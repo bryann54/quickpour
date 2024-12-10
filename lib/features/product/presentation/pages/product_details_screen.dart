@@ -48,8 +48,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        showNotification: false,
+        showNotification: true,
         showProfile: false,
+        
       ),
       body: MultiBlocProvider(
         providers: [

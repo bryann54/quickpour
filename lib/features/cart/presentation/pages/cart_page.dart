@@ -5,6 +5,7 @@ import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_event.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/widgets/cart_item_widget.dart';
+import 'package:chupachap/features/checkout/presentation/pages/checkout_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -214,12 +215,12 @@ class _CartPageState extends State<CartPage>
                     ElevatedButton(
                       onPressed: cartState.cart.items.isNotEmpty
                           ? () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => const CheckoutScreen(),
-                              //   ),
-                              // );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CheckoutScreen(),
+                                ),
+                              );
                             }
                           : null,
                       style: ElevatedButton.styleFrom(
