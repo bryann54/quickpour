@@ -14,7 +14,7 @@ class FarmersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar:  CustomAppBar(),
       body: BlocBuilder<FarmerBloc, FarmerState>(
         builder: (context, state) {
           if (state is FarmerLoading) {
@@ -22,8 +22,7 @@ class FarmersScreen extends StatelessWidget {
           } else if (state is FarmerLoaded) {
             return Column(
               children: [
-                Text(
-                  'Farmers',
+                    Text('Farmers',
                   style: Theme.of(context).textTheme.displayLarge,
                 ),
                 Expanded(
@@ -34,11 +33,7 @@ class FarmersScreen extends StatelessWidget {
                       return FarmerCardWidget(
                         farmer: farmer,
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      FarmerDetailsScreen(farmer: farmer)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) =>  FarmerDetailsScreen(farmer: farmer)));
                         },
                       );
                     },

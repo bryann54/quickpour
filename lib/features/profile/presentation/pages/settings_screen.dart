@@ -13,7 +13,7 @@ class SettingsScreen extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
    
         showProfile: false,
       
