@@ -7,7 +7,7 @@ class ProductModel {
   final String productName;
   final List<String> imageUrls;
   final double price;
-  final String metrics;
+
   final String description;
   final CategoryModel category;
   final Farmer farmer;
@@ -18,7 +18,7 @@ class ProductModel {
     required this.productName,
     required this.imageUrls,
     required this.price,
-    required this.metrics,
+
     required this.description,
     required this.category,
   });
