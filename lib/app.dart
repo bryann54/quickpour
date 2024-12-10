@@ -13,7 +13,8 @@ import 'package:chupachap/features/farmer/data/repositories/farmer_repository.da
 import 'package:chupachap/features/farmer/presentation/bloc/farmer_bloc.dart';
 import 'package:chupachap/features/farmer/presentation/bloc/farmer_event.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
-import 'package:chupachap/features/merchants/presentation/bloc/merchants_bloc.dart';
+import 'package:chupachap/features/merchant/data/repositories/merchants_repository.dart';
+import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
 import 'package:chupachap/features/orders/presentation/bloc/orders_bloc.dart';
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
@@ -27,8 +28,12 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
         final farmerRepository = FarmerRepository();
+        final merchantRepository = MerchantsRepository();
     return MultiBlocProvider(
       providers: [
+             BlocProvider(
+          create: (_) => MerchantBloc(merchantRepository)..add(FetchMerchantEvent()),
+        ),
          BlocProvider(
           create: (context) =>
               OrdersBloc(checkoutBloc: context.read<CheckoutBloc>())
@@ -38,7 +43,7 @@ class App extends StatelessWidget {
           create: (_) => BrandsBloc(brandRepository: BrandRepository())
             ..add(FetchBrandsEvent()), // Optionally, immediately fetch brands
         ),
-        BlocProvider(create: (_) => MerchantsBloc()),
+      
              BlocProvider(
           create: (_) => FarmerBloc(farmerRepository)..add(FetchFarmersEvent()),
         ),

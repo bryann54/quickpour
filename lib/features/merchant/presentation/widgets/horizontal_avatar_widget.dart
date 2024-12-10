@@ -1,17 +1,18 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/features/farmer/data/models/farmer_model.dart';
-import 'package:chupachap/features/farmer/presentation/pages/farmer_details_screen.dart';
+import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
+
 import 'package:flutter/material.dart';
-class FarmerCardAvatar extends StatelessWidget {
-  final Farmer farmer;
+
+class MerchantCardAvatar extends StatelessWidget {
+  final Merchants merchant;
   final bool isFirst;
   final bool isLast;
 
-  const FarmerCardAvatar({
+  const MerchantCardAvatar({
     super.key,
-    required this.farmer,
+    required this.merchant,
     this.isFirst = false,
     this.isLast = false,
   });
@@ -19,12 +20,12 @@ class FarmerCardAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => FarmerDetailsScreen(farmer: farmer),
-        ),
-      ),
+      // onTap: () => Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => MerchantDetailsScreen(Merchant: Merchant),
+      //   ),
+      // ),
       child: Container(
         width: 100,
         decoration: BoxDecoration(
@@ -46,7 +47,7 @@ class FarmerCardAvatar extends StatelessWidget {
             children: [
               _buildAvatarWithBadge(),
               const SizedBox(height: 4),
-              _buildFarmerName(context),
+              _buildMerchantName(context),
             ],
           ),
         ),
@@ -58,7 +59,7 @@ class FarmerCardAvatar extends StatelessWidget {
     return Stack(
       children: [
         _buildAvatarImage(),
-        if (farmer.isVerified)
+        if (merchant.isVerified)
           Positioned(
             top: 0,
             right: 0,
@@ -75,7 +76,7 @@ class FarmerCardAvatar extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.verified,
                 size: 16,
                 color: AppColors.accentColor,
@@ -105,10 +106,10 @@ class FarmerCardAvatar extends StatelessWidget {
         ],
       ),
       child: Hero(
-        tag: 'farmer_avatar_${farmer.id}',
+        tag: 'Merchant_avatar_${merchant.id}',
         child: ClipOval(
           child: CachedNetworkImage(
-            imageUrl: farmer.imageUrl,
+            imageUrl: merchant.imageUrl,
             placeholder: (context, url) => Container(
               color: Colors.grey[200],
               child: const Center(
@@ -136,14 +137,14 @@ class FarmerCardAvatar extends StatelessWidget {
     );
   }
 
-  Widget _buildFarmerName(BuildContext context) {
+  Widget _buildMerchantName(BuildContext context) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Text(
-        farmer.name,
+        merchant.name,
         style: TextStyle(
           fontWeight: FontWeight.w500,
           fontSize: 12,

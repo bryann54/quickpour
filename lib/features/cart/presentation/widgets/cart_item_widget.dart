@@ -125,7 +125,7 @@ class CartItemWidget extends StatelessWidget {
                                   ),
                                   placeholder: (context, url) =>
                                       const CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) => Icon(
+                                  errorWidget: (context, url, error) => const Icon(
                                     Icons.error,
                                     color: AppColors.accentColor,
                                     size: 20,
