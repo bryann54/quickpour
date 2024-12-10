@@ -21,7 +21,7 @@ class ProductPriceSection extends StatelessWidget {
               ?.copyWith(fontWeight: FontWeight.bold),
         ),
         Text(
-          'KSh ${(product.price).toStringAsFixed(2)} per ${product.metrics}',
+          'KSh ${(product.price).toStringAsFixed(2)}',
           style: Theme.of(context)
               .textTheme
               .headlineSmall

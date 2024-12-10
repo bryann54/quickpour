@@ -1,4 +1,3 @@
-
 import 'package:chupachap/features/categories/data/models/category_model.dart';
 
 class CategoryRepository {
@@ -9,71 +8,76 @@ class CategoryRepository {
     return [
       CategoryModel(
         id: 'cat1',
-        name: 'Vegetables',
+        name: 'Beer',
         imageUrl:
-            'https://img.freepik.com/premium-psd/garden-s-finest-highres-vegetables-png_68880-13857.jpg',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS85xh1k2wB9Ze9TnIU5Js2sT7jP-YKIKAwpA&s',
       ),
       CategoryModel(
         id: 'cat2',
-        name: 'Cereals',
+        name: 'Wine',
         imageUrl:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrqkyncXkKOIR1gw0-pt9bPiJ62U_ZV2FEuQ&s',
+            'https://media.istockphoto.com/id/1132889797/vector/red-wine-glass-icon-illustration.jpg?s=612x612&w=0&k=20&c=jzSAqDg-wLQIm0xk6MVkZ6IZJhNPbdkTPDDMcwzDMhY=',
       ),
       CategoryModel(
         id: 'cat3',
-        name: 'Dairy',
+        name: 'Whiskey',
         imageUrl:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXjQ_LMMdMB5fScOsZC0WA54PnyQnFhcTBwA&s',
+            'https://i.pinimg.com/originals/c9/29/42/c92942f5a2a2676904dade306bdfb3cc.jpg',
       ),
       CategoryModel(
         id: 'cat4',
-        name: 'Meat & Poultry',
+        name: 'Vodka',
         imageUrl:
-            'https://w7.pngwing.com/pngs/152/473/png-transparent-raw-meat-and-fish-seafood-meat-fish-protein-meat-food-beef-recipe-thumbnail.png',
+            'https://img.freepik.com/premium-vector/vodka-bottle-logo-lettering-sign-vodka_579179-3325.jpg',
       ),
       CategoryModel(
         id: 'cat5',
-        name: 'Fruits',
+        name: 'Gin',
         imageUrl:
-            'https://c0.klipartz.com/pngpicture/181/2/gratis-png-elemento-de-frutas-thumbnail.png',
+            'https://cdn3.vectorstock.com/i/1000x1000/42/72/gin-vintage-label-design-alcohol-industry-vector-21064272.jpg',
       ),
       CategoryModel(
         id: 'cat6',
-        name: 'Eggs & Honey',
+        name: 'Rum',
         imageUrl:
-            'https://w7.pngwing.com/pngs/1016/792/png-transparent-dabur-organic-food-breakfast-eating-honey-pot-thumbnail.png',
+            'https://cdn5.vectorstock.com/i/1000x1000/62/24/bottle-and-rum-logo-vector-30236224.jpg',
       ),
-      // New creative categories
       CategoryModel(
         id: 'cat7',
-        name: 'Medicinal Herbs',
-        imageUrl: 'https://example.com/medicinal-herbs.jpg',
+        name: 'Tequila',
+        imageUrl:
+            'https://static.vecteezy.com/system/resources/thumbnails/009/675/742/small_2x/tequila-logo-designs-free-vector.jpg',
       ),
       CategoryModel(
         id: 'cat8',
-        name: 'Exotic Spices',
-        imageUrl: 'https://example.com/exotic-spices.jpg',
+        name: 'Champagne',
+        imageUrl:
+            'https://thumbs.dreamstime.com/z/champagne-bottle-pop-open-cork-sparkles-elegant-black-white-logo-icon-vector-illustration-137124082.jpg',
       ),
       CategoryModel(
         id: 'cat9',
-        name: 'Sustainable Seeds',
-        imageUrl: 'https://example.com/sustainable-seeds.jpg',
+        name: 'Cider',
+        imageUrl:
+            'https://img.freepik.com/free-vector/cider-logo-design-template_23-2150191160.jpg',
       ),
       CategoryModel(
         id: 'cat10',
-        name: 'Organic Fertilizers',
-        imageUrl: 'https://example.com/organic-fertilizers.jpg',
+        name: 'Cocktails',
+        imageUrl:
+            'https://img.freepik.com/premium-vector/cocktails-logo-inspiration-drink-glass-bar-restaurant_63578-164.jpg',
       ),
       CategoryModel(
         id: 'cat11',
-        name: 'Aquaponic Produce',
-        imageUrl: 'https://example.com/aquaponic-produce.jpg',
+        name: 'Brandy',
+        imageUrl:
+            'https://www.shutterstock.com/shutterstock/photos/316567271/display_1500/stock-vector-brandy-logo-vector-cognac-sign-with-wooden-barrel-typographic-label-badge-with-hand-sketched-keg-316567271.jpg',
       ),
       CategoryModel(
         id: 'cat12',
-        name: 'Rare Cultivars',
-        imageUrl: 'https://example.com/rare-cultivars.jpg',
-      )
+        name: 'Absinthe',
+        imageUrl:
+            'https://c8.alamy.com/comp/MPRD0A/original-absinthe-vintage-stamp-vector-MPRD0A.jpg',
+      ),
     ];
   }
 }
