@@ -1,0 +1,56 @@
+name: chupachap
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'  # Adjusted to be more flexible
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.0.0
+  get_it: ^8.0.0
+  injectable: ^2.0.0
+  dio: ^5.0.0
+  json_annotation: ^4.7.0
+  dartz: ^0.10.0
+  shared_preferences: ^2.0.0
+  geolocator: ^10.0.0  
+  connectivity_plus: ^6.0.5
+  cached_network_image: ^3.2.0
+  carousel_slider: ^5.0.0
+  shimmer: ^3.0.0
+  equatable: ^2.0.5
+  intl: ^0.19.0 
+  curved_navigation_bar: ^1.0.6
+  provider: ^6.1.1 
+  smooth_page_indicator: ^1.0.0+2
+  lottie: ^2.7.0
+  badges: ^3.1.1
+  flutter_animate: ^4.5.2
+  go_router: ^14.6.2
+  font_awesome_flutter: ^10.8.0
+  # firebase_auth: ^5.3.4
+  # cloud_firestore: ^5.5.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter  # Added flutter_test
+  build_runner: ^2.0.0
+  flutter_launcher_icons: ^0.13.1
+  json_serializable: ^6.6.0
+  hive_generator: ^2.0.0
+  bloc_test: ^9.0.0
+  mocktail: ^1.0.4
+  flutter_lints: ^2.0.0 
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/AppIcons (6)/playstore.png"
