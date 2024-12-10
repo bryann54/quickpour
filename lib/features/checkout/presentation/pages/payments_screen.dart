@@ -17,7 +17,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
     
        
       ),
@@ -128,7 +128,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
         ),
         Text(
           'KSh ${widget.totalAmount.toStringAsFixed(2)}',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: AppColors.primaryColor,

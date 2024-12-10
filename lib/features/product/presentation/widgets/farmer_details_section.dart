@@ -80,7 +80,7 @@ class FarmerDetailsSection extends StatelessWidget {
                   width: 1.5,
                 ),
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.verified,
                 color: AppColors.accentColor,
                 size: 16,

@@ -12,8 +12,7 @@ class FarmerRepository {
         location: 'Nyeri, Kenya',
         crops: ['Tea', 'Coffee', 'Macadamia'],
         experience: 12,
-        imageUrl:
-            'https://img.freepik.com/free-photo/photorealistic-view-african-people-harvesting-vegetables-grains_23-2151487454.jpg',
+        imageUrl: 'https://img.freepik.com/free-photo/photorealistic-view-african-people-harvesting-vegetables-grains_23-2151487454.jpg',
         rating: 4.6,
         isVerified: true,
       ),
@@ -23,8 +22,7 @@ class FarmerRepository {
         location: 'Murang’a, Kenya',
         crops: ['Maize', 'Bananas', 'Avocados'],
         experience: 8,
-        imageUrl:
-            'https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDI0LTAxL3Jhd3BpeGVsX29mZmljZV8zNV9waG90b19vZl9oYXBweV9hZnJpY2FuX2FtZXJpY2FuX3dvbWFuX2hhcnZlc181NmU4MWU4YS1kOWY3LTQ5M2QtYWY5ZS1mN2Y0OTNhNmNlMjdfMS5qcGc.jpg',
+        imageUrl: 'https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDI0LTAxL3Jhd3BpeGVsX29mZmljZV8zNV9waG90b19vZl9oYXBweV9hZnJpY2FuX2FtZXJpY2FuX3dvbWFuX2hhcnZlc181NmU4MWU4YS1kOWY3LTQ5M2QtYWY5ZS1mN2Y0OTNhNmNlMjdfMS5qcGc.jpg',
         rating: 4.8,
         isVerified: false,
       ),
@@ -34,8 +32,7 @@ class FarmerRepository {
         location: 'Kisumu, Kenya',
         crops: ['Sugarcane', 'Cassava', 'Sweet Potatoes'],
         experience: 10,
-        imageUrl:
-            'https://www.ada-microfinance.org/sites/default/files/inline-images/newslette%20dimension_0.png',
+        imageUrl: 'https://www.ada-microfinance.org/sites/default/files/inline-images/newslette%20dimension_0.png',
         rating: 4.5,
         isVerified: true,
       ),
@@ -55,8 +52,7 @@ class FarmerRepository {
         location: 'Nakuru, Kenya',
         crops: ['Wheat', 'Barley', 'Canola'],
         experience: 15,
-        imageUrl:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPh-lYxQa0GDjCSShpvehWf__78OG084llMg&s',
+        imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPh-lYxQa0GDjCSShpvehWf__78OG084llMg&s',
         rating: 4.9,
         isVerified: true,
       ),
@@ -66,8 +62,7 @@ class FarmerRepository {
         location: 'Eldoret, Kenya',
         crops: ['Dairy', 'Potatoes', 'Peas'],
         experience: 9,
-        imageUrl:
-            'https://elements-resized.envatousercontent.com/files/344cb5615f84170b9dcc5b8620895bcf/elements_watermarked_image.jpg',
+        imageUrl: 'https://elements-resized.envatousercontent.com/files/344cb5615f84170b9dcc5b8620895bcf/elements_watermarked_image.jpg',
         rating: 4.7,
         isVerified: true,
       ),

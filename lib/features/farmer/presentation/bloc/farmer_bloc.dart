@@ -3,7 +3,6 @@ import 'package:chupachap/features/farmer/data/repositories/farmer_repository.da
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'farmer_event.dart';
 import 'farmer_state.dart';
-
 class FarmerBloc extends Bloc<FarmerEvent, FarmerState> {
   final FarmerRepository farmerRepository;
 
