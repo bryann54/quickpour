@@ -12,7 +12,9 @@ import 'package:chupachap/features/categories/presentation/bloc/categories_state
 import 'package:chupachap/features/categories/presentation/pages/categories_screen.dart';
 import 'package:chupachap/features/categories/presentation/widgets/horizontal_list_widget.dart';
 import 'package:chupachap/features/categories/presentation/widgets/shimmer_widget.dart';
-import 'package:chupachap/features/search/presentation/widgets/search_bar.dart';
+import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
+import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
+import 'package:chupachap/features/product_search/presentation/widgets/search_bar.dart';
 import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
 import 'package:chupachap/features/merchant/presentation/pages/merchants_screen.dart';
 import 'package:chupachap/features/merchant/presentation/widgets/merchant_horizontal_list_widget.dart';
@@ -24,6 +26,7 @@ import 'package:chupachap/features/product/presentation/widgets/product_card.dar
 import 'package:chupachap/features/product/presentation/widgets/product_shimmer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rxdart/rxdart.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,6 +36,37 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+    late ScrollController _scrollController;
+  late ProductSearchBloc _productSearchBloc;
+  final _searchController = TextEditingController();
+  final _searchSubject = PublishSubject<String>();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _productSearchBloc = ProductSearchBloc(
+      productRepository: ProductRepository(),
+    );
+
+    // Setup debounce for search
+    _searchSubject
+        .debounceTime(const Duration(milliseconds: 500))
+        .distinct()
+        .listen((query) {
+      _productSearchBloc.add(SearchProductsEvent(query));
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _searchController.dispose();
+    _searchSubject.close();
+    _productSearchBloc.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
       final theme = Theme.of(context);
@@ -62,17 +96,18 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CustomSearchBar(
-                  onSearch: (query) {
-                    print('Searching for: $query');
-                  },
-                  onFilterTap: () {
-                    print('Filter tapped');
-                  },
-                ),
-              ),
+             Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: CustomSearchBar(
+                      controller: _searchController,
+                      onSearch: (query) {
+                        _searchSubject.add(query);
+                      },
+                      onFilterTap: () {
+                        print('Filter tapped');
+                      },
+                    ),
+                  ),
                                        Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
