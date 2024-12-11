@@ -79,7 +79,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                         isFavorite ? Icons.favorite : Icons.favorite_outline,
                         size: 35,
                       ),
-                      color: AppColors.primaryColor,
+                      color: AppColors.accentColor,
                       onPressed: () {
                         if (isFavorite) {
                           context.read<FavoritesBloc>().add(

@@ -1,6 +1,9 @@
 
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
+import 'package:chupachap/features/brands/presentation/bloc/brands_bloc.dart';
+import 'package:chupachap/features/brands/presentation/pages/brands_screen.dart';
+import 'package:chupachap/features/brands/presentation/widgets/horizontal_list_widget.dart';
 import 'package:chupachap/features/categories/data/repositories/category_repository.dart';
 import 'package:chupachap/features/categories/domain/usecases/fetch_categories.dart';
 import 'package:chupachap/features/categories/presentation/bloc/categories_bloc.dart';
@@ -9,11 +12,7 @@ import 'package:chupachap/features/categories/presentation/bloc/categories_state
 import 'package:chupachap/features/categories/presentation/pages/categories_screen.dart';
 import 'package:chupachap/features/categories/presentation/widgets/horizontal_list_widget.dart';
 import 'package:chupachap/features/categories/presentation/widgets/shimmer_widget.dart';
-import 'package:chupachap/features/farmer/presentation/bloc/farmer_bloc.dart';
-import 'package:chupachap/features/farmer/presentation/bloc/farmer_state.dart';
-import 'package:chupachap/features/farmer/presentation/pages/farmers_screen.dart';
-import 'package:chupachap/features/farmer/presentation/widgets/farmers_horizontal_list_widget.dart';
-import 'package:chupachap/features/home/presentation/widgets/product_carousel.dart';
+import 'package:chupachap/features/home/presentation/widgets/search_bar.dart';
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_event.dart';
@@ -60,17 +59,17 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: CustomSearchBar(
-              //     onSearch: (query) {
-              //       print('Searching for: $query');
-              //     },
-              //     onFilterTap: () {
-              //       print('Filter tapped');
-              //     },
-              //   ),
-              // ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CustomSearchBar(
+                  onSearch: (query) {
+                    print('Searching for: $query');
+                  },
+                  onFilterTap: () {
+                    print('Filter tapped');
+                  },
+                ),
+              ),
                 Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -79,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Row(
                       children: [
                         Text(
-                          'Verified Farmers',
+                          'Verified  brands',
                           style: Theme.of(context).textTheme.displayLarge,
                         ),
                         const SizedBox(width: 5,),
@@ -91,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const FarmersScreen(),
+                            builder: (context) => const BrandsScreen(),
                           ),
                         );
                       },
@@ -107,16 +106,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-             BlocBuilder<FarmerBloc, FarmerState>(
+             BlocBuilder<BrandsBloc, BrandsState>(
                 builder: (context, state) {
-                  if (state is FarmerLoaded) {
-                    return HorizontalFarmersListWidget(farmer: state.farmers);
+                  if (state is BrandsLoadedState) {
+                    return HorizontalbrandsListWidget(brand: state.brands);
                   }
-                  if (state is FarmerLoading) {
+                  if (state is BrandsLoadingState) {
                     return const Center(child: LoadingHorizontalList());
                   }
-                  if (state is FarmerError) {
-                    return Center(child: Text(state.message));
+                  if (state is BrandsErrorState) {
+                    return Center(child: Text(state.errorMessage));
                   }
                   return const SizedBox.shrink();
                 },
@@ -160,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return const Center(child: LoadingHorizontalList());
                 },
               ),
-              const ProductCarousel(),
+        
               const SizedBox(height: 16),
               Text(
                 'Recommended for you',

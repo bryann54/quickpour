@@ -1,6 +1,7 @@
 import 'package:chupachap/core/theme/app_theme.dart';
 import 'package:chupachap/core/theme/theme_controller.dart';
 import 'package:chupachap/features/auth/presentation/pages/entry_splash.dart';
+import 'package:chupachap/features/brands/data/repositories/brand_repository.dart';
 import 'package:chupachap/features/brands/presentation/bloc/brands_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/categories/data/repositories/category_repository.dart';
@@ -33,7 +34,10 @@ class App extends StatelessWidget {
               OrdersBloc(checkoutBloc: context.read<CheckoutBloc>())
                 ..add(LoadOrdersFromCheckout()),
         ),
-        BlocProvider(create: (_) => BrandsBloc()),
+       BlocProvider(
+          create: (_) => BrandsBloc(brandRepository: BrandRepository())
+            ..add(FetchBrandsEvent()), // Optionally, immediately fetch brands
+        ),
         BlocProvider(create: (_) => MerchantsBloc()),
              BlocProvider(
           create: (_) => FarmerBloc(farmerRepository)..add(FetchFarmersEvent()),
