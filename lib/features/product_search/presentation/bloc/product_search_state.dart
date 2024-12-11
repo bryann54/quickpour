@@ -1,11 +1,11 @@
-import 'package:equatable/equatable.dart';
 import 'package:chupachap/features/product/data/models/product_model.dart';
+import 'package:equatable/equatable.dart';
 
 abstract class ProductSearchState extends Equatable {
   const ProductSearchState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ProductSearchInitialState extends ProductSearchState {}
@@ -18,7 +18,7 @@ class ProductSearchLoadedState extends ProductSearchState {
   const ProductSearchLoadedState(this.searchResults);
 
   @override
-  List<Object> get props => [searchResults];
+  List<Object?> get props => [searchResults];
 }
 
 class ProductSearchErrorState extends ProductSearchState {
@@ -27,5 +27,5 @@ class ProductSearchErrorState extends ProductSearchState {
   const ProductSearchErrorState(this.errorMessage);
 
   @override
-  List<Object> get props => [errorMessage];
+  List<Object?> get props => [errorMessage];
 }

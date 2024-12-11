@@ -1,4 +1,3 @@
-
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_state.dart';
 import 'package:chupachap/features/home/presentation/widgets/stattic_item_widget.dart';

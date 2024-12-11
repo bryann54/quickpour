@@ -28,11 +28,10 @@ class _BottomNavState extends State<BottomNav> {
   // List of screens corresponding to navigation items
   final List<Widget> _screens = [
     const HomeScreen(),
-     const SearchPage(),
+    const SearchPage(),
     const FavoritesScreen(),
     const CartPage(),
-     const OrdersScreen(),
-    
+    const OrdersScreen(),
   ];
 
   @override
@@ -46,10 +45,9 @@ class _BottomNavState extends State<BottomNav> {
         items: [
           const FaIcon(FontAwesomeIcons.houseChimney,
               size: 25, color: Colors.white),
-                        const FaIcon(FontAwesomeIcons.searchengin,
-              size: 25, color: Colors.white),
+          const FaIcon(FontAwesomeIcons.search, size: 25, color: Colors.white),
 
-      // Favorites with badge
+          // Favorites with badge
           BlocBuilder<FavoritesBloc, FavoritesState>(
             builder: (context, favoritesState) {
               return badges.Badge(
@@ -79,7 +77,8 @@ class _BottomNavState extends State<BottomNav> {
             },
           ),
 
-          const FaIcon(FontAwesomeIcons.clipboardList, size: 25, color: Colors.white),
+          const FaIcon(FontAwesomeIcons.clipboardList,
+              size: 25, color: Colors.white),
         ],
         color: AppColors.primaryColor,
         buttonBackgroundColor: AppColors.primaryColor,

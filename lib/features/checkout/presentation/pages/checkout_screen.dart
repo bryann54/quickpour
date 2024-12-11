@@ -1,4 +1,3 @@
-
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
@@ -14,9 +13,7 @@ class CheckoutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:const CustomAppBar(
-      
-      ),
+      appBar: const CustomAppBar(),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, cartState) {
           // Check if the cart is empty
@@ -98,7 +95,7 @@ class CheckoutScreen extends StatelessWidget {
                 const SizedBox(height: 20),
 
                 // Proceed Button
-            ElevatedButton(
+                ElevatedButton(
                   onPressed: cartState.cart.items.isNotEmpty
                       ? () {
                           // Calculate total amount from cart items
