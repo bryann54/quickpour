@@ -240,8 +240,8 @@ class _ProductCardState extends State<ProductCard>
                               const SizedBox(height: 2),
                               Text(
                                 'KSh ${(widget.product.price).toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                  color: AppColors.primaryColor,
+                                style:  TextStyle(
+                                  color:isDarkMode?Colors.tealAccent: AppColors.primaryColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
                                 ),

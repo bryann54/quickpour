@@ -12,7 +12,7 @@ class MerchantBloc extends Bloc<MerchantEvent, MerchantState> {
     on<FetchMerchantEvent>((event, emit) async {
       emit(MerchantLoading());
       try {
-        final merchants = await merchantRepository.getMerchantss();
+        final merchants = await merchantRepository.getMerchants();
         emit(MerchantLoaded(merchants));
       } catch (e) {
         emit(MerchantError(e.toString()));

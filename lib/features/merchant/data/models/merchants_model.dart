@@ -7,6 +7,7 @@ class Merchants {
   final String imageUrl;
   final double rating;
   final bool isVerified;
+  final bool isOpen;
 
   Merchants({
     required this.id,
@@ -16,6 +17,7 @@ class Merchants {
     required this.experience,
     required this.imageUrl,
     required this.rating,
+    required this.isOpen,
     required this.isVerified,
   });
 
@@ -29,6 +31,7 @@ class Merchants {
       imageUrl: json['imageUrl'],
       rating: (json['rating'] as num).toDouble(),
       isVerified: json['isVerified'],
+      isOpen: json['isOpen']
     );
   }
 
