@@ -1,8 +1,6 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
-
 import 'package:flutter/material.dart';
 
 class MerchantCardAvatar extends StatelessWidget {
@@ -20,37 +18,54 @@ class MerchantCardAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // onTap: () => Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => MerchantDetailsScreen(Merchant: Merchant),
-      //   ),
-      // ),
-      child: Container(
-        width: 100,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: isFirst || isLast
-                ? Colors.transparent
-                : AppColors.accentColor.withOpacity(0.5),
+      child: Stack(
+        children: [
+          Container(
+            width: 100,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: isFirst || isLast
+                    ? Colors.transparent
+                    : AppColors.accentColor.withOpacity(0.5),
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            margin: EdgeInsets.only(
+              left: isFirst ? 4.0 : 0.0,
+              right: isLast ? 4.0 : 8.0,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 2.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildAvatarWithBadge(),
+                  const SizedBox(height: 4),
+                  _buildMerchantName(context),
+                ],
+              ),
+            ),
           ),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        margin: EdgeInsets.only(
-          left: isFirst ? 4.0 : 0.0,
-          right: isLast ? 4.0 : 8.0,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 2.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildAvatarWithBadge(),
-              const SizedBox(height: 4),
-              _buildMerchantName(context),
-            ],
+          Positioned(
+            top: 4,
+            left: 4,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: merchant.isOpen ? Colors.green : Colors.red,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                merchant.isOpen ? 'Open' : 'Closed',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -59,30 +74,30 @@ class MerchantCardAvatar extends StatelessWidget {
     return Stack(
       children: [
         _buildAvatarImage(),
-        if (merchant.isVerified)
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.all(2),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 4,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: const Icon(
-                Icons.verified,
-                size: 16,
-                color: AppColors.accentColor,
-              ),
-            ),
-          ),
+        // if (merchant.isVerified)
+        //   Positioned(
+        //     top: 0,
+        //     right: 0,
+        //     child: Container(
+        //       padding: const EdgeInsets.all(2),
+        //       decoration: const BoxDecoration(
+        //         color: Colors.white,
+        //         shape: BoxShape.circle,
+        //         boxShadow: [
+        //           BoxShadow(
+        //             color: Colors.black12,
+        //             blurRadius: 4,
+        //             offset: Offset(0, 2),
+        //           ),
+        //         ],
+        //       ),
+        //       child: const Icon(
+        //         Icons.verified,
+        //         size: 16,
+        //         color: AppColors.accentColor,
+        //       ),
+        //     ),
+        //   ),
       ],
     );
   }
@@ -143,16 +158,20 @@ class MerchantCardAvatar extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text(
-        merchant.name,
-        style: TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 12,
-          color: isDarkMode ? Colors.white70 : Colors.black87,
-        ),
-        textAlign: TextAlign.center,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+      child: Column(
+        children: [
+          Text(
+            merchant.name,
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 12,
+              color: isDarkMode ? Colors.white70 : Colors.black87,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }

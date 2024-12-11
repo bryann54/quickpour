@@ -58,7 +58,7 @@ class FavoritesWidget extends StatelessWidget {
                     favoriteItem.product.productName,
                     style: theme.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: isDarkMode ? Colors.white : Colors.black,
+                      color: isDarkMode ? AppColors.surface.withOpacity(.3): Colors.black,
                     ),
                   ),
                 ],
@@ -70,7 +70,7 @@ class FavoritesWidget extends StatelessWidget {
                         shape: BoxShape.circle,
                         border: Border.all(
                           color:
-                              isDarkMode ? Colors.white : AppColors.accentColor,
+                              isDarkMode ? AppColors.surface.withOpacity(.3) : AppColors.accentColor,
                         )),
                     child: CircleAvatar(
                       radius: 10,
@@ -81,7 +81,8 @@ class FavoritesWidget extends StatelessWidget {
                   Text(
                     '  ${favoriteItem.product.category.name}',
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: isDarkMode ? Colors.white70 : Colors.black54,
+                      color: isDarkMode ? AppColors.surface.withOpacity(.3)
+                          : Colors.black54,
                     ),
                   ),
                 ],
@@ -107,18 +108,25 @@ class FavoritesWidget extends StatelessWidget {
               ),
             );
           },
-          trailing: IconButton(
-            icon: Icon(
-              Icons.delete_rounded,
-              color: isDarkMode
-                  ? AppColors.cardColor.withOpacity(0.7)
-                  : AppColors.accentColor,
+          trailing: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: isDarkMode ? AppColors.surface.withOpacity(.3) : AppColors.backgroundDark.withOpacity(.1),
+              
             ),
-            onPressed: () {
-              context.read<FavoritesBloc>().add(
-                    RemoveFromFavoritesEvent(product: favoriteItem.product),
-                  );
-            },
+            child: IconButton(
+              icon: Icon(
+                Icons.delete_rounded,
+                color: isDarkMode
+                    ? AppColors.backgroundDark.withOpacity(0.8)
+                    : AppColors.accentColor,
+              ),
+              onPressed: () {
+                context.read<FavoritesBloc>().add(
+                      RemoveFromFavoritesEvent(product: favoriteItem.product),
+                    );
+              },
+            ),
           ),
         ),
       ),
