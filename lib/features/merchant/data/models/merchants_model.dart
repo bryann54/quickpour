@@ -1,34 +1,37 @@
-class Farmer {
+class Merchants {
   final String id;
   final String name;
   final String location;
-  final List<String> crops;
+  final List<String> products;
   final int experience;
   final String imageUrl;
   final double rating;
   final bool isVerified;
+  final bool isOpen;
 
-  Farmer({
+  Merchants({
     required this.id,
     required this.name,
     required this.location,
-    required this.crops,
+    required this.products,
     required this.experience,
     required this.imageUrl,
     required this.rating,
+    required this.isOpen,
     required this.isVerified,
   });
 
-  factory Farmer.fromJson(Map<String, dynamic> json) {
-    return Farmer(
+  factory Merchants.fromJson(Map<String, dynamic> json) {
+    return Merchants(
       id: json['id'],
       name: json['name'],
       location: json['location'],
-      crops: List<String>.from(json['crops']),
+      products: List<String>.from(json['products']),
       experience: json['experience'],
       imageUrl: json['imageUrl'],
       rating: (json['rating'] as num).toDouble(),
       isVerified: json['isVerified'],
+      isOpen: json['isOpen']
     );
   }
 
@@ -37,7 +40,7 @@ class Farmer {
       'id': id,
       'name': name,
       'location': location,
-      'crops': crops,
+      'products': products,
       'experience': experience,
       'imageUrl': imageUrl,
       'rating': rating,

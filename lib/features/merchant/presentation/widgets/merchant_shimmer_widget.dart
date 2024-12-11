@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-class FarmersShimmer extends StatelessWidget {
+class MerchantsShimmer extends StatelessWidget {
   final double? width;
-  const FarmersShimmer({super.key, this.width});
+  const MerchantsShimmer({super.key, this.width});
 
   @override
   Widget build(BuildContext context) {

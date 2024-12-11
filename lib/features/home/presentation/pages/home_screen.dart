@@ -13,6 +13,9 @@ import 'package:chupachap/features/categories/presentation/pages/categories_scre
 import 'package:chupachap/features/categories/presentation/widgets/horizontal_list_widget.dart';
 import 'package:chupachap/features/categories/presentation/widgets/shimmer_widget.dart';
 import 'package:chupachap/features/home/presentation/widgets/search_bar.dart';
+import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
+import 'package:chupachap/features/merchant/presentation/pages/merchants_screen.dart';
+import 'package:chupachap/features/merchant/presentation/widgets/merchant_horizontal_list_widget.dart';
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_event.dart';
@@ -49,9 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ],
       child: Scaffold(
-        appBar:  CustomAppBar(
+        appBar:  const CustomAppBar(
           showNotification: true,
-         
+         showCart: false,
           showProfile: true,
         
         ),
@@ -70,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
-                Padding(
+                                       Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,11 +81,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     Row(
                       children: [
                         Text(
-                          'Verified  brands',
-                          style: Theme.of(context).textTheme.displayLarge,
+                          'Verified  Stores',
+                           style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        const SizedBox(width: 5,),
-                        Icon(Icons.verified,color:isDarkMode?Colors.teal: AppColors.accentColor,)
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.verified,
+                          color:
+                              isDarkMode ? Colors.teal : AppColors.accentColor,
+                        )
                       ],
                     ),
                     GestureDetector(
@@ -90,14 +101,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const BrandsScreen(),
+                            builder: (context) => const MerchantsScreen(),
                           ),
                         );
                       },
                       child: Text(
                         'See All',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: isDarkMode
+                              color: isDarkMode
                                   ? Colors.teal
                                   : AppColors.accentColor,
                             ),
@@ -106,6 +117,55 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
+              BlocBuilder<MerchantBloc, MerchantState>(
+                builder: (context, state) {
+                  if (state is MerchantLoaded) {
+                    return HorizontalMerchantsListWidget(
+                        merchant: state.merchants);
+                  }
+                  if (state is MerchantLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (state is MerchantError) {
+                    return Center(child: Text(state.message));
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+
+        
+                 Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Top Brands',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const BrandsScreen(),
+                          ),
+                        );
+                      },
+                child: Text(
+                  'See All',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: AppColors.accentColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
              BlocBuilder<BrandsBloc, BrandsState>(
                 builder: (context, state) {
                   if (state is BrandsLoadedState) {
@@ -122,20 +182,22 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(5.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       'Categories',
-                      style: Theme.of(context).textTheme.displayLarge,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CategoriesScreen(),
+                            builder: (context) => const CategoriesScreen(),
                           ),
                         );
                       },
@@ -159,11 +221,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   return const Center(child: LoadingHorizontalList());
                 },
               ),
-        
+   
               const SizedBox(height: 16),
               Text(
                 'Recommended for you',
-                style: Theme.of(context).textTheme.displayLarge,
+              style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 8),
               BlocBuilder<ProductBloc, ProductState>(

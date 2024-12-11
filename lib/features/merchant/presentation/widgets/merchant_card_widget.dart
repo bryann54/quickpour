@@ -1,15 +1,15 @@
 
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/features/farmer/data/models/farmer_model.dart';
-import 'package:chupachap/features/farmer/presentation/pages/farmer_details_screen.dart';
+import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class FarmerCardWidget extends StatelessWidget {
-  final Farmer farmer;
+class MerchantCardWidget extends StatelessWidget {
+  final Merchants merchant;
   final VoidCallback? onTap;
 
-  const FarmerCardWidget({super.key, required this.farmer, this.onTap});
+  const MerchantCardWidget({super.key, required this.merchant, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +24,11 @@ class FarmerCardWidget extends StatelessWidget {
         onTap: onTap ??
             () {
               // Default navigation if no custom onTap is provided
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          FarmerDetailsScreen(farmer: farmer)));
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) =>
+              //             MerchantDetailsScreen(merchant: merchant)));
             },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -38,16 +38,16 @@ class FarmerCardWidget extends StatelessWidget {
               Stack(
                 children: [
                   Hero(
-                    tag: 'farmer_image_${farmer.id}',
+                    tag: 'merchant_image_${merchant.id}',
                     child: CircleAvatar(
                       radius: 40,
                       backgroundColor: Colors.grey.shade200,
                       backgroundImage:
-                          CachedNetworkImageProvider(farmer.imageUrl),
+                          CachedNetworkImageProvider(merchant.imageUrl),
                     ),
                   ),
                   // Verification Badge
-                  if (farmer.isVerified)
+                  if (merchant.isVerified)
                     Positioned(
                       bottom: 0,
                       right: 0,
@@ -75,23 +75,25 @@ class FarmerCardWidget extends StatelessWidget {
 
               const SizedBox(width: 16),
 
-              // Farmer Details
+              // merchant Details
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        Text(
-                          farmer.name,
-                          style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                        Expanded(
+                          child: Text(
+                            merchant.name,
+                            style:
+                                Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                        if (farmer.isVerified)
+                        if (merchant.isVerified)
                           const Padding(
                             padding: EdgeInsets.only(left: 8.0),
                             child: Icon(
@@ -110,7 +112,7 @@ class FarmerCardWidget extends StatelessWidget {
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
-                            farmer.location,
+                            merchant.location,
                             style: Theme.of(context).textTheme.bodyMedium,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -118,7 +120,22 @@ class FarmerCardWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ],
+               RichText(
+  text: TextSpan(
+    text: 'Store is now ',
+    style: TextStyle(color: Colors.black, fontSize: 16), // Style for the base text
+    children: [
+      TextSpan(
+        text: merchant.isOpen ? 'Open' : 'Closed',
+        style: TextStyle(
+          color: merchant.isOpen ? Colors.green : Colors.red, // Color for the status
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ],
+  ),
+)
+],
                 ),
               ),
 
@@ -134,7 +151,7 @@ class FarmerCardWidget extends StatelessWidget {
                     const Icon(Icons.star, color: Colors.amber, size: 20),
                     const SizedBox(width: 4),
                     Text(
-                      farmer.rating.toStringAsFixed(1),
+                      merchant.rating.toStringAsFixed(1),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: AppColors.accentColor,

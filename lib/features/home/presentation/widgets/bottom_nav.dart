@@ -29,7 +29,7 @@ class _BottomNavState extends State<BottomNav> {
     const HomeScreen(),
     const FavoritesScreen(),
     const CartPage(),
-     OrdersScreen(),
+     const OrdersScreen(),
   ];
 
   @override

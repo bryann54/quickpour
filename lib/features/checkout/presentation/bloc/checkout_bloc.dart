@@ -17,7 +17,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     UpdateDeliveryInfoEvent event,
     Emitter<CheckoutState> emit,
   ) {
-    emit(CheckoutInitialState().copyWith(
+    emit(const CheckoutInitialState().copyWith(
       address: event.address,
       phoneNumber: event.phoneNumber,
     ));
@@ -70,7 +70,7 @@ extension CheckoutStateCopyWith on CheckoutState {
     String? phoneNumber,
     String? paymentMethod,
   }) {
-    return CheckoutInitialState().copyWith(
+    return const CheckoutInitialState().copyWith(
       address: address ?? this.address,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       paymentMethod: paymentMethod ?? this.paymentMethod,

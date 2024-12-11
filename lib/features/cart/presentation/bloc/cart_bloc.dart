@@ -5,7 +5,7 @@ import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  CartBloc() : super(CartInitialState()) {
+  CartBloc() : super(const CartInitialState()) {
     on<AddToCartEvent>(_onAddToCart);
     on<RemoveFromCartEvent>(_onRemoveFromCart);
     on<UpdateCartQuantityEvent>(_onUpdateCartQuantity);
@@ -58,6 +58,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   }
 
   void _onClearCart(ClearCartEvent event, Emitter<CartState> emit) {
-    emit(CartInitialState());
+    emit(const CartInitialState());
   }
 }

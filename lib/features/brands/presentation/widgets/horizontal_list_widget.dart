@@ -1,5 +1,4 @@
 import 'package:chupachap/core/utils/colors.dart';
-
 import 'package:chupachap/features/brands/data/models/brands_model.dart';
 import 'package:chupachap/features/brands/presentation/widgets/brands_avatar.dart';
 import 'package:flutter/material.dart';
@@ -13,37 +12,52 @@ class HorizontalbrandsListWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
 
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
  
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: 100,
-        decoration: BoxDecoration(
-          color: isDarkMode
-              ? AppColors.dividerColorDark.withOpacity(.3)
-              : AppColors.cardColor.withOpacity(.5),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: brand.isEmpty
-            ? const Center(
-                child: Text(
-                  'No verified brands available',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontStyle: FontStyle.italic,
+        // Brands List
+        Container(
+          height:90, 
+          decoration: BoxDecoration(
+            color: isDarkMode
+                ? AppColors.dividerColorDark.withOpacity(0.2)
+                : AppColors.cardColor.withOpacity(0.3),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: brand.isEmpty
+              ? Center(
+                  child: Text(
+                    'No brands available',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontStyle: FontStyle.italic,
+                      color: Colors.grey,
+                    ),
                   ),
+                )
+              : ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: brand.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          brandCardAvatar(
+                            brand: brand[index],
+                            isFirst: index == 0,
+                            isLast: index == brand.length - 1,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-              )
-            : ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) =>
-                    brandCardAvatar(brand: brand[index]),
-                separatorBuilder: (context, index) => const SizedBox(width: 8),
-                itemCount: brand.length,
-              ),
-      ),
+        ),
+      ],
     );
   }
 }

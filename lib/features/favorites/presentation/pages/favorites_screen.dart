@@ -12,7 +12,7 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBar(showCart: false,),
       body: Column(
         children: [
           BlocBuilder<FavoritesBloc, FavoritesState>(

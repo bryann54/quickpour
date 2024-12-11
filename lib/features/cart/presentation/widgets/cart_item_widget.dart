@@ -95,7 +95,7 @@ class CartItemWidget extends StatelessWidget {
                           cartItem.product.productName,
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: isDarkMode ? Colors.white : Colors.black,
+                            color: isDarkMode ? AppColors.surface.withOpacity(.5) : Colors.black,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -125,7 +125,7 @@ class CartItemWidget extends StatelessWidget {
                                   ),
                                   placeholder: (context, url) =>
                                       const CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) => Icon(
+                                  errorWidget: (context, url, error) => const Icon(
                                     Icons.error,
                                     color: AppColors.accentColor,
                                     size: 20,
@@ -138,7 +138,7 @@ class CartItemWidget extends StatelessWidget {
                               cartItem.product.category.name,
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: isDarkMode
-                                    ? Colors.grey[400]
+                                    ? AppColors.surface.withOpacity(.5)
                                     : Colors.grey[600],
                               ),
                             ),
