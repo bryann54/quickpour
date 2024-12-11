@@ -7,7 +7,6 @@ import 'package:chupachap/features/favorites/presentation/bloc/favorites_state.d
 import 'package:chupachap/features/favorites/presentation/pages/favorites_screen.dart';
 import 'package:chupachap/features/home/presentation/pages/home_screen.dart';
 import 'package:chupachap/features/orders/presentation/pages/orders_screen.dart';
-import 'package:chupachap/features/profile/presentation/pages/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -54,7 +53,7 @@ class _BottomNavState extends State<BottomNav> {
                   style: const TextStyle(color: Colors.white),
                 ),
                 showBadge: favoritesState.favorites.items.isNotEmpty,
-                child: const FaIcon(FontAwesomeIcons.heartCircleCheck,
+                child: const FaIcon(FontAwesomeIcons.solidHeart,
                     size: 25, color: Colors.white),
               );
             },

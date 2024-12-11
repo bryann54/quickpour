@@ -229,7 +229,7 @@ class _ProductCardState extends State<ProductCard>
                                   const SizedBox(width: 8),
                                   Text(
                                     cartItem.product.category.name,
-                                    style: theme.textTheme.bodySmall?.copyWith(
+                                     style: theme.textTheme.bodySmall?.copyWith(
                                       color: isDarkMode
                                           ? Colors.grey[400]
                                           : Colors.grey[600],
@@ -239,7 +239,7 @@ class _ProductCardState extends State<ProductCard>
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                'KSh ${(widget.product.price).toStringAsFixed(2)} per ${(widget.product.metrics)}',
+                                'KSh ${(widget.product.price).toStringAsFixed(2)}',
                                 style: const TextStyle(
                                   color: AppColors.primaryColor,
                                   fontWeight: FontWeight.bold,

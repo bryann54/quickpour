@@ -146,7 +146,7 @@ class CartItemWidget extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'KSh ${cartItem.product.price.toStringAsFixed(2)} per ${cartItem.product.metrics}',
+                          'KSh ${cartItem.product.price.toStringAsFixed(2)} ',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: Colors.green,
                             fontWeight: FontWeight.bold,
