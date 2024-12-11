@@ -3,11 +3,11 @@
 import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
 
 class MerchantsRepository {
-  Future<List<Merchants>> getMerchantss() async {
+  Future<List<Merchants>> getMerchants() async {
     await Future.delayed(const Duration(seconds: 2));
 
     return [
-      Merchants(
+      Merchants(isOpen: false,
         id: '1',
         name: 'Whiskey Corner',
         location: 'Nairobi, Kenya',
@@ -17,7 +17,7 @@ class MerchantsRepository {
         rating: 4.9,
         isVerified: true,
       ),
-      Merchants(
+      Merchants(isOpen: true,
         id: '2',
         name: 'The Gin Vault',
         location: 'Mombasa, Kenya',
@@ -27,7 +27,7 @@ class MerchantsRepository {
         rating: 4.7,
         isVerified: true,
       ),
-      Merchants(
+      Merchants(isOpen: true,
         id: '3',
         name: 'Bourbon Haven',
         location: 'Kisumu, Kenya',
@@ -37,7 +37,7 @@ class MerchantsRepository {
         rating: 4.6,
         isVerified: true,
       ),
-      Merchants(
+      Merchants(isOpen: false,
         id: '4',
         name: 'Wine & Spirits Emporium',
         location: 'Nakuru, Kenya',
@@ -47,7 +47,7 @@ class MerchantsRepository {
         rating: 4.5,
         isVerified: false,
       ),
-      Merchants(
+      Merchants(isOpen: false,
         id: '5',
         name: 'The Liquor Store',
         location: 'Eldoret, Kenya',
@@ -57,7 +57,7 @@ class MerchantsRepository {
         rating: 4.4,
         isVerified: true,
       ),
-      Merchants(
+      Merchants(isOpen: true,
         id: '6',
         name: 'Crafted Spirits Co.',
         location: 'Nyeri, Kenya',
@@ -67,7 +67,7 @@ class MerchantsRepository {
         rating: 4.8,
         isVerified: true,
       ),
-      Merchants(
+      Merchants(isOpen: true,
         id: '7',
         name: 'Elite Liquor Lounge',
         location: 'Thika, Kenya',
@@ -77,7 +77,7 @@ class MerchantsRepository {
         rating: 4.9,
         isVerified: true,
       ),
-      Merchants(
+      Merchants(isOpen: true,
         id: '8',
         name: 'Heritage Liquors',
         location: 'Kericho, Kenya',
@@ -87,7 +87,7 @@ class MerchantsRepository {
         rating: 4.6,
         isVerified: true,
       ),
-      Merchants(
+      Merchants(isOpen: true,
         id: '9',
         name: 'The Tequila Cove',
         location: 'Malindi, Kenya',
@@ -97,7 +97,7 @@ class MerchantsRepository {
         rating: 4.5,
         isVerified: false,
       ),
-      Merchants(
+      Merchants(isOpen: true,
         id: '10',
         name: 'Vintage Spirits',
         location: 'Naivasha, Kenya',

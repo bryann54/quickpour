@@ -40,29 +40,29 @@ class brandCardAvatar extends StatelessWidget {
       children: [
         _buildAvatarImage(),
        
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.all(2),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 4,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: const Icon(
-                Icons.verified,
-                size: 16,
-                color: AppColors.accentColor,
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: 0,
+          //   right: 0,
+          //   child: Container(
+          //     padding: const EdgeInsets.all(2),
+          //     decoration: const BoxDecoration(
+          //       color: Colors.white,
+          //       shape: BoxShape.circle,
+          //       boxShadow: [
+          //         BoxShadow(
+          //           color: Colors.black12,
+          //           blurRadius: 4,
+          //           offset: Offset(0, 2),
+          //         ),
+          //       ],
+          //     ),
+          //     child: const Icon(
+          //       Icons.verified,
+          //       size: 16,
+          //       color: AppColors.accentColor,
+          //     ),
+          //   ),
+          // ),
       ],
     );
   }

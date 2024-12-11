@@ -120,7 +120,22 @@ class MerchantCardWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ],
+               RichText(
+  text: TextSpan(
+    text: 'Store is now ',
+    style: TextStyle(color: Colors.black, fontSize: 16), // Style for the base text
+    children: [
+      TextSpan(
+        text: merchant.isOpen ? 'Open' : 'Closed',
+        style: TextStyle(
+          color: merchant.isOpen ? Colors.green : Colors.red, // Color for the status
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ],
+  ),
+)
+],
                 ),
               ),
 

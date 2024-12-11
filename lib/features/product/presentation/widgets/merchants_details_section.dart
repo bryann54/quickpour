@@ -2,11 +2,12 @@ import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/product/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class FarmerDetailsSection extends StatelessWidget {
+class MerchantsDetailsSection extends StatelessWidget {
   final ProductModel product;
 
-  const FarmerDetailsSection({Key? key, required this.product})
+  const MerchantsDetailsSection({Key? key, required this.product})
       : super(key: key);
 
   @override
@@ -18,7 +19,7 @@ class FarmerDetailsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Farmer',
+          'store',
           style:
               theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
@@ -30,16 +31,26 @@ class FarmerDetailsSection extends StatelessWidget {
           ),
           child: Row(
             children: [
-              _buildFarmerAvatar(),
+              _buildmerchantsAvatar(),
               Expanded(
-                child: Text(
-                  product.farmer.name,
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: AppColors.primaryColor,
-                  ),
+                child: Column(mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.merchants.name,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                     Text(
+                      product.merchants.location,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                         color: AppColors.primaryColor.withOpacity(.4),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              _buildFarmerRating(context, isDarkMode),
+              _buildmerchantsRating(context, isDarkMode),
             ],
           ),
         ),
@@ -47,20 +58,41 @@ class FarmerDetailsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildFarmerAvatar() {
+  Widget _buildmerchantsAvatar() {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        Padding(
+      Padding(
           padding: const EdgeInsets.all(8.0),
           child: CircleAvatar(
             radius: 25,
-            backgroundImage: CachedNetworkImageProvider(
-              product.farmer.imageUrl.toString(),
+            
+            backgroundImage:
+                NetworkImage(product.merchants.imageUrl.toString()),
+            child: CachedNetworkImage(
+              imageUrl: product.merchants.imageUrl.toString(),
+              imageBuilder: (context, imageProvider) {
+                return CircleAvatar(
+                  radius: 25,
+                  backgroundImage: imageProvider,
+                );
+              },
+              errorWidget: (context, url, error) {
+                return const CircleAvatar(
+                  radius: 25,
+                  backgroundImage: AssetImage(
+                      'assets/placeholder_image.png'), 
+                  child: FaIcon(
+                    FontAwesomeIcons.houseChimneyWindow,
+                    size: 20, 
+                  ),
+                );
+              },
             ),
           ),
         ),
-        if (product.farmer.isVerified)
+
+        if (product.merchants.isVerified)
           Positioned(
             top: 0,
             right: 0,
@@ -91,7 +123,7 @@ class FarmerDetailsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildFarmerRating(BuildContext context, bool isDarkMode) {
+  Widget _buildmerchantsRating(BuildContext context, bool isDarkMode) {
     return Container(
       margin: const EdgeInsets.only(right: 8),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -108,7 +140,7 @@ class FarmerDetailsSection extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           Text(
-            product.farmer.rating.toStringAsFixed(1),
+            product.merchants.rating.toStringAsFixed(1),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
