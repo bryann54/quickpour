@@ -1,4 +1,3 @@
-
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
@@ -9,6 +8,7 @@ import 'package:chupachap/features/profile/presentation/pages/settings_screen.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:badges/badges.dart' as badges;
+
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showNotification;
   final bool showCart;
@@ -151,7 +151,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const ProfileScreen()));
+                                        builder: (context) =>
+                                            const ProfileScreen()));
                                 break;
                               case 'favorites':
                                 Navigator.push(
@@ -164,7 +165,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const OrdersScreen()));
+                                        builder: (context) =>
+                                            const OrdersScreen()));
                                 break;
                               case 'logout':
                                 print('Logout tapped');

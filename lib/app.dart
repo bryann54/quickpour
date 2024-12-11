@@ -25,28 +25,27 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-        final merchantRepository = MerchantsRepository();
+    final merchantRepository = MerchantsRepository();
     return MultiBlocProvider(
       providers: [
-          BlocProvider<ProductSearchBloc>(
+        BlocProvider<ProductSearchBloc>(
           create: (context) => ProductSearchBloc(
             productRepository: ProductRepository(),
           ),
         ),
-             BlocProvider(
-          create: (_) => MerchantBloc(merchantRepository)..add(FetchMerchantEvent()),
+        BlocProvider(
+          create: (_) =>
+              MerchantBloc(merchantRepository)..add(FetchMerchantEvent()),
         ),
-         BlocProvider(
+        BlocProvider(
           create: (context) =>
               OrdersBloc(checkoutBloc: context.read<CheckoutBloc>())
                 ..add(LoadOrdersFromCheckout()),
         ),
-       BlocProvider(
+        BlocProvider(
           create: (_) => BrandsBloc(brandRepository: BrandRepository())
             ..add(FetchBrandsEvent()), // Optionally, immediately fetch brands
         ),
-   
         BlocProvider(
           create: (context) => CategoriesBloc(FetchCategories(
             CategoryRepository(),

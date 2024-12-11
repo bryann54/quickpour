@@ -1,4 +1,3 @@
-
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/brands/presentation/bloc/brands_bloc.dart';
@@ -36,7 +35,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-    late ScrollController _scrollController;
+  late ScrollController _scrollController;
   late ProductSearchBloc _productSearchBloc;
   final _searchController = TextEditingController();
   final _searchSubject = PublishSubject<String>();
@@ -69,11 +68,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-      final theme = Theme.of(context);
+    final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     return MultiBlocProvider(
       providers: [
-        
         BlocProvider(
           create: (context) => ProductBloc(
             productRepository: ProductRepository(),
@@ -86,29 +84,29 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ],
       child: Scaffold(
-        appBar:  const CustomAppBar(
+        appBar: const CustomAppBar(
           showNotification: true,
-         showCart: false,
+          showCart: false,
           showProfile: true,
-        
         ),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-             Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: CustomSearchBar(
-                      controller: _searchController,
-                      onSearch: (query) {
-                        _searchSubject.add(query);
-                      },
-                      onFilterTap: () {
-                        print('Filter tapped');
-                      },
-                    ),
-                  ),
-                                       Padding(
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+                child: CustomSearchBar(
+                  controller: _searchController,
+                  onSearch: (query) {
+                    _searchSubject.add(query);
+                  },
+                  onFilterTap: () {
+                    print('Filter tapped');
+                  },
+                ),
+              ),
+              Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -117,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Text(
                           'Verified  Stores',
-                           style: theme.textTheme.titleMedium?.copyWith(
+                          style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -159,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         merchant: state.merchants);
                   }
                   if (state is MerchantLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: LoadingHorizontalList());
                   }
                   if (state is MerchantError) {
                     return Center(child: Text(state.message));
@@ -167,21 +165,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   return const SizedBox.shrink();
                 },
               ),
-
-        
-                 Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Top Brands',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Top Brands',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -189,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       },
-               child: Text(
+                      child: Text(
                         'See All',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: isDarkMode
@@ -197,15 +194,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   : AppColors.accentColor,
                             ),
                       ),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-
-             BlocBuilder<BrandsBloc, BrandsState>(
+              BlocBuilder<BrandsBloc, BrandsState>(
                 builder: (context, state) {
                   if (state is BrandsLoadedState) {
-                    return HorizontalbrandsListWidget(brand: state.brands);
+                    return HorizontalBrandsListWidget(brands: state.brands);
                   }
                   if (state is BrandsLoadingState) {
                     return const Center(child: LoadingHorizontalList());
@@ -216,9 +212,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   return const SizedBox.shrink();
                 },
               ),
-
               Padding(
-                padding: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.only(right: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -240,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Text(
                         'See All',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                           color: isDarkMode
+                              color: isDarkMode
                                   ? Colors.teal
                                   : AppColors.accentColor,
                             ),
@@ -252,16 +247,15 @@ class _HomeScreenState extends State<HomeScreen> {
               BlocBuilder<CategoriesBloc, CategoriesState>(
                 builder: (context, state) {
                   if (state is CategoriesLoaded) {
-                    return HorizontalListWidget(category: state.categories);
+                    return HorizontalCategoriesListWidget(
+                        categories: state.categories);
                   }
                   return const Center(child: LoadingHorizontalList());
                 },
               ),
-   
-              const SizedBox(height: 16),
               Text(
                 'Recommended for you',
-              style: theme.textTheme.titleMedium?.copyWith(
+                style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -313,7 +307,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   return const SizedBox.shrink();
                 },
               ),
-            
             ],
           ),
         ),

@@ -1,6 +1,6 @@
-
+import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
-import 'package:chupachap/features/product/presentation/pages/products_screen.dart';
+import 'package:chupachap/features/product_search/presentation/pages/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -10,33 +10,55 @@ class OrdersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(showCart: false,),
+      appBar: const CustomAppBar(
+        showCart: false,
+      ),
       body: _buildEmptyOrdersView(context),
     );
   }
 
   Widget _buildEmptyOrdersView(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          FaIcon(FontAwesomeIcons.clipboardList,
-              size: 100, color: Colors.grey[400]),
+          FaIcon(
+            FontAwesomeIcons.accusoft,
+            size: 50,
+          ),
           const SizedBox(height: 20),
           const Text('No orders yet',
               style: TextStyle(fontSize: 18, color: Colors.grey)),
           const SizedBox(height: 150),
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ProductsScreen(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => SearchPage()));
+              },
+              child: Container(
+                height: 50,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: isDarkMode
+                        ? AppColors.background.withOpacity(.8)
+                        : AppColors.backgroundDark),
+                child: Center(
+                  child: Text(
+                    'Search Page',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: isDarkMode
+                              ? AppColors.backgroundDark
+                              : AppColors.background,
+                        ),
+                  ),
                 ),
-              );
-            },
-            child: const Text('Start Shopping'),
-          ),
+              ),
+            ),
+          )
         ],
       ),
     );
