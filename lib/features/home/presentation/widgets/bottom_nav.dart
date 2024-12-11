@@ -7,7 +7,7 @@ import 'package:chupachap/features/favorites/presentation/bloc/favorites_state.d
 import 'package:chupachap/features/favorites/presentation/pages/favorites_screen.dart';
 import 'package:chupachap/features/home/presentation/pages/home_screen.dart';
 import 'package:chupachap/features/orders/presentation/pages/orders_screen.dart';
-import 'package:chupachap/features/search/presentation/pages/search_page.dart';
+import 'package:chupachap/features/product_search/presentation/pages/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

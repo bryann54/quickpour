@@ -1,0 +1,263 @@
+import 'package:chupachap/core/utils/colors.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rxdart/rxdart.dart';
+
+import 'package:chupachap/features/product/data/repositories/product_repository.dart';
+import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
+import 'package:chupachap/features/product/presentation/bloc/product_event.dart';
+import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
+import 'package:chupachap/features/product/presentation/widgets/product_card.dart';
+import 'package:chupachap/features/product/presentation/widgets/product_shimmer_widget.dart';
+import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
+import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
+import 'package:chupachap/features/product_search/presentation/bloc/product_search_state.dart';
+import 'package:chupachap/features/product_search/presentation/widgets/search_bar.dart';
+
+class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
+
+  @override
+  State<SearchPage> createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  late ScrollController _scrollController;
+  late ProductSearchBloc _productSearchBloc;
+  final _searchController = TextEditingController();
+  final _searchSubject = PublishSubject<String>();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _productSearchBloc = ProductSearchBloc(
+      productRepository: ProductRepository(),
+    );
+
+    // Setup debounce for search
+    _searchSubject
+        .debounceTime(const Duration(milliseconds: 500))
+        .distinct()
+        .listen((query) {
+      _productSearchBloc.add(SearchProductsEvent(query));
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _searchController.dispose();
+    _searchSubject.close();
+    _productSearchBloc.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+          final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ProductBloc(
+            productRepository: ProductRepository(),
+          )..add(FetchProductsEvent()),
+        ),
+        BlocProvider.value(
+          value: _productSearchBloc,
+        ),
+      ],
+      child: Scaffold(
+        body: CustomScrollView(
+          controller: _scrollController,
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            // Sliver App Bar with Search
+            SliverAppBar(
+              floating: true,
+              pinned: true,
+              elevation: 0,
+              expandedHeight: 120.0,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              flexibleSpace: FlexibleSpaceBar(
+                expandedTitleScale: 1,
+                titlePadding: EdgeInsets.zero,
+                title: Container(
+                  width: double.infinity,
+                  height: 56.0,
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: CustomSearchBar(
+                      controller: _searchController,
+                      onSearch: (query) {
+                        _searchSubject.add(query);
+                      },
+                      onFilterTap: () {
+                        print('Filter tapped');
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            // Search Results or Products Grid
+            BlocBuilder<ProductSearchBloc, ProductSearchState>(
+              builder: (context, searchState) {
+                // If search is active and has results
+                if (searchState is ProductSearchLoadedState &&
+                    searchState.searchResults.isNotEmpty) {
+                  return SliverPadding(
+                    padding: const EdgeInsets.all(10),
+                    sliver: SliverGrid(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.7,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final product = searchState.searchResults[index];
+                          return ProductCard(product: product);
+                        },
+                        childCount: searchState.searchResults.length,
+                      ),
+                    ),
+                  );
+                }
+
+                // If search is active but no results
+                if (searchState is ProductSearchLoadedState &&
+                    searchState.searchResults.isEmpty) {
+                  return  SliverFillRemaining(
+                    child: Center(
+                      child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                         Text(
+                              'Oops!!... didn\'t find "${_searchController.text}"'),
+                        const  SizedBox(
+                            height: 50,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: isDarkMode?AppColors.background.withOpacity(.8):AppColors.backgroundDark
+                              ),
+                              child: Center(
+                                child: Text('make drink request',  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: isDarkMode
+                                  ? AppColors.backgroundDark
+                                  :  AppColors.background,
+                            ),),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
+                // Fallback to original product list
+                return BlocBuilder<ProductBloc, ProductState>(
+                  builder: (context, state) {
+                      if (searchState is ProductSearchLoadingState) {
+                      return const SliverFillRemaining(
+                        child: Center(
+                          child: CircularProgressIndicator.adaptive(
+                            
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (state is ProductLoadingState) {
+                      return SliverPadding(
+                        padding: const EdgeInsets.all(10),
+                        sliver: SliverGrid(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.7,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) => const ProductCardShimmer(),
+                            childCount: 6,
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (state is ProductErrorState) {
+                      return SliverFillRemaining(
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.error_outline, size: 60),
+                              const SizedBox(height: 16),
+                              Text(
+                                state.errorMessage,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              const SizedBox(height: 16),
+                              ElevatedButton(
+                                onPressed: () {
+                                  context
+                                      .read<ProductBloc>()
+                                      .add(FetchProductsEvent());
+                                },
+                                child: const Text('Retry'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (state is ProductLoadedState) {
+                      return SliverPadding(
+                        padding: const EdgeInsets.all(10),
+                        sliver: SliverGrid(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.7,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              final product = state.products[index];
+                              return ProductCard(product: product);
+                            },
+                            childCount: state.products.length,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return const SliverToBoxAdapter(child: SizedBox.shrink());
+                  },
+                );
+              },
+            ),
+
+            // Bottom padding
+            const SliverPadding(padding: EdgeInsets.only(bottom: 20)),
+          ],
+        ),
+      ),
+    );
+  }
+}
