@@ -84,7 +84,7 @@ class _CartPageState extends State<CartPage>
 
     return Scaffold(
       appBar: const CustomAppBar(
-       
+       showCart: false,
       ),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, cartState) {
@@ -205,7 +205,8 @@ class _CartPageState extends State<CartPage>
                           'KSh ${cartState.cart.totalPrice.toStringAsFixed(2)}',
                           style:
                               Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    color: AppColors.primaryColor,
+                                    color:isDarkMode? AppColors.surface.withOpacity(.7)
+                                        : AppColors.primaryColor,
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
