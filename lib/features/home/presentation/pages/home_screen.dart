@@ -12,7 +12,7 @@ import 'package:chupachap/features/categories/presentation/bloc/categories_state
 import 'package:chupachap/features/categories/presentation/pages/categories_screen.dart';
 import 'package:chupachap/features/categories/presentation/widgets/horizontal_list_widget.dart';
 import 'package:chupachap/features/categories/presentation/widgets/shimmer_widget.dart';
-import 'package:chupachap/features/home/presentation/widgets/search_bar.dart';
+import 'package:chupachap/features/search/presentation/widgets/search_bar.dart';
 import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
 import 'package:chupachap/features/merchant/presentation/pages/merchants_screen.dart';
 import 'package:chupachap/features/merchant/presentation/widgets/merchant_horizontal_list_widget.dart';
@@ -154,13 +154,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       },
-                child: Text(
-                  'See All',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppColors.accentColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+               child: Text(
+                        'See All',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: isDarkMode
+                                  ? Colors.teal
+                                  : AppColors.accentColor,
+                            ),
+                      ),
               ),
             ],
           ),
