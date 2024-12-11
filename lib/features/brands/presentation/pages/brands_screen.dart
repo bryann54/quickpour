@@ -11,14 +11,14 @@ class BrandsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBar(),
       body: BlocProvider(
         create: (context) => BrandsBloc(brandRepository: BrandRepository())
           ..add(FetchBrandsEvent()),
         child: BlocBuilder<BrandsBloc, BrandsState>(
           builder: (context, state) {
             if (state is BrandsLoadingState) {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             } else if (state is BrandsLoadedState) {
            return ListView.builder(
                 itemCount: state.brands.length,
@@ -28,7 +28,7 @@ class BrandsScreen extends StatelessWidget {
                 },
               );
             }
-            return Text('Failed to load brands');
+            return const Text('Failed to load brands');
           },
         ),
       ),

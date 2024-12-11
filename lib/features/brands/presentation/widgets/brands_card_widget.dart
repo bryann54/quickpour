@@ -91,7 +91,7 @@ class BrandCardWidget extends StatelessWidget {
                   color: AppColors.accentColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.business,
                   color: AppColors.accentColor,
                   size: 20,
