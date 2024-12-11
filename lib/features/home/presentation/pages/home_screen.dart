@@ -154,13 +154,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       },
-                child: Text(
-                  'See All',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppColors.accentColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                 child: Text(
+                        'See All',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: isDarkMode
+                                  ? Colors.teal
+                                  : AppColors.accentColor,
+                            ),
+                      ),
               ),
             ],
           ),
