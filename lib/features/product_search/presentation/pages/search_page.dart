@@ -1,4 +1,6 @@
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/features/drink_request/presentation/pages/drink_request_screen.dart';
+import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
@@ -53,9 +55,33 @@ class _SearchPageState extends State<SearchPage> {
     super.dispose();
   }
 
+  void _openFilterBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.75,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        builder: (_, controller) => FilterBottomSheet(
+          onApplyFilters: (filters) {
+            _productSearchBloc.add(
+              FilterProductsEvent(
+                category: filters['category'] as String?,
+                store: filters['store'] as String?,
+                priceRange: filters['priceRange'] as RangeValues?,
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-          final theme = Theme.of(context);
+    final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     return MultiBlocProvider(
       providers: [
@@ -94,9 +120,7 @@ class _SearchPageState extends State<SearchPage> {
                       onSearch: (query) {
                         _searchSubject.add(query);
                       },
-                      onFilterTap: () {
-                        print('Filter tapped');
-                      },
+                      onFilterTap: _openFilterBottomSheet, // Show filter
                     ),
                   ),
                 ),
@@ -133,29 +157,45 @@ class _SearchPageState extends State<SearchPage> {
                 // If search is active but no results
                 if (searchState is ProductSearchLoadedState &&
                     searchState.searchResults.isEmpty) {
-                  return  SliverFillRemaining(
+                  return SliverFillRemaining(
                     child: Center(
-                      child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                         Text(
+                          Text(
                               'Oops!!... didn\'t find "${_searchController.text}"'),
-                        const  SizedBox(
+                          const SizedBox(
                             height: 50,
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: isDarkMode?AppColors.background.withOpacity(.8):AppColors.backgroundDark
-                              ),
-                              child: Center(
-                                child: Text('make drink request',  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: isDarkMode
-                                  ? AppColors.backgroundDark
-                                  :  AppColors.background,
-                            ),),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => DrinkRequestScreen()));
+                              },
+                              child: Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: isDarkMode
+                                        ? AppColors.background.withOpacity(.8)
+                                        : AppColors.backgroundDark),
+                                child: Center(
+                                  child: Text(
+                                    'make drink request',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                          color: isDarkMode
+                                              ? AppColors.backgroundDark
+                                              : AppColors.background,
+                                        ),
+                                  ),
+                                ),
                               ),
                             ),
                           )
@@ -168,12 +208,10 @@ class _SearchPageState extends State<SearchPage> {
                 // Fallback to original product list
                 return BlocBuilder<ProductBloc, ProductState>(
                   builder: (context, state) {
-                      if (searchState is ProductSearchLoadingState) {
+                    if (searchState is ProductSearchLoadingState) {
                       return const SliverFillRemaining(
                         child: Center(
-                          child: CircularProgressIndicator.adaptive(
-                            
-                          ),
+                          child: CircularProgressIndicator.adaptive(),
                         ),
                       );
                     }

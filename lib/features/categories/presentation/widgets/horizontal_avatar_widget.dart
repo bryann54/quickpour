@@ -1,12 +1,11 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/categories/domain/entities/category.dart';
-import 'package:flutter/material.dart';
 
 class CategoryCardAvatar extends StatelessWidget {
-  final double? width;
   final Category category;
+  final double? width;
 
   const CategoryCardAvatar({super.key, required this.category, this.width});
 
@@ -14,69 +13,79 @@ class CategoryCardAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: () {
-        // Add navigation logic here if needed
-        // For example:
-        // Navigator.pushNamed(
-        //   context,
-        //   Routes.productsByCategory,
-        //   arguments: category.id,
-        // );
+        // TODO: Implement category navigation
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Tapped ${category.name} category')),
+        );
       },
-      child: Container(
-        margin: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: AppColors.accentColor.withOpacity(0.3),
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(25),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 5.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: width ?? 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.accentColor, width: 2),
-                  color: Colors.grey[100],
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 70,
+            height: 70,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.accentColor.withOpacity(0.1),
+                  AppColors.accentColor.withOpacity(0.3),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              border: Border.all(
+                color: AppColors.accentColor.withOpacity(0.3),
+                width: 2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.accentColor.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
                 ),
-                child: ClipOval(
-                  child: CachedNetworkImage(
-                    imageUrl: category.imageUrl,
-                    placeholder: (context, url) => const Center(
-                      child: CircularProgressIndicator.adaptive(),
+              ],
+            ),
+            child: ClipOval(
+              child: CachedNetworkImage(
+                imageUrl: category.imageUrl,
+                placeholder: (context, url) => Container(
+                  color: Colors.grey[200],
+                  child: const Center(
+                    child: CircularProgressIndicator.adaptive(
+                      strokeWidth: 2,
                     ),
-                    errorWidget: (context, url, error) => Icon(
-                      Icons.error,
-                      size: 35,
-                      color: isDarkMode
-                          ? AppColors.accentColor
-                          : AppColors.surfaceColorDark.withOpacity(.4),
-                    ),
-                    fit: BoxFit.cover,
                   ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                category.name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 11,
+                errorWidget: (context, url, error) => Container(
+                  color: Colors.grey[200],
+                  child: Icon(
+                    Icons.category,
+                    size: 40,
+                    color: Colors.grey[400],
+                  ),
                 ),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+                fit: BoxFit.cover,
               ),
-            ],
+            ),
           ),
-        ),
+          const SizedBox(height: 8),
+          Text(
+            category.name,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+              color: isDarkMode ? Colors.white70 : Colors.black87,
+              letterSpacing: 0.5,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }

@@ -1,0 +1,276 @@
+import 'package:chupachap/core/utils/colors.dart';
+import 'package:flutter/material.dart';
+import 'package:chupachap/features/categories/data/repositories/category_repository.dart';
+import 'package:chupachap/features/merchant/data/repositories/merchants_repository.dart';
+
+class FilterBottomSheet extends StatefulWidget {
+  final Function(Map<String, dynamic>) onApplyFilters;
+
+  const FilterBottomSheet({
+    super.key,
+    required this.onApplyFilters,
+  });
+
+  @override
+  State<FilterBottomSheet> createState() => _FilterBottomSheetState();
+}
+
+class _FilterBottomSheetState extends State<FilterBottomSheet> {
+  // Add this at the top of the FilterBottomSheet class
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
+// Update the _loadFilters method
+  Future<void> _loadFilters() async {
+    try {
+      final categoryRepository = CategoryRepository();
+      final merchantsRepository = MerchantsRepository();
+
+      final categoriesList = await categoryRepository.getCategories();
+      final merchantsList = await merchantsRepository.getMerchants();
+
+      if (mounted) {
+        setState(() {
+          categories = categoriesList.map((category) => category.name).toList();
+          stores = merchantsList.map((merchant) => merchant.name).toList();
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        _showErrorSnackBar('Failed to load filters: ${e.toString()}');
+      }
+    }
+  }
+
+// Update the _applyFilters method
+  void _applyFilters() {
+    if (selectedCategory == null &&
+        selectedStore == null &&
+        _currentRangeValues == const RangeValues(0, 10000)) {
+      _showErrorSnackBar('Please select at least one filter');
+      return;
+    }
+
+    widget.onApplyFilters({
+      'category': selectedCategory,
+      'store': selectedStore,
+      'priceRange': _currentRangeValues,
+    });
+    Navigator.pop(context);
+  }
+
+  String? selectedCategory;
+  String? selectedStore;
+  RangeValues _currentRangeValues = const RangeValues(0, 10000);
+  bool _isLoading = true;
+  List<String> categories = [];
+  List<String> stores = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFilters();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.scaffoldBackgroundColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Header
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: isDarkMode ? Colors.grey[800]! : Colors.grey[200]!,
+                ),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Filters',
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close),
+                ),
+              ],
+            ),
+          ),
+
+          if (_isLoading)
+            const Padding(
+              padding: EdgeInsets.all(20),
+              child: CircularProgressIndicator.adaptive(),
+            )
+          else
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Categories
+                    _buildSectionTitle('Category'),
+                    const SizedBox(height: 8),
+                    _buildCategoryChips(),
+                    const SizedBox(height: 24),
+
+                    // Stores
+                    _buildSectionTitle('Stores'),
+                    const SizedBox(height: 8),
+                    _buildStoreChips(),
+                    const SizedBox(height: 24),
+
+                    // Price Range
+                    _buildSectionTitle('Price Range'),
+                    const SizedBox(height: 16),
+                    _buildPriceRangeSlider(isDarkMode),
+                    const SizedBox(height: 24),
+
+                    // Apply Button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _applyFilters,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.accentColor,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'Apply Filters',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+    );
+  }
+
+  Widget _buildCategoryChips() {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: categories.map((category) {
+        final isSelected = selectedCategory == category;
+        return FilterChip(
+          label: Text(category),
+          selected: isSelected,
+          onSelected: (bool selected) {
+            setState(() {
+              selectedCategory = selected ? category : null;
+            });
+          },
+          backgroundColor: isSelected ? AppColors.accentColor : null,
+          labelStyle: TextStyle(
+            color: isSelected ? Colors.white : null,
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildStoreChips() {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: stores.map((store) {
+        final isSelected = selectedStore == store;
+        return FilterChip(
+          label: Text(store),
+          selected: isSelected,
+          onSelected: (bool selected) {
+            setState(() {
+              selectedStore = selected ? store : null;
+            });
+          },
+          backgroundColor: isSelected ? AppColors.accentColor : null,
+          labelStyle: TextStyle(
+            color: isSelected ? Colors.white : null,
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildPriceRangeSlider(bool isDarkMode) {
+    return Column(
+      children: [
+        RangeSlider(
+          values: _currentRangeValues,
+          max: 10000,
+          divisions: 100,
+          labels: RangeLabels(
+            'KES ${_currentRangeValues.start.round()}',
+            'KES ${_currentRangeValues.end.round()}',
+          ),
+          onChanged: (RangeValues values) {
+            setState(() {
+              _currentRangeValues = values;
+            });
+          },
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'KES ${_currentRangeValues.start.round()}',
+              style: TextStyle(
+                color: isDarkMode ? Colors.white70 : Colors.grey[600],
+              ),
+            ),
+            Text(
+              'KES ${_currentRangeValues.end.round()}',
+              style: TextStyle(
+                color: isDarkMode ? Colors.white70 : Colors.grey[600],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}

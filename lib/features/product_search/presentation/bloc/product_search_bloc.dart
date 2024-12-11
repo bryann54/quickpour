@@ -11,11 +11,11 @@ class ProductSearchBloc extends Bloc<ProductSearchEvent, ProductSearchState> {
   ProductSearchBloc({required this.productRepository})
       : super(ProductSearchInitialState()) {
     on<SearchProductsEvent>(_onSearchProducts);
+    on<FilterProductsEvent>(_onFilterProducts); // Add this line
   }
 
   void _onSearchProducts(
       SearchProductsEvent event, Emitter<ProductSearchState> emit) async {
-    // If products haven't been loaded yet, load them first
     if (_allProducts.isEmpty) {
       emit(ProductSearchLoadingState());
       try {
@@ -26,7 +26,6 @@ class ProductSearchBloc extends Bloc<ProductSearchEvent, ProductSearchState> {
       }
     }
 
-    // Perform search
     final query = event.query.toLowerCase();
     final searchResults = _allProducts.where((product) {
       return product.productName.toLowerCase().contains(query) ||
@@ -35,5 +34,36 @@ class ProductSearchBloc extends Bloc<ProductSearchEvent, ProductSearchState> {
     }).toList();
 
     emit(ProductSearchLoadedState(searchResults));
+  }
+
+  Future<void> _onFilterProducts(
+    FilterProductsEvent event,
+    Emitter<ProductSearchState> emit,
+  ) async {
+    if (_allProducts.isEmpty) {
+      emit(ProductSearchLoadingState());
+      try {
+        _allProducts = await productRepository.getProducts();
+      } catch (e) {
+        emit(ProductSearchErrorState('Failed to load products'));
+        return;
+      }
+    }
+
+    final filteredProducts = _allProducts.where((product) {
+      bool matchesCategory =
+          event.category == null || product.category.name == event.category;
+
+      bool matchesStore =
+          event.store == null || product.merchants.name == event.store;
+
+      bool matchesPrice = event.priceRange == null ||
+          (product.price >= event.priceRange!.start &&
+              product.price <= event.priceRange!.end);
+
+      return matchesCategory && matchesStore && matchesPrice;
+    }).toList();
+
+    emit(ProductSearchLoadedState(filteredProducts));
   }
 }
