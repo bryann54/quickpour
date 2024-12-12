@@ -1,4 +1,3 @@
-
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/home/presentation/widgets/logout_button_widget.dart';
@@ -7,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends StatelessWidget {
-
-
-  const ProfileScreen({super.key,});
+  const ProfileScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +17,7 @@ class ProfileScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: const CustomAppBar(
-   
         showProfile: false,
-       
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -80,7 +77,7 @@ class ProfileScreen extends StatelessWidget {
             backgroundColor: AppColors.accentColor.withOpacity(0.2),
             // ignore: unnecessary_null_comparison
             backgroundImage: 'user.profileImage' != null
-                ?const NetworkImage('ser.profileImage')
+                ? const NetworkImage('ser.profileImage')
                 : null,
             // child: user.profileImage == null
             //     ? Icon(
@@ -105,7 +102,7 @@ class ProfileScreen extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-               ' user.email',
+                ' user.email',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Colors.grey,
                     ),

@@ -1,4 +1,3 @@
-
 import 'package:chupachap/features/orders/data/models/order_model.dart';
 
 class CompletedOrder {
