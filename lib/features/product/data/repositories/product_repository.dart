@@ -26,7 +26,7 @@ class ProductRepository {
     return [
       ProductModel(
         id: '1',
-      
+
         productName: 'Tusker Lager',
         imageUrls: [
           'https://greenspoon.co.ke/wp-content/uploads/2023/02/Greenspoon-Kenya-Tusker-Lager.jpg',
@@ -39,7 +39,7 @@ class ProductRepository {
       ),
       ProductModel(
         id: '2',
-    
+
         productName: 'Frontera Cabernet Sauvignon',
         imageUrls: [
           'https://winenliquor.com/wp-content/uploads/Frontera-Cabernet-Sauvignon-Wine-N-Liquor.jpg',
@@ -51,7 +51,7 @@ class ProductRepository {
       ),
       ProductModel(
         id: '3',
-       
+
         productName: 'Jameson Irish Whiskey',
         imageUrls: [
           'https://www.drinksupermarket.com/media/catalog/product/cache/ad8b6ba7fad7f4211ece39072947e9e8/j/a/jameson-original-irish-whiskey-70cl_3.jpg',
@@ -63,7 +63,7 @@ class ProductRepository {
       ),
       ProductModel(
         id: '4',
-     
+
         productName: 'Smirnoff Vodka',
         imageUrls: [
           'https://soys.co.ke/PImages/AAAAJ-0.png',
@@ -75,7 +75,7 @@ class ProductRepository {
       ),
       ProductModel(
         id: '5',
-    
+
         productName: 'Captain Morgan Dark Rum',
         imageUrls: [
           'https://mydrinx.shop/cdn/shop/products/2da39ac2c53de95f0c315f51a99377e36f679cd916e6b0cabb856bff867ea2e2.jpg?v=1710799969',
@@ -87,7 +87,7 @@ class ProductRepository {
       ),
       ProductModel(
         id: '6',
-       
+
         productName: 'Beefeater Gin',
         imageUrls: [
           'https://res.cloudinary.com/dyc0ieeyu/image/upload/c_fit,f_auto/v1/products/beefeater-clear-gin.jpg',
@@ -99,7 +99,7 @@ class ProductRepository {
       ),
       ProductModel(
         id: '7',
-       
+
         productName: 'Hunter’s Gold Cider',
         imageUrls: [
           'https://www.havenwines.co.ke/wp-content/uploads/2021/08/Hunters-Gold-330Ml-Cider-Bottle.jpg',
@@ -111,7 +111,7 @@ class ProductRepository {
       ),
       ProductModel(
         id: '8',
-      
+
         productName: 'Hennessy VS Cognac',
         imageUrls: [
           'https://www.wildpoppies.co.nz/cdn/shop/files/hennessy-vs-cognac-singles-moet-wild-poppies-brown-for-him-orange-908841_2048x.jpg?v=1725332394',
@@ -123,7 +123,7 @@ class ProductRepository {
       ),
       ProductModel(
         id: '9',
-       
+
         productName: 'Moët & Chandon Brut',
         imageUrls: [
           'https://vineonline.vtexassets.com/arquivos/ids/162178/540036-1.jpg?v=638177090072100000',
@@ -135,7 +135,7 @@ class ProductRepository {
       ),
       ProductModel(
         id: '10',
-        
+
         productName: 'Jose Cuervo Tequila',
         imageUrls: [
           'https://www.liquorshack.co.ke/wp-content/uploads/2022/03/Jose-Cuervo-Especial-Reposado-1-Litre.jpg',

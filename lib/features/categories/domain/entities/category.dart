@@ -1,4 +1,3 @@
-
 import 'package:chupachap/features/categories/data/models/category_model.dart';
 
 class Category {

@@ -46,7 +46,8 @@ class _GetstartedButtonState extends State<GetstartedButton>
     Navigator.pushReplacement(
       context,
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => const HomeScreen(),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            const HomeScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(
             opacity: animation,

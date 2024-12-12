@@ -14,9 +14,7 @@ class SettingsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: const CustomAppBar(
-   
         showProfile: false,
-      
       ),
       body: SingleChildScrollView(
         child: Padding(

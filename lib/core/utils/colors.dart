@@ -16,7 +16,6 @@ class AppColors {
   static const Color success = Color(0xFF2ECC71); // Success Green
   static const Color warning = Color(0xFFF1C40F); // Warning Yellow
 
-
   // Light Theme Gradient for Buttons
   static const LinearGradient lightButtonGradient = LinearGradient(
     colors: [primaryColor, secondaryColor],

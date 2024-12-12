@@ -1,13 +1,14 @@
-
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomSearchBar extends StatefulWidget {
+  final TextEditingController controller;
   final Function(String) onSearch;
   final VoidCallback onFilterTap;
 
   const CustomSearchBar({
     super.key,
+    required this.controller,
     required this.onSearch,
     required this.onFilterTap,
   });
@@ -17,14 +18,6 @@ class CustomSearchBar extends StatefulWidget {
 }
 
 class _CustomSearchBarState extends State<CustomSearchBar> {
-  final TextEditingController _searchController = TextEditingController();
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -55,7 +48,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: TextField(
-                    controller: _searchController,
+                    controller: widget.controller,
                     onChanged: widget.onSearch,
                     decoration: InputDecoration(
                       hintText: 'Search product',
@@ -68,11 +61,11 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                     ),
                   ),
                 ),
-                if (_searchController.text.isNotEmpty)
+                if (widget.controller.text.isNotEmpty)
                   GestureDetector(
                     onTap: () {
-                      _searchController.clear();
-                      widget.onSearch('');
+                      widget.controller.clear();
+                      widget.onSearch(''); 
                     },
                     child: Icon(
                       Icons.close,

@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/favorites/data/models/favorites_model.dart';
@@ -58,7 +57,9 @@ class FavoritesWidget extends StatelessWidget {
                     favoriteItem.product.productName,
                     style: theme.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: isDarkMode ? AppColors.surface.withOpacity(.3): Colors.black,
+                      color: isDarkMode
+                          ? AppColors.surface.withOpacity(.3)
+                          : Colors.black,
                     ),
                   ),
                 ],
@@ -69,8 +70,9 @@ class FavoritesWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color:
-                              isDarkMode ? AppColors.surface.withOpacity(.3) : AppColors.accentColor,
+                          color: isDarkMode
+                              ? AppColors.surface.withOpacity(.3)
+                              : AppColors.accentColor,
                         )),
                     child: CircleAvatar(
                       radius: 10,
@@ -81,7 +83,8 @@ class FavoritesWidget extends StatelessWidget {
                   Text(
                     '  ${favoriteItem.product.category.name}',
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: isDarkMode ? AppColors.surface.withOpacity(.3)
+                      color: isDarkMode
+                          ? AppColors.surface.withOpacity(.3)
                           : Colors.black54,
                     ),
                   ),
@@ -111,8 +114,9 @@ class FavoritesWidget extends StatelessWidget {
           trailing: Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: isDarkMode ? AppColors.surface.withOpacity(.3) : AppColors.backgroundDark.withOpacity(.1),
-              
+              color: isDarkMode
+                  ? AppColors.surface.withOpacity(.3)
+                  : AppColors.backgroundDark.withOpacity(.1),
             ),
             child: IconButton(
               icon: Icon(

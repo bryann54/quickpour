@@ -1,4 +1,3 @@
-
 import 'package:chupachap/core/utils/colors.dart';
 
 import 'package:chupachap/features/Merchant/presentation/widgets/horizontal_avatar_widget.dart';
@@ -26,8 +25,7 @@ class HorizontalMerchantsListWidget extends StatelessWidget {
           color: isDarkMode
               ? AppColors.dividerColorDark.withOpacity(.3)
               : AppColors.cardColor.withOpacity(.5),
-          borderRadius:
-              BorderRadius.circular(12), 
+          borderRadius: BorderRadius.circular(12),
         ),
         child: verifiedMerchants.isEmpty
             ? const Center(
