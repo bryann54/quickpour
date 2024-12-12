@@ -65,7 +65,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                   GestureDetector(
                     onTap: () {
                       widget.controller.clear();
-                      widget.onSearch(''); // Clear search results
+                      widget.onSearch(''); 
                     },
                     child: Icon(
                       Icons.close,
