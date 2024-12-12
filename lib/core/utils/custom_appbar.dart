@@ -1,19 +1,19 @@
-
+import 'package:chupachap/core/utils/custom_greetings.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
-import 'package:chupachap/features/favorites/presentation/pages/favorites_screen.dart';
-import 'package:chupachap/features/orders/presentation/pages/orders_screen.dart';
 import 'package:chupachap/features/profile/presentation/pages/profile_screen.dart';
 import 'package:chupachap/features/profile/presentation/pages/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showNotification;
   final bool showCart;
   final bool showProfile;
   final bool useCartFAB;
+  final bool showGreeting;
   final double iconSize;
   final Color? iconColor;
   final ThemeData? theme;
@@ -23,6 +23,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     Key? key,
     this.showNotification = true,
+    this.showGreeting =false,
     this.showCart = true,
     this.showProfile = true,
     this.useCartFAB = false,
@@ -44,12 +45,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       MaterialPageRoute(builder: (context) => const CartPage()),
     );
   }
-
-  void _handleProfileTap(BuildContext context) {
-    // Add your profile navigation/logic here
-    print('Profile tapped');
-  }
-
   Widget _buildCartIcon(
       BuildContext context, CartState cartState, ThemeData currentTheme) {
     final iconColorWithTheme = iconColor ?? currentTheme.iconTheme.color;
@@ -60,8 +55,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         style: const TextStyle(color: Colors.white),
       ),
       showBadge: cartState.cart.totalQuantity > 0,
-      child: Icon(
-        Icons.shopping_cart_outlined,
+      child: FaIcon(
+        FontAwesomeIcons.cartShopping,
         size: iconSize,
         color: iconColorWithTheme,
       ),
@@ -78,16 +73,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           : Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Logo
-                SizedBox(
-                  height: 127,
-                  width: 100,
-                  child: Image.asset(
-                    'assets/splash.png',
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                // Icons
+                // Conditional Greeting or Logo
+                showGreeting
+                    ? const CustomGreeting(
+                      //to be changed to use user name from model
+                       userName: 'Brian', 
+                    )
+
+                    : SizedBox(
+                        height: 127,
+                        width: 100,
+                        child: Image.asset(
+                          'assets/splash.png',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                // Icons Row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   mainAxisSize: MainAxisSize.min,
@@ -96,8 +97,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       SizedBox(
                         width: 40,
                         child: IconButton(
-                          icon: Icon(
-                            Icons.notifications_outlined,
+                          icon: FaIcon(
+                            FontAwesomeIcons.bell,
                             size: iconSize,
                             color: iconColorWithTheme,
                           ),
@@ -117,8 +118,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                               ),
                               showBadge: cartState.cart.totalQuantity > 0,
                               child: IconButton(
-                                icon: Icon(
-                                  Icons.shopping_cart_outlined,
+                                icon: FaIcon(
+                                  FontAwesomeIcons.cartShopping,
                                   size: iconSize,
                                   color: iconColorWithTheme,
                                 ),
@@ -133,8 +134,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       SizedBox(
                         width: 40,
                         child: PopupMenuButton<String>(
-                          icon: Icon(
-                            Icons.person_outline,
+                          icon: FaIcon(
+                            FontAwesomeIcons.userCircle,
                             size: iconSize,
                             color: iconColorWithTheme,
                           ),
@@ -151,20 +152,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const ProfileScreen()));
-                                break;
-                              case 'favorites':
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
                                         builder: (context) =>
-                                            const FavoritesScreen()));
-                                break;
-                              case 'Orders':
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const OrdersScreen()));
+                                            const ProfileScreen()));
+                   
                                 break;
                               case 'logout':
                                 print('Logout tapped');
@@ -176,7 +166,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                               value: 'settings',
                               child: Row(
                                 children: [
-                                  Icon(Icons.settings, size: 20),
+                                 FaIcon(
+                            FontAwesomeIcons.cog, size: 20),
                                   SizedBox(width: 10),
                                   Text('Settings'),
                                 ],
@@ -186,37 +177,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                               value: 'profile',
                               child: Row(
                                 children: [
-                                  Icon(Icons.person, size: 20),
+                                  FaIcon(
+                            FontAwesomeIcons.userCircle, size: 20),
                                   SizedBox(width: 10),
                                   Text('Profile'),
                                 ],
                               ),
                             ),
-                            const PopupMenuItem<String>(
-                              value: 'favorites',
-                              child: Row(
-                                children: [
-                                  Icon(Icons.favorite, size: 20),
-                                  SizedBox(width: 10),
-                                  Text('Favorites'),
-                                ],
-                              ),
-                            ),
-                            const PopupMenuItem<String>(
-                              value: 'Orders',
-                              child: Row(
-                                children: [
-                                  Icon(Icons.shopping_bag, size: 20),
-                                  SizedBox(width: 10),
-                                  Text('Orders'),
-                                ],
-                              ),
-                            ),
+                     
                             const PopupMenuItem<String>(
                               value: 'logout',
                               child: Row(
                                 children: [
-                                  Icon(Icons.logout, size: 20),
+                                FaIcon(FontAwesomeIcons.rightFromBracket, size: 20),
                                   SizedBox(width: 10),
                                   Text('Logout'),
                                 ],

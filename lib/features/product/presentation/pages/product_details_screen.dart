@@ -1,14 +1,11 @@
-
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:chupachap/features/product/data/models/product_model.dart';
 import 'package:chupachap/features/product/presentation/widgets/cart_footer.dart';
 import 'package:chupachap/features/product/presentation/widgets/merchants_details_section.dart';
-import 'package:chupachap/features/product/presentation/widgets/product_category_section.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_details_header.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_image_gallery.dart';
-import 'package:chupachap/features/product/presentation/widgets/product_price_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -50,7 +47,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       appBar: const CustomAppBar(
         showNotification: true,
         showProfile: false,
-        
       ),
       body: MultiBlocProvider(
         providers: [
@@ -69,11 +65,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     const SizedBox(height: 16),
                     ProductDetailsHeader(product: widget.product),
                     const SizedBox(height: 16),
-                    ProductCategorySection(product: widget.product),
                     const SizedBox(height: 6),
                     MerchantsDetailsSection(product: widget.product),
                     const SizedBox(height: 16),
-                    ProductPriceSection(product: widget.product),
                     const SizedBox(height: 100),
                   ],
                 ),

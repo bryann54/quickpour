@@ -1,4 +1,3 @@
-
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/categories/presentation/widgets/shimmer_widget.dart';
 import 'package:flutter/material.dart';

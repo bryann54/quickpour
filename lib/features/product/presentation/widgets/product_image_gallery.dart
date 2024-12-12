@@ -9,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductImageGallery extends StatefulWidget {
   final ProductModel product;
-  
 
   const ProductImageGallery({Key? key, required this.product})
       : super(key: key);

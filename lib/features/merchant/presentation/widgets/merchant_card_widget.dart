@@ -1,4 +1,3 @@
-
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
 
@@ -85,10 +84,12 @@ class MerchantCardWidget extends StatelessWidget {
                         Expanded(
                           child: Text(
                             merchant.name,
-                            style:
-                                Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -120,22 +121,26 @@ class MerchantCardWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-               RichText(
-  text: TextSpan(
-    text: 'Store is now ',
-    style: TextStyle(color: Colors.black, fontSize: 16), // Style for the base text
-    children: [
-      TextSpan(
-        text: merchant.isOpen ? 'Open' : 'Closed',
-        style: TextStyle(
-          color: merchant.isOpen ? Colors.green : Colors.red, // Color for the status
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ],
-  ),
-)
-],
+                    RichText(
+                      text: TextSpan(
+                        text: 'Store is now ',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16), // Style for the base text
+                        children: [
+                          TextSpan(
+                            text: merchant.isOpen ? 'Open' : 'Closed',
+                            style: TextStyle(
+                              color: merchant.isOpen
+                                  ? Colors.green
+                                  : Colors.red, // Color for the status
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               ),
 

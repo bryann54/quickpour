@@ -7,10 +7,9 @@ class MerchantInitial extends MerchantState {}
 class MerchantLoading extends MerchantState {}
 
 class MerchantLoaded extends MerchantState {
-  final List<Merchants> merchants; 
+  final List<Merchants> merchants;
   MerchantLoaded(this.merchants);
 }
-
 
 class MerchantError extends MerchantState {
   final String message;
