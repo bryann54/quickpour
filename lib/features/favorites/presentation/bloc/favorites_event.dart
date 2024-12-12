@@ -1,4 +1,3 @@
-
 import 'package:chupachap/features/product/data/models/product_model.dart';
 
 abstract class FavoritesEvent {}

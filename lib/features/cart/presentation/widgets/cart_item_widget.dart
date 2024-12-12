@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
@@ -95,7 +94,9 @@ class CartItemWidget extends StatelessWidget {
                           cartItem.product.productName,
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: isDarkMode ? AppColors.surface.withOpacity(.5) : Colors.black,
+                            color: isDarkMode
+                                ? AppColors.surface.withOpacity(.5)
+                                : Colors.black,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -125,7 +126,8 @@ class CartItemWidget extends StatelessWidget {
                                   ),
                                   placeholder: (context, url) =>
                                       const CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) => const Icon(
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(
                                     Icons.error,
                                     color: AppColors.accentColor,
                                     size: 20,

@@ -1,16 +1,14 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/brands/data/models/brands_model.dart';
 
-import 'package:flutter/material.dart';
-
-class brandCardAvatar extends StatelessWidget {
+class BrandCardAvatar extends StatelessWidget {
   final BrandModel brand;
   final bool isFirst;
   final bool isLast;
 
-  const brandCardAvatar({
+  const BrandCardAvatar({
     super.key,
     required this.brand,
     this.isFirst = false,
@@ -22,66 +20,80 @@ class brandCardAvatar extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // TODO: Add brand detail navigation
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Tapped ${brand.name} brand')),
+        );
       },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildAvatarWithBadge(),
-          const SizedBox(height: 4),
-          _buildbrandName(context),
-        ],
+      child: Container(
+        width: 80,
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildAvatarWithBadge(),
+            const SizedBox(height: 8),
+            _buildBrandName(context),
+          ],
+        ),
       ),
     );
   }
 
-
   Widget _buildAvatarWithBadge() {
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         _buildAvatarImage(),
-       
-          // Positioned(
-          //   top: 0,
-          //   right: 0,
-          //   child: Container(
-          //     padding: const EdgeInsets.all(2),
-          //     decoration: const BoxDecoration(
-          //       color: Colors.white,
-          //       shape: BoxShape.circle,
-          //       boxShadow: [
-          //         BoxShadow(
-          //           color: Colors.black12,
-          //           blurRadius: 4,
-          //           offset: Offset(0, 2),
-          //         ),
-          //       ],
-          //     ),
-          //     child: const Icon(
-          //       Icons.verified,
-          //       size: 16,
-          //       color: AppColors.accentColor,
-          //     ),
-          //   ),
-          // ),
+        // Uncomment and customize if you want a verified badge
+        // Positioned(
+        //   bottom: -4,
+        //   right: -4,
+        //   child: Container(
+        //     decoration: BoxDecoration(
+        //       color: Colors.white,
+        //       shape: BoxShape.circle,
+        //       boxShadow: [
+        //         BoxShadow(
+        //           color: Colors.black.withOpacity(0.2),
+        //           blurRadius: 4,
+        //           offset: const Offset(0, 2),
+        //         )
+        //       ],
+        //     ),
+        //     child: Icon(
+        //       Icons.verified,
+        //       color: AppColors.accentColor,
+        //       size: 16,
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
 
   Widget _buildAvatarImage() {
     return Container(
-      width: 50,
-      height: 50,
+      width: 70,
+      height: 70,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
+        gradient: LinearGradient(
+          colors: [
+            AppColors.accentColor.withOpacity(0.1),
+            AppColors.accentColor.withOpacity(0.3),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         border: Border.all(
-          color: AppColors.accentColor,
+          color: AppColors.accentColor.withOpacity(0.3),
           width: 2,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.accentColor.withOpacity(0.2),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            color: AppColors.accentColor.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -93,47 +105,41 @@ class brandCardAvatar extends StatelessWidget {
             placeholder: (context, url) => Container(
               color: Colors.grey[200],
               child: const Center(
-                child: SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator.adaptive(
-                    strokeWidth: 2,
-                  ),
+                child: CircularProgressIndicator.adaptive(
+                  strokeWidth: 2,
                 ),
               ),
             ),
             errorWidget: (context, url, error) => Container(
               color: Colors.grey[200],
               child: Icon(
-                Icons.person,
-                size: 30,
+                Icons.image_not_supported,
+                size: 40,
                 color: Colors.grey[400],
               ),
             ),
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
           ),
         ),
       ),
     );
   }
 
-  Widget _buildbrandName(BuildContext context) {
+  Widget _buildBrandName(BuildContext context) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text(
-        brand.name,
-        style: TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 12,
-          color: isDarkMode ? Colors.white70 : Colors.black87,
-        ),
-        textAlign: TextAlign.center,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+    return Text(
+      brand.name,
+      style: TextStyle(
+        fontWeight: FontWeight.w600,
+        fontSize: 12,
+        color: isDarkMode ? Colors.white70 : Colors.black87,
+        letterSpacing: 0.5,
       ),
+      textAlign: TextAlign.center,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
     );
   }
 }

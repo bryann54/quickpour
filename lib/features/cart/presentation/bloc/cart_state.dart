@@ -1,4 +1,3 @@
-
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
 import 'package:equatable/equatable.dart';
 

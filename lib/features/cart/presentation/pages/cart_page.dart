@@ -1,4 +1,3 @@
-
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
@@ -84,7 +83,7 @@ class _CartPageState extends State<CartPage>
 
     return Scaffold(
       appBar: const CustomAppBar(
-       showCart: false,
+        showCart: false,
       ),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, cartState) {
@@ -205,7 +204,8 @@ class _CartPageState extends State<CartPage>
                           'KSh ${cartState.cart.totalPrice.toStringAsFixed(2)}',
                           style:
                               Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    color:isDarkMode? AppColors.surface.withOpacity(.7)
+                                    color: isDarkMode
+                                        ? AppColors.surface.withOpacity(.7)
                                         : AppColors.primaryColor,
                                     fontWeight: FontWeight.bold,
                                   ),

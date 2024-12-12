@@ -1,4 +1,3 @@
-
 import 'package:chupachap/features/home/presentation/widgets/stattic_item_widget.dart';
 import 'package:flutter/material.dart';
 

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MerchantCardAvatar extends StatelessWidget {
   final Merchants merchant;
@@ -74,30 +75,29 @@ class MerchantCardAvatar extends StatelessWidget {
     return Stack(
       children: [
         _buildAvatarImage(),
-        // if (merchant.isVerified)
-        //   Positioned(
-        //     top: 0,
-        //     right: 0,
-        //     child: Container(
-        //       padding: const EdgeInsets.all(2),
-        //       decoration: const BoxDecoration(
-        //         color: Colors.white,
-        //         shape: BoxShape.circle,
-        //         boxShadow: [
-        //           BoxShadow(
-        //             color: Colors.black12,
-        //             blurRadius: 4,
-        //             offset: Offset(0, 2),
-        //           ),
-        //         ],
-        //       ),
-        //       child: const Icon(
-        //         Icons.verified,
-        //         size: 16,
-        //         color: AppColors.accentColor,
-        //       ),
-        //     ),
-        //   ),
+        if (merchant.isVerified)
+          Positioned(
+            bottom: 4,
+            right: 4,
+            child: Container(
+              padding: const EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 2,
+                  ),
+                ],
+              ),
+              child: FaIcon(
+                Icons.verified,
+                size: 14,
+                color: AppColors.accentColor,
+              ),
+            ),
+          ),
       ],
     );
   }
