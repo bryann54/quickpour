@@ -113,7 +113,7 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                         opacity: _fadeAnimation.value,
                         child: Container(
                           width: 200,
-                          height: 200,
+                          height: 300,
                           decoration: const BoxDecoration(
                             boxShadow: [
                               BoxShadow(
@@ -130,12 +130,12 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                         ),
                       ),
                     ),
-                    const SizedBox(height: 30),
+               
                     // App name with fade animation
                     Opacity(
                       opacity: _fadeAnimation.value,
                       child: const Text(
-                        'CHUPACHAP',
+                        'QuickPour',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 32,
@@ -156,7 +156,7 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                     Opacity(
                       opacity: _fadeAnimation.value,
                       child: Text(
-                        'Drinks Delivered Fast',
+                        'Drink ako Pap!!',
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.9),
                           fontSize: 16,

@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
@@ -229,7 +228,7 @@ class _ProductCardState extends State<ProductCard>
                                   const SizedBox(width: 8),
                                   Text(
                                     cartItem.product.category.name,
-                                     style: theme.textTheme.bodySmall?.copyWith(
+                                    style: theme.textTheme.bodySmall?.copyWith(
                                       color: isDarkMode
                                           ? Colors.grey[400]
                                           : Colors.grey[600],
@@ -240,8 +239,10 @@ class _ProductCardState extends State<ProductCard>
                               const SizedBox(height: 2),
                               Text(
                                 'KSh ${(widget.product.price).toStringAsFixed(2)}',
-                                style:  TextStyle(
-                                  color:isDarkMode?Colors.tealAccent: AppColors.primaryColor,
+                                style: TextStyle(
+                                  color: isDarkMode
+                                      ? Colors.tealAccent
+                                      : AppColors.primaryColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
                                 ),

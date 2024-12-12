@@ -7,6 +7,7 @@ import 'package:chupachap/features/favorites/presentation/bloc/favorites_state.d
 import 'package:chupachap/features/favorites/presentation/pages/favorites_screen.dart';
 import 'package:chupachap/features/home/presentation/pages/home_screen.dart';
 import 'package:chupachap/features/orders/presentation/pages/orders_screen.dart';
+import 'package:chupachap/features/product_search/presentation/pages/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -27,9 +28,10 @@ class _BottomNavState extends State<BottomNav> {
   // List of screens corresponding to navigation items
   final List<Widget> _screens = [
     const HomeScreen(),
+    const SearchPage(),
     const FavoritesScreen(),
     const CartPage(),
-     const OrdersScreen(),
+    const OrdersScreen(),
   ];
 
   @override
@@ -43,8 +45,9 @@ class _BottomNavState extends State<BottomNav> {
         items: [
           const FaIcon(FontAwesomeIcons.houseChimney,
               size: 25, color: Colors.white),
+          const FaIcon(FontAwesomeIcons.search, size: 25, color: Colors.white),
 
-      // Favorites with badge
+          // Favorites with badge
           BlocBuilder<FavoritesBloc, FavoritesState>(
             builder: (context, favoritesState) {
               return badges.Badge(
@@ -74,7 +77,8 @@ class _BottomNavState extends State<BottomNav> {
             },
           ),
 
-          const FaIcon(FontAwesomeIcons.clipboardList, size: 25, color: Colors.white),
+          const FaIcon(FontAwesomeIcons.clipboardList,
+              size: 25, color: Colors.white),
         ],
         color: AppColors.primaryColor,
         buttonBackgroundColor: AppColors.primaryColor,
