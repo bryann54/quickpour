@@ -1,10 +1,10 @@
-
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_state.dart';
 import 'package:chupachap/features/favorites/presentation/widgets/favorites_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});
@@ -12,16 +12,32 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(showCart: false,),
+      appBar: const CustomAppBar(
+        showCart: false,
+      ),
       body: Column(
         children: [
           BlocBuilder<FavoritesBloc, FavoritesState>(
             builder: (context, state) {
               if (state.favorites.items.isEmpty) {
                 return const Center(
-                  child: Text(
-                    'No favorites yet',
-                    style: TextStyle(fontSize: 18),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 250,
+                      ),
+                      FaIcon(
+                        FontAwesomeIcons.accusoft,
+                        size: 50,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'No favorites yet',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
                   ),
                 );
               }

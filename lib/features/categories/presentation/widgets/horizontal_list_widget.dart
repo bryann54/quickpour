@@ -1,33 +1,53 @@
-
+import 'package:flutter/material.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/categories/domain/entities/category.dart';
 import 'package:chupachap/features/categories/presentation/widgets/horizontal_avatar_widget.dart';
-import 'package:flutter/material.dart';
 
-class HorizontalListWidget extends StatelessWidget {
-  final List<Category> category;
+class HorizontalCategoriesListWidget extends StatelessWidget {
+  final List<Category> categories;
 
-  const HorizontalListWidget({super.key, required this.category});
+  const HorizontalCategoriesListWidget({super.key, required this.categories});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
 
-    return Container(
-      height: 85, // Increased height for better UI space
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      color: isDarkMode
-          ? AppColors.dividerColorDark.withOpacity(0.3)
-          : AppColors.cardColor.withOpacity(0.5),
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => CategoryCardAvatar(
-          category: category[index],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 12),
+        Container(
+          height: 130,
+          decoration: BoxDecoration(
+            color: isDarkMode
+                ? AppColors.dividerColorDark.withOpacity(0.2)
+                : AppColors.cardColor.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: categories.isEmpty
+              ? Center(
+                  child: Text(
+                    'No categories available',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontStyle: FontStyle.italic,
+                      color: Colors.grey,
+                    ),
+                  ),
+                )
+              : ListView.separated(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) => CategoryCardAvatar(
+                    category: categories[index],
+                  ),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: 12),
+                  itemCount: categories.length,
+                ),
         ),
-        separatorBuilder: (context, index) => const SizedBox(width: 12),
-        itemCount: category.length,
-      ),
+      ],
     );
   }
 }

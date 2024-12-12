@@ -23,16 +23,15 @@ class Merchants {
 
   factory Merchants.fromJson(Map<String, dynamic> json) {
     return Merchants(
-      id: json['id'],
-      name: json['name'],
-      location: json['location'],
-      products: List<String>.from(json['products']),
-      experience: json['experience'],
-      imageUrl: json['imageUrl'],
-      rating: (json['rating'] as num).toDouble(),
-      isVerified: json['isVerified'],
-      isOpen: json['isOpen']
-    );
+        id: json['id'],
+        name: json['name'],
+        location: json['location'],
+        products: List<String>.from(json['products']),
+        experience: json['experience'],
+        imageUrl: json['imageUrl'],
+        rating: (json['rating'] as num).toDouble(),
+        isVerified: json['isVerified'],
+        isOpen: json['isOpen']);
   }
 
   Map<String, dynamic> toJson() {

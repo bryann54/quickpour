@@ -15,6 +15,7 @@ import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart
 import 'package:chupachap/features/orders/presentation/bloc/orders_bloc.dart';
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
+import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -24,23 +25,27 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-        final merchantRepository = MerchantsRepository();
+    final merchantRepository = MerchantsRepository();
     return MultiBlocProvider(
       providers: [
-             BlocProvider(
-          create: (_) => MerchantBloc(merchantRepository)..add(FetchMerchantEvent()),
+        BlocProvider<ProductSearchBloc>(
+          create: (context) => ProductSearchBloc(
+            productRepository: ProductRepository(),
+          ),
         ),
-         BlocProvider(
+        BlocProvider(
+          create: (_) =>
+              MerchantBloc(merchantRepository)..add(FetchMerchantEvent()),
+        ),
+        BlocProvider(
           create: (context) =>
               OrdersBloc(checkoutBloc: context.read<CheckoutBloc>())
                 ..add(LoadOrdersFromCheckout()),
         ),
-       BlocProvider(
+        BlocProvider(
           create: (_) => BrandsBloc(brandRepository: BrandRepository())
             ..add(FetchBrandsEvent()), // Optionally, immediately fetch brands
         ),
-   
         BlocProvider(
           create: (context) => CategoriesBloc(FetchCategories(
             CategoryRepository(),
