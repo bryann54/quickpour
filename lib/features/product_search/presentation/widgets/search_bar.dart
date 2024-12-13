@@ -27,7 +27,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       children: [
         Expanded(
           child: Container(
-            height: 50,
+            height: 40,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
               border: Border.all(
@@ -36,7 +36,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                     : Colors.grey.shade300,
               ),
               color: isDarkMode ? Colors.grey.shade600 : Colors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
               children: [
@@ -53,8 +53,8 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                     decoration: InputDecoration(
                       hintText: 'Search product',
                       hintStyle: TextStyle(
-                        color: isDarkMode ? Colors.white : Colors.grey.shade600,
-                        fontSize: 16,
+                        color: isDarkMode ? Colors.white : Colors.grey.shade400,
+                        fontSize: 17,
                       ),
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.zero,
@@ -77,11 +77,11 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             ),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 5),
         GestureDetector(
           onTap: widget.onFilterTap,
           child: Container(
-            height: 50,
+            height: 40,
             width: 50,
             decoration: BoxDecoration(
               color: AppColors.accentColorDark.withOpacity(.9),

@@ -1,7 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/brands/data/models/brands_model.dart';
+import 'package:chupachap/features/drink_request/presentation/pages/drink_request_screen.dart';
+import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
+import 'package:chupachap/features/product/presentation/bloc/product_event.dart';
+import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
+import 'package:chupachap/features/product/presentation/widgets/product_card.dart';
+import 'package:chupachap/features/product/presentation/widgets/product_shimmer_widget.dart';
+import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
+import 'package:chupachap/features/product_search/presentation/bloc/product_search_state.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BrandDetailsScreen extends StatefulWidget {
   final BrandModel brand;
@@ -46,6 +56,9 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+     final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.brand.name),
@@ -112,6 +125,153 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
+               BlocBuilder<ProductSearchBloc, ProductSearchState>(
+              builder: (context, searchState) {
+                // If search is active and has results
+                if (searchState is ProductSearchLoadedState &&
+                    searchState.searchResults.isNotEmpty) {
+                  return GridView.builder(
+                    padding: const EdgeInsets.all(10),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.7,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                    itemCount: searchState.searchResults.length,
+                    itemBuilder: (context, index) {
+                      final product = searchState.searchResults[index];
+                      return ProductCard(product: product);
+                    },
+                  );
+                }
+
+                // If search is active but no results
+                if (searchState is ProductSearchLoadedState &&
+                    searchState.searchResults.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                            'Oops!!... didn\'t find "${_searchController.text}"'),
+                        const SizedBox(height: 50),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => DrinkRequestScreen(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: isDarkMode
+                                    ? AppColors.background.withOpacity(.8)
+                                    : AppColors.backgroundDark,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'make drink request',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                        color: isDarkMode
+                                            ? AppColors.backgroundDark
+                                            : AppColors.background,
+                                      ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                }
+
+                // Fallback to original product list
+                return BlocBuilder<ProductBloc, ProductState>(
+                  builder: (context, state) {
+                    if (searchState is ProductSearchLoadingState) {
+                      return const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      );
+                    }
+
+                    if (state is ProductLoadingState) {
+                      return GridView.builder(
+                        padding: const EdgeInsets.all(10),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.7,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemCount: 6,
+                        itemBuilder: (context, index) =>
+                            const ProductCardShimmer(),
+                      );
+                    }
+
+                    if (state is ProductErrorState) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.error_outline, size: 60),
+                            const SizedBox(height: 16),
+                            Text(
+                              state.errorMessage,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: () {
+                                context
+                                    .read<ProductBloc>()
+                                    .add(FetchProductsEvent());
+                              },
+                              child: const Text('Retry'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
+                    if (state is ProductLoadedState) {
+                      return GridView.builder(
+                        padding: const EdgeInsets.all(10),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.7,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemCount: state.products.length,
+                        itemBuilder: (context, index) {
+                          final product = state.products[index];
+                          return ProductCard(product: product);
+                        },
+                      );
+                    }
+
+                    return const SizedBox.shrink();
+                  },
+                );
+              },
+            ),
+     
           ],
         ),
       ),
