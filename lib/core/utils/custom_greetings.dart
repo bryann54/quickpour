@@ -65,10 +65,12 @@ class _CustomGreetingState extends State<CustomGreeting> {
 
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks[0];
-        if (place.country == "Kenya") {
+
+        // Modify the country check logic as needed
+        if (place.country?.toLowerCase() == 'kenya') {
           setState(() {
             _currentLocation =
-                '${place.locality ?? place.subLocality ?? place.administrativeArea ?? 'Unknown'}, ${place.country}';
+                '${place.locality ?? place.subLocality ?? place.administrativeArea ?? 'Unknown Location'}, ${place.country}';
             _isLoading = false;
           });
         } else {
@@ -77,18 +79,23 @@ class _CustomGreetingState extends State<CustomGreeting> {
             _isLoading = false;
           });
         }
+      } else {
+        setState(() {
+          _currentLocation = 'Location not found';
+          _isLoading = false;
+        });
       }
     } catch (e) {
       setState(() {
         _currentLocation = 'Unable to fetch location';
         _isLoading = false;
       });
+      print('Location error: $e'); // Add error logging
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Get theme for dynamic styling
     final theme = Theme.of(context);
 
     return AnimatedSwitcher(
@@ -115,7 +122,6 @@ class _CustomGreetingState extends State<CustomGreeting> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Greeting with dynamic time-based message
         Text(
           '${_getGreeting()} 👋, ${widget.userName ?? 'User'}',
           style: theme.textTheme.titleMedium?.copyWith(
@@ -123,7 +129,6 @@ class _CustomGreetingState extends State<CustomGreeting> {
             color: theme.colorScheme.onSurface,
           ),
         ),
-        // Location display with icon
         Row(
           children: [
             FaIcon(
