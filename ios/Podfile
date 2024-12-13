@@ -32,7 +32,10 @@ target 'Runner' do
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-   pod 'GoogleMaps'
+
+  # Properly specify GoogleMaps pod with version
+  pod 'GoogleMaps'
+
   target 'RunnerTests' do
     inherit! :search_paths
   end
@@ -41,5 +44,18 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+
+    # Additional configuration for GoogleMaps
+    if target.name == 'GoogleMaps'
+      target.build_configurations.each do |config|
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)']
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'HAVE_GOOGLE_MAPS=1'
+      end
+    end
+
+    # Ensure correct deployment target for all targets
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
+    end
   end
 end
