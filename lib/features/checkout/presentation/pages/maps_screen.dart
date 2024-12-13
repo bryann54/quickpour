@@ -1,3 +1,4 @@
+import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -17,9 +18,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Google Maps Example'),
-      ),
+      appBar: CustomAppBar(),
       body: GoogleMap(
         initialCameraPosition: CameraPosition(
           target: _initialLocation,

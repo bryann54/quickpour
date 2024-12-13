@@ -9,7 +9,7 @@ class CustomGreeting extends StatefulWidget {
   const CustomGreeting({Key? key, this.userName}) : super(key: key);
 
   @override
-  _CustomGreetingState createState() => _CustomGreetingState();
+  State<CustomGreeting> createState() => _CustomGreetingState();
 }
 
 class _CustomGreetingState extends State<CustomGreeting> {
@@ -65,11 +65,18 @@ class _CustomGreetingState extends State<CustomGreeting> {
 
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks[0];
-        setState(() {
-          _currentLocation =
-              '${place.locality ?? place.subLocality ?? place.administrativeArea ?? 'Unknown'}, ${place.country ?? ''}';
-          _isLoading = false;
-        });
+        if (place.country == "Kenya") {
+          setState(() {
+            _currentLocation =
+                '${place.locality ?? place.subLocality ?? place.administrativeArea ?? 'Unknown'}, ${place.country}';
+            _isLoading = false;
+          });
+        } else {
+          setState(() {
+            _currentLocation = 'You are outside Kenya';
+            _isLoading = false;
+          });
+        }
       }
     } catch (e) {
       setState(() {
@@ -113,7 +120,7 @@ class _CustomGreetingState extends State<CustomGreeting> {
           '${_getGreeting()} 👋, ${widget.userName ?? 'User'}',
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
-            color: theme.colorScheme.onBackground,
+            color: theme.colorScheme.onSurface,
           ),
         ),
         // Location display with icon
@@ -122,7 +129,7 @@ class _CustomGreetingState extends State<CustomGreeting> {
             FaIcon(
               FontAwesomeIcons.locationDot,
               size: 15,
-              color: theme.colorScheme.primary,
+              color: theme.colorScheme.onSurface,
             ),
             const SizedBox(width: 8),
             Expanded(

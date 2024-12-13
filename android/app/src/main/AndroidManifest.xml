@@ -25,7 +25,7 @@
             <!-- Google Maps API Key -->
             <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyA_5o-Jh5ULC4bYPyVjAjIHhtqKcmiQkZ0" />
+                android:value="AIzaSyDxRfnngmU4fU37zfBCbC6EtpZo7lSXSA4" />
  
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
