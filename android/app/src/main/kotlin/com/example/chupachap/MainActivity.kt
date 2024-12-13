@@ -1,5 +1,6 @@
-package com.example.chupachap
+package com.example.chupachap;
 
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterActivity;
 
-class MainActivity: FlutterActivity()
+public class MainActivity extends FlutterActivity {
+}

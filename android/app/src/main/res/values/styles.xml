@@ -15,4 +15,7 @@
     <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
+     <!-- Google Maps API Key -->
+    <string name="google_maps_key">@BuildConfig.MAPS_API_KEY</string>
 </resources>
+

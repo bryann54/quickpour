@@ -9,6 +9,7 @@ import 'package:chupachap/features/categories/domain/usecases/fetch_categories.d
 import 'package:chupachap/features/categories/presentation/bloc/categories_bloc.dart';
 import 'package:chupachap/features/categories/presentation/bloc/categories_event.dart';
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
+import 'package:chupachap/features/checkout/presentation/pages/maps_screen.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:chupachap/features/merchant/data/repositories/merchants_repository.dart';
 import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
@@ -69,7 +70,7 @@ class App extends StatelessWidget {
               theme: AppTheme.lightTheme,
               darkTheme: AppTheme.darkTheme,
               themeMode: themeController.themeMode,
-              home: const EntrySplashScreen(),
+              home:  GoogleMapScreen(),
             );
           },
         ),
