@@ -44,7 +44,7 @@ class App extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => BrandsBloc(brandRepository: BrandRepository())
-            ..add(FetchBrandsEvent()), // Optionally, immediately fetch brands
+            ..add(FetchBrandsEvent()),
         ),
         BlocProvider(
           create: (context) => CategoriesBloc(FetchCategories(
