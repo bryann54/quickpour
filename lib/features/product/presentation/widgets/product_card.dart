@@ -11,6 +11,7 @@ import 'package:chupachap/features/product/data/models/product_model.dart';
 import 'package:chupachap/features/product/presentation/pages/product_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProductCard extends StatefulWidget {
   final ProductModel product;
@@ -18,7 +19,7 @@ class ProductCard extends StatefulWidget {
   const ProductCard({Key? key, required this.product}) : super(key: key);
 
   @override
-  _ProductCardState createState() => _ProductCardState();
+  State<ProductCard> createState() => _ProductCardState();
 }
 
 class _ProductCardState extends State<ProductCard>
@@ -191,7 +192,7 @@ class _ProductCardState extends State<ProductCard>
 
                         // Product Details
                         Padding(
-                          padding: const EdgeInsets.all(12.0),
+                          padding: const EdgeInsets.all(4.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -225,13 +226,16 @@ class _ProductCardState extends State<ProductCard>
                                               .product.category.imageUrl),
                                     ),
                                   ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    cartItem.product.category.name,
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: isDarkMode
-                                          ? Colors.grey[400]
-                                          : Colors.grey[600],
+                                
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 3.0),
+                                    child: Text(
+                                      cartItem.product.category.name,
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        color: isDarkMode
+                                            ? Colors.grey[400]
+                                            : Colors.grey[600],
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -247,7 +251,7 @@ class _ProductCardState extends State<ProductCard>
                                   fontSize: 12,
                                 ),
                               ),
-                              const SizedBox(height: 12),
+                              const SizedBox(height:2),
 
                               // Cart Interaction
                               cartItem.quantity > 0
@@ -264,11 +268,12 @@ class _ProductCardState extends State<ProductCard>
                                             MainAxisAlignment.center,
                                         children: [
                                           IconButton(
-                                            icon: Icon(
-                                                Icons.remove_circle_outline,
+                                            icon: FaIcon(
+                                                FontAwesomeIcons.circleMinus,
+                                                size: 35,
                                                 color: isDarkMode
                                                     ? Colors.white
-                                                    : AppColors.accentColor),
+                                                    : Colors.grey[400]),
                                             onPressed: () {
                                               if (cartItem.quantity > 1) {
                                                 context.read<CartBloc>().add(
@@ -291,15 +296,17 @@ class _ProductCardState extends State<ProductCard>
                                           Text(
                                             '${cartItem.quantity}',
                                             style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w400,
                                               color: isDarkMode
                                                   ? Colors.white
                                                   : Colors.black,
                                             ),
                                           ),
                                           IconButton(
-                                            icon: Icon(Icons.add_circle_outline,
+                                            icon: FaIcon(
+                                                FontAwesomeIcons
+                                                    .circlePlus,size: 35,
                                                 color: isDarkMode
                                                     ? Colors.white
                                                     : AppColors.accentColor),
@@ -351,6 +358,7 @@ class _ProductCardState extends State<ProductCard>
                             ],
                           ),
                         ),
+                     
                       ],
                     ),
                   ),
