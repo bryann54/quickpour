@@ -3,6 +3,7 @@ import 'package:chupachap/features/drink_request/presentation/pages/drink_reques
 import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
@@ -119,14 +120,25 @@ class _SearchPageState extends State<SearchPage> {
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-              hintText: 'Search product',
-              border: InputBorder.none,
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.filter_list),
-                onPressed: _openFilterBottomSheet,
+          title: Container(
+           decoration: BoxDecoration(
+              border: Border.all(
+                color: isDarkMode
+                    ? AppColors.accentColor.withOpacity(.3)
+                    : Colors.grey.shade300,
+              ),
+              color: isDarkMode ? Colors.grey.shade600 : Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search product',
+                border: InputBorder.none,
+                suffixIcon: IconButton(
+                  icon:const  FaIcon(Icons.tune),
+                  onPressed: _openFilterBottomSheet,
+                ),
               ),
             ),
           ),
