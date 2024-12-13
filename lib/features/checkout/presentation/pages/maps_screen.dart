@@ -8,7 +8,6 @@ class GoogleMapScreen extends StatefulWidget {
 }
 
 class _GoogleMapScreenState extends State<GoogleMapScreen> {
-  late GoogleMapController _mapController;
 
   final LatLng _initialLocation =
       LatLng(37.7749, -122.4194); // Example: San Francisco
@@ -37,7 +36,6 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
           ),
         },
         onMapCreated: (controller) {
-          _mapController = controller;
         },
       ),
     );
