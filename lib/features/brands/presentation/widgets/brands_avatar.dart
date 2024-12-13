@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/brands/data/models/brands_model.dart';
+import 'package:chupachap/features/brands/presentation/pages/brand_details_screen.dart';
 
 class BrandCardAvatar extends StatelessWidget {
   final BrandModel brand;
@@ -18,13 +19,14 @@ class BrandCardAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // TODO: Add brand detail navigation
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Tapped ${brand.name} brand')),
-        );
-      },
-      child: Container(
+      onTap: () => _navigateToBrandDetails(context),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        margin: EdgeInsets.only(
+          left: isFirst ? 16 : 8,
+          right: isLast ? 16 : 8,
+        ),
         width: 80,
         alignment: Alignment.center,
         child: Column(
@@ -44,29 +46,6 @@ class BrandCardAvatar extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         _buildAvatarImage(),
-        // Uncomment and customize if you want a verified badge
-        // Positioned(
-        //   bottom: -4,
-        //   right: -4,
-        //   child: Container(
-        //     decoration: BoxDecoration(
-        //       color: Colors.white,
-        //       shape: BoxShape.circle,
-        //       boxShadow: [
-        //         BoxShadow(
-        //           color: Colors.black.withOpacity(0.2),
-        //           blurRadius: 4,
-        //           offset: const Offset(0, 2),
-        //         )
-        //       ],
-        //     ),
-        //     child: Icon(
-        //       Icons.verified,
-        //       color: AppColors.accentColor,
-        //       size: 16,
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }
@@ -140,6 +119,28 @@ class BrandCardAvatar extends StatelessWidget {
       textAlign: TextAlign.center,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  void _navigateToBrandDetails(BuildContext context) {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            BrandDetailsScreen(brand: brand),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const curve = Curves.easeInOut;
+          final curvedAnimation =
+              CurvedAnimation(parent: animation, curve: curve);
+
+          return FadeTransition(
+            opacity: curvedAnimation,
+            child: ScaleTransition(
+              scale: curvedAnimation,
+              child: child,
+            ),
+          );
+        },
+      ),
     );
   }
 }
