@@ -57,7 +57,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       showBadge: cartState.cart.totalQuantity > 0,
       child: FaIcon(
         FontAwesomeIcons.cartShopping,
-        size: iconSize,
+        size: 22,
         color: iconColorWithTheme,
       ),
     );
@@ -99,7 +99,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         child: IconButton(
                           icon: FaIcon(
                             FontAwesomeIcons.bell,
-                            size: iconSize,
+                            size: 22,
                             color: iconColorWithTheme,
                           ),
                           onPressed: () => _handleNotificationTap(context),
@@ -114,13 +114,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             child: badges.Badge(
                               badgeContent: Text(
                                 '${cartState.cart.totalQuantity}',
-                                style: const TextStyle(color: Colors.white),
+                                style: const TextStyle(color: Colors.white,fontSize: 12),
                               ),
                               showBadge: cartState.cart.totalQuantity > 0,
                               child: IconButton(
                                 icon: FaIcon(
                                   FontAwesomeIcons.cartShopping,
-                                  size: iconSize,
+                                  size: 22,
                                   color: iconColorWithTheme,
                                 ),
                                 onPressed: () => _handleCartTap(context),
@@ -135,8 +135,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         width: 40,
                         child: PopupMenuButton<String>(
                           icon: FaIcon(
-                            FontAwesomeIcons.userCircle,
-                            size: iconSize,
+                            FontAwesomeIcons.circleUser,
+                            size: 22,
                             color: iconColorWithTheme,
                           ),
                           onSelected: (value) {
