@@ -83,12 +83,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                        userName: 'Brian', 
                     )
 
-                    : SizedBox(
-                        height: 127,
-                        width: 100,
-                        child: Image.asset(
-                          'assets/splash.png',
-                          fit: BoxFit.contain,
+                    : ShaderMask(
+                        shaderCallback: (bounds) => const LinearGradient(
+                          colors: [
+                           Color(0xFFE74C3C),
+                               Color(0xFFF39C12),
+                          ],
+                        ).createShader(bounds),
+                        child: const Text(
+                          'QuickPour',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 23,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                 // Icons Row
