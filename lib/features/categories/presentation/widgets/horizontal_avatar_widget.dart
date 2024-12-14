@@ -3,6 +3,7 @@ import 'package:chupachap/features/categories/presentation/pages/category_detail
 import 'package:flutter/material.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/categories/domain/entities/category.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CategoryCardAvatar extends StatelessWidget {
   final Category category;
@@ -66,10 +67,13 @@ class CategoryCardAvatar extends StatelessWidget {
                 ),
                 errorWidget: (context, url, error) => Container(
                   color: Colors.grey[200],
-                  child: Icon(
-                    Icons.category,
-                    size: 40,
-                    color: Colors.grey[400],
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: FaIcon(
+                      FontAwesomeIcons.cocktail,
+                      size: 30,
+                      color: Colors.grey[400],
+                    ),
                   ),
                 ),
                 fit: BoxFit.cover,
