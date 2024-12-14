@@ -100,7 +100,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           icon: FaIcon(
                             FontAwesomeIcons.bell,
                             size: 22,
-                            color: iconColorWithTheme,
+                            color: iconColorWithTheme!.withOpacity(.7),
                           ),
                           onPressed: () => _handleNotificationTap(context),
                           padding: EdgeInsets.zero,
@@ -121,7 +121,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 icon: FaIcon(
                                   FontAwesomeIcons.cartShopping,
                                   size: 22,
-                                  color: iconColorWithTheme,
+                                  color: iconColorWithTheme!.withOpacity(.7),
                                 ),
                                 onPressed: () => _handleCartTap(context),
                                 padding: EdgeInsets.zero,
@@ -137,7 +137,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           icon: FaIcon(
                             FontAwesomeIcons.circleUser,
                             size: 22,
-                            color: iconColorWithTheme,
+                            color: iconColorWithTheme!.withOpacity(.7),
                           ),
                           onSelected: (value) {
                             switch (value) {
