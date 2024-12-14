@@ -15,104 +15,208 @@ class ProductDetailsHeader extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Card(
-      elevation: 2,
+      elevation: isDarkMode ? 4 : 2,
+      shadowColor: isDarkMode
+          ? AppColors.brandAccent.withOpacity(0.3)
+          : AppColors.brandPrimary.withOpacity(0.1),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(
+          color: isDarkMode
+              ? AppColors.brandAccent.withOpacity(0.1)
+              : AppColors.brandPrimary.withOpacity(0.05),
+          width: 1,
+        ),
       ),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Category and Product Name Section
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Category Avatar
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: isDarkMode
-                          ? AppColors.brandAccent
-                          : AppColors.brandPrimary.withOpacity(0.5),
-                      width: 2,
-                    ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: isDarkMode
+              ? LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    theme.cardColor,
+                    theme.cardColor.withOpacity(0.95),
+                  ],
+                )
+              : null,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Product Name with animated gradient
+              ShaderMask(
+                shaderCallback: (bounds) => LinearGradient(
+                  colors: isDarkMode
+                      ? [AppColors.brandAccent, AppColors.brandPrimary]
+                      : [AppColors.primaryColor, AppColors.brandPrimary],
+                ).createShader(bounds),
+                child: Text(
+                  product.productName,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.5,
+                    height: 1.2,
                   ),
-                  child: CircleAvatar(
-                    radius: 25,
-                    backgroundImage: CachedNetworkImageProvider(
-                      product.category.imageUrl.toString(),
-                    ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Description Section with custom styling
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: isDarkMode
+                      ? AppColors.brandAccent.withOpacity(0.05)
+                      : AppColors.brandPrimary.withOpacity(0.03),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: isDarkMode
+                        ? AppColors.brandAccent.withOpacity(0.1)
+                        : AppColors.brandPrimary.withOpacity(0.1),
+                    width: 1,
                   ),
                 ),
-                const SizedBox(width: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Description',
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: isDarkMode
+                            ? AppColors.brandAccent
+                            : AppColors.brandPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      product.description,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        height: 1.6,
+                        color: isDarkMode ? Colors.white70 : Colors.black87,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
 
-                // Category Name
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Category',
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: theme.hintColor,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        product.category.name,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: isDarkMode
-                              ? AppColors.background.withOpacity(0.8)
-                              : AppColors.primaryColor,
-                        ),
-                      ),
-                    ],
+              const SizedBox(height: 20),
+
+              // Category and Brand Section with enhanced styling
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildInfoCard(
+                      context,
+                      'Category',
+                      product.category.name,
+                      product.category.imageUrl,
+                      isDarkMode,
+                    ),
                   ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _buildInfoCard(
+                      context,
+                      'Brand',
+                      product.brand.name,
+                      product.brand.logoUrl,
+                      isDarkMode,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoCard(BuildContext context, String title, String name,
+      String imageUrl, bool isDarkMode) {
+    final theme = Theme.of(context);
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: isDarkMode
+            ? AppColors.brandAccent.withOpacity(0.05)
+            : AppColors.brandPrimary.withOpacity(0.03),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isDarkMode
+              ? AppColors.brandAccent.withOpacity(0.1)
+              : AppColors.brandPrimary.withOpacity(0.1),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: isDarkMode
+                    ? [AppColors.brandAccent, AppColors.brandPrimary]
+                    : [AppColors.primaryColor, AppColors.brandPrimary],
+              ),
+            ),
+            child: CircleAvatar(
+              radius: 16,
+              backgroundColor: Colors.white,
+              child: ClipOval(
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  width: 28,
+                  height: 28,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) =>
+                      const CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: isDarkMode
+                        ? AppColors.brandAccent
+                        : AppColors.brandPrimary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  name,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: isDarkMode ? Colors.white : Colors.black87,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
-
-            const Divider(height: 24, thickness: 0.5),
-
-            // Product Name
-            Text(
-              product.productName,
-              style: theme.textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.5,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-
-            const SizedBox(height: 12),
-
-            // Description Section
-            Text(
-              'Description',
-              style: theme.textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: theme.hintColor,
-              ),
-            ),
-
-            const SizedBox(height: 8),
-
-            Text(
-              product.description,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                height: 1.5,
-                color: isDarkMode ? Colors.white70 : Colors.black87,
-              ),
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

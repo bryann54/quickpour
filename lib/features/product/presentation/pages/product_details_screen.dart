@@ -64,11 +64,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ProductImageGallery(product: widget.product),
                     const SizedBox(height: 16),
                     ProductDetailsHeader(product: widget.product),
-                    const SizedBox(height: 16),
+                  
                     const SizedBox(height: 6),
                     MerchantsDetailsSection(product: widget.product),
-                    const SizedBox(height: 16),
-                    const SizedBox(height: 100),
+                    const SizedBox(height: 200),
+                   
                   ],
                 ),
               ),
