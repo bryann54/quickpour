@@ -94,7 +94,7 @@ class ProductRepository {
         ],
         price: 2200.00,
         description: 'A classic dry gin with a distinct botanical flavor.',
-        merchants: merchants.firstWhere((m) => m.id == '6'), // Add merchants
+        merchants: merchants.firstWhere((m) => m.id == '1'), // Add merchants
         category: gin,
       ),
       ProductModel(
@@ -130,7 +130,7 @@ class ProductRepository {
         ],
         price: 9500.00,
         description: 'Elegant champagne with fine bubbles and fruity notes.',
-        merchants: merchants.firstWhere((m) => m.id == '9'), // Add merchants
+        merchants: merchants.firstWhere((m) => m.id == '1'), // Add merchants
         category: champagne,
       ),
       ProductModel(
