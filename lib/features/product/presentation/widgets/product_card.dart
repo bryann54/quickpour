@@ -263,66 +263,69 @@ class _ProductCardState extends State<ProductCard>
                                                 : Colors.grey[300]!),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          IconButton(
-                                            icon: FaIcon(
-                                                FontAwesomeIcons.circleMinus,
-                                                size: 35,
+                                      child: Expanded(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            IconButton(
+                                              icon: FaIcon(
+                                                  FontAwesomeIcons.circleMinus,
+                                                  size: 30,
+                                                  color: isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.grey[400]),
+                                              onPressed: () {
+                                                if (cartItem.quantity > 1) {
+                                                  context.read<CartBloc>().add(
+                                                        UpdateCartQuantityEvent(
+                                                          product: widget.product,
+                                                          quantity:
+                                                              cartItem.quantity -
+                                                                  1,
+                                                        ),
+                                                      );
+                                                } else {
+                                                  context.read<CartBloc>().add(
+                                                        RemoveFromCartEvent(
+                                                            product:
+                                                                widget.product),
+                                                      );
+                                                }
+                                              },
+                                            ),
+                                            Text(
+                                              '${cartItem.quantity}',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w400,
                                                 color: isDarkMode
                                                     ? Colors.white
-                                                    : Colors.grey[400]),
-                                            onPressed: () {
-                                              if (cartItem.quantity > 1) {
+                                                    : Colors.black,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              icon: FaIcon(
+                                                  FontAwesomeIcons
+                                                      .circlePlus,size: 30,
+                                                  color: isDarkMode
+                                                      ? Colors.white
+                                                      : AppColors.accentColor),
+                                              onPressed: () {
                                                 context.read<CartBloc>().add(
                                                       UpdateCartQuantityEvent(
                                                         product: widget.product,
                                                         quantity:
-                                                            cartItem.quantity -
-                                                                1,
+                                                            cartItem.quantity + 1,
                                                       ),
                                                     );
-                                              } else {
-                                                context.read<CartBloc>().add(
-                                                      RemoveFromCartEvent(
-                                                          product:
-                                                              widget.product),
-                                                    );
-                                              }
-                                            },
-                                          ),
-                                          Text(
-                                            '${cartItem.quantity}',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w400,
-                                              color: isDarkMode
-                                                  ? Colors.white
-                                                  : Colors.black,
+                                              },
                                             ),
-                                          ),
-                                          IconButton(
-                                            icon: FaIcon(
-                                                FontAwesomeIcons
-                                                    .circlePlus,size: 35,
-                                                color: isDarkMode
-                                                    ? Colors.white
-                                                    : AppColors.accentColor),
-                                            onPressed: () {
-                                              context.read<CartBloc>().add(
-                                                    UpdateCartQuantityEvent(
-                                                      product: widget.product,
-                                                      quantity:
-                                                          cartItem.quantity + 1,
-                                                    ),
-                                                  );
-                                            },
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     )
+                                 
                                   : Row(
                                       children: [
                                         Expanded(

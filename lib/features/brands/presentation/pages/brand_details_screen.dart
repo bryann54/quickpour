@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/brands/data/models/brands_model.dart';
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
@@ -60,54 +62,115 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
         productRepository: ProductRepository(),
       )..add(FetchProductsEvent()),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.brand.name),
-        ),
+        appBar: CustomAppBar(showNotification: false,showProfile: false,),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Hero image/logo
-            Hero(
-              tag: 'brand_logo_${widget.brand.id}',
-              child: Center(
-                child: Container(
-                  width: 200,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: CachedNetworkImageProvider(widget.brand.logoUrl),
-                      fit: BoxFit.contain,
+   Stack(
+              children: [
+                Hero(
+                  tag: 'category_image_${widget.brand.id}',
+                  child: Container(
+                    width: double.infinity,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: AppColors.accentColor.withOpacity(0.4)),
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(widget.brand.logoUrl),
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                          Colors.black.withOpacity(
+                              0.3), // Darkens the image for better text visibility
+                          BlendMode.darken,
+                        ),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
+                Container(
+                  width: double.infinity,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withOpacity(0.1),
+                        Colors.black.withOpacity(0.5),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned.fill(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.brand.name,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            shadows: [
+                              Shadow(
+                                offset: const Offset(1, 1),
+                                blurRadius: 3.0,
+                                color: Colors.black.withOpacity(0.5),
+                              ),
+                            ],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                            height:
+                                4), // Adds spacing between the name and description
+                        Flexible(
+                          child: Text(
+                            widget.brand.description,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              shadows: [
+                                Shadow(
+                                  offset: const Offset(1, 1),
+                                  blurRadius: 3.0,
+                                  color: Colors.black.withOpacity(0.5),
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow
+                                .ellipsis, // Ensures the text does not overflow
+                            maxLines: 2, // Restricts to two lines
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
 
-            // Brand Details Section
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.brand.name,
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.brand.description,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ],
-              ),
-            ),
 
             // Search Bar
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 15),
               child: CustomSearchBar(
                 controller: _searchController,
                 onSearch: _onSearch,
@@ -144,7 +207,7 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
                     if (brandProducts.isEmpty) {
                       return Center(
                         child: Text(
-                          'No products found for this brand',
+                     'No products found for ${widget.brand.name}.',
                           style: theme.textTheme.bodyLarge,
                         ),
                       );

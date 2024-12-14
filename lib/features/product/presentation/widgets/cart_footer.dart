@@ -44,35 +44,30 @@ class CartFooter extends StatelessWidget {
   }
 
   Widget _buildAddToCartButton(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 10,
-                offset: const Offset(0, -5),
-              )
-            ],
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
           ),
-          child: ElevatedButton(
-            onPressed: () {
-              context.read<CartBloc>().add(
-                    AddToCartEvent(product: product, quantity: 1),
-                  );
-              onQuantityChanged(1);
-            },
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 50),
-            ),
-            child: const Text('Add to Cart'),
-          ),
+        ],
+      ),
+      child: ElevatedButton(
+        onPressed: () {
+          context.read<CartBloc>().add(
+                AddToCartEvent(product: product, quantity: 1),
+              );
+          onQuantityChanged(1);
+        },
+        style: ElevatedButton.styleFrom(
+          minimumSize: const Size(double.infinity, 50),
         ),
-        const SizedBox(height: 30),
-      ],
+        child: const Text('Add to Cart'),
+      ),
     );
   }
 
@@ -87,7 +82,7 @@ class CartFooter extends StatelessWidget {
             color: Colors.black.withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, -5),
-          )
+          ),
         ],
       ),
       child: Column(
@@ -95,11 +90,17 @@ class CartFooter extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildQuantitySelector(context, isDarkMode, quantity),
-              _buildTotalPrice(context, quantity),
+              Flexible(
+                flex: 2,
+                child: _buildQuantitySelector(context, isDarkMode, quantity),
+              ),
+              const SizedBox(width: 10),
+              Flexible(
+                flex: 3,
+                child: _buildTotalPrice(context, quantity),
+              ),
             ],
           ),
-          const SizedBox(height: 30),
         ],
       ),
     );
@@ -107,47 +108,45 @@ class CartFooter extends StatelessWidget {
 
   Widget _buildQuantitySelector(
       BuildContext context, bool isDarkMode, int quantity) {
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.primaryColor),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildQuantityButton(
-                context: context,
-                icon: Icons.remove,
-                isDarkMode: isDarkMode,
-                onPressed: () {
-                  final newQuantity = quantity > 1 ? quantity - 1 : 0;
-                  _updateQuantity(context, newQuantity);
-                },
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: AppColors.primaryColor),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildQuantityButton(
+              context: context,
+              icon: Icons.remove,
+              isDarkMode: isDarkMode,
+              onPressed: () {
+                final newQuantity = quantity > 1 ? quantity - 1 : 0;
+                _updateQuantity(context, newQuantity);
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                '$quantity',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontSize: 20,
+                      color: isDarkMode ? Colors.grey : AppColors.accentColor,
+                    ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  '$quantity',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: 20,
-                        color: isDarkMode ? Colors.grey : AppColors.accentColor,
-                      ),
-                ),
-              ),
-              _buildQuantityButton(
-                context: context,
-                icon: Icons.add,
-                isDarkMode: isDarkMode,
-                isAddButton: true,
-                onPressed: () {
-                  _updateQuantity(context, quantity + 1);
-                },
-              ),
-            ],
-          ),
+            ),
+            _buildQuantityButton(
+              context: context,
+              icon: Icons.add,
+              isDarkMode: isDarkMode,
+              isAddButton: true,
+              onPressed: () {
+                _updateQuantity(context, quantity + 1);
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -186,10 +185,14 @@ class CartFooter extends StatelessWidget {
   }
 
   Widget _buildTotalPrice(BuildContext context, int quantity) {
-    return Row(
-      children: [
-        const SizedBox(width: 70),
-        Row(
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return SizedBox(
+      width: screenWidth * 0.5,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.centerLeft,
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
@@ -206,7 +209,7 @@ class CartFooter extends StatelessWidget {
             ),
           ],
         ),
-      ],
+      ),
     );
   }
 
