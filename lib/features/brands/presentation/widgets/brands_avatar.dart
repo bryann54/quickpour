@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/brands/data/models/brands_model.dart';
 import 'package:chupachap/features/brands/presentation/pages/brand_details_screen.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BrandCardAvatar extends StatelessWidget {
   final BrandModel brand;
@@ -91,10 +92,13 @@ class BrandCardAvatar extends StatelessWidget {
             ),
             errorWidget: (context, url, error) => Container(
               color: Colors.grey[200],
-              child: Icon(
-                Icons.image_not_supported,
-                size: 40,
-                color: Colors.grey[400],
+              child: Align(
+                alignment: Alignment.center,
+                child: FaIcon(
+                  FontAwesomeIcons.bootstrap,
+                  size: 35,
+                  color: Colors.grey[400],
+                ),
               ),
             ),
             fit: BoxFit.contain,

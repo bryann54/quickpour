@@ -2,6 +2,7 @@ import 'package:chupachap/core/utils/custom_greetings.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
+import 'package:chupachap/features/notifications/presentation/pages/notifications_screen.dart';
 import 'package:chupachap/features/profile/presentation/pages/profile_screen.dart';
 import 'package:chupachap/features/profile/presentation/pages/settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -35,8 +36,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }) : super(key: key);
 
   void _handleNotificationTap(BuildContext context) {
-    // Add your notification navigation/logic here
-    print('Notification tapped');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) =>  NotificationsScreen()),
+    );
   }
 
   void _handleCartTap(BuildContext context) {
