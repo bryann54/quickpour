@@ -61,3 +61,4 @@ flutter_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/AppIcons (6)/playstore.png"
+  min_sdk_android: 21 

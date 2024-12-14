@@ -78,6 +78,18 @@ class CategoryRepository {
         imageUrl:
             'https://c8.alamy.com/comp/MPRD0A/original-absinthe-vintage-stamp-vector-MPRD0A.jpg',
       ),
+       CategoryModel(
+        id: 'cat13',
+        name: 'Spirit',
+        imageUrl:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxM4_Yp8_jqZmqTxR8fNuPbcCkGMO4ZVTmTg&s',
+      ),
+      CategoryModel(
+        id: 'cat14',
+        name: 'Liqueur',
+        imageUrl:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp1ZnStc4mH-6IQRAnWYt6nfVT4XZuqwcrow&s',
+      ),
     ];
   }
 }
