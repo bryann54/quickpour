@@ -41,35 +41,20 @@ class ProductCardShimmer extends StatelessWidget {
                       color: Colors.grey[500],
                     ),
                     const SizedBox(height: 8),
-                    // Price placeholder
-                    Container(
-                      width: 100,
-                      height: 12,
-                      color: Colors.grey[500],
-                    ),
-                    const SizedBox(height: 20),
-                    // Buttons placeholder
+                  
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
                           child: Container(
-                            height: 40,
+                            height: 35,
                             decoration: BoxDecoration(
                               color: Colors.grey[500],
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[500],
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
+                       
                       ],
                     ),
                   ],

@@ -1,3 +1,7 @@
+import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
+import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
 import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
 import 'package:chupachap/features/merchant/presentation/widgets/merchant_details_header.dart';
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
@@ -7,6 +11,8 @@ import 'package:chupachap/features/product/presentation/bloc/product_state.dart'
 import 'package:chupachap/features/product/presentation/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:badges/badges.dart' as badges;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MerchantDetailsScreen extends StatelessWidget {
   final Merchants merchant;
@@ -25,17 +31,61 @@ class MerchantDetailsScreen extends StatelessWidget {
       child: Scaffold(
         body: CustomScrollView(
           slivers: [
-            // SliverAppBar with MerchantDetailsHeader
-            SliverAppBar(
+            // SliverAppBar with MerchantDetailsHeader and Cart Icon
+         SliverAppBar(
               expandedHeight: 200,
               floating: false,
               pinned: true,
+              actions: [
+                // Cart icon in top-right corner, only show if cart has items
+                BlocBuilder<CartBloc, CartState>(
+                  builder: (context, cartState) {
+                    // Only show the cart icon if the total quantity is greater than 0
+                    if (cartState.cart.totalQuantity > 0) {
+                      return Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: badges.Badge(
+                          badgeContent: Text(
+                            '${cartState.cart.totalQuantity}',
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          showBadge: cartState.cart.totalQuantity > 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.accentColor,
+                              borderRadius: BorderRadius.circular(35),
+                            ),
+                            child: IconButton(
+                              icon: FaIcon(
+                                FontAwesomeIcons.cartShopping,
+                                size: 20,
+                                color: Theme.of(context).iconTheme.color,
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const CartPage(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      // Return an empty widget if the cart is empty
+                      return const SizedBox.shrink();
+                    }
+                  },
+                ),
+              ],
               flexibleSpace: FlexibleSpaceBar(
                 background: MerchantDetailsHeader(merchant: merchant),
                 collapseMode: CollapseMode.parallax,
               ),
             ),
-            // Remaining Content
+
             BlocBuilder<ProductBloc, ProductState>(
               builder: (context, state) {
                 if (state is ProductLoadingState) {
@@ -44,7 +94,8 @@ class MerchantDetailsScreen extends StatelessWidget {
                       padding: EdgeInsets.only(top: 100.0),
                       child: Align(
                         alignment: Alignment.center,
-                        child: CircularProgressIndicator.adaptive()),
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
                     ),
                   );
                 }
@@ -96,5 +147,4 @@ class MerchantDetailsScreen extends StatelessWidget {
       ),
     );
   }
-
 }

@@ -16,7 +16,7 @@ class MerchantsDetailsSection extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Card(
-      elevation: isDarkMode ? 4 : 2,
+      elevation: isDarkMode ? 2 : 1,
       shadowColor: isDarkMode
           ? AppColors.accentColor.withOpacity(0.3)
           : AppColors.primaryColor.withOpacity(0.1),

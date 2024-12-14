@@ -15,7 +15,7 @@ class ProductDetailsHeader extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Card(
-      elevation: isDarkMode ? 4 : 2,
+      elevation: isDarkMode ? 2 : 1,
       shadowColor: isDarkMode
           ? AppColors.brandAccent.withOpacity(0.3)
           : AppColors.brandPrimary.withOpacity(0.1),
