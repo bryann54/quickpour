@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/product/data/models/product_model.dart';
 
@@ -17,71 +16,165 @@ class MerchantsDetailsSection extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Card(
-      elevation: 2,
+      elevation: isDarkMode ? 2 : 1,
+      shadowColor: isDarkMode
+          ? AppColors.accentColor.withOpacity(0.3)
+          : AppColors.primaryColor.withOpacity(0.1),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(
+          color: isDarkMode
+              ? AppColors.accentColor.withOpacity(0.1)
+              : AppColors.primaryColor.withOpacity(0.05),
+        ),
       ),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Store',
-              style: theme.textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: theme.hintColor,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                // Merchants Avatar
-                _buildMerchantsAvatar(),
-                const SizedBox(width: 12),
-
-                // Merchants Info
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              product.merchants.name,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: isDarkMode
-                                    ? AppColors.background.withOpacity(0.8)
-                                    : AppColors.primaryColor,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          _buildMerchantsRating(context, isDarkMode),
-                        ],
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: isDarkMode
+              ? LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    theme.cardColor,
+                    theme.cardColor.withOpacity(0.95),
+                  ],
+                )
+              : null,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: isDarkMode
+                            ? [AppColors.accentColor, AppColors.primaryColor]
+                            : [AppColors.primaryColor, AppColors.accentColor],
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        product.merchants.location,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: isDarkMode
-                              ? AppColors.background.withOpacity(0.5)
-                              : AppColors.primaryColor.withOpacity(0.6),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          FontAwesomeIcons.store,
+                          size: 14,
+                          color: Colors.white.withOpacity(0.9),
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                        const SizedBox(width: 8),
+                        Text(
+                          'Store Details',
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: isDarkMode
+                      ? AppColors.accentColor.withOpacity(0.05)
+                      : AppColors.primaryColor.withOpacity(0.03),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: isDarkMode
+                        ? AppColors.accentColor.withOpacity(0.1)
+                        : AppColors.primaryColor.withOpacity(0.1),
                   ),
                 ),
-              ],
-            ),
-          ],
+                child: Row(
+                  children: [
+                    _buildMerchantsAvatar(),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  product.merchants.name,
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: isDarkMode
+                                        ? Colors.white
+                                        : AppColors.primaryColor,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              _buildMerchantsRating(context, isDarkMode),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.locationDot,
+                                size: 14,
+                                color: isDarkMode
+                                    ? AppColors.accentColor
+                                    : AppColors.primaryColor,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  product.merchants.location,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: isDarkMode
+                                        ? Colors.white70
+                                        : Colors.black87,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        
+                          RichText(
+                      text: TextSpan(
+                        text: 'Store is now ',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16), // Style for the base text
+                        children: [
+                          TextSpan(
+                            text: product.merchants.isOpen ? 'Open' : 'Closed',
+                            style: TextStyle(
+                              color: product.merchants.isOpen 
+                                  ? Colors.green
+                                  : Colors.red, // Color for the status
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -92,44 +185,52 @@ class MerchantsDetailsSection extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         Container(
+          padding: const EdgeInsets.all(3),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(
-              color: AppColors.accentColor.withOpacity(0.3),
-              width: 2,
+            gradient: LinearGradient(
+              colors: [
+                AppColors.accentColor,
+                AppColors.primaryColor,
+              ],
             ),
           ),
-          child: CachedNetworkImage(
-            imageUrl: product.merchants.imageUrl.toString(),
-            imageBuilder: (context, imageProvider) => CircleAvatar(
-              radius: 30,
-              backgroundImage: imageProvider,
+          child: Container(
+            padding: const EdgeInsets.all(2),
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
             ),
-            placeholder: (context, url) => CircleAvatar(
-              radius: 30,
-              backgroundColor: AppColors.accentColor.withOpacity(0.1),
-              child: const CircularProgressIndicator(
-                strokeWidth: 2,
+            child: CachedNetworkImage(
+              imageUrl: product.merchants.imageUrl.toString(),
+              imageBuilder: (context, imageProvider) => CircleAvatar(
+                radius: 30,
+                backgroundImage: imageProvider,
               ),
-            ),
-            errorWidget: (context, url, error) => CircleAvatar(
-              radius: 30,
-              backgroundColor: AppColors.accentColor.withOpacity(0.1),
-              child: const FaIcon(
-                FontAwesomeIcons.houseChimneyWindow,
-                size: 24,
-                color: AppColors.accentColor,
+              placeholder: (context, url) => const CircleAvatar(
+                radius: 30,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                ),
+              ),
+              errorWidget: (context, url, error) => CircleAvatar(
+                radius: 30,
+                backgroundColor: AppColors.accentColor.withOpacity(0.1),
+                child: const FaIcon(
+                  FontAwesomeIcons.store,
+                  size: 24,
+                  color: AppColors.accentColor,
+                ),
               ),
             ),
           ),
         ),
-
-        // Verified Badge
         if (product.merchants.isVerified)
           Positioned(
-            bottom: -2,
-            right: -2,
+            bottom: -4,
+            right: -4,
             child: Container(
+              padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
@@ -140,15 +241,18 @@ class MerchantsDetailsSection extends StatelessWidget {
                     offset: const Offset(0, 2),
                   )
                 ],
-                border: Border.all(
-                  color: AppColors.accentColor,
-                  width: 1.5,
-                ),
               ),
-              child: const Icon(
-                Icons.verified,
-                color: AppColors.accentColor,
-                size: 16,
+              child: Container(
+                padding: const EdgeInsets.all(2),
+                decoration: const BoxDecoration(
+                  color: AppColors.accentColor,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.verified,
+                  color: Colors.white,
+                  size: 14,
+                ),
               ),
             ),
           ),
@@ -158,10 +262,21 @@ class MerchantsDetailsSection extends StatelessWidget {
 
   Widget _buildMerchantsRating(BuildContext context, bool isDarkMode) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: isDarkMode ? Colors.grey[800] : AppColors.accentColor,
-        borderRadius: BorderRadius.circular(12),
+        gradient: LinearGradient(
+          colors: isDarkMode
+              ? [AppColors.accentColor, AppColors.primaryColor]
+              : [AppColors.primaryColor, AppColors.accentColor],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.accentColor.withOpacity(0.2),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -183,4 +298,5 @@ class MerchantsDetailsSection extends StatelessWidget {
       ),
     );
   }
+
 }

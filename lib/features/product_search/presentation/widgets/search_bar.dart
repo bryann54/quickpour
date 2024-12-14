@@ -27,7 +27,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       children: [
         Expanded(
           child: Container(
-            height: 40,
+            height: 45,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
               border: Border.all(
@@ -81,7 +81,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         GestureDetector(
           onTap: widget.onFilterTap,
           child: Container(
-            height: 40,
+            height: 45,
             width: 50,
             decoration: BoxDecoration(
               color: AppColors.accentColorDark.withOpacity(.9),

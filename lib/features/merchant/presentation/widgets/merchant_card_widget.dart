@@ -1,5 +1,6 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
+import 'package:chupachap/features/merchant/presentation/pages/merchant_details_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -23,11 +24,11 @@ class MerchantCardWidget extends StatelessWidget {
         onTap: onTap ??
             () {
               // Default navigation if no custom onTap is provided
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) =>
-              //             MerchantDetailsScreen(merchant: merchant)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MerchantDetailsScreen(merchant: merchant,)));
             },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -121,23 +122,26 @@ class MerchantCardWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-                    RichText(
-                      text: TextSpan(
-                        text: 'Store is now ',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16), // Style for the base text
-                        children: [
-                          TextSpan(
-                            text: merchant.isOpen ? 'Open' : 'Closed',
-                            style: TextStyle(
-                              color: merchant.isOpen
-                                  ? Colors.green
-                                  : Colors.red, // Color for the status
-                              fontWeight: FontWeight.bold,
+                    Padding(
+                      padding: const EdgeInsets.only(top:12.0),
+                      child: RichText(
+                        text: TextSpan(
+                          text: 'Store is now   ',
+                          style:const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16), 
+                          children: [
+                            TextSpan(
+                              text: merchant.isOpen ? 'Open' : 'Closed',
+                              style: TextStyle(
+                                color: merchant.isOpen
+                                    ? Colors.green
+                                    : Colors.red, 
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     )
                   ],
