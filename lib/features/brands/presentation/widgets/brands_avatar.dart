@@ -21,7 +21,7 @@ class BrandCardAvatar extends StatelessWidget {
     return GestureDetector(
       onTap: () => _navigateToBrandDetails(context),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 100),
         curve: Curves.easeInOut,
         margin: EdgeInsets.only(
           left: isFirst ? 16 : 8,

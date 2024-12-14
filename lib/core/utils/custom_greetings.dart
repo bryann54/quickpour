@@ -90,7 +90,7 @@ class _CustomGreetingState extends State<CustomGreeting> {
         _currentLocation = 'Unable to fetch location';
         _isLoading = false;
       });
-      print('Location error: $e'); // Add error logging
+      print('Location error: $e');
     }
   }
 
