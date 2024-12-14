@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/categories/domain/entities/category.dart';
+import 'package:chupachap/features/categories/presentation/pages/category_details_screen.dart';
 import 'package:flutter/material.dart';
 
 class CategoryCard extends StatelessWidget {
@@ -15,15 +16,15 @@ class CategoryCard extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return GestureDetector(
-      onTap: () {
-        // Add navigation logic here if needed
-        // For example:
-        // Navigator.pushNamed(
-        //   context,
-        //   Routes.productsByCategory,
-        //   arguments: category.id,
-        // );
+   onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CategoryDetailsScreen(category: category),
+          ),
+        );
       },
+
       child: Column(
         children: [
           Container(

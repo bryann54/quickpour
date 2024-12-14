@@ -98,6 +98,53 @@ class BrandRepository {
         description: 'Pioneer of single barrel bourbon',
         logoUrl: 'https://i.ebayimg.com/images/g/qKgAAOSwvy1mFYma/s-l1200.jpg',
       ),
+       BrandModel(
+        id: '13',
+        name: 'Tusker',
+        country: 'Kenya',
+        description: 'Pioneer of single barrel bourbon',
+        logoUrl: 'https://upload.wikimedia.org/wikipedia/en/c/c0/Tusker_lager_logo.png',
+      ),
+       BrandModel(
+        id: '14',
+        name: 'Kenya Breweries Limited (KBL)',
+        country: 'Kenya',
+        description: 'Major Kenyan beverage producer',
+        logoUrl:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/KBL_Logo.svg/1200px-KBL_Logo.svg.png',
+      ),
+      BrandModel(
+        id: '15',
+        name: 'White Cap',
+        country: 'Kenya',
+        description: 'Popular Kenyan lager beer',
+        logoUrl:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/White_Cap_Logo.jpg/800px-White_Cap_Logo.jpg',
+      ),
+      BrandModel(
+        id: '16',
+        name: 'Kenya Cane',
+        country: 'Kenya',
+        description: 'Local spirits and liqueur brand',
+        logoUrl:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZJfQkXFdsfSK-9QG_kEVV0M8D2ReXJ8QG3w&s',
+      ),
+      BrandModel(
+        id: '17',
+        name: 'Senator Keg',
+        country: 'Kenya',
+        description: 'Popular affordable beer brand',
+        logoUrl:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPG6zUzqpuXpRB9_ZqHg-nR5G0eX8T4cN8Vg&s',
+      ),
+      BrandModel(
+        id: '18',
+        name: 'Rare Spirits',
+        country: 'Kenya',
+        description: 'Local spirits and liqueur producer',
+        logoUrl:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz_8hqvzogZOvyT6b1fDIFLXkPQNnFjYYqag&s',
+      ),
     ];
   }
 }

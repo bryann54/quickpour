@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chupachap/features/categories/presentation/pages/category_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/categories/domain/entities/category.dart';
@@ -15,12 +16,15 @@ class CategoryCardAvatar extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return GestureDetector(
-      onTap: () {
-        // TODO: Implement category navigation
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Tapped ${category.name} category')),
+    onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CategoryDetailsScreen(category: category),
+          ),
         );
       },
+
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
