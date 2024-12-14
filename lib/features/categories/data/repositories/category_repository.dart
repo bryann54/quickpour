@@ -3,7 +3,7 @@ import 'package:chupachap/features/categories/data/models/category_model.dart';
 class CategoryRepository {
   Future<List<CategoryModel>> getCategories() async {
     // Simulating network delay
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
 
     return [
       CategoryModel(
