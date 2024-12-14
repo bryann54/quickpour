@@ -1,9 +1,28 @@
 part of 'notifications_bloc.dart';
 
-abstract class NotificationsState extends Equatable {
-  const NotificationsState();  
+class NotificationsState extends Equatable {
+  final List<NotificationModel> notifications;
+  final bool isLoading;
+  final String? error;
+
+  const NotificationsState({
+    this.notifications = const [],
+    this.isLoading = false,
+    this.error,
+  });
+
+  NotificationsState copyWith({
+    List<NotificationModel>? notifications,
+    bool? isLoading,
+    String? error,
+  }) {
+    return NotificationsState(
+      notifications: notifications ?? this.notifications,
+      isLoading: isLoading ?? this.isLoading,
+      error: error ?? this.error,
+    );
+  }
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [notifications, isLoading, error];
 }
-class NotificationsInitial extends NotificationsState {}

@@ -24,7 +24,7 @@ class _CartPageState extends State<CartPage>
   void initState() {
     super.initState();
     _clearCartController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 300));
+        vsync: this, duration: const Duration(milliseconds: 900));
 
     _scaleAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
         CurvedAnimation(parent: _clearCartController, curve: Curves.easeInOut));
