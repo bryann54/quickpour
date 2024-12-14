@@ -1,3 +1,4 @@
+import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_state.dart';
@@ -20,15 +21,16 @@ class FavoritesScreen extends StatelessWidget {
           BlocBuilder<FavoritesBloc, FavoritesState>(
             builder: (context, state) {
               if (state.favorites.items.isEmpty) {
-                return const Center(
+                return  Center(
                   child: Column(
                     children: [
                       SizedBox(
                         height: 250,
                       ),
                       FaIcon(
-                        FontAwesomeIcons.accusoft,
+                        FontAwesomeIcons.boxOpen,
                         size: 50,
+                        color: AppColors.brandAccent,
                       ),
                       SizedBox(
                         height: 20,
