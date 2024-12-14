@@ -40,12 +40,6 @@ class AppColors {
   static const Color shadowColor = Color(0x1A2C3E50);
   static const Color inputBorder = Color(0xFFD5DBDB); // Border Gray
 
-  // Category Colors
-  static const Color wineColor = Color(0xFF8E44AD); // Purple for Wines
-  static const Color beerColor = Color(0xFFD4AC0D); // Gold for Beers
-  static const Color spiritsColor = Color(0xFF2980B9); // Blue for Spirits
-  static const Color mixersColor = Color(0xFF16A085); // Teal for Mixers
-
   // Status Colors
   static const Color statusPending = Color(0xFFF39C12); // Orange
   static const Color statusDelivering = Color(0xFF3498DB); // Blue

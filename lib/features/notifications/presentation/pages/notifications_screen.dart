@@ -1,104 +1,146 @@
+// notifications_screen.dart
+import 'package:chupachap/features/notifications/data/models/notifications_model.dart';
+import 'package:chupachap/features/notifications/data/repositories/notifications_repository.dart';
+import 'package:chupachap/features/notifications/presentation/bloc/notifications_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class NotificationsScreen extends StatelessWidget {
-  final List<Map<String, String>> notifications = [
-    {
-      'title': 'Order Confirmed',
-      'description': 'Your order #1234 has been confirmed.',
-      'time': '2 min ago',
-      'icon': 'assets/icons/confirmed.png',
-    },
-    {
-      'title': 'Drink Discount!',
-      'description': '50% off on your favorite soda this weekend.',
-      'time': '1 hr ago',
-      'icon': 'assets/icons/discount.png',
-    },
-    {
-      'title': 'Order Delivered',
-      'description': 'Your order #1234 has been delivered.',
-      'time': 'Yesterday',
-      'icon': 'assets/icons/delivered.png',
-    },
-  ];
-
-  NotificationsScreen({super.key});
+  const NotificationsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    return BlocProvider(
+      create: (context) =>
+          NotificationsBloc(context.read<NotificationsRepository>())
+            ..add(FetchNotifications()),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Notifications'),
+          centerTitle: true,
+        ),
+        body: BlocBuilder<NotificationsBloc, NotificationsState>(
+          builder: (context, state) {
+            if (state.isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notifications'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.filter_list),
-            onPressed: () {
-              // Handle filter or settings logic
-            },
-          ),
-        ],
-      ),
-      body: notifications.isEmpty
-          ? _buildEmptyState(theme)
-          : ListView.separated(
-              itemCount: notifications.length,
-              separatorBuilder: (context, index) => const Divider(),
+            if (state.error != null) {
+              return Center(
+                child: Text('Error: ${state.error}'),
+              );
+            }
+
+            if (state.notifications.isEmpty) {
+              return const Center(
+                child: Text('No notifications'),
+              );
+            }
+
+            return ListView.builder(
+              itemCount: state.notifications.length,
               itemBuilder: (context, index) {
-                final notification = notifications[index];
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: AssetImage(notification['icon']!),
-                    backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
-                  ),
-                  title: Text(
-                    notification['title']!,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  subtitle: Text(notification['description']!),
-                  trailing: Text(
-                    notification['time']!,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.secondary,
-                    ),
-                  ),
+                final notification = state.notifications[index];
+                return _NotificationTile(
+                  notification: notification,
                   onTap: () {
-                    // Handle notification tap
+                    context
+                        .read<NotificationsBloc>()
+                        .add(MarkNotificationAsRead(notification.id));
                   },
                 );
               },
-            ),
+            );
+          },
+        ),
+      ),
     );
   }
+}
 
-  Widget _buildEmptyState(ThemeData theme) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+class _NotificationTile extends StatelessWidget {
+  final NotificationModel notification;
+  final VoidCallback onTap;
+
+  const _NotificationTile({
+    required this.notification,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: _buildLeadingIcon(),
+      title: Text(
+        notification.title,
+        style: TextStyle(
+          fontWeight: notification.isRead ? FontWeight.normal : FontWeight.bold,
+        ),
+      ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.notifications_off,
-            size: 80,
-            color: theme.colorScheme.onBackground.withOpacity(0.2),
-          ),
-          const SizedBox(height: 20),
           Text(
-            'No Notifications Yet',
-            style: theme.textTheme.headlineSmall,
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'We\'ll let you know when something comes up.',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onBackground.withOpacity(0.6),
+            notification.body,
+            style: TextStyle(
+              color: notification.isRead ? Colors.grey : Colors.black87,
             ),
-            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            _formatTimestamp(notification.timestamp),
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[600],
+            ),
           ),
         ],
       ),
+      trailing: !notification.isRead
+          ? Icon(Icons.circle, color: Theme.of(context).primaryColor, size: 12)
+          : null,
+      onTap: onTap,
     );
+  }
+
+  Widget _buildLeadingIcon() {
+    switch (notification.type) {
+      case NotificationType.order:
+        return const CircleAvatar(
+          backgroundColor: Colors.blue,
+          child: Icon(Icons.shopping_cart, color: Colors.white),
+        );
+      case NotificationType.promotion:
+        return const CircleAvatar(
+          backgroundColor: Colors.purple,
+          child: Icon(Icons.local_offer, color: Colors.white),
+        );
+      case NotificationType.delivery:
+        return const CircleAvatar(
+          backgroundColor: Colors.green,
+          child: Icon(Icons.local_shipping, color: Colors.white),
+        );
+      case NotificationType.system:
+        return const CircleAvatar(
+          backgroundColor: Colors.grey,
+          child: Icon(Icons.settings, color: Colors.white),
+        );
+    }
+  }
+
+  String _formatTimestamp(DateTime timestamp) {
+    final now = DateTime.now();
+    final difference = now.difference(timestamp);
+
+    if (difference.inHours < 1) {
+      return '${difference.inMinutes} min ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} hr ago';
+    } else {
+      return DateFormat('MMM d, HH:mm').format(timestamp);
+    }
   }
 }

@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Setup debounce for search
     _searchSubject
-        .debounceTime(const Duration(milliseconds: 500))
+        .debounceTime(const Duration(milliseconds: 300))
         .distinct()
         .listen((query) {
       _productSearchBloc.add(SearchProductsEvent(query));
