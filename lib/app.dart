@@ -12,6 +12,8 @@ import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:chupachap/features/merchant/data/repositories/merchants_repository.dart';
 import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
+import 'package:chupachap/features/notifications/data/repositories/notifications_repository.dart';
+import 'package:chupachap/features/notifications/presentation/bloc/notifications_bloc.dart';
 import 'package:chupachap/features/orders/presentation/bloc/orders_bloc.dart';
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
@@ -26,52 +28,66 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final merchantRepository = MerchantsRepository();
-    return MultiBlocProvider(
+    return MultiProvider(
       providers: [
-        BlocProvider<ProductSearchBloc>(
-          create: (context) => ProductSearchBloc(
-            productRepository: ProductRepository(),
-          ),
-        ),
-        BlocProvider(
-          create: (_) =>
-              MerchantBloc(merchantRepository)..add(FetchMerchantEvent()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              OrdersBloc(checkoutBloc: context.read<CheckoutBloc>())
-                ..add(LoadOrdersFromCheckout()),
-        ),
-        BlocProvider(
-          create: (_) => BrandsBloc(brandRepository: BrandRepository())
-            ..add(FetchBrandsEvent()),
-        ),
-        BlocProvider(
-          create: (context) => CategoriesBloc(FetchCategories(
-            CategoryRepository(),
-          ))
-            ..add(LoadCategories()),
-        ),
-        BlocProvider(create: (_) => FavoritesBloc()),
-        BlocProvider(create: (_) => CartBloc()),
-        BlocProvider(
-          create: (context) => ProductBloc(
-            productRepository: ProductRepository(),
-          ),
+        // Add NotificationsRepository provider
+        Provider<NotificationsRepository>(
+          create: (_) => NotificationsRepository(),
         ),
       ],
-      child: ChangeNotifierProvider(
-        create: (_) => ThemeController(),
-        child: Consumer<ThemeController>(
-          builder: (context, themeController, child) {
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: AppTheme.lightTheme,
-              darkTheme: AppTheme.darkTheme,
-              themeMode: themeController.themeMode,
-              home: const EntrySplashScreen(),
-            );
-          },
+      child: MultiBlocProvider(
+        providers: [
+          // Update NotificationsBloc to use repository from context
+          BlocProvider(
+            create: (context) => NotificationsBloc(
+              context.read<NotificationsRepository>(),
+            ),
+          ),
+          BlocProvider<ProductSearchBloc>(
+            create: (context) => ProductSearchBloc(
+              productRepository: ProductRepository(),
+            ),
+          ),
+          BlocProvider(
+            create: (_) =>
+                MerchantBloc(merchantRepository)..add(FetchMerchantEvent()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                OrdersBloc(checkoutBloc: context.read<CheckoutBloc>())
+                  ..add(LoadOrdersFromCheckout()),
+          ),
+          BlocProvider(
+            create: (_) => BrandsBloc(brandRepository: BrandRepository())
+              ..add(FetchBrandsEvent()),
+          ),
+          BlocProvider(
+            create: (context) => CategoriesBloc(FetchCategories(
+              CategoryRepository(),
+            ))
+              ..add(LoadCategories()),
+          ),
+          BlocProvider(create: (_) => FavoritesBloc()),
+          BlocProvider(create: (_) => CartBloc()),
+          BlocProvider(
+            create: (context) => ProductBloc(
+              productRepository: ProductRepository(),
+            ),
+          ),
+        ],
+        child: ChangeNotifierProvider(
+          create: (_) => ThemeController(),
+          child: Consumer<ThemeController>(
+            builder: (context, themeController, child) {
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode: themeController.themeMode,
+                home: const EntrySplashScreen(),
+              );
+            },
+          ),
         ),
       ),
     );
