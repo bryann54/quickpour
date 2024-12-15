@@ -1,5 +1,5 @@
-// login_screen.dart
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/custom_snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/auth_bloc.dart';
@@ -28,20 +28,29 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-      final theme = Theme.of(context);
+    final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
-              ),
+            CustomAnimatedSnackbar.show(
+              context: context,
+              message: state.message,
+              icon: Icons.error_outline,
+              backgroundColor: Colors.red.withOpacity(0.9),
             );
           } else if (state is Authenticated) {
-            Navigator.pushReplacementNamed(context, "/home");
+            CustomAnimatedSnackbar.show(
+              context: context,
+              message: 'Login successful!',
+              icon: Icons.check_circle_outline,
+              backgroundColor: Colors.green.withOpacity(0.9),
+            );
+
+            Future.delayed(const Duration(milliseconds: 1500), () {
+              Navigator.pushReplacementNamed(context, "/home");
+            });
           }
         },
         builder: (context, state) {
@@ -57,17 +66,23 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 40),
                       Text(
                         'Welcome Back!',
-                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: isDarkMode?AppColors.brandPrimary:AppColors.brandPrimary
-                        ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: isDarkMode
+                                    ? AppColors.brandPrimary
+                                    : AppColors.brandPrimary),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         'Log in to continue',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color:isDarkMode?AppColors.accentColorDark: AppColors.accentColor,
-                        ),
+                              color: isDarkMode
+                                  ? AppColors.accentColorDark
+                                  : AppColors.accentColor,
+                            ),
                       ),
                       const SizedBox(height: 40),
                       TextFormField(
@@ -84,6 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (value?.isEmpty ?? true) {
                             return 'Please enter your email';
                           }
+                          // Add email format validation if needed
                           return null;
                         },
                       ),
@@ -122,11 +138,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPressed: state is AuthLoading
                             ? null
                             : () {
-                                if (_formKey.currentState?.validate() ?? false) {
+                                if (_formKey.currentState?.validate() ??
+                                    false) {
                                   context.read<AuthBloc>().add(
                                         LoginEvent(
                                           email: _emailController.text.trim(),
-                                          password: _passwordController.text.trim(),
+                                          password:
+                                              _passwordController.text.trim(),
                                         ),
                                       );
                                 }
@@ -143,14 +161,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 width: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  valueColor:
-                                      AlwaysStoppedAnimation<Color>(Colors.white),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
                                 ),
                               )
                             : const Text('Login'),
                       ),
                       const SizedBox(height: 16),
-                  
+                      // Add additional widgets here if needed (e.g., "Forgot Password?" link)
                     ],
                   ),
                 ),
