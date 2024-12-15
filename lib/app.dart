@@ -1,5 +1,8 @@
 import 'package:chupachap/core/theme/app_theme.dart';
 import 'package:chupachap/core/theme/theme_controller.dart';
+import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
+import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
+import 'package:chupachap/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:chupachap/features/auth/presentation/pages/entry_splash.dart';
 import 'package:chupachap/features/brands/data/repositories/brand_repository.dart';
 import 'package:chupachap/features/brands/presentation/bloc/brands_bloc.dart';
@@ -30,6 +33,13 @@ class App extends StatelessWidget {
     final merchantRepository = MerchantsRepository();
     return MultiProvider(
       providers: [
+         BlocProvider(
+          create: (context) => AuthBloc(
+            authUseCases: AuthUseCases(
+              authRepository: AuthRepository(),
+            ),
+          ),
+         ),
         // Add NotificationsRepository provider
         Provider<NotificationsRepository>(
           create: (_) => NotificationsRepository(),

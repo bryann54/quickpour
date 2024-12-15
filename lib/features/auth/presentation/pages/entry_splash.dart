@@ -1,5 +1,6 @@
 // Make sure to import your colors
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/features/auth/presentation/pages/signup_screen.dart';
 import 'package:chupachap/features/home/presentation/widgets/bottom_nav.dart';
 import 'package:flutter/material.dart';
 
@@ -56,7 +57,7 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
     // Navigate to home screen after animation completes
     Future.delayed(const Duration(seconds: 4), () {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const BottomNav()),
+        MaterialPageRoute(builder: (_) =>  SignupScreen()),
       );
     });
   }
