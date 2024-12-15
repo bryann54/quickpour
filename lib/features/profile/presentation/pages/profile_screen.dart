@@ -1,5 +1,5 @@
 
-import 'package:chupachap/features/profile/presentation/widgets/static_widget.dart';
+import 'package:chupachap/features/profile/presentation/widgets/option_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:chupachap/core/utils/colors.dart';
@@ -9,12 +9,12 @@ import 'package:chupachap/features/profile/presentation/widgets/logout_button_wi
 import 'package:chupachap/features/auth/data/models/user_model.dart';
 
 class ProfileScreen extends StatelessWidget {
-  final String userEmail;
+ 
   final AuthUseCases authUseCases;
 
   const ProfileScreen({
     super.key,
-    required this.userEmail,
+  
     required this.authUseCases,
   });
 

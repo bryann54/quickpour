@@ -88,9 +88,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               children: [
                 // Conditional Greeting or Logo
                 showGreeting
-                    ?  CustomGreeting(
-                     userName: userName,
-                    )
+                    ? CustomGreeting(authUseCases: authUseCases)
 
                     : ShaderMask(
                         shaderCallback: (bounds) => const LinearGradient(
@@ -174,7 +172,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                             ProfileScreen(userEmail: userEmail, authUseCases: authUseCases,)));
+                                             ProfileScreen(authUseCases: authUseCases,)));
                    
                                 break;
                               case 'logout':
@@ -199,7 +197,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                               child: Row(
                                 children: [
                                   FaIcon(
-                            FontAwesomeIcons.userCircle, size: 20),
+                            FontAwesomeIcons.circleUser, size: 20),
                                   SizedBox(width: 10),
                                   Text('Profile'),
                                 ],

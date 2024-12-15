@@ -1,4 +1,4 @@
-import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
+import 'package:chupachap/features/auth/data/models/user_model.dart';
 import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,13 +6,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
 class CustomGreeting extends StatefulWidget {
-  final String? userName;
-     final authUseCases = AuthUseCases(authRepository: AuthRepository());
+  final AuthUseCases authUseCases;
 
 
   
 
-   CustomGreeting({Key? key, this.userName}) : super(key: key);
+   CustomGreeting({Key? key, required this.authUseCases,}) : super(key: key);
 
   @override
   State<CustomGreeting> createState() => _CustomGreetingState();
@@ -21,11 +20,24 @@ class CustomGreeting extends StatefulWidget {
 class _CustomGreetingState extends State<CustomGreeting> {
   String _currentLocation = 'Fetching location...';
   bool _isLoading = true;
+  User? _currentUser;
 
   @override
   void initState() {
     super.initState();
     _fetchCurrentLocation();
+      _fetchUserDetails();
+  }
+  Future<void> _fetchUserDetails() async {
+    try {
+      final user =
+          await widget.authUseCases.authRepository.getCurrentUserDetails();
+      setState(() {
+        _currentUser = user;
+      });
+    } catch (e) {
+      print('Error fetching user details: $e');
+    }
   }
 
   String _getGreeting() {
@@ -129,7 +141,7 @@ class _CustomGreetingState extends State<CustomGreeting> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${_getGreeting()} 👋, ${widget.userName ?? 'User'}',
+           '${_getGreeting()} 👋, ${_currentUser?.firstName ?? 'User'}',
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
             color: theme.colorScheme.onSurface,
