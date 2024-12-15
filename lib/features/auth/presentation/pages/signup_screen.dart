@@ -193,26 +193,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             : const Text('Sign Up'),
                       ),
                       const SizedBox(height: 16),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: RichText(
-                          text: TextSpan(
-                            text: 'Already have an account? ',
-                            style: TextStyle(color: Colors.grey[600]),
-                            children: const [
-                              TextSpan(
-                                text: 'Login',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                  
                     ],
                   ),
                 ),

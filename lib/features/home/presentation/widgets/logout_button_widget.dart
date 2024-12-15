@@ -1,9 +1,6 @@
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:chupachap/features/auth/presentation/bloc/auth_event.dart';
 import 'package:chupachap/features/home/presentation/widgets/logout_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LogOutButton extends StatefulWidget {
   const LogOutButton({super.key});
@@ -19,8 +16,7 @@ class _LogOutButtonState extends State<LogOutButton> {
       builder: (BuildContext context) {
         return CustomLogoutDialog(
           onConfirm: () {
-            // Perform the logout logic here
-            _logout();
+            // Perform logout logic here
             Navigator.of(context).pop(); // Close the dialog
           },
           onCancel: () {
@@ -29,20 +25,6 @@ class _LogOutButtonState extends State<LogOutButton> {
         );
       },
     );
-  }
-
-  void _logout() {
-    // You can perform logout logic here, like clearing user data or tokens
-    // For example, if using BLoC:
-    BlocProvider.of<AuthBloc>(context).add(LogoutEvent());
-
-    // Optionally, you can also clear shared preferences or tokens directly:
-    // SharedPreferences.getInstance().then((prefs) {
-    //   prefs.clear(); // Clear stored user data (example for SharedPreferences)
-    // });
-
-    // After logout, navigate to the login screen (or any other screen)
-    Navigator.pushReplacementNamed(context, '/login'); // Adjust route as needed
   }
 
   @override
@@ -73,7 +55,7 @@ class _LogOutButtonState extends State<LogOutButton> {
             ),
             child: Center(
               child: Text(
-                'Logout',
+                'logout',
                 style: TextStyle(
                   color: isLightMode
                       ? AppColors.textPrimaryDark

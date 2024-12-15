@@ -1,4 +1,5 @@
 // login_screen.dart
+import 'package:chupachap/core/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/auth_bloc.dart';
@@ -27,6 +28,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+      final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -56,13 +59,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         'Welcome Back!',
                         style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
+                          color: isDarkMode?AppColors.brandPrimary:AppColors.brandPrimary
                         ),
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Sign in to continue',
+                        'Log in to continue',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Colors.grey,
+                          color:isDarkMode?AppColors.accentColorDark: AppColors.accentColor,
                         ),
                       ),
                       const SizedBox(height: 40),
@@ -146,26 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             : const Text('Login'),
                       ),
                       const SizedBox(height: 16),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/signup');
-                        },
-                        child: RichText(
-                          text: TextSpan(
-                            text: "Don't have an account? ",
-                            style: TextStyle(color: Colors.grey[600]),
-                            children: const [
-                              TextSpan(
-                                text: 'Sign Up',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                  
                     ],
                   ),
                 ),

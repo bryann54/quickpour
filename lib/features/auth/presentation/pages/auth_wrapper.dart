@@ -1,3 +1,5 @@
+import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'signup_screen.dart';
@@ -15,9 +17,10 @@ class _AuthWrapperState extends State<AuthWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(isLogin ? "Login" : "Sign Up"),
-        backgroundColor: Colors.blueAccent,
+      appBar: CustomAppBar(
+        showCart: false,
+        showNotification: false,
+        showProfile: false,
       ),
       body: isLogin ? const LoginScreen() : const SignupScreen(),
       bottomNavigationBar: BottomAppBar(
@@ -32,12 +35,12 @@ class _AuthWrapperState extends State<AuthWrapper> {
               TextButton(
                 onPressed: () {
                   setState(() {
-                    isLogin = !isLogin; // Toggle between login and signup
+                    isLogin = !isLogin; 
                   });
                 },
                 child: Text(
                   isLogin ? "Sign Up" : "Login",
-                  style: TextStyle(color: Colors.blueAccent),
+                  style: TextStyle(color: AppColors.errorDark,fontSize: 20),
                 ),
               ),
             ],
