@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ],
       child: Scaffold(
-        appBar: const CustomAppBar(
+        appBar:  CustomAppBar(
           showNotification: true,
           showCart: false,
           showProfile: true,

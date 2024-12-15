@@ -1,6 +1,6 @@
 // Make sure to import your colors
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/features/auth/presentation/pages/wrapper/wrapper.dart';
+import 'package:chupachap/core/wrapper/wrapper.dart';
 import 'package:flutter/material.dart';
 
 class EntrySplashScreen extends StatefulWidget {

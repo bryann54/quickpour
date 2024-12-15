@@ -1,8 +1,8 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:flutter/material.dart';
-import '../login_screen.dart';
-import '../signup_screen.dart';
+import '../../features/auth/presentation/pages/login_screen.dart';
+import '../../features/auth/presentation/pages/signup_screen.dart';
 
 class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});
@@ -12,7 +12,7 @@ class AuthWrapper extends StatefulWidget {
 }
 
 class _AuthWrapperState extends State<AuthWrapper> {
-  bool isLogin = true; // Track whether the user wants to log in or sign up
+  bool isLogin = true; 
 
   @override
   Widget build(BuildContext context) {

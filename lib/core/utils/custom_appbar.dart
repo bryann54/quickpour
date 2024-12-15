@@ -5,6 +5,7 @@ import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
 import 'package:chupachap/features/notifications/presentation/pages/notifications_screen.dart';
 import 'package:chupachap/features/profile/presentation/pages/profile_screen.dart';
 import 'package:chupachap/features/profile/presentation/pages/settings_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:badges/badges.dart' as badges;
@@ -20,8 +21,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final ThemeData? theme;
   final String? title;
   final FloatingActionButtonLocation? fabLocation;
+  final userEmail =
+      FirebaseAuth.instance.currentUser?.email ?? 'No email found';
 
-  const CustomAppBar({
+
+   CustomAppBar({
     Key? key,
     this.showNotification = true,
     this.showGreeting =false,
@@ -165,7 +169,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const ProfileScreen()));
+                                             ProfileScreen(userEmail: userEmail,)));
                    
                                 break;
                               case 'logout':

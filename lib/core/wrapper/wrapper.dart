@@ -1,11 +1,11 @@
 import 'package:chupachap/core/utils/custom_snackbar_widget.dart';
-import 'package:chupachap/features/auth/presentation/pages/wrapper/auth_wrapper.dart';
+import 'package:chupachap/core/wrapper/auth_wrapper.dart';
 import 'package:chupachap/features/home/presentation/widgets/bottom_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/auth_bloc.dart';
-import '../../bloc/auth_state.dart';
+import '../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../features/auth/presentation/bloc/auth_state.dart';
 
 class Wrapper extends StatefulWidget {
   const Wrapper({super.key});
@@ -49,11 +49,11 @@ class _WrapperState extends State<Wrapper> {
               ),
             );
           } else if (state is Authenticated) {
-            // If the user is authenticated, show the Home screen
+            // If the user is authenticated, show the bottomnav
             return BottomNav(); // Your home screen widget
           } else {
             // If not authenticated, show the login screen
-            return AuthWrapper(); // This widget will wrap the Login or Signup screen
+            return AuthWrapper(); 
           }
         },
       ),

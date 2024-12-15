@@ -1,14 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/home/presentation/widgets/logout_button_widget.dart';
 import 'package:chupachap/features/home/presentation/widgets/option_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({
-    super.key,
-  });
+  final String userEmail;
+
+  const ProfileScreen({super.key, required this.userEmail});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class ProfileScreen extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar:  CustomAppBar(
         showProfile: false,
       ),
       body: SingleChildScrollView(
@@ -79,13 +80,6 @@ class ProfileScreen extends StatelessWidget {
             backgroundImage: 'user.profileImage' != null
                 ? const NetworkImage('ser.profileImage')
                 : null,
-            // child: user.profileImage == null
-            //     ? Icon(
-            //         Icons.person,
-            //         size: 50,
-            //         color: AppColors.accentColor,
-            //       )
-            //     : null,
           ),
         ),
         const SizedBox(width: 16),
@@ -94,7 +88,7 @@ class ProfileScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'user.name',
+                'user.name', // You can replace this with actual user name from Firebase
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -102,7 +96,7 @@ class ProfileScreen extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                ' user.email',
+                userEmail, // Pass the email here
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Colors.grey,
                     ),
@@ -110,12 +104,6 @@ class ProfileScreen extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 8),
-              // Text(
-              //   'Joined ${_formatJoinDate(user.createdAt)}',
-              //   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              //         color: Colors.grey,
-              //       ),
-              // ),
             ],
           ),
         ),
@@ -206,26 +194,5 @@ class ProfileScreen extends StatelessWidget {
         color: AppColors.dividerColorDark.withOpacity(0.3),
       ),
     );
-  }
-
-  String _formatJoinDate(DateTime? createdAt) {
-    if (createdAt == null) return 'Unknown';
-
-    final months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December'
-    ];
-
-    return '${months[createdAt.month - 1]} ${createdAt.year}';
   }
 }

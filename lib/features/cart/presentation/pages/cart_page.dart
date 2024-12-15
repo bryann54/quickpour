@@ -82,7 +82,7 @@ class _CartPageState extends State<CartPage>
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar:  CustomAppBar(
         showCart: false,
       ),
       body: BlocBuilder<CartBloc, CartState>(
