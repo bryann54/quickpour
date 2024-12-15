@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1027765291967",
+    "project_id": "chupachap-e861a",
+    "storage_bucket": "chupachap-e861a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027765291967:android:934900f6f511950b7d6f0a",
+        "android_client_info": {
+          "package_name": "com.example.chupachap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9fO5uMctjAwGektoGriopf6NtBTKrxoY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

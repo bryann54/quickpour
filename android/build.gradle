@@ -1,3 +1,18 @@
+
+buildscript {
+    ext {
+        googleServicesVersion = "4.4.2"
+        gradleVersion = "8.1.0"
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:$gradleVersion"
+        classpath "com.google.gms:google-services:$googleServicesVersion"
+    }
+}
 allprojects {
     repositories {
         google()
@@ -16,3 +31,4 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
