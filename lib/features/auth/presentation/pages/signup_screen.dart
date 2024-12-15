@@ -19,6 +19,10 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  final TextEditingController _firstNameController =
+      TextEditingController(); // Added
+  final TextEditingController _lastNameController =
+      TextEditingController(); // Added
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
 
@@ -27,6 +31,8 @@ class _SignupScreenState extends State<SignupScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _firstNameController.dispose(); // Added
+    _lastNameController.dispose(); // Added
     super.dispose();
   }
 
@@ -77,6 +83,43 @@ class _SignupScreenState extends State<SignupScreen> {
                             ),
                       ),
                       const SizedBox(height: 40),
+                      // First Name Field
+                      TextFormField(
+                        controller: _firstNameController,
+                        decoration: InputDecoration(
+                          labelText: 'First Name',
+                          prefixIcon: const Icon(Icons.person_outline),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value?.isEmpty ?? true) {
+                            return 'Please enter your first name';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      // Last Name Field
+                      TextFormField(
+                        controller: _lastNameController,
+                        decoration: InputDecoration(
+                          labelText: 'Last Name',
+                          prefixIcon: const Icon(Icons.person_outline),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value?.isEmpty ?? true) {
+                            return 'Please enter your last name';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      // Email Field
                       TextFormField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
@@ -95,6 +138,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         },
                       ),
                       const SizedBox(height: 16),
+                      // Password Field
                       TextFormField(
                         controller: _passwordController,
                         obscureText: !_isPasswordVisible,
@@ -125,6 +169,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         },
                       ),
                       const SizedBox(height: 16),
+                      // Confirm Password Field
                       TextFormField(
                         controller: _confirmPasswordController,
                         obscureText: !_isConfirmPasswordVisible,
@@ -170,6 +215,10 @@ class _SignupScreenState extends State<SignupScreen> {
                                           email: _emailController.text.trim(),
                                           password:
                                               _passwordController.text.trim(),
+                                          firstName: _firstNameController.text
+                                              .trim(), // Added
+                                          lastName: _lastNameController.text
+                                              .trim(), // Added
                                         ),
                                       );
                                 }
@@ -193,7 +242,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             : const Text('Sign Up'),
                       ),
                       const SizedBox(height: 16),
-                  
                     ],
                   ),
                 ),

@@ -1,3 +1,5 @@
+import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
+import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -5,9 +7,12 @@ import 'package:geocoding/geocoding.dart';
 
 class CustomGreeting extends StatefulWidget {
   final String? userName;
+     final authUseCases = AuthUseCases(authRepository: AuthRepository());
+
+
   
 
-  const CustomGreeting({Key? key, this.userName}) : super(key: key);
+   CustomGreeting({Key? key, this.userName}) : super(key: key);
 
   @override
   State<CustomGreeting> createState() => _CustomGreetingState();

@@ -1,5 +1,5 @@
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/features/home/presentation/widgets/logout_dialog.dart';
+import 'package:chupachap/features/profile/presentation/widgets/logout_dialog.dart';
 import 'package:flutter/material.dart';
 
 class LogOutButton extends StatefulWidget {

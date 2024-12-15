@@ -10,28 +10,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoginEvent>((event, emit) async {
       emit(AuthLoading());
       try {
-        final email = await authUseCases.login(event.email, event.password);
+        final email = await authUseCases.login(
+            email: event.email, password: event.password);
         emit(Authenticated(email: email));
       } catch (e) {
         emit(AuthError(message: e.toString()));
       }
     });
 
-on<SignupEvent>((event, emit) async {
-      emit(AuthLoading()); // Emit loading state before the sign-up process
-
+    on<SignupEvent>((event, emit) async {
+      emit(AuthLoading());
       try {
-        // Call your use case to register the user
-        final email = await authUseCases.register(event.email, event.password);
-
-        // Emit Authenticated state with the email (or user data if needed)
+        final email = await authUseCases.register(
+            email: event.email,
+            password: event.password,
+            firstName: event.firstName,
+            lastName: event.lastName);
         emit(Authenticated(email: email));
       } catch (e) {
-        // Handle errors by emitting AuthError with the error message
         emit(AuthError(message: e.toString()));
       }
     });
-
 
     on<LogoutEvent>((event, emit) async {
       emit(AuthLoading());

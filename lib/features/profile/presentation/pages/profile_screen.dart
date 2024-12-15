@@ -1,15 +1,22 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:chupachap/features/profile/presentation/widgets/static_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
-import 'package:chupachap/features/home/presentation/widgets/logout_button_widget.dart';
-import 'package:chupachap/features/home/presentation/widgets/option_widget.dart';
+import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
+import 'package:chupachap/features/profile/presentation/widgets/logout_button_widget.dart';
+import 'package:chupachap/features/auth/data/models/user_model.dart';
 
 class ProfileScreen extends StatelessWidget {
   final String userEmail;
+  final AuthUseCases authUseCases;
 
-  const ProfileScreen({super.key, required this.userEmail});
+  const ProfileScreen({
+    super.key,
+    required this.userEmail,
+    required this.authUseCases,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,69 +24,93 @@ class ProfileScreen extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      appBar:  CustomAppBar(
-        showProfile: false,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Profile Header
-              Center(
-                child: Text(
-                  'Profile',
-                  style: theme.textTheme.displayLarge?.copyWith(
-                    color: isDarkMode
-                        ? AppColors.cardColor
-                        : AppColors.accentColorDark,
-                  ),
-                ),
+      appBar: CustomAppBar(showProfile: false),
+      body: FutureBuilder<User?>(
+        future: authUseCases.authRepository.getCurrentUserDetails(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                'Error: ${snapshot.error}',
+                style: theme.textTheme.bodyLarge?.copyWith(color: Colors.red),
               ),
+            );
+          }
 
-              const SizedBox(height: 20),
+          final user = snapshot.data;
 
-              // User Profile Section
-              _buildUserProfileHeader(context),
+          if (user == null) {
+            return Center(
+              child: Text(
+                'User data not found!',
+                style: theme.textTheme.bodyLarge,
+              ),
+            );
+          }
 
-              const SizedBox(height: 24),
+          return SingleChildScrollView(
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Profile Header
+                  Center(
+                    child: Text(
+                      'Profile',
+                      style: theme.textTheme.displayLarge?.copyWith(
+                        color: isDarkMode
+                            ? AppColors.cardColor
+                            : AppColors.accentColorDark,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
 
-              // User Activity Section
-              _buildSectionTitle(context, 'Your Activity'),
-              const SizedBox(height: 12),
-              const ProfileStatisticsSection(),
+                  // User Profile Section
+                  _buildUserProfileHeader(context, user),
 
-              const SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
-              // Profile Options
-              _buildSectionTitle(context, 'Account'),
-              const SizedBox(height: 12),
-              _buildProfileOptions(context),
+                  // User Activity Section
+                  _buildSectionTitle(context, 'Your Activity'),
+                  const SizedBox(height: 12),
+                  const ProfileStatisticsSection(),
 
-              const SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
-              // Logout Button
-              const LogOutButton(),
-            ],
-          ),
-        ),
+                  // Profile Options
+                  _buildSectionTitle(context, 'Account'),
+                  const SizedBox(height: 12),
+                  _buildProfileOptions(context),
+
+                  const SizedBox(height: 24),
+
+                  // Logout Button
+                  const LogOutButton(),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
-
-  Widget _buildUserProfileHeader(BuildContext context) {
+Widget _buildUserProfileHeader(BuildContext context, User user) {
     return Row(
       children: [
         Hero(
           tag: 'profile_avatar',
-          child: CircleAvatar(
+           child: CircleAvatar(
             radius: 50,
             backgroundColor: AppColors.accentColor.withOpacity(0.2),
-            // ignore: unnecessary_null_comparison
-            backgroundImage: 'user.profileImage' != null
-                ? const NetworkImage('ser.profileImage')
-                : null,
+            backgroundImage:
+                null, // Replace with user profile image if available
           ),
         ),
         const SizedBox(width: 16),
@@ -88,22 +119,20 @@ class ProfileScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'user.name', // You can replace this with actual user name from Firebase
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                '${user.firstName} ${user.lastName}',
+                style: Theme.of(context).textTheme.headlineSmall,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
+              const SizedBox(height: 8),
               Text(
-                userEmail, // Pass the email here
+                user.email,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Colors.grey,
                     ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 8),
             ],
           ),
         ),
@@ -145,7 +174,6 @@ class ProfileScreen extends StatelessWidget {
             icon: Icons.settings,
             title: 'Account Settings',
             onTap: () {
-              // Navigate to settings screen
               context.push('/settings');
             },
           ),
@@ -196,3 +224,4 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 }
+

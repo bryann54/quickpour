@@ -1,4 +1,6 @@
 import 'package:chupachap/core/utils/custom_greetings.dart';
+import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
+import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
@@ -17,12 +19,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool useCartFAB;
   final bool showGreeting;
   final double iconSize;
+  final String? userName; 
   final Color? iconColor;
   final ThemeData? theme;
   final String? title;
   final FloatingActionButtonLocation? fabLocation;
   final userEmail =
       FirebaseAuth.instance.currentUser?.email ?? 'No email found';
+      final authUseCases = AuthUseCases(authRepository: AuthRepository());
+
 
 
    CustomAppBar({
@@ -37,6 +42,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.theme,
     this.title,
     this.fabLocation,
+     this.userName,
   }) : super(key: key);
 
   void _handleNotificationTap(BuildContext context) {
@@ -82,9 +88,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               children: [
                 // Conditional Greeting or Logo
                 showGreeting
-                    ? const CustomGreeting(
-                      //to be changed to use user name from model
-                       userName: 'Brian', 
+                    ?  CustomGreeting(
+                     userName: userName,
                     )
 
                     : ShaderMask(
@@ -169,7 +174,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                             ProfileScreen(userEmail: userEmail,)));
+                                             ProfileScreen(userEmail: userEmail, authUseCases: authUseCases,)));
                    
                                 break;
                               case 'logout':
