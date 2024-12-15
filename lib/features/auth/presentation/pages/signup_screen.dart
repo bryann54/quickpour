@@ -1,4 +1,6 @@
 // signup_screen.dart
+import 'package:chupachap/features/auth/presentation/widgets/facebook_signin_button.dart';
+import 'package:chupachap/features/auth/presentation/widgets/google_signin_button.dart';
 import 'package:chupachap/features/home/presentation/widgets/bottom_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,13 +61,13 @@ class _SignupScreenState extends State<SignupScreen> {
           return SafeArea(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding:  EdgeInsets.only(top: 5,left: 10,right: 10.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const SizedBox(height: 40),
+                    
                       Text(
                         'Create Account',
                         style: Theme.of(context)
@@ -82,7 +84,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               color: Colors.grey,
                             ),
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 20),
                       // First Name Field
                       TextFormField(
                         controller: _firstNameController,
@@ -241,7 +243,47 @@ class _SignupScreenState extends State<SignupScreen> {
                               )
                             : const Text('Sign Up'),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 70),
+                   Padding(
+                     padding: const EdgeInsets.all(8.0),
+                     child: Row(
+                       children: [
+                         const Expanded(
+                           child: Divider(
+                             color: Colors.grey,
+                             thickness: 1,
+                           ),
+                         ),
+                         Padding(
+                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                           child: Text(
+                             'Or Sign Up with',
+                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                   color: Colors.grey,
+                                 ),
+                           ),
+                         ),
+                         const Expanded(
+                           child: Divider(
+                             color: Colors.grey,
+                             thickness: 1,
+                           ),
+                         ),
+                       ],
+                     ),
+                   ),
+                  const    Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GoogleSignInButton(
+                        
+                          ),
+                          const SizedBox(width: 30),
+                          FacebookSignInButton(
+                        
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),

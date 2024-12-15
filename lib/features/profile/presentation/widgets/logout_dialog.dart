@@ -13,55 +13,66 @@ class CustomLogoutDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     return AlertDialog.adaptive(
-      backgroundColor: AppColors.secondaryColor, // Custom color for the dialog
+      backgroundColor:isDarkMode?AppColors.cardColorDark: AppColors.cardColor, // Custom color for the dialog
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0), // Rounded corners
       ),
       title: const Text(
-        'confirm_logout',
+        'confirm logout',
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20,
         ),
       ),
       content: const Text(
-        'logout_text',
+        'are you Sure you want to log out?',
         style: TextStyle(fontSize: 16),
       ),
       actions: <Widget>[
-        GestureDetector(
-          onTap: onCancel, // Cancel action
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Center(
-              child: Text(
-                'cancel',
-                style: TextStyle(
-                  color: Colors.redAccent,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+        Row(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: onCancel, // Cancel action
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Text(
+                      'cancel',
+                      style: TextStyle(
+                        color: Colors.redAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
-        GestureDetector(
-          onTap: onConfirm, // Confirm (logout) action
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Center(
-              child: Text(
-                'logout',
-                style: TextStyle(
-                  color: AppColors.textPrimary, // Custom text color
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+              Expanded(
+                child: GestureDetector(
+                onTap: onConfirm, // Confirm (logout) action
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Text(
+                      'logout',
+                      style: TextStyle(
+                        color: AppColors.textPrimary, // Custom text color
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
                 ),
+                            ),
               ),
-            ),
-          ),
+          ],
         ),
+     
       ],
     );
   }

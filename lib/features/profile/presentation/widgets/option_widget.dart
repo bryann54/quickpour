@@ -24,7 +24,7 @@ class ProfileStatisticsSection extends StatelessWidget {
               const ProfileStatisticItem(
                 icon: Icons.shopping_cart_outlined,
                 label: "Orders",
-                count: "28",
+                count: "0",
               ),
             ),
             _buildStatisticWithDivider(
@@ -41,7 +41,7 @@ class ProfileStatisticsSection extends StatelessWidget {
             const ProfileStatisticItem(
               icon: Icons.star_rounded,
               label: "Reviews",
-              count: "7",
+              count: "0",
             ),
           ],
         ),

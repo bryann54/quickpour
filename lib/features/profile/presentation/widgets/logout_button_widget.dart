@@ -57,9 +57,9 @@ class _LogOutButtonState extends State<LogOutButton> {
               child: Text(
                 'logout',
                 style: TextStyle(
-                  color: isLightMode
-                      ? AppColors.textPrimaryDark
-                      : AppColors.textPrimaryDark,
+                  color: 
+                    
+                       AppColors.textPrimaryDark,
                   fontWeight: FontWeight.bold,
                   fontSize: 17,
                 ),
