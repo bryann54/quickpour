@@ -1,6 +1,6 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/strings.dart';
-import 'package:chupachap/features/profile/presentation/widgets/getstarted_button.dart';
+import 'package:chupachap/features/auth/presentation/widgets/getstarted_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

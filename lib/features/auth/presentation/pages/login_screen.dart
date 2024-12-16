@@ -176,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 16),
                
-          const  SizedBox(height: 250,),
+          const  SizedBox(height: 350,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -207,6 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ],
                       )
+                   
                     ],
                   ),
                 ),

@@ -3,6 +3,7 @@ import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -26,12 +27,13 @@ class SettingsScreen extends StatelessWidget {
               Center(
                 child: Text(
                   'App Settings',
-                  style: theme.textTheme.displayLarge?.copyWith(
-                    color: isDarkMode
-                        ? AppColors.cardColor
-                        : AppColors.accentColorDark,
-                    fontWeight: FontWeight.bold,
-                  ),
+                 style: GoogleFonts.montaga(
+                      textStyle: theme.textTheme.displayLarge?.copyWith(
+                        color: isDarkMode
+                            ? AppColors.cardColor
+                            : AppColors.accentColorDark,
+                      ),
+                    )
                 ).animate().fadeIn(duration: 500.ms).slideY(begin: 0.1),
               ),
               const SizedBox(height: 20),
@@ -151,10 +153,13 @@ class SettingsScreen extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 10.0),
           child: Text(
             title,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.accentColor,
-                ),
+             style: GoogleFonts.montaga(
+                textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
+                       fontWeight: FontWeight.w600,
+                      color: AppColors.accentColor,
+                      fontSize: 17
+                    ),
+              )
           ),
         ),
         Container(

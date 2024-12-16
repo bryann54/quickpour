@@ -7,6 +7,7 @@ import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
 import 'package:chupachap/features/profile/presentation/widgets/logout_button_widget.dart';
 import 'package:chupachap/features/auth/data/models/user_model.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProfileScreen extends StatelessWidget {
  
@@ -63,11 +64,12 @@ class ProfileScreen extends StatelessWidget {
                   Center(
                     child: Text(
                       'Profile',
-                      style: theme.textTheme.displayLarge?.copyWith(
+                      style: GoogleFonts.montaga(
+                                    textStyle: theme.textTheme.displayLarge?.copyWith(
                         color: isDarkMode
                             ? AppColors.cardColor
                             : AppColors.accentColorDark,
-                      ),
+                      ),)
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -119,19 +121,19 @@ Widget _buildUserProfileHeader(BuildContext context, User user) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${user.firstName} ${user.lastName}',
-                style: Theme.of(context).textTheme.headlineSmall,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+                '${user.firstName}  ${user.lastName}',
+                style: GoogleFonts.acme(
+                                    textStyle: Theme.of(context).textTheme.headlineSmall,
+              
+               ) ),
               const SizedBox(height: 8),
               Text(
                 user.email,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                style: GoogleFonts.montaga(
+                                    textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Colors.grey,
                     ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+               )
               ),
             ],
           ),
@@ -143,9 +145,10 @@ Widget _buildUserProfileHeader(BuildContext context, User user) {
   Widget _buildSectionTitle(BuildContext context, String title) {
     return Text(
       title,
-      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+      style: GoogleFonts.montaga(
+                                    textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
-          ),
+          ),)
     );
   }
 
@@ -204,7 +207,7 @@ Widget _buildUserProfileHeader(BuildContext context, User user) {
       ),
       title: Text(
         title,
-        style: const TextStyle(fontSize: 16),
+        style:  GoogleFonts.acme(fontSize: 16,fontWeight: FontWeight.normal),
       ),
       trailing: const Icon(
         Icons.chevron_right,

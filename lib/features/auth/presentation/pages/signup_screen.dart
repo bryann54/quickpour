@@ -67,7 +67,7 @@ class _SignupScreenState extends State<SignupScreen> {
           return SafeArea(
             child: SingleChildScrollView(
               child: Padding(
-                padding:  EdgeInsets.only(top: 5,left: 10,right: 10.0),
+                padding:  EdgeInsets.only(top: 40,left: 10,right: 10.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -303,7 +303,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 20,),
+                      SizedBox(height: 50,),
+
 Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -334,8 +335,9 @@ Row(
                           ),
                         ],
                       )
-                    ],
-                  ),
+                   
+
+                ]  ),
                 ),
               ),
             ),

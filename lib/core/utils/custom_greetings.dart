@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomGreeting extends StatefulWidget {
   final AuthUseCases authUseCases;
@@ -141,11 +142,13 @@ class _CustomGreetingState extends State<CustomGreeting> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-           '${_getGreeting()} 👋, ${_currentUser?.firstName ?? 'User'}',
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w600,
-            color: theme.colorScheme.onSurface,
-          ),
+           '${_getGreeting()} 👋, ${_currentUser?.firstName}',
+          style: GoogleFonts.instrumentSerif(
+            textStyle: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: theme.colorScheme.onSurface,
+              ),
+          )
         ),
         Row(
           children: [

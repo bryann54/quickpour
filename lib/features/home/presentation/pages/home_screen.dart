@@ -25,6 +25,7 @@ import 'package:chupachap/features/product/presentation/widgets/product_card.dar
 import 'package:chupachap/features/product/presentation/widgets/product_shimmer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -103,7 +104,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding:
+                          const EdgeInsets.only(left: 3, top: 2, bottom: 2),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -111,9 +113,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Text(
                                 'Verified  Stores',
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                               style: GoogleFonts.montaga(
+                                    textStyle:
+                                        theme.textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17,
+                                      color: theme.colorScheme.onSurface,
+                                      letterSpacing: 1
+                                    ),
+                                  )
                               ),
                               const SizedBox(
                                 width: 5,
@@ -136,11 +144,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             child: Text(
                               'See All',
-                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              style:GoogleFonts.montaga(
+                                    textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                     color: isDarkMode
                                         ? Colors.teal
                                         : AppColors.accentColor,
-                                  ),
+                                  ),)
                             ),
                           ),
                         ],
@@ -163,15 +172,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Padding(
                       padding:
-                          const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                           const EdgeInsets.only(left: 3,top:2,bottom: 2),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'Top Brands',
-                            style: theme.textTheme.titleMedium?.copyWith(
+                            style:GoogleFonts.montaga(
+                                    textStyle: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
-                            ),
+                            ),)
                           ),
                           GestureDetector(
                             onTap: () {
@@ -184,12 +194,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             child: Text(
                               'See All',
-                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              style:GoogleFonts.montaga(
+                                    textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                     color: isDarkMode
                                         ? Colors.teal
                                         : AppColors.accentColor,
                                   ),
-                            ),
+                            ),)
                           ),
                         ],
                       ),
@@ -209,15 +220,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(right: 8),
+                      padding: const EdgeInsets.only(left: 3,top:2,bottom: 2),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'Categories',
-                            style: theme.textTheme.titleMedium?.copyWith(
+                            style:GoogleFonts.montaga(
+                                    textStyle: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
-                            ),
+                            ),)
                           ),
                           GestureDetector(
                             onTap: () {
@@ -230,12 +242,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             child: Text(
                               'See All',
-                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              style:GoogleFonts.montaga(
+                                    textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                     color: isDarkMode
                                         ? Colors.teal
                                         : AppColors.accentColor,
                                   ),
-                            ),
+                            ),)
                           ),
                         ],
                       ),
@@ -251,9 +264,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Text(
                       'Recommended for you',
-                      style: theme.textTheme.titleMedium?.copyWith(
+                      style:GoogleFonts.montaga(
+                                    textStyle: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                      ),
+                      )),
                     ),
                     const SizedBox(height: 8),
                     BlocBuilder<ProductBloc, ProductState>(

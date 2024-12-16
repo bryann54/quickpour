@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showNotification;
   final bool showCart;
@@ -97,11 +98,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                Color(0xFFF39C12),
                           ],
                         ).createShader(bounds),
-                        child: const Text(
+                        child: Text(
                           'QuickPour',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 23,
+                          style: GoogleFonts.acme(
+                           
+                            fontSize: 25,
                             fontWeight: FontWeight.w800,
                             color: Colors.white,
                           ),
