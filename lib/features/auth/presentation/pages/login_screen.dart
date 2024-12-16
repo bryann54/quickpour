@@ -1,7 +1,9 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_snackbar_widget.dart';
+import 'package:chupachap/features/auth/presentation/pages/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -10,7 +12,7 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -66,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 40),
                       Text(
                         'Welcome Back!',
-                        style: Theme.of(context)
+                        style: GoogleFonts.acme(textStyle: Theme.of(context)
                             .textTheme
                             .headlineMedium
                             ?.copyWith(
@@ -74,15 +76,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                 color: isDarkMode
                                     ? AppColors.brandPrimary
                                     : AppColors.brandPrimary),
-                      ),
+                      )),
                       const SizedBox(height: 8),
                       Text(
                         'Log in to continue',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: isDarkMode
-                                  ? AppColors.accentColorDark
-                                  : AppColors.accentColor,
-                            ),
+                        style: GoogleFonts.acme(textStyle: 
+                          Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  color: isDarkMode
+                                      ? AppColors.accentColorDark
+                                      : AppColors.accentColor,
+                                ).copyWith(
+                                  fontSize: 24,
+                                ),
+
+                        )
                       ),
                       const SizedBox(height: 40),
                       TextFormField(
@@ -133,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 60),
                       ElevatedButton(
                         onPressed: state is AuthLoading
                             ? null
@@ -168,7 +175,38 @@ class _LoginScreenState extends State<LoginScreen> {
                             : const Text('Login'),
                       ),
                       const SizedBox(height: 16),
-                      // Add additional widgets here if needed (e.g., "Forgot Password?" link)
+               
+          const  SizedBox(height: 250,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Don\'t have an account? ',
+                            style: GoogleFonts
+                                .poppins(),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                    const  SignupScreen(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'SignUp',
+                              style: GoogleFonts.poppins(
+                                color:
+                                    Colors.blue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),

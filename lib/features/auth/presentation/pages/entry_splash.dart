@@ -2,6 +2,7 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/wrapper/wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EntrySplashScreen extends StatefulWidget {
   const EntrySplashScreen({super.key});
@@ -81,14 +82,13 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        AppColors.primaryColor,
-                        AppColors.primaryColor.withOpacity(0.8),
-                        AppColors.secondaryColor.withOpacity(0.9),
-                      ],
-                    ),
+                    colors: [
+                      AppColors.primaryColorDark,
+                      AppColors.secondaryColorDark.withOpacity(0.7),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
                   ),
                 ),
               ),
@@ -132,37 +132,38 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                     ),
                
                     // App name with fade animation
-                    Opacity(
+                Opacity(
                       opacity: _fadeAnimation.value,
-                      child: const Text(
+                      child: Text(
                         'QuickPour',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 2,
-                          shadows: [
-                            Shadow(
-                              color: AppColors.shadowColor,
-                              blurRadius: 10,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
+                        style: GoogleFonts.chewy(
+                          textStyle: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 4,
+                            shadows: [
+                              Shadow(
+                                color: AppColors.shadowColor,
+                                blurRadius: 10,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                      const SizedBox(height: 10),
                     // Tagline with fade animation
                     Opacity(
                       opacity: _fadeAnimation.value,
                       child: Text(
-                        'Drink ako Pap!!',
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 1,
-                        ),
+                        'Drink yako Pap!!',
+                        style: GoogleFonts.tangerine(
+                          color: AppColors.background,
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold
+                        )
                       ),
                     ),
                   ],

@@ -1,9 +1,12 @@
 // signup_screen.dart
+import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/features/auth/presentation/pages/login_screen.dart';
 import 'package:chupachap/features/auth/presentation/widgets/facebook_signin_button.dart';
 import 'package:chupachap/features/auth/presentation/widgets/google_signin_button.dart';
 import 'package:chupachap/features/home/presentation/widgets/bottom_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -40,6 +43,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -58,6 +62,8 @@ class _SignupScreenState extends State<SignupScreen> {
           }
         },
         builder: (context, state) {
+           final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
           return SafeArea(
             child: SingleChildScrollView(
               child: Padding(
@@ -67,22 +73,35 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                    
-                      Text(
+                  Text(
                         'Create Account',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style: GoogleFonts.acme(
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
                       ),
+
                       const SizedBox(height: 8),
                       Text(
                         'Sign up to get started',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Colors.grey,
-                            ),
+                       style: GoogleFonts.acme(textStyle: 
+                           
+                          Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(
+                                  color: isDarkMode
+                                      ? AppColors.accentColorDark
+                                      : AppColors.accentColor,
+                                )
+                                .copyWith(
+                                  fontSize: 20,
+                                ),
+                        )
                       ),
                       const SizedBox(height: 20),
                       // First Name Field
@@ -281,6 +300,37 @@ class _SignupScreenState extends State<SignupScreen> {
                           const SizedBox(width: 30),
                           FacebookSignInButton(
                         
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20,),
+Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Already have an account? ',
+                            style: GoogleFonts
+                                .poppins(), 
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      LoginScreen(), 
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Login',
+                              style: GoogleFonts.poppins(
+                                color:
+                                    Colors.blue, 
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17
+                              ),
+                            ),
                           ),
                         ],
                       )

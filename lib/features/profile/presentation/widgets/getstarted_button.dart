@@ -1,6 +1,6 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/strings.dart';
-import 'package:chupachap/features/home/presentation/pages/home_screen.dart';
+import 'package:chupachap/features/auth/presentation/pages/signup_screen.dart';
 import 'package:flutter/material.dart';
 
 class GetstartedButton extends StatefulWidget {
@@ -47,7 +47,7 @@ class _GetstartedButtonState extends State<GetstartedButton>
       context,
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            const HomeScreen(),
+            const SignupScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(
             opacity: animation,

@@ -1,7 +1,8 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/strings.dart';
-import 'package:chupachap/features/home/presentation/widgets/getstarted_button.dart';
+import 'package:chupachap/features/profile/presentation/widgets/getstarted_button.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -82,13 +83,13 @@ class _SplashScreenState extends State<SplashScreen>
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  AppColors.background,
-                  AppColors.brandSecondary.withOpacity(0.7),
-                ],
-              ),
+              colors: [
+                AppColors.primaryColorDark,
+                AppColors.secondaryColorDark.withOpacity(0.7),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            )
             ),
           ),
 
@@ -136,13 +137,13 @@ class _SplashScreenState extends State<SplashScreen>
                         children: [
                           _buildAnimatedText(
                             splash1,
-                            fontSize: 28,
+                            fontSize: 35,
                             fontWeight: FontWeight.w800,
                           ),
                           const SizedBox(height: 16),
                           _buildAnimatedText(
                             splash2,
-                            fontSize: 23,
+                            fontSize: 25,
                             fontWeight: FontWeight.w600,
                           ),
                           const SizedBox(height: 12),
@@ -187,14 +188,16 @@ class _SplashScreenState extends State<SplashScreen>
                       padding: const EdgeInsets.only(bottom: 24.0),
                       child: Text(
                         'Terms & conditions apply',
-                        style: TextStyle(
-                          color: AppColors.textLight.withOpacity(0.7),
-                          fontSize: 14,
-                          letterSpacing: 0.5,
-                        ),
+                        style: GoogleFonts.acme(
+                          
+                              color: AppColors.textPrimaryDark.withOpacity(0.7),
+                              fontSize: 14,
+                              letterSpacing: 0.5,
+                            ),
+                        )
                       ),
                     ),
-                  ),
+                  
                 ],
               ),
             ),
@@ -203,8 +206,7 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
   }
-
-  Widget _buildAnimatedText(
+Widget _buildAnimatedText(
     String text, {
     required double fontSize,
     required FontWeight fontWeight,
@@ -221,10 +223,10 @@ class _SplashScreenState extends State<SplashScreen>
       child: Text(
         text,
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: GoogleFonts.akayaKanadaka(
           fontSize: fontSize,
           fontWeight: fontWeight,
-          letterSpacing: 0.5,
+          letterSpacing: 1,
           height: 1.2,
           color: Colors.white,
           shadows: [
@@ -238,7 +240,6 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
   }
-
   @override
   void dispose() {
     _controller.dispose();
