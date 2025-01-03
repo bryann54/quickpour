@@ -124,7 +124,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
           ),
         ),
         Text(
-          'KSh ${widget.totalAmount.toStringAsFixed(2)}',
+          'KSh ${widget.totalAmount.toStringAsFixed(0)}',
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,

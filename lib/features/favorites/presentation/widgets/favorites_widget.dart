@@ -93,7 +93,7 @@ class FavoritesWidget extends StatelessWidget {
             ],
           ),
           subtitle: Text(
-            'KSh ${favoriteItem.product.price.toStringAsFixed(2)}',
+            'KSh ${favoriteItem.product.price.toStringAsFixed(0)}',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: Colors.green,
               fontWeight: FontWeight.bold,

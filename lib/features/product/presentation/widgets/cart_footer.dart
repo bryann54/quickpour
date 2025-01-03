@@ -201,7 +201,7 @@ class CartFooter extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             Text(
-              'KSh ${(product.price * quantity).toStringAsFixed(2)}',
+              'KSh ${(product.price * quantity).toStringAsFixed(0)}',
               style: Theme.of(context)
                   .textTheme
                   .headlineSmall

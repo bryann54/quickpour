@@ -107,7 +107,7 @@ class MerchantDetailsScreen extends StatelessWidget {
                       .toList();
 
                   return SliverPadding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.only(top: 16,left: 3,right: 3),
                     sliver: SliverGrid(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(

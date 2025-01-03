@@ -1,6 +1,7 @@
 
 import 'package:chupachap/features/profile/presentation/widgets/option_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
@@ -108,11 +109,14 @@ Widget _buildUserProfileHeader(BuildContext context, User user) {
       children: [
         Hero(
           tag: 'profile_avatar',
-           child: CircleAvatar(
+        child: CircleAvatar(
             radius: 50,
             backgroundColor: AppColors.accentColor.withOpacity(0.2),
-            backgroundImage:
-                null, // Replace with user profile image if available
+            child:const FaIcon(
+              FontAwesomeIcons.userLarge,
+              color: Color.fromARGB(61, 60, 62, 65),
+              size: 50,
+            ),
           ),
         ),
         const SizedBox(width: 16),

@@ -180,6 +180,7 @@ class _ProductCardState extends State<ProductCard>
                                                             .accentColorDark,
                                                     size: 40,
                                                   )),
+                                       
                                         ),
                                       ),
                                     ),
@@ -211,26 +212,45 @@ class _ProductCardState extends State<ProductCard>
                               const SizedBox(height: 2),
                               Row(
                                 children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: isDarkMode
-                                              ? Colors.white
-                                              : AppColors.accentColor,
-                                        )),
-                                    child: CircleAvatar(
-                                      radius: 10,
-                                      backgroundImage:
-                                          CachedNetworkImageProvider(cartItem
-                                              .product.category.imageUrl),
-                                    ),
-                                  ),
-                                
+                      Container(
+  decoration: BoxDecoration(
+    shape: BoxShape.circle,
+    border: Border.all(
+      color: isDarkMode ? Colors.white : AppColors.accentColor,
+    ),
+  ),
+  child: CachedNetworkImage(
+    imageUrl: cartItem.product.merchants.imageUrl,
+    imageBuilder: (context, imageProvider) => CircleAvatar(
+      radius: 10,
+      backgroundImage: imageProvider,
+    ),
+    errorWidget: (context, url, error) => Container(
+      height: 135,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: isDarkMode 
+          ? Colors.grey.withOpacity(.1)
+          : AppColors.accentColor.withOpacity(.1),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(15),
+          topRight: Radius.circular(15),
+        ),
+      ),
+      child: Icon(
+        Icons.error,
+        color: isDarkMode 
+          ? AppColors.accentColor 
+          : AppColors.accentColorDark,
+        size: 40,
+      ),
+    ),
+  ),
+),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 3.0),
                                     child: Text(
-                                      cartItem.product.category.name,
+                                      cartItem.product.merchants.name,
                                       style: theme.textTheme.bodySmall?.copyWith(
                                         color: isDarkMode
                                             ? Colors.grey[400]
@@ -241,14 +261,17 @@ class _ProductCardState extends State<ProductCard>
                                 ],
                               ),
                               const SizedBox(height: 2),
-                              Text(
-                                'KSh ${(widget.product.price).toStringAsFixed(2)}',
-                                style: TextStyle(
-                                  color: isDarkMode
-                                      ? Colors.tealAccent
-                                      : AppColors.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+                            FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  'KSh ${(widget.product.price).toStringAsFixed(0)}',
+                                  style: TextStyle(
+                                    color: isDarkMode
+                                        ? Colors.tealAccent
+                                        : AppColors.primaryColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height:2),

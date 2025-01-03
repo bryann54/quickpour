@@ -64,11 +64,36 @@ class _AuthWrapperState extends State<AuthWrapper> {
   @override
   Widget build(BuildContext context) {
     // Show loading screen while checking authentication
-    if (_isChecking) {
-      return const Scaffold(
+  if (_isChecking) {
+      return Scaffold(
         body: Center(
-          child: CircularProgressIndicator(
-            color: AppColors.primaryColor,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TweenAnimationBuilder(
+                tween: Tween<double>(begin: 0.5, end: 1.0),
+                duration: const Duration(milliseconds: 1000),
+                builder: (context, double value, child) {
+                  return Transform.scale(
+                    scale: value,
+                    child: child,
+                  );
+                },
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColor,
+                  strokeWidth: 3,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Loading...',
+                style: TextStyle(
+                  color: AppColors.primaryColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
         ),
       );
