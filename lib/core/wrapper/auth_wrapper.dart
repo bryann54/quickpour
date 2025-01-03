@@ -1,7 +1,8 @@
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/core/utils/custom_appbar.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/auth/presentation/pages/login_screen.dart';
 import '../../features/auth/presentation/pages/signup_screen.dart';
@@ -64,8 +65,9 @@ class _AuthWrapperState extends State<AuthWrapper> {
   @override
   Widget build(BuildContext context) {
     // Show loading screen while checking authentication
-  if (_isChecking) {
+    if (_isChecking) {
       return Scaffold(
+        backgroundColor: AppColors.primaryColor,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -80,19 +82,16 @@ class _AuthWrapperState extends State<AuthWrapper> {
                   );
                 },
                 child: CircularProgressIndicator(
-                  color: AppColors.primaryColor,
-                  strokeWidth: 3,
+                  color: AppColors.background,
+                  strokeWidth: 10,
                 ),
               ),
               const SizedBox(height: 20),
-              Text(
-                'Loading...',
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              Text('Loading next screen...',
+                  style: GoogleFonts.montaga(
+                      color: AppColors.background,
+                      fontSize: 27,
+                      fontWeight: FontWeight.bold)),
             ],
           ),
         ),
@@ -100,11 +99,6 @@ class _AuthWrapperState extends State<AuthWrapper> {
     }
 
     return Scaffold(
-      appBar: CustomAppBar(
-        showCart: false,
-        showNotification: false,
-        showProfile: false,
-      ),
       body: isLogin ? const LoginScreen() : const SignupScreen(),
       bottomNavigationBar: BottomAppBar(
         child: Padding(

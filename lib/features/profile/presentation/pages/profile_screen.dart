@@ -1,5 +1,6 @@
 
 import 'package:chupachap/features/profile/presentation/widgets/option_widget.dart';
+import 'package:chupachap/features/profile/presentation/widgets/profile_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -31,7 +32,7 @@ class ProfileScreen extends StatelessWidget {
         future: authUseCases.authRepository.getCurrentUserDetails(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: ProfileScreenShimmer());
           }
 
           if (snapshot.hasError) {

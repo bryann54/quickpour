@@ -1,19 +1,26 @@
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-//  class AuthService{
-//   final FirebaseAuth _auth =FirebaseAuth.instance;
-// //sign in anonymously
-// Future signInAnon()async{
-//   try{
-//    AuthResult result= await _auth.signInAnonymously();
-//    FirebaseUser user = result.user;
-//   }catch(e){}
-// }
+class MerchantFirestoreService {
+  static FirebaseApp? _merchantApp;
+  static FirebaseFirestore? _merchantFirestore;
 
-// //email sign in
+  static Future<void> initializeMerchantApp() async {
+    if (_merchantApp == null) {
+      _merchantApp = await Firebase.initializeApp(
+        name: 'MerchantApp',
+        options: FirebaseOptions(
+          apiKey: '<merchant-api-key>',
+          appId: '<merchant-app-id>',
+          messagingSenderId: '<merchant-messaging-sender-id>',
+          projectId: '<merchant-project-id>',
+          storageBucket: '<merchant-storage-bucket>',
+        ),
+      );
+    }
 
-// //register with email
+    _merchantFirestore = FirebaseFirestore.instanceFor(app: _merchantApp!);
+  }
 
-// //sign out
-
-//  }
+  static FirebaseFirestore get firestore => _merchantFirestore!;
+}
