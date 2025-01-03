@@ -274,113 +274,105 @@ class _ProductCardState extends State<ProductCard>
                                   ),
                                 ),
                               ),
-                              const SizedBox(height:2),
+                     
+const SizedBox(height: 2),
 
-                              // Cart Interaction
-                              cartItem.quantity > 0
-                                  ? Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: isDarkMode
-                                                ? Colors.grey[700]!
-                                                : Colors.grey[300]!),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Expanded(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            IconButton(
-                                              icon: FaIcon(
-                                                  FontAwesomeIcons.circleMinus,
-                                                  size: 30,
-                                                  color: isDarkMode
-                                                      ? Colors.white
-                                                      : Colors.grey[400]),
-                                              onPressed: () {
-                                                if (cartItem.quantity > 1) {
-                                                  context.read<CartBloc>().add(
-                                                        UpdateCartQuantityEvent(
-                                                          product: widget.product,
-                                                          quantity:
-                                                              cartItem.quantity -
-                                                                  1,
-                                                        ),
-                                                      );
-                                                } else {
-                                                  context.read<CartBloc>().add(
-                                                        RemoveFromCartEvent(
-                                                            product:
-                                                                widget.product),
-                                                      );
-                                                }
-                                              },
-                                            ),
-                                            Text(
-                                              '${cartItem.quantity}',
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w400,
-                                                color: isDarkMode
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                              ),
-                                            ),
-                                            IconButton(
-                                              icon: FaIcon(
-                                                  FontAwesomeIcons
-                                                      .circlePlus,size: 30,
-                                                  color: isDarkMode
-                                                      ? Colors.white
-                                                      : AppColors.accentColor),
-                                              onPressed: () {
-                                                context.read<CartBloc>().add(
-                                                      UpdateCartQuantityEvent(
-                                                        product: widget.product,
-                                                        quantity:
-                                                            cartItem.quantity + 1,
-                                                      ),
-                                                    );
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                 
-                                  : Row(
-                                      children: [
-                                        Expanded(
-                                          child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  AppColors.primaryColor,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                            ),
-                                            onPressed: () {
-                                              _triggerAddToCartAnimation();
-                                              Future.delayed(
-                                                  const Duration(
-                                                      milliseconds: 300), () {
-                                                context.read<CartBloc>().add(
-                                                    AddToCartEvent(
-                                                        product: widget.product,
-                                                        quantity: 1));
-                                              });
-                                            },
-                                            child: const Text(
-                                              'Add to Cart',
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
+// Cart Interaction
+cartItem.quantity > 0
+    ? Container(
+        width: double.infinity,
+        constraints: const BoxConstraints(maxHeight: 40),
+        decoration: BoxDecoration(
+          border: Border.all(
+              color: isDarkMode ? Colors.grey[700]! : Colors.grey[300]!),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              icon: FaIcon(
+                FontAwesomeIcons.circleMinus,
+                size: 24,
+                color: isDarkMode ? Colors.white : Colors.grey[400],
+              ),
+              onPressed: () {
+                if (cartItem.quantity > 1) {
+                  context.read<CartBloc>().add(
+                        UpdateCartQuantityEvent(
+                          product: widget.product,
+                          quantity: cartItem.quantity - 1,
+                        ),
+                      );
+                } else {
+                  context.read<CartBloc>().add(
+                        RemoveFromCartEvent(product: widget.product),
+                      );
+                }
+              },
+            ),
+            Expanded(
+              child: Center(
+                child: Text(
+                  '${cartItem.quantity}',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    color: isDarkMode ? Colors.white : Colors.black,
+                  ),
+                ),
+              ),
+            ),
+            IconButton(
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              icon: FaIcon(
+                FontAwesomeIcons.circlePlus,
+                size: 24,
+                color: isDarkMode ? Colors.white : AppColors.accentColor,
+              ),
+              onPressed: () {
+                context.read<CartBloc>().add(
+                      UpdateCartQuantityEvent(
+                        product: widget.product,
+                        quantity: cartItem.quantity + 1,
+                      ),
+                    );
+              },
+            ),
+          ],
+        ),
+      )
+    : SizedBox(
+        width: double.infinity,
+        height: 40,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+          ),
+          onPressed: () {
+            _triggerAddToCartAnimation();
+            Future.delayed(const Duration(milliseconds: 300), () {
+              context.read<CartBloc>().add(
+                  AddToCartEvent(product: widget.product, quantity: 1));
+            });
+          },
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: const Text(
+              'Add to Cart',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ),
+      
                             ],
                           ),
                         ),
