@@ -24,7 +24,7 @@ class CategoriesScreen extends StatelessWidget {
             return Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: Text(
                     'Categories',
                     style: Theme.of(context).textTheme.displayLarge,

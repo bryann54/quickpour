@@ -181,7 +181,7 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
             // Add search results or filtered items
             if (_searchQuery.isNotEmpty)
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(6.0),
                 child: Text(
                   'Displaying results for: $_searchQuery',
                   style: Theme.of(context).textTheme.bodyMedium,
@@ -214,7 +214,7 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
                     }
 
                     return GridView.builder(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(6.0),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,

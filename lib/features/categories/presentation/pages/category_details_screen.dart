@@ -143,7 +143,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
             // Display search results
             if (_searchQuery.isNotEmpty)
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(6.0),
                 child: Text(
                   'Displaying results for: $_searchQuery',
                   style: Theme.of(context).textTheme.bodyMedium,
@@ -176,7 +176,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                     }
 
                     return GridView.builder(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(6.0),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
