@@ -47,3 +47,4 @@ echo "android/app/build/outputs/flutter-apk/" >> .gitignore
 /android/app/release
 
 .codegptandroid/app/build/
+android/app/build/
