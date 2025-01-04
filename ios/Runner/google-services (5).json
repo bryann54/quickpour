@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "64268472646",
+    "project_id": "quickpour-merchants",
+    "storage_bucket": "quickpour-merchants.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:64268472646:android:300b92b02ddefbad72d547",
+        "android_client_info": {
+          "package_name": "com.example.quickpourmerchant"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIOC8r214F6zolW07RsEKbz66D6BxvxEU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

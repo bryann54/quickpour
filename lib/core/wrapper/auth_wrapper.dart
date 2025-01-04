@@ -87,7 +87,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
                 ),
               ),
               const SizedBox(height: 20),
-              Text('Loading next screen...',
+              Text('Just a moment...',
                   style: GoogleFonts.montaga(
                       color: AppColors.background,
                       fontSize: 27,
