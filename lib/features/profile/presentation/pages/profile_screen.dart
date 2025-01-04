@@ -1,4 +1,4 @@
-
+import 'package:chupachap/features/profile/presentation/widgets/edit_profile_dialog.dart';
 import 'package:chupachap/features/profile/presentation/widgets/option_widget.dart';
 import 'package:chupachap/features/profile/presentation/widgets/profile_shimmer.dart';
 import 'package:flutter/material.dart';
@@ -11,15 +11,32 @@ import 'package:chupachap/features/profile/presentation/widgets/logout_button_wi
 import 'package:chupachap/features/auth/data/models/user_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ProfileScreen extends StatelessWidget {
- 
+class ProfileScreen extends StatefulWidget {
   final AuthUseCases authUseCases;
 
   const ProfileScreen({
     super.key,
-  
     required this.authUseCases,
   });
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  Future<User?>? _userFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  void _loadUserData() {
+    setState(() {
+      _userFuture = widget.authUseCases.authRepository.getCurrentUserDetails();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +46,7 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(showProfile: false),
       body: FutureBuilder<User?>(
-        future: authUseCases.authRepository.getCurrentUserDetails(),
+        future: _userFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: ProfileScreenShimmer());
@@ -62,40 +79,29 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Profile Header
                   Center(
                     child: Text(
                       'Profile',
                       style: GoogleFonts.montaga(
-                                    textStyle: theme.textTheme.displayLarge?.copyWith(
-                        color: isDarkMode
-                            ? AppColors.cardColor
-                            : AppColors.accentColorDark,
-                      ),)
+                        textStyle: theme.textTheme.displayLarge?.copyWith(
+                          color: isDarkMode
+                              ? AppColors.cardColor
+                              : AppColors.accentColorDark,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
-
-                  // User Profile Section
                   _buildUserProfileHeader(context, user),
-
                   const SizedBox(height: 24),
-
-                  // User Activity Section
                   _buildSectionTitle(context, 'Your Activity'),
                   const SizedBox(height: 12),
                   const ProfileStatisticsSection(),
-
                   const SizedBox(height: 24),
-
-                  // Profile Options
                   _buildSectionTitle(context, 'Account'),
                   const SizedBox(height: 12),
-                  _buildProfileOptions(context),
-
+                  _buildProfileOptions(context, user),
                   const SizedBox(height: 24),
-
-                  // Logout Button
                   const LogOutButton(),
                 ],
               ),
@@ -105,15 +111,16 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
-Widget _buildUserProfileHeader(BuildContext context, User user) {
+
+  Widget _buildUserProfileHeader(BuildContext context, User user) {
     return Row(
       children: [
         Hero(
           tag: 'profile_avatar',
-        child: CircleAvatar(
+          child: CircleAvatar(
             radius: 50,
             backgroundColor: AppColors.accentColor.withOpacity(0.2),
-            child:const FaIcon(
+            child: const FaIcon(
               FontAwesomeIcons.userLarge,
               color: Color.fromARGB(61, 60, 62, 65),
               size: 50,
@@ -128,17 +135,17 @@ Widget _buildUserProfileHeader(BuildContext context, User user) {
               Text(
                 '${user.firstName}  ${user.lastName}',
                 style: GoogleFonts.acme(
-                                    textStyle: Theme.of(context).textTheme.headlineSmall,
-              
-               ) ),
+                  textStyle: Theme.of(context).textTheme.headlineSmall,
+                ),
+              ),
               const SizedBox(height: 8),
               Text(
                 user.email,
                 style: GoogleFonts.montaga(
-                                    textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey,
-                    ),
-               )
+                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.grey,
+                      ),
+                ),
               ),
             ],
           ),
@@ -151,13 +158,14 @@ Widget _buildUserProfileHeader(BuildContext context, User user) {
     return Text(
       title,
       style: GoogleFonts.montaga(
-                                    textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),)
+        textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+      ),
     );
   }
 
-  Widget _buildProfileOptions(BuildContext context) {
+  Widget _buildProfileOptions(BuildContext context, User user) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.backgroundDark.withOpacity(0.1),
@@ -172,8 +180,19 @@ Widget _buildUserProfileHeader(BuildContext context, User user) {
             context,
             icon: Icons.edit,
             title: 'Edit Profile',
-            onTap: () {
-              // TODO: Implement edit profile navigation
+            onTap: () async {
+              final result = await showDialog<bool>(
+                context: context,
+                builder: (context) => EditProfileDialog(
+                  currentFirstName: user.firstName,
+                  currentLastName: user.lastName,
+                  
+                ),
+              );
+
+              if (result == true) {
+                _loadUserData(); // Refresh the profile screen
+              }
             },
           ),
           _buildDivider(),
@@ -212,7 +231,7 @@ Widget _buildUserProfileHeader(BuildContext context, User user) {
       ),
       title: Text(
         title,
-        style:  GoogleFonts.acme(fontSize: 16,fontWeight: FontWeight.normal),
+        style: GoogleFonts.acme(fontSize: 16, fontWeight: FontWeight.normal),
       ),
       trailing: const Icon(
         Icons.chevron_right,
@@ -232,4 +251,3 @@ Widget _buildUserProfileHeader(BuildContext context, User user) {
     );
   }
 }
-
