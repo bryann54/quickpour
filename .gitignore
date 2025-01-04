@@ -40,10 +40,10 @@ app.*.symbols
 .env.example
 # Obfuscation related
 app.*.map.json
-
+echo "android/app/build/outputs/flutter-apk/" >> .gitignore
 # Android Studio will place build artifacts here
 /android/app/debug
 /android/app/profile
 /android/app/release
 
-.codegpt
+.codegptandroid/app/build/
