@@ -3,7 +3,8 @@ import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/widgets/cart_item_widget.dart';
-import 'package:chupachap/features/checkout/presentation/pages/payments_screen.dart';
+import 'package:chupachap/features/checkout/presentation/pages/delivery_location.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -80,7 +81,12 @@ class CheckoutScreen extends StatelessWidget {
                 const TextField(
                   decoration: InputDecoration(
                     labelText: 'Delivery Address',
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        )
+                    ),
                     prefixIcon: Icon(Icons.location_on),
                   ),
                 ),
@@ -88,7 +94,12 @@ class CheckoutScreen extends StatelessWidget {
                 const TextField(
                   decoration: InputDecoration(
                     labelText: 'Phone Number',
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      )
+                    ),
                     prefixIcon: Icon(Icons.phone),
                   ),
                 ),
@@ -107,14 +118,14 @@ class CheckoutScreen extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => PaymentsScreen(
+                                  builder: (_) => DeliveryLocationScreen(
                                       totalAmount: totalAmount)));
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),
                   ),
-                  child: const Text('Proceed to Payment'),
+                  child: const Text('Proceed to delivery'),
                 ),
               ],
             ),
