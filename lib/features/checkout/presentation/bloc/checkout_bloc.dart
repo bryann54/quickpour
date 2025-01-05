@@ -7,7 +7,7 @@ part 'checkout_event.dart';
 
 class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   CheckoutBloc() : super(const CheckoutInitialState()) {
-    on<UpdateDeliveryInfoEvent>(_onUpdateDeliveryInfo);
+  on<UpdateDeliveryInfoEvent>(_onUpdateDeliveryInfo);
     on<UpdatePaymentMethodEvent>(_onUpdatePaymentMethod);
     on<PlaceOrderEvent>(_onPlaceOrder);
   }
@@ -31,7 +31,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     ));
   }
 
-  void _onPlaceOrder(
+void _onPlaceOrder(
     PlaceOrderEvent event,
     Emitter<CheckoutState> emit,
   ) async {
@@ -48,6 +48,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         orderId: orderId,
         totalAmount: totalAmount,
         address: state.address,
+        cartItems: event.cart.items,
         phoneNumber: state.phoneNumber,
         paymentMethod: state.paymentMethod,
       ));
@@ -60,6 +61,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       ));
     }
   }
+
 }
 
 // Extension method for state copying

@@ -7,6 +7,7 @@ import 'package:chupachap/features/auth/presentation/pages/entry_splash.dart';
 import 'package:chupachap/features/brands/data/repositories/brand_repository.dart';
 import 'package:chupachap/features/brands/presentation/bloc/brands_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:chupachap/features/cart/presentation/bloc/cart_event.dart';
 import 'package:chupachap/features/categories/data/repositories/category_repository.dart';
 import 'package:chupachap/features/categories/domain/usecases/fetch_categories.dart';
 import 'package:chupachap/features/categories/presentation/bloc/categories_bloc.dart';
@@ -24,7 +25,6 @@ import 'package:chupachap/features/product_search/presentation/bloc/product_sear
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-
 class App extends StatelessWidget {
   const App({super.key});
 
@@ -33,21 +33,19 @@ class App extends StatelessWidget {
     final merchantRepository = MerchantsRepository();
     return MultiProvider(
       providers: [
-         BlocProvider(
+        BlocProvider(
           create: (context) => AuthBloc(
             authUseCases: AuthUseCases(
               authRepository: AuthRepository(),
             ),
           ),
-         ),
-        // Add NotificationsRepository provider
+        ),
         Provider<NotificationsRepository>(
           create: (_) => NotificationsRepository(),
         ),
       ],
       child: MultiBlocProvider(
         providers: [
-          // Update NotificationsBloc to use repository from context
           BlocProvider(
             create: (context) => NotificationsBloc(
               context.read<NotificationsRepository>(),
@@ -62,10 +60,27 @@ class App extends StatelessWidget {
             create: (_) =>
                 MerchantBloc(merchantRepository)..add(FetchMerchantEvent()),
           ),
+           BlocProvider(create: (_) => CartBloc()),
+          // Add CheckoutBloc before OrdersBloc
+           BlocProvider(
+            create: (context) {
+              final checkoutBloc = CheckoutBloc();
+
+              // Listen to CheckoutBloc to clear cart when order is placed
+              checkoutBloc.stream.listen((state) {
+                if (state is CheckoutOrderPlacedState) {
+                  context.read<CartBloc>().add(ClearCartEvent());
+                }
+              });
+
+              return checkoutBloc;
+            },
+          ),
+          // Now OrdersBloc can access CheckoutBloc
           BlocProvider(
-            create: (context) =>
-                OrdersBloc(checkoutBloc: context.read<CheckoutBloc>())
-                  ..add(LoadOrdersFromCheckout()),
+            create: (context) => OrdersBloc(
+              checkoutBloc: context.read<CheckoutBloc>(),
+            ),
           ),
           BlocProvider(
             create: (_) => BrandsBloc(brandRepository: BrandRepository())
@@ -78,7 +93,7 @@ class App extends StatelessWidget {
               ..add(LoadCategories()),
           ),
           BlocProvider(create: (_) => FavoritesBloc()),
-          BlocProvider(create: (_) => CartBloc()),
+         
           BlocProvider(
             create: (context) => ProductBloc(
               productRepository: ProductRepository(),

@@ -23,10 +23,12 @@ class CheckoutLoadingState extends CheckoutState {
 class CheckoutOrderPlacedState extends CheckoutState {
   final String orderId;
   final double totalAmount;
+  final List<CartItem> cartItems;
 
   const CheckoutOrderPlacedState({
     required this.orderId,
     required this.totalAmount,
+    required this.cartItems,
     String? address,
     String? phoneNumber,
     String? paymentMethod,

@@ -1,4 +1,8 @@
+import 'package:chupachap/features/home/presentation/widgets/bottom_nav.dart';
+import 'package:chupachap/features/orders/presentation/bloc/orders_bloc.dart';
+import 'package:chupachap/features/orders/presentation/pages/orders_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OrderConfirmationScreen extends StatelessWidget {
   final String orderId;
@@ -68,7 +72,15 @@ class OrderConfirmationScreen extends StatelessWidget {
               // Track Order Button
               ElevatedButton(
                 onPressed: () {
-                  // Navigate to order tracking screen
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BlocProvider.value(
+                        value: context.read<OrdersBloc>(),
+                        child: const OrdersScreen(),
+                      ),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
@@ -83,8 +95,10 @@ class OrderConfirmationScreen extends StatelessWidget {
               // Return to Home Button
               OutlinedButton(
                 onPressed: () {
-                  Navigator.of(context)
-                      .pushNamedAndRemoveUntil('/home', (route) => false);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const BottomNav()),
+                  );
                 },
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
@@ -107,18 +121,23 @@ class OrderConfirmationScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: const TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
+          Expanded(
+            child: Text(
+              label,
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 16,
+              ),
             ),
           ),
-          Text(
-            value,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

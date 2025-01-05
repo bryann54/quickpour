@@ -1,5 +1,6 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
+import 'package:chupachap/features/checkout/presentation/pages/0rder_confirmation_screen.dart';
 import 'package:flutter/material.dart';
 
 class PaymentsScreen extends StatefulWidget {
@@ -17,7 +18,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  CustomAppBar(),
+      appBar: CustomAppBar(showCart: false, showNotification: false),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -173,25 +174,32 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
         _handleCreditCardPayment();
         break;
     }
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => OrderConfirmationScreen(
+          orderId: '123456', // Replace with dynamic order ID
+          totalAmount: widget.totalAmount,
+          deliveryAddress: '123 Main Street, Nairobi',
+          deliveryTime: 'Tomorrow, 2:00 PM',
+        ),
+      ),
+    );
   }
 
   void _handleMpesaPayment() {
-    // Implement M-Pesa payment logic
-    // This might involve opening a web view or calling an M-Pesa API
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Initiating M-Pesa Payment')),
     );
   }
 
   void _handleCashOnDelivery() {
-    // Implement Cash on Delivery logic
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Cash on Delivery Selected')),
     );
   }
 
   void _handleCreditCardPayment() {
-    // Implement Credit Card payment logic
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Credit Card Payment Selected')),
     );
