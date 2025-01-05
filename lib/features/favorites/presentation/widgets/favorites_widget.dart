@@ -37,15 +37,15 @@ class FavoritesWidget extends StatelessWidget {
         ),
         child: ListTile(
           contentPadding:
-              const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+              const EdgeInsets.symmetric(vertical: 2.0, horizontal: 16.0),
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: CachedNetworkImage(
               imageUrl: favoriteItem.product.imageUrls.first,
               width: 50,
-              height: 50,
+              height: double.infinity,
               fit: BoxFit.cover,
-              placeholder: (context, url) => const CircularProgressIndicator(),
+              placeholder: (context, url) => const CircularProgressIndicator.adaptive(),
               errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ),
