@@ -1,66 +1,136 @@
+import 'dart:async';
+
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
+import 'package:chupachap/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:chupachap/features/auth/presentation/bloc/auth_state.dart';
+import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:chupachap/features/checkout/presentation/pages/0rder_confirmation_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PaymentsScreen extends StatefulWidget {
   final double totalAmount;
+  final String deliveryAddress;
+  final String deliveryDetails;
+  final String deliveryTime;
+  final String specialInstructions;
 
-  const PaymentsScreen({super.key, required this.totalAmount});
+  const PaymentsScreen({
+    Key? key,
+    required this.totalAmount,
+    required this.deliveryAddress,
+    required this.deliveryDetails,
+    required this.deliveryTime,
+    required this.specialInstructions,
+  }) : super(key: key);
 
   @override
   State<PaymentsScreen> createState() => _PaymentsScreenState();
 }
 
 class _PaymentsScreenState extends State<PaymentsScreen> {
+  late final AuthBloc _authBloc;
   PaymentMethod _selectedPaymentMethod = PaymentMethod.mpesa;
+  StreamSubscription? _checkoutSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _authBloc = BlocProvider.of<AuthBloc>(context);
+    _checkAuthentication();
+  }
+
+  @override
+  void dispose() {
+    _checkoutSubscription?.cancel();
+    super.dispose();
+  }
+
+  void _checkAuthentication() {
+    if (_authBloc.state is! Authenticated) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacementNamed('/login');
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(showCart: false, showNotification: false),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Select Payment Method',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 20),
-            _buildPaymentMethodTile(
+      body: BlocListener<CheckoutBloc, CheckoutState>(
+        listener: (context, state) {
+          if (state is CheckoutOrderPlacedState) {
+            Navigator.pushReplacement(
               context,
-              PaymentMethod.mpesa,
-              'M-Pesa',
-              'assets/M-PESA.png',
-            ),
-            const SizedBox(height: 16),
-            _buildPaymentMethodTile(
-              context,
-              PaymentMethod.cashOnDelivery,
-              'Cash on Delivery',
-              'assets/cod.png',
-            ),
-            const SizedBox(height: 16),
-            _buildPaymentMethodTile(
-              context,
-              PaymentMethod.creditCard,
-              'Credit Card',
-              'assets/code.png',
-            ),
-            const Spacer(),
-            _buildTotalAmountWidget(),
-            const SizedBox(height: 16),
-            _buildProceedButton(context),
-          ],
+              MaterialPageRoute(
+                builder: (context) => OrderConfirmationScreen(
+                  orderId: state.orderId,
+                  totalAmount: widget.totalAmount,
+                  deliveryAddress: widget.deliveryAddress,
+                  deliveryTime: widget.deliveryTime,
+                ),
+              ),
+            );
+          } else if (state is CheckoutErrorState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Select Payment Method',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 20),
+              _buildPaymentMethodTile(
+                context,
+                PaymentMethod.mpesa,
+                'M-Pesa',
+                'assets/M-PESA.png',
+              ),
+              const SizedBox(height: 16),
+              _buildPaymentMethodTile(
+                context,
+                PaymentMethod.cashOnDelivery,
+                'Cash on Delivery',
+                'assets/cod.png',
+              ),
+              const SizedBox(height: 16),
+              _buildPaymentMethodTile(
+                context,
+                PaymentMethod.creditCard,
+                'Credit Card',
+                'assets/code.png',
+              ),
+              const Spacer(),
+              _buildTotalAmountWidget(),
+              const SizedBox(height: 16),
+              _buildProceedButton(context),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildPaymentMethodTile(BuildContext context, PaymentMethod method,
-      String title, String iconPath) {
+  Widget _buildPaymentMethodTile(
+    BuildContext context,
+    PaymentMethod method,
+    String title,
+    String iconPath,
+  ) {
     final isSelected = _selectedPaymentMethod == method;
     return GestureDetector(
       onTap: () {
@@ -147,9 +217,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        onPressed: () {
-          _proceedWithPayment(context);
-        },
+        onPressed: () => _proceedWithPayment(context),
         child: const Text(
           'Proceed to Payment',
           style: TextStyle(
@@ -163,46 +231,44 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
   }
 
   void _proceedWithPayment(BuildContext context) {
-    switch (_selectedPaymentMethod) {
-      case PaymentMethod.mpesa:
-        _handleMpesaPayment();
-        break;
-      case PaymentMethod.cashOnDelivery:
-        _handleCashOnDelivery();
-        break;
-      case PaymentMethod.creditCard:
-        _handleCreditCardPayment();
-        break;
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please log in to place an order'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      Navigator.of(context).pushReplacementNamed('/login');
+      return;
     }
 
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => OrderConfirmationScreen(
-          orderId: '123456', // Replace with dynamic order ID
-          totalAmount: widget.totalAmount,
-          deliveryAddress: '123 Main Street, Nairobi',
-          deliveryTime: 'Tomorrow, 2:00 PM',
+    try {
+      final cartBloc = context.read<CartBloc>();
+      final cart = cartBloc.state.cart;
+      final checkoutBloc = context.read<CheckoutBloc>();
+
+      // Update delivery info
+      checkoutBloc.add(UpdateDeliveryInfoEvent(
+        address: "${widget.deliveryAddress}\n${widget.deliveryDetails}",
+        phoneNumber: user.phoneNumber ?? "",
+      ));
+
+      // Update payment method
+      checkoutBloc.add(UpdatePaymentMethodEvent(
+        paymentMethod: _selectedPaymentMethod.toString().split('.').last,
+      ));
+
+      // Place the order
+      checkoutBloc.add(PlaceOrderEvent(cart: cart));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: Colors.red,
         ),
-      ),
-    );
-  }
-
-  void _handleMpesaPayment() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Initiating M-Pesa Payment')),
-    );
-  }
-
-  void _handleCashOnDelivery() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Cash on Delivery Selected')),
-    );
-  }
-
-  void _handleCreditCardPayment() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Credit Card Payment Selected')),
-    );
+      );
+    }
   }
 }
 

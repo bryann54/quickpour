@@ -18,21 +18,28 @@ import 'package:chupachap/features/merchant/data/repositories/merchants_reposito
 import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
 import 'package:chupachap/features/notifications/data/repositories/notifications_repository.dart';
 import 'package:chupachap/features/notifications/presentation/bloc/notifications_bloc.dart';
+import 'package:chupachap/features/orders/data/repositories/orders_repository.dart';
 import 'package:chupachap/features/orders/presentation/bloc/orders_bloc.dart';
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+
 class App extends StatelessWidget {
   const App({super.key});
 
   @override
   Widget build(BuildContext context) {
     final merchantRepository = MerchantsRepository();
+
     return MultiProvider(
       providers: [
+        Provider<FirebaseFirestore>(
+          create: (_) => FirebaseFirestore.instance,
+        ),
         BlocProvider(
           create: (context) => AuthBloc(
             authUseCases: AuthUseCases(
@@ -60,26 +67,38 @@ class App extends StatelessWidget {
             create: (_) =>
                 MerchantBloc(merchantRepository)..add(FetchMerchantEvent()),
           ),
-           BlocProvider(create: (_) => CartBloc()),
-          // Add CheckoutBloc before OrdersBloc
-           BlocProvider(
+          BlocProvider(create: (_) => CartBloc()),
+     BlocProvider(
             create: (context) {
-              final checkoutBloc = CheckoutBloc();
+              final checkoutBloc = CheckoutBloc(
+                firestore: context.read<FirebaseFirestore>(),
+                authUseCases:
+                    context.read<AuthBloc>().authUseCases, // Add AuthUseCases
+              );
 
               // Listen to CheckoutBloc to clear cart when order is placed
               checkoutBloc.stream.listen((state) {
                 if (state is CheckoutOrderPlacedState) {
                   context.read<CartBloc>().add(ClearCartEvent());
+                } else if (state is CheckoutErrorState) {
+                  // Optionally handle error states
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.errorMessage),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
                 }
               });
 
               return checkoutBloc;
             },
           ),
-          // Now OrdersBloc can access CheckoutBloc
-          BlocProvider(
+        BlocProvider(
             create: (context) => OrdersBloc(
               checkoutBloc: context.read<CheckoutBloc>(),
+              ordersRepository:
+                  OrdersRepository(context.read<FirebaseFirestore>()),
             ),
           ),
           BlocProvider(
@@ -93,7 +112,6 @@ class App extends StatelessWidget {
               ..add(LoadCategories()),
           ),
           BlocProvider(create: (_) => FavoritesBloc()),
-         
           BlocProvider(
             create: (context) => ProductBloc(
               productRepository: ProductRepository(),

@@ -1,26 +1,31 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
 import 'package:chupachap/features/orders/data/models/order_model.dart';
-
 class OrdersRepository {
-  final List<Order> _orders = [];
+  final FirebaseFirestore _firestore;
 
-  List<Order> getOrders() {
-    return List.unmodifiable(_orders);
-  }
+  OrdersRepository(this._firestore);
 
-  void addOrder(Order order) {
-    _orders.add(order);
-  }
-
-  void clearOrders() {
-    _orders.clear();
-  }
-
-  Order? getOrderById(String id) {
+  Future<List<CompletedOrder>> getOrders() async {
     try {
-      return _orders.firstWhere((order) => order.id == id);
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+      if (userId == null) {
+        throw Exception('User not authenticated');
+      }
+
+      final querySnapshot = await _firestore
+          .collection('orders')
+          .where('userId', isEqualTo: userId)
+          .orderBy('date', descending: true)
+          .get();
+
+      return querySnapshot.docs
+          .map((doc) => CompletedOrder.fromFirebase(doc.data(), doc.id))
+          .toList();
     } catch (e) {
-      // Return null if no match is found
-      return null;
+      print('Error fetching orders: $e'); // For debugging
+      throw Exception('Failed to fetch orders: $e');
     }
   }
 }
