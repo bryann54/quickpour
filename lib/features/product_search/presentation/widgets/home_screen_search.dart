@@ -6,7 +6,7 @@ class HomeScreenSearch extends StatelessWidget {
   final TextEditingController? controller;
 
   const HomeScreenSearch({
-    super.key, 
+    super.key,
     this.onChanged,
     this.controller,
   });
@@ -37,7 +37,8 @@ class HomeScreenSearch extends StatelessWidget {
           ),
           filled: true,
           fillColor: isDarkMode ? Colors.grey.shade800 : Colors.white,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: isDarkMode
@@ -53,7 +54,7 @@ class HomeScreenSearch extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(12),
           ),
-        ), 
+        ),
       ),
     );
   }

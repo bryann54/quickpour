@@ -115,6 +115,4 @@ class AuthRepository {
   String? getCurrentUserId() {
     return _firebaseAuth.currentUser?.uid;
   }
-
-  
 }

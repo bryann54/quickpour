@@ -27,8 +27,9 @@ class MerchantCardWidget extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          MerchantDetailsScreen(merchant: merchant,)));
+                      builder: (context) => MerchantDetailsScreen(
+                            merchant: merchant,
+                          )));
             },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -123,20 +124,18 @@ class MerchantCardWidget extends StatelessWidget {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top:12.0),
+                      padding: const EdgeInsets.only(top: 12.0),
                       child: RichText(
                         text: TextSpan(
                           text: 'Store is now   ',
-                          style:const TextStyle(
-                              color: Colors.grey,
-                              fontSize: 16), 
+                          style:
+                              const TextStyle(color: Colors.grey, fontSize: 16),
                           children: [
                             TextSpan(
                               text: merchant.isOpen ? 'Open' : 'Closed',
                               style: TextStyle(
-                                color: merchant.isOpen
-                                    ? Colors.green
-                                    : Colors.red, 
+                                color:
+                                    merchant.isOpen ? Colors.green : Colors.red,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

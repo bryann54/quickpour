@@ -57,7 +57,7 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
     // Navigate to home screen after animation completes
     Future.delayed(const Duration(seconds: 4), () {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) =>  Wrapper()),
+        MaterialPageRoute(builder: (_) => Wrapper()),
       );
     });
   }
@@ -81,15 +81,14 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                 opacity: _backgroundFadeAnimation.value,
                 child: Container(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
+                      gradient: LinearGradient(
                     colors: [
                       AppColors.primaryColorDark,
                       AppColors.secondaryColorDark.withOpacity(0.7),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                  )
-                  ),
+                  )),
                 ),
               ),
               // Animated pattern overlay
@@ -130,9 +129,9 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                         ),
                       ),
                     ),
-               
+
                     // App name with fade animation
-                Opacity(
+                    Opacity(
                       opacity: _fadeAnimation.value,
                       child: Text(
                         'QuickPour',
@@ -153,18 +152,15 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                         ),
                       ),
                     ),
-                      const SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     // Tagline with fade animation
                     Opacity(
                       opacity: _fadeAnimation.value,
-                      child: Text(
-                        'Drink yako Pap!!',
-                        style: GoogleFonts.tangerine(
-                          color: AppColors.background,
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold
-                        )
-                      ),
+                      child: Text('Drink yako Pap!!',
+                          style: GoogleFonts.tangerine(
+                              color: AppColors.background,
+                              fontSize: 35,
+                              fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),

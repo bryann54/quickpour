@@ -153,14 +153,15 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-          builder: (_) => PaymentsScreen(
-            totalAmount: widget.totalAmount + 150, // Including delivery fee
-            deliveryAddress: widget.address,
-            deliveryDetails: widget.addressDetails,
-            deliveryTime: _selectedTimeSlot!,
-            specialInstructions: _instructionsController.text,
-          ),
-        ),
+                          builder: (_) => PaymentsScreen(
+                            totalAmount: widget.totalAmount +
+                                150, // Including delivery fee
+                            deliveryAddress: widget.address,
+                            deliveryDetails: widget.addressDetails,
+                            deliveryTime: _selectedTimeSlot!,
+                            specialInstructions: _instructionsController.text,
+                          ),
+                        ),
                       );
                     }
                   : null,

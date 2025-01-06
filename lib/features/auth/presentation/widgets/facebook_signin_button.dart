@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'social_button.dart';
 
 class FacebookSignInButton extends StatelessWidget {
-
-
-  const FacebookSignInButton({Key? key, })
-      : super(key: key);
+  const FacebookSignInButton({
+    Key? key,
+  }) : super(key: key);
 
   Future<void> _handleFacebookSignIn(BuildContext context) async {
     try {

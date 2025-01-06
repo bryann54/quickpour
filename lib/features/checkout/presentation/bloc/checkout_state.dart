@@ -6,6 +6,9 @@ abstract class CheckoutState {
   final String? paymentMethod;
   final String? deliveryTime;
   final String? specialInstructions;
+  final String? userEmail; // Add userEmail
+  final String? userName; // Add userName
+  final String? userId; // Add userId
 
   const CheckoutState({
     this.address,
@@ -13,6 +16,9 @@ abstract class CheckoutState {
     this.paymentMethod,
     this.deliveryTime,
     this.specialInstructions,
+    this.userEmail,
+    this.userName,
+    this.userId,
   });
 
   // Define copyWith method in the abstract class
@@ -22,6 +28,9 @@ abstract class CheckoutState {
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
+    String? userEmail,
+    String? userName,
+    String? userId,
   });
 }
 
@@ -35,6 +44,9 @@ class CheckoutInitialState extends CheckoutState {
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
+    String? userEmail,
+    String? userName,
+    String? userId,
   }) {
     return CheckoutInitialState();
   }
@@ -50,6 +62,9 @@ class CheckoutLoadingState extends CheckoutState {
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
+    String? userEmail,
+    String? userName,
+    String? userId,
   }) {
     return CheckoutLoadingState();
   }
@@ -69,12 +84,18 @@ class CheckoutOrderPlacedState extends CheckoutState {
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
+    String? userEmail,
+    String? userName,
+    String? userId,
   }) : super(
           address: address,
           phoneNumber: phoneNumber,
           paymentMethod: paymentMethod,
           deliveryTime: deliveryTime,
           specialInstructions: specialInstructions,
+          userEmail: userEmail,
+          userName: userName,
+          userId: userId,
         );
 
   @override
@@ -84,6 +105,9 @@ class CheckoutOrderPlacedState extends CheckoutState {
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
+    String? userEmail,
+    String? userName,
+    String? userId,
   }) {
     return CheckoutOrderPlacedState(
       orderId: orderId,
@@ -94,6 +118,9 @@ class CheckoutOrderPlacedState extends CheckoutState {
       paymentMethod: paymentMethod ?? this.paymentMethod,
       deliveryTime: deliveryTime ?? this.deliveryTime,
       specialInstructions: specialInstructions ?? this.specialInstructions,
+      userEmail: userEmail ?? this.userEmail,
+      userName: userName ?? this.userName,
+      userId: userId ?? this.userId,
     );
   }
 }
@@ -108,12 +135,18 @@ class CheckoutErrorState extends CheckoutState {
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
+    String? userEmail,
+    String? userName,
+    String? userId,
   }) : super(
           address: address,
           phoneNumber: phoneNumber,
           paymentMethod: paymentMethod,
           deliveryTime: deliveryTime,
           specialInstructions: specialInstructions,
+          userEmail: userEmail,
+          userName: userName,
+          userId: userId,
         );
 
   @override
@@ -123,6 +156,9 @@ class CheckoutErrorState extends CheckoutState {
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
+    String? userEmail,
+    String? userName,
+    String? userId,
   }) {
     return CheckoutErrorState(
       errorMessage: errorMessage,
@@ -131,6 +167,9 @@ class CheckoutErrorState extends CheckoutState {
       paymentMethod: paymentMethod ?? this.paymentMethod,
       deliveryTime: deliveryTime ?? this.deliveryTime,
       specialInstructions: specialInstructions ?? this.specialInstructions,
+      userEmail: userEmail ?? this.userEmail,
+      userName: userName ?? this.userName,
+      userId: userId ?? this.userId,
     );
   }
 }

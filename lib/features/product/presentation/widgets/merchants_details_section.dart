@@ -147,26 +147,27 @@ class MerchantsDetailsSection extends StatelessWidget {
                               ),
                             ],
                           ),
-                        
                           RichText(
-                      text: TextSpan(
-                        text: 'Store is now ',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16), // Style for the base text
-                        children: [
-                          TextSpan(
-                            text: product.merchants.isOpen ? 'Open' : 'Closed',
-                            style: TextStyle(
-                              color: product.merchants.isOpen 
-                                  ? Colors.green
-                                  : Colors.red, // Color for the status
-                              fontWeight: FontWeight.bold,
+                            text: TextSpan(
+                              text: 'Store is now ',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16), // Style for the base text
+                              children: [
+                                TextSpan(
+                                  text: product.merchants.isOpen
+                                      ? 'Open'
+                                      : 'Closed',
+                                  style: TextStyle(
+                                    color: product.merchants.isOpen
+                                        ? Colors.green
+                                        : Colors.red, // Color for the status
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                    )
+                          )
                         ],
                       ),
                     ),
@@ -298,5 +299,4 @@ class MerchantsDetailsSection extends StatelessWidget {
       ),
     );
   }
-
 }

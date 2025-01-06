@@ -186,7 +186,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 builder: (context) => EditProfileDialog(
                   currentFirstName: user.firstName,
                   currentLastName: user.lastName,
-                  
                 ),
               );
 

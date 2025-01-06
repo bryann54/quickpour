@@ -65,8 +65,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
           return SafeArea(
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 24.0, vertical: 10.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 10.0),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -97,7 +97,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                     const SizedBox(height: 40),
-            
+
                     // Form Fields Section
                     Row(
                       children: [
@@ -172,7 +172,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       },
                     ),
                     const SizedBox(height: 32),
-            
+
                     // Sign Up Button
                     SizedBox(
                       height: 56,
@@ -187,8 +187,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                           email: _emailController.text.trim(),
                                           password:
                                               _passwordController.text.trim(),
-                                          firstName: _firstNameController.text
-                                              .trim(),
+                                          firstName:
+                                              _firstNameController.text.trim(),
                                           lastName:
                                               _lastNameController.text.trim(),
                                         ),
@@ -220,7 +220,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               ),
                       ),
                     ),
-            
+
                     // Divider Section
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 32.0),
@@ -246,7 +246,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ],
                       ),
                     ),
-            
+
                     // Social Sign In Buttons
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.center,

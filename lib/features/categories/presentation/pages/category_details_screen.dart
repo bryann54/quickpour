@@ -57,7 +57,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
         productRepository: ProductRepository(),
       )..add(FetchProductsEvent()),
       child: Scaffold(
-         appBar: CustomAppBar(
+        appBar: CustomAppBar(
           showNotification: false,
           showProfile: false,
         ),
@@ -65,74 +65,79 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Hero image or category banner
-       Stack(
-  children: [
-    Hero(
-      tag: 'category_image_${widget.category.id}',
-      child: Container(
-        width: double.infinity,
-        height: 100,
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.accentColor.withOpacity(0.4)),
-          image: DecorationImage(
-            image: CachedNetworkImageProvider(widget.category.imageUrl),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.3), // Darkens the image for better text visibility
-              BlendMode.darken,
+            Stack(
+              children: [
+                Hero(
+                  tag: 'category_image_${widget.category.id}',
+                  child: Container(
+                    width: double.infinity,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: AppColors.accentColor.withOpacity(0.4)),
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(
+                            widget.category.imageUrl),
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                          Colors.black.withOpacity(
+                              0.3), // Darkens the image for better text visibility
+                          BlendMode.darken,
+                        ),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  // Gradient overlay for better text visibility
+                  width: double.infinity,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withOpacity(0.1),
+                        Colors.black.withOpacity(0.5),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned.fill(
+                  child: Center(
+                    child: Text(
+                      widget.category.name,
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            offset: const Offset(1, 1),
+                            blurRadius: 3.0,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 5,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-      ),
-    ),
-    Container( // Gradient overlay for better text visibility
-      width: double.infinity,
-      height: 100,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.black.withOpacity(0.1),
-            Colors.black.withOpacity(0.5),
-          ],
-        ),
-      ),
-    ),
-    Positioned.fill(
-      child: Center(
-        child: Text(
-          widget.category.name,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            shadows: [
-              Shadow(
-                offset: const Offset(1, 1),
-                blurRadius: 3.0,
-                color: Colors.black.withOpacity(0.5),
-              ),
-            ],
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    ),
-  ],
-),
 
-         
             // Search Bar
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 10),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
               child: CustomSearchBar(
                 controller: _searchController,
                 onSearch: _onSearch,

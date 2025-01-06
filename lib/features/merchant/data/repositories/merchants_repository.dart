@@ -12,7 +12,8 @@ class MerchantsRepository {
         location: 'Nairobi, Kenya',
         products: ['Whiskey', 'Vodka', 'Gin'],
         experience: 15,
-        imageUrl: 'https://imageio.forbes.com/specials-images/imageserve/697222998/independent-liquor-store/960x0.jpg?format=jpg&width=960',
+        imageUrl:
+            'https://imageio.forbes.com/specials-images/imageserve/697222998/independent-liquor-store/960x0.jpg?format=jpg&width=960',
         rating: 4.9,
         isVerified: true,
       ),
@@ -23,7 +24,8 @@ class MerchantsRepository {
         location: 'Mombasa, Kenya',
         products: ['Gin', 'Tonic Water', 'Cocktail Mixers'],
         experience: 12,
-        imageUrl: 'https://www.logodesign.net/logo-new/ripple-effect-circle-with-liquor-bottle-and-star-9430ld.png?nwm=1&nws=1&industry=liquor-store&txt_keyword=All',
+        imageUrl:
+            'https://www.logodesign.net/logo-new/ripple-effect-circle-with-liquor-bottle-and-star-9430ld.png?nwm=1&nws=1&industry=liquor-store&txt_keyword=All',
         rating: 4.7,
         isVerified: true,
       ),
@@ -45,7 +47,8 @@ class MerchantsRepository {
         location: 'Nakuru, Kenya',
         products: ['Wine', 'Brandy', 'Champagne'],
         experience: 8,
-        imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbRoKam2LMEhmFKJ4UfWm4OvN5h5FRaWResQ&s',
+        imageUrl:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbRoKam2LMEhmFKJ4UfWm4OvN5h5FRaWResQ&s',
         rating: 4.5,
         isVerified: false,
       ),
@@ -56,7 +59,8 @@ class MerchantsRepository {
         location: 'Eldoret, Kenya',
         products: ['Rum', 'Tequila', 'Mezcal'],
         experience: 9,
-        imageUrl: 'https://thumbs.dreamstime.com/b/vector-logo-liquor-store-black-round-sign-board-department-hypermarket-variety-cartoon-bottles-hard-alcohol-142206819.jpg',
+        imageUrl:
+            'https://thumbs.dreamstime.com/b/vector-logo-liquor-store-black-round-sign-board-department-hypermarket-variety-cartoon-bottles-hard-alcohol-142206819.jpg',
         rating: 4.4,
         isVerified: true,
       ),
@@ -67,7 +71,8 @@ class MerchantsRepository {
         location: 'Nyeri, Kenya',
         products: ['Craft Vodka', 'Flavored Whiskey', 'Premium Gin'],
         experience: 11,
-        imageUrl: 'https://t3.ftcdn.net/jpg/03/94/71/36/360_F_394713609_N5MjKOrHqQN6vG8beLN4KAduAKmy3hFH.jpg',
+        imageUrl:
+            'https://t3.ftcdn.net/jpg/03/94/71/36/360_F_394713609_N5MjKOrHqQN6vG8beLN4KAduAKmy3hFH.jpg',
         rating: 4.8,
         isVerified: true,
       ),
@@ -89,7 +94,8 @@ class MerchantsRepository {
         location: 'Kericho, Kenya',
         products: ['Craft Beers', 'Fine Wines', 'Signature Cocktails'],
         experience: 10,
-        imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdkOcxNyoTA8LhgD1iUoC-g4CzmZIARdcwIQ&s',
+        imageUrl:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdkOcxNyoTA8LhgD1iUoC-g4CzmZIARdcwIQ&s',
         rating: 4.6,
         isVerified: true,
       ),

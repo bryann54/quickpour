@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
@@ -8,7 +6,6 @@ import 'package:chupachap/features/orders/presentation/widgets/order_item_widget
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
@@ -83,19 +80,30 @@ class _OrdersScreenState extends State<OrdersScreen> {
       ),
     );
   }
-Widget _buildOrdersList(BuildContext context, List<CompletedOrder> orders) {
-  return RefreshIndicator(
-    onRefresh: () async {
-      context.read<OrdersBloc>().add(LoadOrdersFromCheckout());
-    },
-    child: ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: orders.length,
-      itemBuilder: (context, index) {
-        final order = orders[index];
-        return OrderItemWidget(order: order); // Use the OrderItemWidget here
+
+  Widget _buildOrdersList(BuildContext context, List<CompletedOrder> orders) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<OrdersBloc>().add(LoadOrdersFromCheckout());
       },
-    ),
-  );
-}
+      child: Column(
+        children: [
+          Text(
+            'Orders',
+            style: Theme.of(context).textTheme.displayLarge,
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.all(6),
+              itemCount: orders.length,
+              itemBuilder: (context, index) {
+                final order = orders[index];
+                return OrderItemWidget(order: order);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

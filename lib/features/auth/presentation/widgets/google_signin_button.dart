@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'social_button.dart';
 
 class GoogleSignInButton extends StatelessWidget {
-
-
-  const GoogleSignInButton({Key? key,})
-      : super(key: key);
+  const GoogleSignInButton({
+    Key? key,
+  }) : super(key: key);
 
   Future<void> _handleGoogleSignIn(BuildContext context) async {
     try {

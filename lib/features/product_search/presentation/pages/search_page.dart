@@ -121,7 +121,7 @@ class _SearchPageState extends State<SearchPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Container(
-           decoration: BoxDecoration(
+            decoration: BoxDecoration(
               border: Border.all(
                 color: isDarkMode
                     ? AppColors.accentColor.withOpacity(.3)
@@ -136,7 +136,7 @@ class _SearchPageState extends State<SearchPage> {
                 hintText: 'Search product',
                 border: InputBorder.none,
                 suffixIcon: IconButton(
-                  icon:const  FaIcon(Icons.tune),
+                  icon: const FaIcon(Icons.tune),
                   onPressed: _openFilterBottomSheet,
                 ),
               ),

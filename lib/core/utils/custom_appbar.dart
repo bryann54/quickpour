@@ -13,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showNotification;
   final bool showCart;
@@ -20,21 +21,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool useCartFAB;
   final bool showGreeting;
   final double iconSize;
-  final String? userName; 
+  final String? userName;
   final Color? iconColor;
   final ThemeData? theme;
   final String? title;
   final FloatingActionButtonLocation? fabLocation;
   final userEmail =
       FirebaseAuth.instance.currentUser?.email ?? 'No email found';
-      final authUseCases = AuthUseCases(authRepository: AuthRepository());
+  final authUseCases = AuthUseCases(authRepository: AuthRepository());
 
-
-
-   CustomAppBar({
+  CustomAppBar({
     Key? key,
     this.showNotification = true,
-    this.showGreeting =false,
+    this.showGreeting = false,
     this.showCart = true,
     this.showProfile = true,
     this.useCartFAB = false,
@@ -43,13 +42,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.theme,
     this.title,
     this.fabLocation,
-     this.userName,
+    this.userName,
   }) : super(key: key);
 
   void _handleNotificationTap(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) =>  NotificationsScreen()),
+      MaterialPageRoute(builder: (context) => NotificationsScreen()),
     );
   }
 
@@ -59,6 +58,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       MaterialPageRoute(builder: (context) => const CartPage()),
     );
   }
+
   Widget _buildCartIcon(
       BuildContext context, CartState cartState, ThemeData currentTheme) {
     final iconColorWithTheme = iconColor ?? currentTheme.iconTheme.color;
@@ -90,18 +90,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 // Conditional Greeting or Logo
                 showGreeting
                     ? CustomGreeting(authUseCases: authUseCases)
-
                     : ShaderMask(
                         shaderCallback: (bounds) => const LinearGradient(
                           colors: [
-                           Color(0xFFE74C3C),
-                               Color(0xFFF39C12),
+                            Color(0xFFE74C3C),
+                            Color(0xFFF39C12),
                           ],
                         ).createShader(bounds),
                         child: Text(
                           'QuickPour',
                           style: GoogleFonts.acme(
-                           
                             fontSize: 25,
                             fontWeight: FontWeight.w800,
                             color: Colors.white,
@@ -134,7 +132,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             child: badges.Badge(
                               badgeContent: Text(
                                 '${cartState.cart.totalQuantity}',
-                                style: const TextStyle(color: Colors.white,fontSize: 12),
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 12),
                               ),
                               showBadge: cartState.cart.totalQuantity > 0,
                               child: IconButton(
@@ -172,9 +171,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                             ProfileScreen(authUseCases: authUseCases,)));
-                   
+                                        builder: (context) => ProfileScreen(
+                                              authUseCases: authUseCases,
+                                            )));
+
                                 break;
                               case 'logout':
                                 print('Logout tapped');
@@ -186,8 +186,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                               value: 'settings',
                               child: Row(
                                 children: [
-                                 FaIcon(
-                            FontAwesomeIcons.cog, size: 20),
+                                  FaIcon(FontAwesomeIcons.cog, size: 20),
                                   SizedBox(width: 10),
                                   Text('Settings'),
                                 ],
@@ -197,19 +196,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                               value: 'profile',
                               child: Row(
                                 children: [
-                                  FaIcon(
-                            FontAwesomeIcons.circleUser, size: 20),
+                                  FaIcon(FontAwesomeIcons.circleUser, size: 20),
                                   SizedBox(width: 10),
                                   Text('Profile'),
                                 ],
                               ),
                             ),
-                     
                             const PopupMenuItem<String>(
                               value: 'logout',
                               child: Row(
                                 children: [
-                                FaIcon(FontAwesomeIcons.rightFromBracket, size: 20),
+                                  FaIcon(FontAwesomeIcons.rightFromBracket,
+                                      size: 20),
                                   SizedBox(width: 10),
                                   Text('Logout'),
                                 ],

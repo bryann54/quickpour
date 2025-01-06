@@ -44,7 +44,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  CustomAppBar(
+      appBar: CustomAppBar(
         showNotification: true,
         showProfile: false,
       ),
@@ -64,11 +64,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ProductImageGallery(product: widget.product),
                     const SizedBox(height: 16),
                     ProductDetailsHeader(product: widget.product),
-                  
                     const SizedBox(height: 6),
                     MerchantsDetailsSection(product: widget.product),
                     const SizedBox(height: 200),
-                   
                   ],
                 ),
               ),

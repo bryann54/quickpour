@@ -53,7 +53,7 @@ class _WrapperState extends State<Wrapper> {
             return BottomNav(); // Your home screen widget
           } else {
             // If not authenticated, show the login screen
-            return AuthWrapper(); 
+            return AuthWrapper();
           }
         },
       ),

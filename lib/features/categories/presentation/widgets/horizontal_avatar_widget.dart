@@ -17,7 +17,7 @@ class CategoryCardAvatar extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return GestureDetector(
-    onTap: () {
+      onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -25,7 +25,6 @@ class CategoryCardAvatar extends StatelessWidget {
           ),
         );
       },
-
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

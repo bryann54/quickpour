@@ -188,7 +188,6 @@ class BrandCardWidget extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => BrandDetailsScreen(
           brand: brand,
-       
         ),
       ),
     );

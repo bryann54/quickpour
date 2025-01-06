@@ -32,7 +32,7 @@ class MerchantDetailsScreen extends StatelessWidget {
         body: CustomScrollView(
           slivers: [
             // SliverAppBar with MerchantDetailsHeader and Cart Icon
-         SliverAppBar(
+            SliverAppBar(
               expandedHeight: 200,
               floating: false,
               pinned: true,
@@ -107,7 +107,7 @@ class MerchantDetailsScreen extends StatelessWidget {
                       .toList();
 
                   return SliverPadding(
-                    padding: const EdgeInsets.only(top: 16,left: 3,right: 3),
+                    padding: const EdgeInsets.only(top: 16, left: 3, right: 3),
                     sliver: SliverGrid(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(

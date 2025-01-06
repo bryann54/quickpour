@@ -9,7 +9,6 @@ abstract class OrdersEvent extends Equatable {
 
 class LoadOrdersFromCheckout extends OrdersEvent {}
 
-
 class AddNewOrder extends OrdersEvent {
   final CompletedOrder order;
 

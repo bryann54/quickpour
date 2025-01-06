@@ -9,10 +9,10 @@ import 'package:google_fonts/google_fonts.dart';
 class CustomGreeting extends StatefulWidget {
   final AuthUseCases authUseCases;
 
-
-  
-
-   CustomGreeting({Key? key, required this.authUseCases,}) : super(key: key);
+  CustomGreeting({
+    Key? key,
+    required this.authUseCases,
+  }) : super(key: key);
 
   @override
   State<CustomGreeting> createState() => _CustomGreetingState();
@@ -27,8 +27,9 @@ class _CustomGreetingState extends State<CustomGreeting> {
   void initState() {
     super.initState();
     _fetchCurrentLocation();
-      _fetchUserDetails();
+    _fetchUserDetails();
   }
+
   Future<void> _fetchUserDetails() async {
     try {
       final user =
@@ -141,15 +142,13 @@ class _CustomGreetingState extends State<CustomGreeting> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-           '${_getGreeting()} 👋, ${_currentUser?.firstName}',
-          style: GoogleFonts.instrumentSerif(
-            textStyle: theme.textTheme.titleMedium?.copyWith(
+        Text('${_getGreeting()} 👋, ${_currentUser?.firstName}',
+            style: GoogleFonts.instrumentSerif(
+              textStyle: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: theme.colorScheme.onSurface,
               ),
-          )
-        ),
+            )),
         Row(
           children: [
             FaIcon(

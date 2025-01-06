@@ -14,7 +14,7 @@ class SettingsScreen extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      appBar:  CustomAppBar(
+      appBar: CustomAppBar(
         showProfile: false,
       ),
       body: SingleChildScrollView(
@@ -25,16 +25,14 @@ class SettingsScreen extends StatelessWidget {
             children: [
               // Title with subtle animation
               Center(
-                child: Text(
-                  'App Settings',
-                 style: GoogleFonts.montaga(
+                child: Text('App Settings',
+                    style: GoogleFonts.montaga(
                       textStyle: theme.textTheme.displayLarge?.copyWith(
                         color: isDarkMode
                             ? AppColors.cardColor
                             : AppColors.accentColorDark,
                       ),
-                    )
-                ).animate().fadeIn(duration: 500.ms).slideY(begin: 0.1),
+                    )).animate().fadeIn(duration: 500.ms).slideY(begin: 0.1),
               ),
               const SizedBox(height: 20),
 
@@ -151,16 +149,13 @@ class SettingsScreen extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 10.0),
-          child: Text(
-            title,
-             style: GoogleFonts.montaga(
+          child: Text(title,
+              style: GoogleFonts.montaga(
                 textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
-                       fontWeight: FontWeight.w600,
-                      color: AppColors.accentColor,
-                      fontSize: 17
-                    ),
-              )
-          ),
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.accentColor,
+                    fontSize: 17),
+              )),
         ),
         Container(
           decoration: BoxDecoration(

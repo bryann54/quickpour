@@ -31,25 +31,25 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     emit(state.copyWith(paymentMethod: event.paymentMethod));
   }
 
-Future<void> _onPlaceOrder(
-  PlaceOrderEvent event, Emitter<CheckoutState> emit) async {
-  try {
-    emit(const CheckoutLoadingState());
-    final orderId = const Uuid().v4();
-    final totalAmount = event.cart.totalPrice;
+  Future<void> _onPlaceOrder(
+      PlaceOrderEvent event, Emitter<CheckoutState> emit) async {
+    try {
+      emit(const CheckoutLoadingState());
+      final orderId = const Uuid().v4();
+      final totalAmount = event.cart.totalPrice;
       // Check if user is authenticated using AuthUseCases
       final userId = authUseCases.getCurrentUserId();
       if (userId == null) {
         throw Exception('User not authenticated');
       }
-        // Get current user details
+      // Get current user details
       final userDetails = await authUseCases.getCurrentUserDetails();
       if (userDetails == null) {
         throw Exception('User details not found');
       }
 
-    // Save order to Firestore
-      
+      // Save order to Firestore
+
       final orderData = {
         'orderId': orderId,
         'userId': userId,
@@ -74,7 +74,7 @@ Future<void> _onPlaceOrder(
 
       await firestore.collection('orders').doc(orderId).set(orderData);
 
-     emit(CheckoutOrderPlacedState(
+      emit(CheckoutOrderPlacedState(
         orderId: orderId,
         totalAmount: event.cart.totalPrice,
         address: state.address,

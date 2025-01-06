@@ -1,5 +1,3 @@
-
-
 class OrderItem {
   final String name;
   final int quantity;

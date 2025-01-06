@@ -13,8 +13,8 @@ class ProductModel {
   final String description;
   final CategoryModel category;
 
-  ProductModel( {
-   required this.brand,
+  ProductModel({
+    required this.brand,
     required this.id,
     required this.productName,
     required this.imageUrls,

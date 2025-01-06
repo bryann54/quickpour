@@ -14,7 +14,7 @@ class CheckoutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  CustomAppBar(),
+      appBar: CustomAppBar(),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, cartState) {
           // Check if the cart is empty
@@ -85,8 +85,7 @@ class CheckoutScreen extends StatelessWidget {
                         borderSide: BorderSide(color: Colors.grey),
                         borderRadius: BorderRadius.all(
                           Radius.circular(10),
-                        )
-                    ),
+                        )),
                     prefixIcon: Icon(Icons.location_on),
                   ),
                 ),
@@ -95,11 +94,10 @@ class CheckoutScreen extends StatelessWidget {
                   decoration: InputDecoration(
                     labelText: 'Phone Number',
                     border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      )
-                    ),
+                        borderSide: BorderSide(color: Colors.grey),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        )),
                     prefixIcon: Icon(Icons.phone),
                   ),
                 ),

@@ -68,7 +68,7 @@ class App extends StatelessWidget {
                 MerchantBloc(merchantRepository)..add(FetchMerchantEvent()),
           ),
           BlocProvider(create: (_) => CartBloc()),
-     BlocProvider(
+          BlocProvider(
             create: (context) {
               final checkoutBloc = CheckoutBloc(
                 firestore: context.read<FirebaseFirestore>(),
@@ -94,7 +94,7 @@ class App extends StatelessWidget {
               return checkoutBloc;
             },
           ),
-        BlocProvider(
+          BlocProvider(
             create: (context) => OrdersBloc(
               checkoutBloc: context.read<CheckoutBloc>(),
               ordersRepository:

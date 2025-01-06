@@ -45,7 +45,8 @@ class FavoritesWidget extends StatelessWidget {
               width: 50,
               height: double.infinity,
               fit: BoxFit.cover,
-              placeholder: (context, url) => const CircularProgressIndicator.adaptive(),
+              placeholder: (context, url) =>
+                  const CircularProgressIndicator.adaptive(),
               errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ),

@@ -13,7 +13,7 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  CustomAppBar(
+      appBar: CustomAppBar(
         showCart: false,
       ),
       body: Column(
@@ -21,7 +21,7 @@ class FavoritesScreen extends StatelessWidget {
           BlocBuilder<FavoritesBloc, FavoritesState>(
             builder: (context, state) {
               if (state.favorites.items.isEmpty) {
-                return  Center(
+                return Center(
                   child: Column(
                     children: [
                       SizedBox(

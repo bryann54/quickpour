@@ -62,12 +62,15 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
         productRepository: ProductRepository(),
       )..add(FetchProductsEvent()),
       child: Scaffold(
-        appBar: CustomAppBar(showNotification: false,showProfile: false,),
+        appBar: CustomAppBar(
+          showNotification: false,
+          showProfile: false,
+        ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Hero image/logo
-   Stack(
+            Stack(
               children: [
                 Hero(
                   tag: 'category_image_${widget.brand.id}',
@@ -167,10 +170,10 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
               ],
             ),
 
-
             // Search Bar
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 15),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 15),
               child: CustomSearchBar(
                 controller: _searchController,
                 onSearch: _onSearch,
@@ -207,7 +210,7 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
                     if (brandProducts.isEmpty) {
                       return Center(
                         child: Text(
-                     'No products found for ${widget.brand.name}.',
+                          'No products found for ${widget.brand.name}.',
                           style: theme.textTheme.bodyLarge,
                         ),
                       );

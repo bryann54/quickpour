@@ -98,14 +98,15 @@ class BrandRepository {
         description: 'Pioneer of single barrel bourbon',
         logoUrl: 'https://i.ebayimg.com/images/g/qKgAAOSwvy1mFYma/s-l1200.jpg',
       ),
-       BrandModel(
+      BrandModel(
         id: '13',
         name: 'Tusker',
         country: 'Kenya',
         description: 'Pioneer of single barrel bourbon',
-        logoUrl: 'https://upload.wikimedia.org/wikipedia/en/c/c0/Tusker_lager_logo.png',
+        logoUrl:
+            'https://upload.wikimedia.org/wikipedia/en/c/c0/Tusker_lager_logo.png',
       ),
-       BrandModel(
+      BrandModel(
         id: '14',
         name: 'Kenya Breweries Limited (KBL)',
         country: 'Kenya',

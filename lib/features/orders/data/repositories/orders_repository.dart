@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
-import 'package:chupachap/features/orders/data/models/order_model.dart';
+
 class OrdersRepository {
   final FirebaseFirestore _firestore;
 

@@ -57,7 +57,7 @@ class OrderConfirmationScreen extends StatelessWidget {
                       ),
                 ),
                 const SizedBox(height: 32),
-      
+
                 // Order Details Card
                 Card(
                   child: Padding(
@@ -78,11 +78,11 @@ class OrderConfirmationScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 32),
-      
+
                 // Track Order Button
                 ElevatedButton(
                   onPressed: () {
-                  Navigator.pushReplacement(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => BlocProvider.value(
@@ -101,13 +101,13 @@ class OrderConfirmationScreen extends StatelessWidget {
                   child: const Text('Track Order'),
                 ),
                 const SizedBox(height: 16),
-      
+
                 // Return to Home Button
                 OutlinedButton(
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) =>  BottomNav()),
+                      MaterialPageRoute(builder: (context) => BottomNav()),
                     );
                   },
                   style: OutlinedButton.styleFrom(

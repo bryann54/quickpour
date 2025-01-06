@@ -82,15 +82,14 @@ class _SplashScreenState extends State<SplashScreen>
           // Base gradient background
           Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
+                gradient: LinearGradient(
               colors: [
                 AppColors.primaryColorDark,
                 AppColors.secondaryColorDark.withOpacity(0.7),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-            )
-            ),
+            )),
           ),
 
           SafeArea(
@@ -185,19 +184,16 @@ class _SplashScreenState extends State<SplashScreen>
                   FadeTransition(
                     opacity: _termsAnimation,
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 24.0),
-                      child: Text(
-                        'Terms & conditions apply',
-                        style: GoogleFonts.acme(
-                          
-                              color: AppColors.textPrimaryDark.withOpacity(0.7),
-                              fontSize: 14,
-                              letterSpacing: 0.5,
-                            ),
-                        )
-                      ),
-                    ),
-                  
+                        padding: const EdgeInsets.only(bottom: 24.0),
+                        child: Text(
+                          'Terms & conditions apply',
+                          style: GoogleFonts.acme(
+                            color: AppColors.textPrimaryDark.withOpacity(0.7),
+                            fontSize: 14,
+                            letterSpacing: 0.5,
+                          ),
+                        )),
+                  ),
                 ],
               ),
             ),
@@ -206,7 +202,8 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
   }
-Widget _buildAnimatedText(
+
+  Widget _buildAnimatedText(
     String text, {
     required double fontSize,
     required FontWeight fontWeight,
@@ -240,6 +237,7 @@ Widget _buildAnimatedText(
       ),
     );
   }
+
   @override
   void dispose() {
     _controller.dispose();

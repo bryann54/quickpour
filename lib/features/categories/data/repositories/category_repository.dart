@@ -78,7 +78,7 @@ class CategoryRepository {
         imageUrl:
             'https://c8.alamy.com/comp/MPRD0A/original-absinthe-vintage-stamp-vector-MPRD0A.jpg',
       ),
-       CategoryModel(
+      CategoryModel(
         id: 'cat13',
         name: 'Spirit',
         imageUrl:

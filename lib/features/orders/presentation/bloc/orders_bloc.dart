@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'orders_event.dart';
 part 'orders_state.dart';
+
 class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
   final CheckoutBloc checkoutBloc;
   final OrdersRepository ordersRepository;
@@ -25,17 +26,25 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
           id: state.orderId,
           total: state.totalAmount,
           date: DateTime.now(),
-          address: state.address ?? '',
-          phoneNumber: state.phoneNumber ?? '',
-          paymentMethod: state.paymentMethod ?? '',
+          address: state.address ?? 'No address provided', // Default value
+          phoneNumber: state.phoneNumber ?? 'No phone number', // Default value
+          paymentMethod:
+              state.paymentMethod ?? 'Not specified', // Default value
           items: state.cartItems
               .map((cartItem) => OrderItem(
-                    name: cartItem.product.productName,
-                    quantity: cartItem.quantity,
-                    price: cartItem.product.price,
+                    name: cartItem.product.productName, // Default value if null
+                    quantity: cartItem.quantity, // Default value if null
+                    price: cartItem.product.price, // Default value if null
                   ))
               .toList(),
+          userEmail: state.userEmail ??
+              'No email provided', // You must define userEmail in the state or obtain it from somewhere
+          userName: state.userName ??
+              'No name provided', // You must define userName in the state or obtain it from somewhere
+          userId: state.userId ??
+              'No user ID provided', // You must define userId in the state or obtain it from somewhere
         );
+
         add(AddNewOrder(newOrder));
       }
     });

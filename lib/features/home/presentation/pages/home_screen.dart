@@ -36,7 +36,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  
   late ScrollController _scrollController;
   late ProductSearchBloc _productSearchBloc;
   final _searchController = TextEditingController();
@@ -86,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ],
       child: Scaffold(
-        appBar:  CustomAppBar(
+        appBar: CustomAppBar(
           showNotification: true,
           showCart: false,
           showProfile: true,
@@ -94,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: Column(
           children: [
-              HomeScreenSearch(
+            HomeScreenSearch(
               controller: _searchController,
             ),
             Expanded(
@@ -102,7 +101,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-               
                     Padding(
                       padding:
                           const EdgeInsets.only(left: 3, top: 2, bottom: 2),
@@ -111,25 +109,23 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Row(
                             children: [
-                              Text(
-                                'Verified  Stores',
-                               style: GoogleFonts.montaga(
-                                    textStyle:
-                                        theme.textTheme.titleMedium?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 17,
-                                      color: theme.colorScheme.onSurface,
-                                      letterSpacing: 1
-                                    ),
-                                  )
-                              ),
+                              Text('Verified  Stores',
+                                  style: GoogleFonts.montaga(
+                                    textStyle: theme.textTheme.titleMedium
+                                        ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17,
+                                            color: theme.colorScheme.onSurface,
+                                            letterSpacing: 1),
+                                  )),
                               const SizedBox(
                                 width: 5,
                               ),
                               Icon(
                                 Icons.verified,
-                                color:
-                                    isDarkMode ? Colors.teal : AppColors.accentColor,
+                                color: isDarkMode
+                                    ? Colors.teal
+                                    : AppColors.accentColor,
                               )
                             ],
                           ),
@@ -142,15 +138,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               );
                             },
-                            child: Text(
-                              'See All',
-                              style:GoogleFonts.montaga(
-                                    textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: isDarkMode
-                                        ? Colors.teal
-                                        : AppColors.accentColor,
-                                  ),)
-                            ),
+                            child: Text('See All',
+                                style: GoogleFonts.montaga(
+                                  textStyle: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                        color: isDarkMode
+                                            ? Colors.teal
+                                            : AppColors.accentColor,
+                                      ),
+                                )),
                           ),
                         ],
                       ),
@@ -172,43 +170,47 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Padding(
                       padding:
-                           const EdgeInsets.only(left: 3,top:2,bottom: 2),
+                          const EdgeInsets.only(left: 3, top: 2, bottom: 2),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Top Brands',
-                            style:GoogleFonts.montaga(
-                                    textStyle: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),)
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const BrandsScreen(),
+                          Text('Top Brands',
+                              style: GoogleFonts.montaga(
+                                textStyle:
+                                    theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              );
-                            },
-                            child: Text(
-                              'See All',
-                              style:GoogleFonts.montaga(
-                                    textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: isDarkMode
-                                        ? Colors.teal
-                                        : AppColors.accentColor,
+                              )),
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const BrandsScreen(),
                                   ),
-                            ),)
-                          ),
+                                );
+                              },
+                              child: Text(
+                                'See All',
+                                style: GoogleFonts.montaga(
+                                  textStyle: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                        color: isDarkMode
+                                            ? Colors.teal
+                                            : AppColors.accentColor,
+                                      ),
+                                ),
+                              )),
                         ],
                       ),
                     ),
                     BlocBuilder<BrandsBloc, BrandsState>(
                       builder: (context, state) {
                         if (state is BrandsLoadedState) {
-                          return HorizontalBrandsListWidget(brands: state.brands);
+                          return HorizontalBrandsListWidget(
+                              brands: state.brands);
                         }
                         if (state is BrandsLoadingState) {
                           return const Center(child: LoadingHorizontalList());
@@ -220,36 +222,41 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 3,top:2,bottom: 2),
+                      padding:
+                          const EdgeInsets.only(left: 3, top: 2, bottom: 2),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Categories',
-                            style:GoogleFonts.montaga(
-                                    textStyle: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),)
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const CategoriesScreen(),
+                          Text('Categories',
+                              style: GoogleFonts.montaga(
+                                textStyle:
+                                    theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              );
-                            },
-                            child: Text(
-                              'See All',
-                              style:GoogleFonts.montaga(
-                                    textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: isDarkMode
-                                        ? Colors.teal
-                                        : AppColors.accentColor,
+                              )),
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CategoriesScreen(),
                                   ),
-                            ),)
-                          ),
+                                );
+                              },
+                              child: Text(
+                                'See All',
+                                style: GoogleFonts.montaga(
+                                  textStyle: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                        color: isDarkMode
+                                            ? Colors.teal
+                                            : AppColors.accentColor,
+                                      ),
+                                ),
+                              )),
                         ],
                       ),
                     ),
@@ -264,8 +271,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Text(
                       'Recommended for you',
-                      style:GoogleFonts.montaga(
-                                    textStyle: theme.textTheme.titleMedium?.copyWith(
+                      style: GoogleFonts.montaga(
+                          textStyle: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       )),
                     ),
@@ -289,11 +296,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const ProductCardShimmer(),
                           );
                         }
-              
+
                         if (state is ProductErrorState) {
                           return Center(child: Text(state.errorMessage));
                         }
-              
+
                         if (state is ProductLoadedState) {
                           return GridView.builder(
                             shrinkWrap: true,
@@ -313,7 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           );
                         }
-              
+
                         return const SizedBox.shrink();
                       },
                     ),
