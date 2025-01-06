@@ -1,5 +1,6 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
+import 'package:chupachap/features/home/presentation/widgets/bottom_nav.dart';
 import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
 import 'package:chupachap/features/orders/presentation/bloc/orders_bloc.dart';
 import 'package:chupachap/features/orders/presentation/widgets/order_item_widget.dart';
@@ -24,40 +25,53 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        showCart: false,
-      ),
-      body: BlocBuilder<OrdersBloc, OrdersState>(
-        builder: (context, state) {
-          if (state is OrdersInitial) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is OrdersEmpty) {
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => BottomNav()),
+          (route) => false, // Removes all previous routes from the stack
+        );
+        return false; // Prevent the default back navigation
+      },
+      child: Scaffold(
+        appBar: CustomAppBar(
+          showCart: false,
+        ),
+        body: BlocBuilder<OrdersBloc, OrdersState>(
+          builder: (context, state) {
+            if (state is OrdersInitial) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is OrdersEmpty) {
+              return _buildEmptyOrdersView(context);
+            } else if (state is OrdersLoaded) {
+              return _buildOrdersList(context, state.orders);
+            } else if (state is OrdersError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.error_outline,
+                        size: 48, color: Colors.red),
+                    const SizedBox(height: 16),
+                    Text(state.message),
+                    ElevatedButton(
+                      onPressed: () {
+                        context
+                            .read<OrdersBloc>()
+                            .add(LoadOrdersFromCheckout());
+                      },
+                      child: const Text('Retry'),
+                    ),
+                  ],
+                ),
+              );
+            }
             return _buildEmptyOrdersView(context);
-          } else if (state is OrdersLoaded) {
-            return _buildOrdersList(context, state.orders);
-          } else if (state is OrdersError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
-                  const SizedBox(height: 16),
-                  Text(state.message),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<OrdersBloc>().add(LoadOrdersFromCheckout());
-                    },
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            );
-          }
-          return _buildEmptyOrdersView(context);
-        },
+          },
+        ),
       ),
     );
   }

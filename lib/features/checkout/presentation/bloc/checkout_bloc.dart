@@ -31,6 +31,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       UpdatePaymentMethodEvent event, Emitter<CheckoutState> emit) {
     emit(state.copyWith(paymentMethod: event.paymentMethod));
   }
+
   void _onUpdateDeliveryTime(
       UpdateDeliveryTimeEvent event, Emitter<CheckoutState> emit) {
     emit(state.copyWith(
@@ -38,6 +39,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       specialInstructions: event.specialInstructions,
     ));
   }
+
   Future<void> _onPlaceOrder(
       PlaceOrderEvent event, Emitter<CheckoutState> emit) async {
     try {
@@ -57,7 +59,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
 
       // Save order to Firestore
 
-    final orderData = {
+      final orderData = {
         'orderId': orderId,
         'userId': userId,
         'userEmail': userDetails.email,
@@ -98,5 +100,4 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       ));
     }
   }
-
 }

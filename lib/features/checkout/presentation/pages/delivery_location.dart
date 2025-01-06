@@ -151,31 +151,34 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-          ElevatedButton(
-  onPressed: () {
-    if (_selectedLocation != null) {
-      // Update the checkout bloc with address
-      context.read<CheckoutBloc>().add(UpdateDeliveryInfoEvent(
-            address: '${_currentAddress ?? ''}\n${_addressDetailsController.text}',
-            phoneNumber: '', // Will be updated in PaymentsScreen
-          ));
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_selectedLocation != null) {
+                        // Update the checkout bloc with address
+                        context
+                            .read<CheckoutBloc>()
+                            .add(UpdateDeliveryInfoEvent(
+                              address:
+                                  '${_currentAddress ?? ''}\n${_addressDetailsController.text}',
+                              phoneNumber:
+                                  '', // Will be updated in PaymentsScreen
+                            ));
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => DeliveryDetailsScreen(
-            address: _currentAddress ?? '',
-            addressDetails: _addressDetailsController.text,
-            location: _selectedLocation!,
-            totalAmount: widget.totalAmount,
-          ),
-        ),
-      );
-    }
-  },
-  child: const Text('Confirm Location'),
-),
-
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => DeliveryDetailsScreen(
+                              address: _currentAddress ?? '',
+                              addressDetails: _addressDetailsController.text,
+                              location: _selectedLocation!,
+                              totalAmount: widget.totalAmount,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    child: const Text('Confirm Location'),
+                  ),
                 ],
               ),
             ),

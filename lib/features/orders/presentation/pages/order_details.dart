@@ -120,18 +120,19 @@ class OrderDetails extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           if (order.items.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              'Items',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color:
-                    isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
+          if (order.items.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                'Items',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: isDark
+                      ? AppColors.textPrimaryDark
+                      : AppColors.textPrimary,
+                ),
               ),
             ),
-          ),
           if (order.items.isNotEmpty) ...[
             ...order.items.map((item) => Container(
                   decoration: BoxDecoration(

@@ -147,7 +147,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
             ),
             const SizedBox(height: 24),
 
-ElevatedButton(
+            ElevatedButton(
               onPressed: _selectedTimeSlot != null
                   ? () {
                       // Dispatch event to update delivery time
@@ -179,7 +179,6 @@ ElevatedButton(
               ),
               child: const Text('Continue to Payment'),
             ),
-
           ],
         ),
       ),

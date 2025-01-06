@@ -21,6 +21,7 @@ class UpdatePaymentMethodEvent extends CheckoutEvent {
     required this.paymentMethod,
   });
 }
+
 class UpdateDeliveryTimeEvent extends CheckoutEvent {
   final String deliveryTime;
   final String specialInstructions;

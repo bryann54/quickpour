@@ -9,7 +9,7 @@ import GoogleMaps
   ) -> Bool {
     let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
     let channel = FlutterMethodChannel(name: "com.yourapp.maps",
-                                     binaryMessenger: controller.binaryMessenger)
+                                       binaryMessenger: controller.binaryMessenger)
     
     channel.setMethodCallHandler({
       [weak self] (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in

@@ -18,7 +18,7 @@ class OrderConfirmationScreen extends StatelessWidget {
     required this.totalAmount,
     required this.deliveryAddress,
     required this.deliveryTime,
-    required this.selectedPaymentMethod, // Add to constructor
+    required this.selectedPaymentMethod,
   }) : super(key: key);
 
   @override
@@ -95,6 +95,7 @@ class OrderConfirmationScreen extends StatelessWidget {
                         ),
                       ),
                     );
+                    (route) => false;
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),

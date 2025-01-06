@@ -92,7 +92,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextField(
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
@@ -222,7 +222,8 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
       ],
     );
   }
-Widget _buildProceedButton(BuildContext context) {
+
+  Widget _buildProceedButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
@@ -291,7 +292,8 @@ Widget _buildProceedButton(BuildContext context) {
       ),
     );
   }
-void _proceedWithPayment(BuildContext context) {
+
+  void _proceedWithPayment(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -346,7 +348,6 @@ void _proceedWithPayment(BuildContext context) {
       );
     }
   }
-
 }
 
 enum PaymentMethod {
