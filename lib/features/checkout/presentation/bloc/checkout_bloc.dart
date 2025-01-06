@@ -18,6 +18,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     on<UpdateDeliveryInfoEvent>(_onUpdateDeliveryInfo);
     on<UpdatePaymentMethodEvent>(_onUpdatePaymentMethod);
     on<PlaceOrderEvent>(_onPlaceOrder);
+    on<UpdateDeliveryTimeEvent>(_onUpdateDeliveryTime);
   }
 
   void _onUpdateDeliveryInfo(
@@ -30,13 +31,19 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       UpdatePaymentMethodEvent event, Emitter<CheckoutState> emit) {
     emit(state.copyWith(paymentMethod: event.paymentMethod));
   }
-
+  void _onUpdateDeliveryTime(
+      UpdateDeliveryTimeEvent event, Emitter<CheckoutState> emit) {
+    emit(state.copyWith(
+      deliveryTime: event.deliveryTime,
+      specialInstructions: event.specialInstructions,
+    ));
+  }
   Future<void> _onPlaceOrder(
       PlaceOrderEvent event, Emitter<CheckoutState> emit) async {
     try {
       emit(const CheckoutLoadingState());
       final orderId = const Uuid().v4();
-      final totalAmount = event.cart.totalPrice;
+      // final totalAmount = event.cart.totalPrice;
       // Check if user is authenticated using AuthUseCases
       final userId = authUseCases.getCurrentUserId();
       if (userId == null) {
@@ -50,7 +57,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
 
       // Save order to Firestore
 
-      final orderData = {
+    final orderData = {
         'orderId': orderId,
         'userId': userId,
         'userEmail': userDetails.email,
@@ -59,8 +66,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         'address': state.address,
         'phoneNumber': state.phoneNumber,
         'paymentMethod': state.paymentMethod,
-        'deliveryTime': state.deliveryTime,
-        'specialInstructions': state.specialInstructions,
+        'deliveryTime': event.deliveryTime, // Add this
+        'specialInstructions': event.specialInstructions, // Add this
         'cartItems': event.cart.items
             .map((item) => {
                   'productName': item.product.productName,
@@ -91,4 +98,5 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       ));
     }
   }
+
 }

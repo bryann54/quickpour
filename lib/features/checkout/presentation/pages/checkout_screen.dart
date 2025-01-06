@@ -64,7 +64,7 @@ class CheckoutScreen extends StatelessWidget {
                     Text(
                       'KSh ${cartState.cart.totalPrice.toStringAsFixed(0)}',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: AppColors.primaryColor,
+                            color: AppColors.accentColor.withOpacity(.8),
                             fontWeight: FontWeight.bold,
                           ),
                     ),

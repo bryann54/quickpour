@@ -1,5 +1,7 @@
+import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:chupachap/features/checkout/presentation/pages/payments_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DeliveryDetailsScreen extends StatefulWidget {
@@ -145,17 +147,21 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Continue Button
-            ElevatedButton(
+ElevatedButton(
               onPressed: _selectedTimeSlot != null
                   ? () {
-                      // Navigate to payment screen
+                      // Dispatch event to update delivery time
+                      context.read<CheckoutBloc>().add(UpdateDeliveryTimeEvent(
+                            deliveryTime: _selectedTimeSlot!,
+                            specialInstructions: _instructionsController.text,
+                          ));
+
+                      // Navigate to payment screen with full details
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => PaymentsScreen(
-                            totalAmount: widget.totalAmount +
-                                150, // Including delivery fee
+                            totalAmount: widget.totalAmount + 150,
                             deliveryAddress: widget.address,
                             deliveryDetails: widget.addressDetails,
                             deliveryTime: _selectedTimeSlot!,
@@ -173,6 +179,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
               ),
               child: const Text('Continue to Payment'),
             ),
+
           ],
         ),
       ),

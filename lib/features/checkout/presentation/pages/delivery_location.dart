@@ -1,5 +1,7 @@
+import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:chupachap/features/checkout/presentation/pages/delivery_details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
@@ -149,29 +151,31 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Navigate to delivery details screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => DeliveryDetailsScreen(
-                            address: _currentAddress ?? '',
-                            addressDetails: _addressDetailsController.text,
-                            location: _selectedLocation!,
-                            totalAmount: widget.totalAmount,
-                          ),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text('Confirm Location'),
-                  ),
+          ElevatedButton(
+  onPressed: () {
+    if (_selectedLocation != null) {
+      // Update the checkout bloc with address
+      context.read<CheckoutBloc>().add(UpdateDeliveryInfoEvent(
+            address: '${_currentAddress ?? ''}\n${_addressDetailsController.text}',
+            phoneNumber: '', // Will be updated in PaymentsScreen
+          ));
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => DeliveryDetailsScreen(
+            address: _currentAddress ?? '',
+            addressDetails: _addressDetailsController.text,
+            location: _selectedLocation!,
+            totalAmount: widget.totalAmount,
+          ),
+        ),
+      );
+    }
+  },
+  child: const Text('Confirm Location'),
+),
+
                 ],
               ),
             ),

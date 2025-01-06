@@ -21,11 +21,26 @@ class UpdatePaymentMethodEvent extends CheckoutEvent {
     required this.paymentMethod,
   });
 }
+class UpdateDeliveryTimeEvent extends CheckoutEvent {
+  final String deliveryTime;
+  final String specialInstructions;
+
+  const UpdateDeliveryTimeEvent({
+    required this.deliveryTime,
+    required this.specialInstructions,
+  });
+}
 
 class PlaceOrderEvent extends CheckoutEvent {
   final Cart cart;
+  final String deliveryTime;
+  final String specialInstructions;
+  final String paymentMethod;
 
   const PlaceOrderEvent({
     required this.cart,
+    required this.deliveryTime,
+    required this.specialInstructions,
+    required this.paymentMethod,
   });
 }

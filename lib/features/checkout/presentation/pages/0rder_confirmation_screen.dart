@@ -10,6 +10,7 @@ class OrderConfirmationScreen extends StatelessWidget {
   final double totalAmount;
   final String deliveryAddress;
   final String deliveryTime;
+  final String selectedPaymentMethod; // New field
 
   const OrderConfirmationScreen({
     Key? key,
@@ -17,6 +18,7 @@ class OrderConfirmationScreen extends StatelessWidget {
     required this.totalAmount,
     required this.deliveryAddress,
     required this.deliveryTime,
+    required this.selectedPaymentMethod, // Add to constructor
   }) : super(key: key);
 
   @override
@@ -24,7 +26,6 @@ class OrderConfirmationScreen extends StatelessWidget {
     return BlocListener<CheckoutBloc, CheckoutState>(
       listener: (context, state) {
         if (state is CheckoutOrderPlacedState) {
-          // Order has been successfully placed
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Order placed successfully!')),
           );
@@ -73,6 +74,9 @@ class OrderConfirmationScreen extends StatelessWidget {
                         _buildDetailRow('Delivery Address', deliveryAddress),
                         const Divider(),
                         _buildDetailRow('Delivery Time', deliveryTime),
+                        const Divider(),
+                        _buildDetailRow(
+                            'Payment Method', selectedPaymentMethod), // New row
                       ],
                     ),
                   ),

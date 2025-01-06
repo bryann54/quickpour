@@ -120,6 +120,7 @@ class OrderDetails extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+           if (order.items.isNotEmpty)
           Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
