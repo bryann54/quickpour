@@ -5,6 +5,14 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+def envPropertiesFile = rootProject.file("../.env")
+def envProperties = new Properties()
+if (envPropertiesFile.exists()) {
+    envPropertiesFile.withReader('UTF-8') { reader ->
+        envProperties.load(reader)
+    }
+}
+
 android {
     namespace "com.example.chupachap"
     compileSdk flutter.compileSdkVersion
@@ -15,6 +23,13 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutter.versionCode
         versionName flutter.versionName
+        
+        // Add applicationName placeholder
+        manifestPlaceholders = [
+            applicationName: "io.flutter.app.FlutterApplication",
+            mapsApiKey: envProperties.getProperty("GOOGLE_MAPS_API_KEY_ANDROID", "")
+        ]
+        resValue "string", "MAPS_API_KEY", envProperties.getProperty("GOOGLE_MAPS_API_KEY_ANDROID", "")
     }
     
     buildTypes {
@@ -39,6 +54,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:33.7.0')
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.android.gms:play-services-maps:18.2.0'
 }
 
 flutter {
