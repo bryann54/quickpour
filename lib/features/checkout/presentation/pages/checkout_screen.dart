@@ -14,7 +14,7 @@ class CheckoutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar(showCart: false,),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, cartState) {
           // Check if the cart is empty

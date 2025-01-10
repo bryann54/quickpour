@@ -68,8 +68,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         'address': state.address,
         'phoneNumber': state.phoneNumber,
         'paymentMethod': state.paymentMethod,
-        'deliveryTime': event.deliveryTime, // Add this
-        'specialInstructions': event.specialInstructions, // Add this
+        'deliveryTime': event.deliveryTime, 
+        'specialInstructions': event.specialInstructions, 
         'cartItems': event.cart.items
             .map((item) => {
                   'productName': item.product.productName,
