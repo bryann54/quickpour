@@ -8,9 +8,15 @@ import 'package:geocoding/geocoding.dart';
 
 class DeliveryLocationScreen extends StatefulWidget {
   final double totalAmount;
+  final String address;
+  final String phoneNumber;
 
-  const DeliveryLocationScreen({Key? key, required this.totalAmount})
-      : super(key: key);
+  const DeliveryLocationScreen({
+    Key? key,
+    required this.totalAmount,
+    required this.address,
+    required this.phoneNumber,
+  }) : super(key: key);
 
   @override
   State<DeliveryLocationScreen> createState() => _DeliveryLocationScreenState();
@@ -28,21 +34,29 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
+    // Prefill the address field with the address passed from CheckoutScreen
+    _searchController.text = widget.address;
+    _convertAddressToLatLng(widget.address);
   }
 
-  Future<void> _getCurrentLocation() async {
+  // Method to convert address to latitude and longitude
+  Future<void> _convertAddressToLatLng(String address) async {
     try {
-      Position position = await Geolocator.getCurrentPosition();
-      setState(() {
-        _selectedLocation = LatLng(position.latitude, position.longitude);
-        _isLoading = false;
-      });
-      _getAddressFromLatLng(_selectedLocation!);
+      // Geocode the provided address to get latitude and longitude
+      List<Location> locations = await locationFromAddress(address);
+      if (locations.isNotEmpty) {
+        setState(() {
+          _selectedLocation =
+              LatLng(locations[0].latitude, locations[0].longitude);
+          _isLoading = false;
+        });
+        _getAddressFromLatLng(_selectedLocation!);
+      }
     } catch (e) {
       setState(() {
         _isLoading = false;
       });
+      debugPrint('Error converting address to LatLng: $e');
     }
   }
 
@@ -160,8 +174,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                             .add(UpdateDeliveryInfoEvent(
                               address:
                                   '${_currentAddress ?? ''}\n${_addressDetailsController.text}',
-                              phoneNumber:
-                                  '', // Will be updated in PaymentsScreen
+                              phoneNumber: widget.phoneNumber,
                             ));
 
                         Navigator.push(

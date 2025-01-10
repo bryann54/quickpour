@@ -93,18 +93,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              TextField(
-                controller: _phoneController,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  labelText: 'Phone Number',
-                  hintText: 'Enter your phone number',
-                  prefixIcon: const Icon(Icons.phone),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
+            
               const SizedBox(height: 24),
               Text(
                 'Select Payment Method',
@@ -228,15 +217,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          if (_phoneController.text.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Please enter your phone number'),
-                backgroundColor: Colors.red,
-              ),
-            );
-            return;
-          }
+        
 
           final user = FirebaseAuth.instance.currentUser;
           if (user == null) {
@@ -306,15 +287,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
       return;
     }
 
-    if (_phoneController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter your phone number'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
+   
 
     try {
       final cartBloc = context.read<CartBloc>();

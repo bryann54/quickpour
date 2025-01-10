@@ -83,8 +83,8 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
                     colors: [
-                      AppColors.primaryColorDark,
-                      AppColors.secondaryColorDark.withOpacity(0.7),
+                      AppColors.primaryColor,
+                      AppColors.primaryColor,
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,

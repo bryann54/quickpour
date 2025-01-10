@@ -24,6 +24,7 @@ dependencies:
   shimmer: ^3.0.0
   equatable: ^2.0.5
   google_maps_flutter: ^2.10.0
+  google_maps_place_picker: ^4.0.2
   google_maps_places_autocomplete_widgets: ^1.2.2
   intl: ^0.19.0 
   rxdart: ^0.27.7

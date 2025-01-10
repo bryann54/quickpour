@@ -8,7 +8,7 @@ class UpdateDeliveryInfoEvent extends CheckoutEvent {
   final String address;
   final String phoneNumber;
 
-  const UpdateDeliveryInfoEvent({
+  UpdateDeliveryInfoEvent({
     required this.address,
     required this.phoneNumber,
   });
