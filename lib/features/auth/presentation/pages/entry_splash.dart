@@ -112,7 +112,7 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                         opacity: _fadeAnimation.value,
                         child: Container(
                           width: 200,
-                          height: 300,
+                          height: 150,
                           decoration: const BoxDecoration(
                             boxShadow: [
                               BoxShadow(
@@ -123,35 +123,35 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                             ],
                           ),
                           child: Image.asset(
-                            'assets/splash.png',
+                            'assets/111.png',
                             fit: BoxFit.contain,
                           ),
                         ),
                       ),
                     ),
 
-                    // App name with fade animation
-                    Opacity(
-                      opacity: _fadeAnimation.value,
-                      child: Text(
-                        'QuickPour',
-                        style: GoogleFonts.chewy(
-                          textStyle: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 4,
-                            shadows: [
-                              Shadow(
-                                color: AppColors.shadowColor,
-                                blurRadius: 10,
-                                offset: Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                    // // App name with fade animation
+                    // Opacity(
+                    //   opacity: _fadeAnimation.value,
+                    //   child: Text(
+                    //     'Alko Hut',
+                    //     style: GoogleFonts.chewy(
+                    //       textStyle: const TextStyle(
+                    //         color: Colors.white,
+                    //         fontSize: 32,
+                    //         fontWeight: FontWeight.bold,
+                    //         letterSpacing: 4,
+                    //         shadows: [
+                    //           Shadow(
+                    //             color: AppColors.shadowColor,
+                    //             blurRadius: 10,
+                    //             offset: Offset(0, 2),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     const SizedBox(height: 10),
                     // Tagline with fade animation
                     Opacity(

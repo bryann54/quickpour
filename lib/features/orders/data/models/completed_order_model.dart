@@ -5,35 +5,35 @@ class CompletedOrder {
   final DateTime date;
   final double total;
   final String address;
-  final String deliveryTime; // Adjusted to match data structure
+  final String deliveryTime; 
   final String phoneNumber;
   final String paymentMethod;
   final List<OrderItem> items;
-  final String userEmail; // Added based on provided Firebase data
-  final String userName; // Added based on provided Firebase data
-  final String userId; // Added based on provided Firebase data
+  final String userEmail; 
+  final String userName; 
+  final String userId; 
 
   CompletedOrder({
     required this.id,
     required this.date,
     required this.total,
-    this.deliveryTime = 'No delivery time specified', // Default value
-    this.address = 'No address provided', // Default value
-    this.phoneNumber = 'No phone number', // Default value
-    this.paymentMethod = 'Not specified', // Default value
+    this.deliveryTime = 'No delivery time specified', 
+    this.address = 'No address provided', 
+    this.phoneNumber = 'No phone number', 
+    this.paymentMethod = 'Not specified',
     required this.items,
     required this.userEmail,
     required this.userName,
     required this.userId,
   });
 
-  // Add a factory constructor to create from Firebase data
+  // factory constructor to create from Firebase data
   factory CompletedOrder.fromFirebase(Map<String, dynamic> data, String docId) {
     DateTime orderDate;
     try {
       orderDate = DateTime.parse(data['date'] as String);
     } catch (e) {
-      orderDate = DateTime.now(); // Fallback to current date if parsing fails
+      orderDate = DateTime.now(); 
     }
 
     List<OrderItem> orderItems = [];

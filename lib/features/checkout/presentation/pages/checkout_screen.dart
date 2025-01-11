@@ -189,7 +189,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 const SizedBox(height: 20),
 
                 // Proceed Button
-                ElevatedButton(
+          ElevatedButton(
                   onPressed: (_isAddressEmpty || _isPhoneEmpty)
                       ? null
                       : () {
@@ -206,8 +206,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             MaterialPageRoute(
                               builder: (_) => DeliveryLocationScreen(
                                 totalAmount: totalAmount,
-                                address: _addressController.text,
-                                phoneNumber: _phoneController.text,
+                                address: address,
+                                phoneNumber: phoneNumber,
                               ),
                             ),
                           );
@@ -217,6 +217,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                   child: const Text('Proceed to delivery'),
                 ),
+
               ],
             ),
           );

@@ -3,7 +3,7 @@ import 'package:chupachap/features/checkout/presentation/pages/delivery_details_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
+
 import 'package:geocoding/geocoding.dart';
 
 class DeliveryLocationScreen extends StatefulWidget {
@@ -34,38 +34,36 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
   @override
   void initState() {
     super.initState();
-    // Prefill the address field with the address passed from CheckoutScreen
     _searchController.text = widget.address;
     _convertAddressToLatLng(widget.address);
   }
 
-  // Method to convert address to latitude and longitude
   Future<void> _convertAddressToLatLng(String address) async {
     try {
-      // Geocode the provided address to get latitude and longitude
       List<Location> locations = await locationFromAddress(address);
       if (locations.isNotEmpty) {
         setState(() {
           _selectedLocation =
               LatLng(locations[0].latitude, locations[0].longitude);
-          _isLoading = false;
         });
+        _mapController?.animateCamera(
+          CameraUpdate.newLatLng(_selectedLocation!),
+        );
         _getAddressFromLatLng(_selectedLocation!);
       }
     } catch (e) {
+      debugPrint('Error converting address to LatLng: $e');
+    } finally {
       setState(() {
         _isLoading = false;
       });
-      debugPrint('Error converting address to LatLng: $e');
     }
   }
 
   Future<void> _getAddressFromLatLng(LatLng position) async {
     try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-        position.latitude,
-        position.longitude,
-      );
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks[0];
         setState(() {
@@ -75,7 +73,16 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
         });
       }
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint('Error getting address from LatLng: $e');
+    }
+  }
+
+  void _searchLocation() {
+    if (_searchController.text.isNotEmpty) {
+      setState(() {
+        _isLoading = true;
+      });
+      _convertAddressToLatLng(_searchController.text);
     }
   }
 
@@ -87,22 +94,23 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
       ),
       body: Column(
         children: [
-          // Search Bar
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
               controller: _searchController,
+              onSubmitted: (_) => _searchLocation(),
               decoration: InputDecoration(
                 hintText: 'Search location',
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: _searchLocation,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
             ),
           ),
-
-          // Map
           Expanded(
             flex: 2,
             child: _isLoading
@@ -112,8 +120,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                       GoogleMap(
                         initialCameraPosition: CameraPosition(
                           target: _selectedLocation ??
-                              const LatLng(
-                                  -1.2921, 36.8219), // Default to Nairobi
+                              const LatLng(-1.2921, 36.8219),
                           zoom: 15,
                         ),
                         onMapCreated: (controller) =>
@@ -141,7 +148,6 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                     ],
                   ),
           ),
-
           // Address Details Form
           Expanded(
             child: SingleChildScrollView(
@@ -177,7 +183,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                               phoneNumber: widget.phoneNumber,
                             ));
 
-                        Navigator.push(
+                    Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => DeliveryDetailsScreen(
@@ -188,6 +194,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                             ),
                           ),
                         );
+
                       }
                     },
                     child: const Text('Confirm Location'),

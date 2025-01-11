@@ -2,8 +2,6 @@ import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uuid/uuid.dart';
-
 part 'checkout_state.dart';
 part 'checkout_event.dart';
 
@@ -17,14 +15,16 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   }) : super(const CheckoutInitialState()) {
     on<UpdateDeliveryInfoEvent>(_onUpdateDeliveryInfo);
     on<UpdatePaymentMethodEvent>(_onUpdatePaymentMethod);
-    on<PlaceOrderEvent>(_onPlaceOrder);
     on<UpdateDeliveryTimeEvent>(_onUpdateDeliveryTime);
+    on<PlaceOrderEvent>(_onPlaceOrder);
   }
 
   void _onUpdateDeliveryInfo(
       UpdateDeliveryInfoEvent event, Emitter<CheckoutState> emit) {
-    emit(
-        state.copyWith(address: event.address, phoneNumber: event.phoneNumber));
+    emit(state.copyWith(
+      address: event.address,
+      phoneNumber: event.phoneNumber,
+    ));
   }
 
   void _onUpdatePaymentMethod(
@@ -44,32 +44,38 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       PlaceOrderEvent event, Emitter<CheckoutState> emit) async {
     try {
       emit(const CheckoutLoadingState());
-      final orderId = const Uuid().v4();
-      // final totalAmount = event.cart.totalPrice;
-      // Check if user is authenticated using AuthUseCases
+
+      // Check user authentication
       final userId = authUseCases.getCurrentUserId();
       if (userId == null) {
         throw Exception('User not authenticated');
       }
-      // Get current user details
+
+      // Get user details
       final userDetails = await authUseCases.getCurrentUserDetails();
       if (userDetails == null) {
         throw Exception('User details not found');
       }
 
-      // Save order to Firestore
+      // Generate orderId using actual document reference
+      final orderRef = firestore.collection('orders').doc();
+      final orderId = orderRef.id;
 
+      // Create complete order data combining both sources
       final orderData = {
-        'orderId': orderId,
+        // User details from AuthUseCases
         'userId': userId,
         'userEmail': userDetails.email,
         'userName': '${userDetails.firstName} ${userDetails.lastName}',
-        'totalAmount': event.cart.totalPrice,
+
+        // Order details from state
         'address': state.address,
         'phoneNumber': state.phoneNumber,
-        'paymentMethod': state.paymentMethod,
-        'deliveryTime': event.deliveryTime, 
-        'specialInstructions': event.specialInstructions, 
+        'paymentMethod': event.paymentMethod,
+        'deliveryTime': event.deliveryTime,
+        'specialInstructions': event.specialInstructions,
+
+        // Cart details from event
         'cartItems': event.cart.items
             .map((item) => {
                   'productName': item.product.productName,
@@ -77,19 +83,30 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
                   'price': item.product.price,
                 })
             .toList(),
+        'totalAmount': event.cart.totalPrice,
+
+        // Order metadata
+        'orderId': orderId,
         'date': DateTime.now().toIso8601String(),
         'status': 'pending',
       };
 
-      await firestore.collection('orders').doc(orderId).set(orderData);
+      // Save to Firestore using the generated reference
+      await orderRef.set(orderData);
 
+      // Emit success state with all combined data
       emit(CheckoutOrderPlacedState(
         orderId: orderId,
         totalAmount: event.cart.totalPrice,
-        address: state.address,
         cartItems: event.cart.items,
+        address: state.address,
         phoneNumber: state.phoneNumber,
-        paymentMethod: state.paymentMethod,
+        paymentMethod: event.paymentMethod,
+        deliveryTime: event.deliveryTime,
+        specialInstructions: event.specialInstructions,
+        userEmail: userDetails.email,
+        userName: '${userDetails.firstName} ${userDetails.lastName}',
+        userId: userId,
       ));
     } catch (e) {
       emit(CheckoutErrorState(
@@ -97,6 +114,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         address: state.address,
         phoneNumber: state.phoneNumber,
         paymentMethod: state.paymentMethod,
+        deliveryTime: state.deliveryTime,
+        specialInstructions: state.specialInstructions,
       ));
     }
   }

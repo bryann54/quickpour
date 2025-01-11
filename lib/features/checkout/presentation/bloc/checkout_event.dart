@@ -45,3 +45,12 @@ class PlaceOrderEvent extends CheckoutEvent {
     required this.paymentMethod,
   });
 }
+class OrderPlacedEvent extends CheckoutEvent {
+  final String orderId;
+  final double totalAmount;
+
+  OrderPlacedEvent({
+    required this.orderId,
+    required this.totalAmount,
+  });
+}

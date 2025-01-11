@@ -24,8 +24,8 @@ class OrdersRepository {
           .map((doc) => CompletedOrder.fromFirebase(doc.data(), doc.id))
           .toList();
     } catch (e) {
-      print('Error fetching orders: $e'); // For debugging
+      print('Error fetching orders: $e');
       throw Exception('Failed to fetch orders: $e');
-    }
+    }  
   }
 }

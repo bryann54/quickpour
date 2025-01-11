@@ -1,15 +1,14 @@
-import 'dart:async';
-
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:chupachap/features/auth/presentation/bloc/auth_state.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:chupachap/features/cart/presentation/bloc/cart_event.dart';
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:chupachap/features/checkout/presentation/pages/0rder_confirmation_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+enum PaymentMethod { mpesa, cashOnDelivery, creditCard }
 
 class PaymentsScreen extends StatefulWidget {
   final double totalAmount;
@@ -35,7 +34,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
   final TextEditingController _phoneController = TextEditingController();
   late final AuthBloc _authBloc;
   PaymentMethod _selectedPaymentMethod = PaymentMethod.mpesa;
-  StreamSubscription? _checkoutSubscription;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -46,7 +45,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
 
   @override
   void dispose() {
-    _checkoutSubscription?.cancel();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -61,10 +60,15 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(showCart: false, showNotification: false),
+      appBar: AppBar(
+        title: const Text('Payments'),
+        centerTitle: true,
+      ),
       body: BlocListener<CheckoutBloc, CheckoutState>(
         listener: (context, state) {
           if (state is CheckoutOrderPlacedState) {
+            context.read<CartBloc>().add(ClearCartEvent());
+
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -85,6 +89,9 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
                 backgroundColor: Colors.red,
               ),
             );
+            setState(() {
+              _isLoading = false;
+            });
           }
         },
         child: Padding(
@@ -93,8 +100,6 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-            
-              const SizedBox(height: 24),
               Text(
                 'Select Payment Method',
                 style: Theme.of(context).textTheme.headlineSmall,
@@ -216,115 +221,50 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {
-        
-
-          final user = FirebaseAuth.instance.currentUser;
-          if (user == null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Please log in to place an order'),
-                backgroundColor: Colors.red,
-              ),
-            );
-            Navigator.of(context).pushReplacementNamed('/login');
-            return;
-          }
-
-          try {
-            final cartBloc = context.read<CartBloc>();
-            final cart = cartBloc.state.cart;
-            final checkoutBloc = context.read<CheckoutBloc>();
-
-            // Update delivery info with phone number
-            checkoutBloc.add(UpdateDeliveryInfoEvent(
-              address: "${widget.deliveryAddress}\n${widget.deliveryDetails}",
-              phoneNumber: _phoneController.text,
-            ));
-
-            // Update payment method
-            checkoutBloc.add(UpdatePaymentMethodEvent(
-              paymentMethod: _selectedPaymentMethod.toString().split('.').last,
-            ));
-
-            // Place order
-            checkoutBloc.add(PlaceOrderEvent(
-              cart: cart,
-              deliveryTime: widget.deliveryTime,
-              specialInstructions: widget.specialInstructions,
-              paymentMethod: _selectedPaymentMethod.toString().split('.').last,
-            ));
-          } catch (e) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Error: $e'),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
-        },
+        onPressed: _isLoading ? null : () => _handlePlaceOrder(context),
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        child: const Text('Place Order'),
+        child: _isLoading
+            ? const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              )
+            : const Text('Place Order'),
       ),
     );
   }
 
-  void _proceedWithPayment(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please log in to place an order'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      Navigator.of(context).pushReplacementNamed('/login');
-      return;
-    }
+  void _handlePlaceOrder(BuildContext context) {
+    if (_isLoading) return;
 
-   
+    setState(() {
+      _isLoading = true;
+    });
 
-    try {
-      final cartBloc = context.read<CartBloc>();
-      final cart = cartBloc.state.cart;
-      final checkoutBloc = context.read<CheckoutBloc>();
+    final checkoutBloc = context.read<CheckoutBloc>();
+    final cartBloc = context.read<CartBloc>();
+    final cart = cartBloc.state.cart;
 
-      // Update delivery info with phone number
-      checkoutBloc.add(UpdateDeliveryInfoEvent(
-        address: "${widget.deliveryAddress}\n${widget.deliveryDetails}",
-        phoneNumber: _phoneController.text,
-      ));
+    // Update delivery info
+    checkoutBloc.add(UpdateDeliveryInfoEvent(
+      address: "${widget.deliveryAddress}\n${widget.deliveryDetails}",
+      phoneNumber: _phoneController.text,
+    ));
 
-      // Update payment method
-      checkoutBloc.add(UpdatePaymentMethodEvent(
-        paymentMethod: _selectedPaymentMethod.toString().split('.').last,
-      ));
+    // Update payment method
+    checkoutBloc.add(UpdatePaymentMethodEvent(
+      paymentMethod: _selectedPaymentMethod.toString().split('.').last,
+    ));
 
-      // Place order
-      checkoutBloc.add(PlaceOrderEvent(
-        cart: cart,
-        deliveryTime: widget.deliveryTime,
-        specialInstructions: widget.specialInstructions,
-        paymentMethod: _selectedPaymentMethod.toString().split('.').last,
-      ));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
+    // Place the order
+    checkoutBloc.add(PlaceOrderEvent(
+      cart: cart,
+      deliveryTime: widget.deliveryTime,
+      specialInstructions: widget.specialInstructions,
+      paymentMethod: _selectedPaymentMethod.toString().split('.').last,
+    ));
   }
-}
-
-enum PaymentMethod {
-  mpesa,
-  cashOnDelivery,
-  creditCard,
 }

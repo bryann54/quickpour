@@ -98,7 +98,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           ],
                         ).createShader(bounds),
                         child: Text(
-                          'QuickPour',
+                          'Alko Hut',
                           style: GoogleFonts.acme(
                             fontSize: 25,
                             fontWeight: FontWeight.w800,
