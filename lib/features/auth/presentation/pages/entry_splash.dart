@@ -3,6 +3,7 @@ import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/wrapper/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gradient_borders/gradient_borders.dart';
 
 class EntrySplashScreen extends StatefulWidget {
   const EntrySplashScreen({super.key});
@@ -57,7 +58,7 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
     // Navigate to home screen after animation completes
     Future.delayed(const Duration(seconds: 4), () {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => Wrapper()),
+        MaterialPageRoute(builder: (_) => const Wrapper()),
       );
     });
   }
@@ -81,24 +82,22 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                 opacity: _backgroundFadeAnimation.value,
                 child: Container(
                   decoration: BoxDecoration(
+                      color: Colors.blueGrey.withOpacity(.3),
                       gradient: LinearGradient(
                     colors: [
-                      AppColors.primaryColor,
-                      AppColors.primaryColor,
+                          AppColors.primaryColor.withOpacity(.9),
+                          AppColors.primaryColor.withOpacity(.9),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   )),
                 ),
               ),
-              // Animated pattern overlay
+              // Animated pattern overlayR
               Opacity(
                 opacity: _backgroundFadeAnimation.value * 0.1,
                 child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    backgroundBlendMode: BlendMode.softLight,
-                  ),
+                
                 ),
               ),
               // Center logo with scale and fade animations
@@ -113,8 +112,22 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                         child: Container(
                           width: 200,
                           height: 150,
-                          decoration: const BoxDecoration(
-                            boxShadow: [
+                          decoration: BoxDecoration(
+                            border: const GradientBoxBorder(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.blue,
+                                  Colors.purple,
+                                  Colors.red,
+                                  Colors.orange,
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              width: 2, // Border width
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: const [
                               BoxShadow(
                                 color: AppColors.shadowColor,
                                 blurRadius: 20,
@@ -122,36 +135,39 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                               ),
                             ],
                           ),
-                          child: Image.asset(
-                            'assets/111.png',
-                            fit: BoxFit.contain,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.asset(
+                              'assets/11.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                      ),
+),
+
+                    // // App name with fade animation
+                    Opacity(
+                      opacity: _fadeAnimation.value,
+                      child: Text(
+                        'Alko Hut',
+                        style: GoogleFonts.chewy(
+                          textStyle: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 4,
+                            shadows: [
+                              Shadow(
+                                color: AppColors.shadowColor,
+                                blurRadius: 10,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
-
-                    // // App name with fade animation
-                    // Opacity(
-                    //   opacity: _fadeAnimation.value,
-                    //   child: Text(
-                    //     'Alko Hut',
-                    //     style: GoogleFonts.chewy(
-                    //       textStyle: const TextStyle(
-                    //         color: Colors.white,
-                    //         fontSize: 32,
-                    //         fontWeight: FontWeight.bold,
-                    //         letterSpacing: 4,
-                    //         shadows: [
-                    //           Shadow(
-                    //             color: AppColors.shadowColor,
-                    //             blurRadius: 10,
-                    //             offset: Offset(0, 2),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     const SizedBox(height: 10),
                     // Tagline with fade animation
                     Opacity(

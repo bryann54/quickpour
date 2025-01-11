@@ -36,6 +36,7 @@ dependencies:
   google_fonts: ^6.2.1
   go_router: ^14.6.2
   font_awesome_flutter: ^10.8.0
+  gradient_borders: ^1.0.0
   flutter_dotenv: ^5.2.1
   firebase_auth: ^5.3.4
   cloud_firestore: ^5.5.1

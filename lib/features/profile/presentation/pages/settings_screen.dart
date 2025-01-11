@@ -50,32 +50,32 @@ class SettingsScreen extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(height: 20),
+              // const SizedBox(height: 20),
 
-              // Account Settings
-              _buildSettingsSection(
-                context,
-                title: 'Account',
-                children: [
-                  _buildSettingsItem(
-                    context,
-                    icon: Icons.person_outline,
-                    title: 'Edit Profile',
-                    onTap: () {
-                      // TODO: Navigate to edit profile screen
-                    },
-                  ),
-                  _buildDivider(),
-                  _buildSettingsItem(
-                    context,
-                    icon: Icons.lock_outline,
-                    title: 'Change Password',
-                    onTap: () {
-                      // TODO: Navigate to change password screen
-                    },
-                  ),
-                ],
-              ),
+              // // Account Settings
+              // _buildSettingsSection(
+              //   context,
+              //   title: 'Account',
+              //   children: [
+              //     _buildSettingsItem(
+              //       context,
+              //       icon: Icons.person_outline,
+              //       title: 'Edit Profile',
+              //       onTap: () {
+              //         // TODO: Navigate to edit profile screen
+              //       },
+              //     ),
+              //     _buildDivider(),
+              //     _buildSettingsItem(
+              //       context,
+              //       icon: Icons.lock_outline,
+              //       title: 'Change Password',
+              //       onTap: () {
+              //         // TODO: Navigate to change password screen
+              //       },
+              //     ),
+              //   ],
+              // ),
 
               const SizedBox(height: 20),
 
@@ -119,16 +119,7 @@ class SettingsScreen extends StatelessWidget {
                       // TODO: Navigate to privacy policy
                     },
                   ),
-                  _buildDivider(),
-                  _buildSettingsItem(
-                    context,
-                    icon: Icons.logout,
-                    title: 'Logout',
-                    onTap: () {
-                      // TODO: Implement logout functionality
-                    },
-                    color: Colors.red,
-                  ),
+                
                 ],
               ),
             ],

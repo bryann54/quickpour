@@ -3,6 +3,7 @@ import 'package:chupachap/core/utils/strings.dart';
 import 'package:chupachap/features/auth/presentation/widgets/getstarted_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -84,8 +85,8 @@ class _SplashScreenState extends State<SplashScreen>
             decoration: BoxDecoration(
                 gradient: LinearGradient(
               colors: [
-                AppColors.primaryColorDark,
-                AppColors.secondaryColorDark.withOpacity(0.7),
+                AppColors.primaryColor,
+                AppColors.primaryColor,
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -108,8 +109,23 @@ class _SplashScreenState extends State<SplashScreen>
                       child: Container(
                         height: 250,
                         width: 250,
-                        decoration: const BoxDecoration(
-                          boxShadow: [
+                        decoration: BoxDecoration(
+                          color: Colors.blueGrey.withOpacity(.3),
+                          border: GradientBoxBorder(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.blue,
+                                Colors.purple,
+                                Colors.red,
+                                Colors.orange,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            width: 2, // Border width
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: const [
                             BoxShadow(
                               color: AppColors.shadowColor,
                               blurRadius: 20,
@@ -117,13 +133,16 @@ class _SplashScreenState extends State<SplashScreen>
                             ),
                           ],
                         ),
-                        child: Image.asset(
-                          'assets/111.png',
-                          fit: BoxFit.contain,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.asset(
+                            'assets/11.png',
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                     ),
-                  ),
+),
 
                   const SizedBox(height: 40),
 
@@ -139,7 +158,7 @@ class _SplashScreenState extends State<SplashScreen>
                             fontSize: 35,
                             fontWeight: FontWeight.w800,
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 12),
                           _buildAnimatedText(
                             splash2,
                             fontSize: 25,

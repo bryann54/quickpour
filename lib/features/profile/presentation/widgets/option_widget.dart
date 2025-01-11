@@ -1,5 +1,6 @@
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_state.dart';
+import 'package:chupachap/features/orders/presentation/bloc/orders_bloc.dart';
 import 'package:chupachap/features/profile/presentation/widgets/stattic_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,11 +21,25 @@ class ProfileStatisticsSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildStatisticWithDivider(
-              const ProfileStatisticItem(
-                icon: Icons.shopping_cart_outlined,
-                label: "Orders",
-                count: "0",
+            BlocBuilder<OrdersBloc, OrdersState>(
+                builder: (context, state) {
+                  int orderCount = 0; 
+
+                  if (state is OrdersLoaded) {
+                    orderCount =
+                        state.orders.length; 
+                  } else if (state is OrdersEmpty) {
+                    orderCount = 0; 
+                  }
+
+                  return ProfileStatisticItem(
+                    icon: Icons.shopping_cart_outlined,
+                    label: "Orders",
+                    count: orderCount.toString(),
+                  );
+                },
               ),
+
             ),
             _buildStatisticWithDivider(
               BlocBuilder<FavoritesBloc, FavoritesState>(
@@ -38,8 +53,8 @@ class ProfileStatisticsSection extends StatelessWidget {
               ),
             ),
             const ProfileStatisticItem(
-              icon: Icons.star_rounded,
-              label: "Reviews",
+              icon: Icons.request_quote_sharp,
+              label: "Requests",
               count: "0",
             ),
           ],

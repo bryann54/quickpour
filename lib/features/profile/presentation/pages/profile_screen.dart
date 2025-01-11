@@ -1,9 +1,9 @@
+import 'package:chupachap/features/profile/presentation/widgets/change_password.dart';
 import 'package:chupachap/features/profile/presentation/widgets/edit_profile_dialog.dart';
 import 'package:chupachap/features/profile/presentation/widgets/option_widget.dart';
 import 'package:chupachap/features/profile/presentation/widgets/profile_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
@@ -197,21 +197,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _buildDivider(),
           _buildProfileOptionItem(
             context,
-            icon: Icons.settings,
-            title: 'Account Settings',
+            icon: Icons.lock,
+            title: 'change Password',
             onTap: () {
-              context.push('/settings');
+             showDialog(
+                context: context,
+                builder: (context) => const ChangePassword(),
+              ).then((success) {
+                if (success == true) {
+                  // Handle successful password change
+                }
+              });
             },
           ),
-          _buildDivider(),
-          _buildProfileOptionItem(
-            context,
-            icon: Icons.help_outline,
-            title: 'Help & Support',
-            onTap: () {
-              // TODO: Implement help & support navigation
-            },
-          ),
+          // _buildDivider(),
+          // _buildProfileOptionItem(
+          //   context,
+          //   icon: Icons.help_outline,
+          //   title: 'Help & Support',
+          //   onTap: () {
+          //     // TODO: Implement help & support navigation
+          //   },
+          // ),
         ],
       ),
     );
