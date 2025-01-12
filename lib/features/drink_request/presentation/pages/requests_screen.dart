@@ -1,4 +1,5 @@
 // screens/requests_screen.dart
+import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/drink_request/presentation/bloc/drink_request_bloc.dart';
 import 'package:chupachap/features/drink_request/presentation/bloc/drink_request_event.dart';
 import 'package:chupachap/features/drink_request/presentation/bloc/drink_request_state.dart';
@@ -13,7 +14,9 @@ class RequestsScreen extends StatelessWidget {
     context.read<DrinkRequestBloc>().add(FetchDrinkRequests());
 
     return Scaffold(
-      appBar: AppBar(title: Text('Drink Requests')),
+      appBar: CustomAppBar(
+        showProfile: false,
+      ),
       body: BlocBuilder<DrinkRequestBloc, DrinkRequestState>(
         builder: (context, state) {
           if (state is DrinkRequestLoading) {

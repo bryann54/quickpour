@@ -1,54 +1,136 @@
-// widgets/drink_request_list_tile.dart
+// drink_request_list_tile.dart
 import 'package:chupachap/features/drink_request/data/models/drink_request.dart';
+import 'package:chupachap/features/drink_request/presentation/pages/offers_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DrinkRequestListTile extends StatelessWidget {
   final DrinkRequest request;
 
-  DrinkRequestListTile({required this.request});
+  const DrinkRequestListTile({
+    super.key,
+    required this.request,
+  });
+
+  void _navigateToOffers(BuildContext context) {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => OffersScreen(
+          request: request,
+        ),
+        transitionDuration: const Duration(milliseconds: 600),
+        reverseTransitionDuration: const Duration(milliseconds: 600),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Format timestamp for better readability
-    final formattedTime =
-        DateFormat('yyyy-MM-dd – hh:mm a').format(request.timestamp);
-
+    final theme = Theme.of(context);
+    
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: ListTile(
-        contentPadding: EdgeInsets.all(16),
-        leading: Icon(Icons.local_drink, color: Theme.of(context).primaryColor),
-        title: Text(
-          request.drinkName,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: InkWell(
+        onTap: () => _navigateToOffers(context),
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              left: BorderSide(
+                color: theme.colorScheme.primary,
+                width: 4,
+              ),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Hero(
+                      tag: 'drink_icon_${request.id}',
+                      child: Icon(
+                        Icons.local_drink_rounded,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Hero(
+                        tag: 'drink_name_${request.id}',
+                        child: Material(
+                          color: Colors.transparent,
+                          child: Text(
+                            request.drinkName,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Hero(
+                      tag: 'quantity_${request.id}',
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Text(
+                          'x${request.quantity}',
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            color: theme.colorScheme.onPrimaryContainer,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Hero(
+                      tag: 'timestamp_${request.id}',
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.schedule,
+                            size: 16,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            DateFormat('MMM d, h:mm a')
+                                .format(request.timestamp.toLocal()),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.more_vert),
+                      onPressed: () {},
+                      style: IconButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(24, 24),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Quantity: ${request.quantity}',
-              style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-            ),
-            SizedBox(height: 4),
-            Text(
-              'Requested on: $formattedTime',
-              style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-            ),
-          ],
-        ),
-        trailing: Icon(
-          Icons.arrow_forward_ios,
-          color: Colors.grey[500],
-        ),
-        onTap: () {
-          // Action when tapped (could be viewing details)
-        },
       ),
     );
   }

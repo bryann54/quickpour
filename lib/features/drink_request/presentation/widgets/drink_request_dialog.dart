@@ -1,4 +1,4 @@
-// widgets/drink_request_dialog.dart
+import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/drink_request/data/models/drink_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,36 +7,100 @@ import 'package:chupachap/features/drink_request/presentation/bloc/drink_request
 import 'package:intl/intl.dart';
 
 class DrinkRequestDialog extends StatefulWidget {
+  const DrinkRequestDialog({super.key});
+
   @override
-  _DrinkRequestDialogState createState() => _DrinkRequestDialogState();
+  State<DrinkRequestDialog> createState() => _DrinkRequestDialogState();
 }
 
 class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
-  final TextEditingController _drinkNameController = TextEditingController();
-  final TextEditingController _quantityController = TextEditingController();
-  final TextEditingController _instructionsController = TextEditingController();
-  DateTime? _preferredTime;
+  final _formKey = GlobalKey<FormState>();
+  final _drinkNameController = TextEditingController();
+  final _quantityController = TextEditingController();
+  final _instructionsController = TextEditingController();
+  DateTime? _selectedDateTime;
+
+  @override
+  void dispose() {
+    _drinkNameController.dispose();
+    _quantityController.dispose();
+    _instructionsController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _selectDateTime(BuildContext context) async {
+    final DateTime? date = await showDatePicker(
+      context: context,
+      initialDate: _selectedDateTime ?? DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 14)),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.brandPrimary,
+              onPrimary: Colors.white,
+              surface: AppColors.surface,
+              onSurface: AppColors.textPrimary,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (date != null) {
+      final TimeOfDay? time = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: AppColors.brandPrimary,
+                onPrimary: Colors.white,
+                surface: AppColors.surface,
+                onSurface: AppColors.textPrimary,
+              ),
+            ),
+            child: child!,
+          );
+        },
+      );
+
+      if (time != null) {
+        setState(() {
+          _selectedDateTime = DateTime(
+            date.year,
+            date.month,
+            date.day,
+            time.hour,
+            time.minute,
+          );
+        });
+      }
+    }
+  }
 
   void _submitRequest(BuildContext context) {
-    final String drinkName = _drinkNameController.text;
-    final int quantity = int.tryParse(_quantityController.text) ?? 0;
-    final String instructions = _instructionsController.text;
-
-    if (drinkName.isEmpty || quantity <= 0 || _preferredTime == null) {
+    if (!_formKey.currentState!.validate() || _selectedDateTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill in all fields correctly')),
+        const SnackBar(
+          content: Text('Please fill all required fields'),
+          backgroundColor: AppColors.error,
+        ),
       );
       return;
     }
 
     final drinkRequest = DrinkRequest(
       id: DateTime.now().toIso8601String(),
-      drinkName: drinkName,
-      quantity: quantity,
+      drinkName: _drinkNameController.text.trim(),
+      quantity: int.parse(_quantityController.text),
       timestamp: DateTime.now(),
-      merchantId: '', // Merchant field is removed, empty string for now
-      additionalInstructions: instructions,
-      preferredTime: _preferredTime!,
+      merchantId: '',
+      additionalInstructions: _instructionsController.text.trim(),
+      preferredTime: _selectedDateTime!,
     );
 
     context.read<DrinkRequestBloc>().add(AddDrinkRequest(drinkRequest));
@@ -45,67 +109,160 @@ class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Make a Drink Request'),
-      content: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: _drinkNameController,
-              decoration: InputDecoration(labelText: 'Drink Name'),
-            ),
-            TextField(
-              controller: _quantityController,
-              decoration: InputDecoration(labelText: 'Quantity'),
-              keyboardType: TextInputType.number,
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _instructionsController,
-              decoration: InputDecoration(labelText: 'Additional Instructions'),
-              maxLines: 3,
-            ),
-            SizedBox(height: 16),
-            GestureDetector(
-              onTap: () async {
-                final DateTime? picked = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2020),
-                  lastDate: DateTime(2101),
-                );
-                if (picked != null && picked != _preferredTime)
-                  setState(() {
-                    _preferredTime = picked;
-                  });
-              },
-              child: InputDecorator(
-                decoration:
-                    InputDecoration(labelText: 'Preferred Delivery Time'),
-                child: Text(
-                  _preferredTime == null
-                      ? 'Select Date'
-                      : DateFormat('yyyy-MM-dd').format(_preferredTime!),
+    return Dialog(
+      elevation: 0,
+      backgroundColor: AppColors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 400),
+        padding: const EdgeInsets.all(24),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'New Drink Request',
+                style: TextStyle(
+                  color: AppColors.textPrimary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 24),
+              TextFormField(
+                controller: _drinkNameController,
+                decoration: InputDecoration(
+                  hintText: 'Drink name',
+                  filled: true,
+                  fillColor: AppColors.background,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
+                ),
+                validator: (value) =>
+                    value?.isEmpty ?? true ? 'Required' : null,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _quantityController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: 'Quantity',
+                  filled: true,
+                  fillColor: AppColors.background,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
+                ),
+                validator: (value) {
+                  if (value?.isEmpty ?? true) return 'Required';
+                  if (int.tryParse(value!) == null || int.parse(value) <= 0) {
+                    return 'Invalid quantity';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _instructionsController,
+                maxLines: 2,
+                decoration: InputDecoration(
+                  hintText: 'Additional instructions (optional)',
+                  filled: true,
+                  fillColor: AppColors.background,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              InkWell(
+                onTap: () => _selectDateTime(context),
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.background,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.access_time,
+                        color: AppColors.textSecondary,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          _selectedDateTime == null
+                              ? 'Select delivery time'
+                              : DateFormat('MMM d, y • h:mm a')
+                                  .format(_selectedDateTime!),
+                          style: TextStyle(
+                            color: _selectedDateTime == null
+                                ? AppColors.textSecondary
+                                : AppColors.textPrimary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.textSecondary,
+                    ),
+                    child: const Text('Cancel'),
+                  ),
+                  const SizedBox(width: 12),
+                  ElevatedButton(
+                    onPressed: () => _submitRequest(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.brandPrimary,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text('Submit'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text('Cancel'),
-        ),
-        ElevatedButton(
-          onPressed: () => _submitRequest(context),
-          child: Text('Submit Request'),
-        ),
-      ],
     );
   }
 }
