@@ -61,9 +61,10 @@ class RequestsScreen extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text('Make request'),
         onPressed: () => _showRequestDialog(context),
-        child: Icon(Icons.add),
+        icon: Icon(Icons.add),
         tooltip: 'Add Drink Request',
       ),
     );

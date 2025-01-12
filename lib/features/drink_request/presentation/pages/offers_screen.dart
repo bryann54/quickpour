@@ -239,7 +239,10 @@ class OffersScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  // Add your offers list here
+                 Align(
+                  alignment: Alignment.center,
+                  child: Text('No offers yet')
+                 )
                 ],
               ),
             ),
