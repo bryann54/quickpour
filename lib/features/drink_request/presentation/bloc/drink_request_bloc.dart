@@ -4,7 +4,6 @@ import 'package:chupachap/features/drink_request/presentation/bloc/drink_request
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'drink_request_event.dart';
-
 class DrinkRequestBloc extends Bloc<DrinkRequestEvent, DrinkRequestState> {
   final DrinkRequestRepository repository;
 
@@ -24,6 +23,16 @@ class DrinkRequestBloc extends Bloc<DrinkRequestEvent, DrinkRequestState> {
         emit(DrinkRequestLoading());
         final requests = await repository.fetchDrinkRequests();
         emit(DrinkRequestSuccess(requests));
+      } catch (e) {
+        emit(DrinkRequestFailure(e.toString()));
+      }
+    });
+
+    on<DeleteDrinkRequest>((event, emit) async {
+      try {
+        emit(DrinkRequestLoading());
+        await repository.deleteDrinkRequest(event.id);
+        add(FetchDrinkRequests());
       } catch (e) {
         emit(DrinkRequestFailure(e.toString()));
       }

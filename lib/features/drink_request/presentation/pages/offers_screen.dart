@@ -1,7 +1,10 @@
-// offers_screen.dart
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:chupachap/features/drink_request/data/models/drink_request.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:chupachap/features/drink_request/presentation/bloc/drink_request_bloc.dart';
+import 'package:chupachap/features/drink_request/presentation/bloc/drink_request_event.dart';
 
 class OffersScreen extends StatelessWidget {
   final DrinkRequest request;
@@ -10,6 +13,92 @@ class OffersScreen extends StatelessWidget {
     super.key,
     required this.request,
   });
+
+  Future<bool> _showDeleteConfirmation(BuildContext context) async {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      return await showCupertinoDialog<bool>(
+            context: context,
+            builder: (BuildContext context) => CupertinoAlertDialog(
+              title: const Text('Delete Request?'),
+              content: Text(
+                'Are you sure you want to delete the request for ${request.quantity}x ${request.drinkName}? Any pending offers will be cancelled.',
+              ),
+              actions: <Widget>[
+                CupertinoDialogAction(
+                  isDestructiveAction: true,
+                  onPressed: () => Navigator.pop(context, true),
+                  child: const Text('Delete'),
+                ),
+                CupertinoDialogAction(
+                  isDefaultAction: true,
+                  onPressed: () => Navigator.pop(context, false),
+                  child: const Text('Cancel'),
+                ),
+              ],
+            ),
+          ) ??
+          false;
+    }
+
+    return await showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Delete Request?'),
+            content: Text(
+              'Are you sure you want to delete the request for ${request.quantity}x ${request.drinkName}? Any pending offers will be cancelled.',
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                style: TextButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.error,
+                ),
+                child: const Text('Delete'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
+  void _handleDelete(BuildContext context) async {
+    final shouldDelete = await _showDeleteConfirmation(context);
+
+    if (shouldDelete && context.mounted) {
+      context.read<DrinkRequestBloc>().add(DeleteDrinkRequest(request.id));
+
+      // Show success snackbar with undo option
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${request.drinkName} request deleted'),
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.fromLTRB(16, 8, 16, 80), // Account for FAB
+            duration: const Duration(seconds: 4),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            action: SnackBarAction(
+              label: 'Undo',
+              onPressed: () {
+                context.read<DrinkRequestBloc>().add(AddDrinkRequest(request));
+              },
+            ),
+          ),
+        );
+      }
+
+      // Pop back with fade transition
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +111,35 @@ class OffersScreen extends StatelessWidget {
             expandedHeight: 200,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      theme.colorScheme.secondaryContainer,
-                      theme.colorScheme.primaryContainer,
-                    ],
+              background: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          theme.colorScheme.secondaryContainer,
+                          theme.colorScheme.primaryContainer,
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                  // Add a subtle overlay for better text readability
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.3),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
               title: Hero(
                 tag: 'drink_name_${request.id}',
@@ -61,16 +168,20 @@ class OffersScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Hero(
                                 tag: 'drink_icon_${request.id}',
-                                child: Icon(
-                                  Icons.local_drink_rounded,
-                                  color: theme.colorScheme.primary,
-                                  size: 32,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: Image.asset(
+                                    'assets/111.png',
+                                    width: 150,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                              const SizedBox(width: 16),
                               Hero(
                                 tag: 'quantity_${request.id}',
                                 child: Container(
@@ -134,6 +245,41 @@ class OffersScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0.0, end: 1.0),
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOutBack,
+          builder: (context, value, child) => Transform.scale(
+            scale: value,
+            child: child,
+          ),
+          child: FloatingActionButton.extended(
+            onPressed: () => _handleDelete(context),
+            elevation: 4,
+            backgroundColor: theme.colorScheme.errorContainer,
+            isExtended: true,
+            icon: ShaderMask(
+              shaderCallback: (bounds) => LinearGradient(
+                colors: [
+                  theme.colorScheme.error,
+                  theme.colorScheme.onErrorContainer,
+                ],
+              ).createShader(bounds),
+              child: const Icon(Icons.delete_outline),
+            ),
+            label: Text(
+              'Delete Request',
+              style: TextStyle(
+                color: theme.colorScheme.onErrorContainer,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

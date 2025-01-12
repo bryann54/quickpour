@@ -27,7 +27,7 @@ class DrinkRequestListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: InkWell(
@@ -51,9 +51,14 @@ class DrinkRequestListTile extends StatelessWidget {
                   children: [
                     Hero(
                       tag: 'drink_icon_${request.id}',
-                      child: Icon(
-                        Icons.local_drink_rounded,
-                        color: theme.colorScheme.primary,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.asset(
+                          'assets/111.png',
+                          width: 60,
+                          height: 40,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),

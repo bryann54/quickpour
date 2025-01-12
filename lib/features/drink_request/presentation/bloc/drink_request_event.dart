@@ -1,4 +1,3 @@
-// blocs/drink_request/drink_request_event.dart
 import 'package:chupachap/features/drink_request/data/models/drink_request.dart';
 
 abstract class DrinkRequestEvent {}
@@ -10,3 +9,7 @@ class AddDrinkRequest extends DrinkRequestEvent {
 
 class FetchDrinkRequests extends DrinkRequestEvent {}
 
+class DeleteDrinkRequest extends DrinkRequestEvent {
+  final String id;
+  DeleteDrinkRequest(this.id);
+}
