@@ -152,7 +152,7 @@ class ProductRepository {
         brand: brand.firstWhere((m) => m.id == '15'),
         productName: 'White Cap Lager',
         imageUrls: [
-          'https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/47/7243/1.jpg',
+          'https://greenspoon.co.ke/wp-content/uploads/2023/02/Greenspoon-Kenya-White-Cap-Can.jpg',
         ],
         price: 180.00,
         description: 'A crisp and refreshing Kenyan lager beer.',
@@ -165,7 +165,7 @@ class ProductRepository {
         brand: brand.firstWhere((m) => m.id == '16'),
         productName: 'Kenya Cane',
         imageUrls: [
-          'https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/83/2549/1.jpg',
+          'https://www.havenwines.co.ke/wp-content/uploads/2021/08/kenya-cane-pineapple-750ml.jpg',
         ],
         price: 500.00,
         description: 'Traditional Kenyan sugar cane spirit.',
@@ -178,7 +178,7 @@ class ProductRepository {
         brand: brand.firstWhere((m) => m.id == '17'),
         productName: 'Senator Keg',
         imageUrls: [
-          'https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/64/3247/1.jpg',
+         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQWBkpcSYKL59O6NW4AzsBe-xPWrC1ptBKHw&s',
         ],
         price: 100.00,
         description: 'Affordable local beer popular in Kenya.',
@@ -191,7 +191,7 @@ class ProductRepository {
         brand: brand.firstWhere((m) => m.id == '18'),
         productName: 'Rare Spirits Apple Liqueur',
         imageUrls: [
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyLZzDqIoXRlZqU_P5-sZHDL5W3RzD0Lk5Tg&s',
+          'https://qualityliquorstore.com/cdn/shop/files/lairds-apple-brandy.jpg?v=1707343523&width=1000',
         ],
         price: 600.00,
         description: 'Sweet apple-flavored liqueur from Rare Spirits.',

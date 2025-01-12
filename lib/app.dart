@@ -13,6 +13,8 @@ import 'package:chupachap/features/categories/domain/usecases/fetch_categories.d
 import 'package:chupachap/features/categories/presentation/bloc/categories_bloc.dart';
 import 'package:chupachap/features/categories/presentation/bloc/categories_event.dart';
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
+import 'package:chupachap/features/drink_request/data/repositories/drink_request_repository.dart';
+import 'package:chupachap/features/drink_request/presentation/bloc/drink_request_bloc.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:chupachap/features/merchant/data/repositories/merchants_repository.dart';
 import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
@@ -40,19 +42,30 @@ class App extends StatelessWidget {
         Provider<FirebaseFirestore>(
           create: (_) => FirebaseFirestore.instance,
         ),
-        BlocProvider(
-          create: (context) => AuthBloc(
-            authUseCases: AuthUseCases(
-              authRepository: AuthRepository(),
-            ),
-          ),
-        ),
         Provider<NotificationsRepository>(
           create: (_) => NotificationsRepository(),
         ),
+      Provider<DrinkRequestRepository>(
+          create: (context) => DrinkRequestRepository(
+            firestore: context.read<FirebaseFirestore>(),
+          ),
+        ),
+
       ],
       child: MultiBlocProvider(
         providers: [
+          BlocProvider(
+            create: (context) => AuthBloc(
+              authUseCases: AuthUseCases(
+                authRepository: AuthRepository(),
+              ),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => DrinkRequestBloc(
+              context.read<DrinkRequestRepository>(),
+            ),
+          ),
           BlocProvider(
             create: (context) => NotificationsBloc(
               context.read<NotificationsRepository>(),
@@ -72,16 +85,15 @@ class App extends StatelessWidget {
             create: (context) {
               final checkoutBloc = CheckoutBloc(
                 firestore: context.read<FirebaseFirestore>(),
-                authUseCases:
-                    context.read<AuthBloc>().authUseCases, // Add AuthUseCases
+                authUseCases: context.read<AuthBloc>().authUseCases,
               );
 
-              // Listen to CheckoutBloc to clear cart when order is placed
+              // Clear cart when order is placed
               checkoutBloc.stream.listen((state) {
                 if (state is CheckoutOrderPlacedState) {
                   context.read<CartBloc>().add(ClearCartEvent());
                 } else if (state is CheckoutErrorState) {
-                  // Optionally handle error states
+                  // Handle errors
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(state.errorMessage),
@@ -97,8 +109,9 @@ class App extends StatelessWidget {
           BlocProvider(
             create: (context) => OrdersBloc(
               checkoutBloc: context.read<CheckoutBloc>(),
-              ordersRepository:
-                  OrdersRepository(context.read<FirebaseFirestore>()),
+              ordersRepository: OrdersRepository(
+                context.read<FirebaseFirestore>(),
+              ),
             ),
           ),
           BlocProvider(
@@ -106,10 +119,9 @@ class App extends StatelessWidget {
               ..add(FetchBrandsEvent()),
           ),
           BlocProvider(
-            create: (context) => CategoriesBloc(FetchCategories(
-              CategoryRepository(),
-            ))
-              ..add(LoadCategories()),
+            create: (context) => CategoriesBloc(
+              FetchCategories(CategoryRepository()),
+            )..add(LoadCategories()),
           ),
           BlocProvider(create: (_) => FavoritesBloc()),
           BlocProvider(
