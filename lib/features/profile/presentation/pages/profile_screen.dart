@@ -200,7 +200,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             icon: Icons.lock,
             title: 'change Password',
             onTap: () {
-             showDialog(
+              showDialog(
                 context: context,
                 builder: (context) => const ChangePassword(),
               ).then((success) {

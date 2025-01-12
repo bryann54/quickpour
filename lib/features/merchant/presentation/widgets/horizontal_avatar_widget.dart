@@ -90,7 +90,7 @@ class MerchantCardAvatar extends StatelessWidget {
             right: 4,
             child: Container(
               padding: const EdgeInsets.all(2),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
                 boxShadow: [
@@ -100,7 +100,7 @@ class MerchantCardAvatar extends StatelessWidget {
                   ),
                 ],
               ),
-              child: FaIcon(
+              child: const FaIcon(
                 Icons.verified,
                 size: 14,
                 color: AppColors.accentColor,

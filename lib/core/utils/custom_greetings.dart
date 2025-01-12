@@ -9,7 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 class CustomGreeting extends StatefulWidget {
   final AuthUseCases authUseCases;
 
-  CustomGreeting({
+  const CustomGreeting({
     Key? key,
     required this.authUseCases,
   }) : super(key: key);

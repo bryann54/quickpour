@@ -391,9 +391,9 @@ class _ProductCardState extends State<ProductCard>
                                                     quantity: 1));
                                           });
                                         },
-                                        child: FittedBox(
+                                        child: const FittedBox(
                                           fit: BoxFit.scaleDown,
-                                          child: const Text(
+                                          child: Text(
                                             'Add to Cart',
                                             style:
                                                 TextStyle(color: Colors.white),

@@ -107,6 +107,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         userEmail: userDetails.email,
         userName: '${userDetails.firstName} ${userDetails.lastName}',
         userId: userId,
+        status: state.specialInstructions.toString(),
       ));
     } catch (e) {
       emit(CheckoutErrorState(

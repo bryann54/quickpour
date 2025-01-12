@@ -44,36 +44,36 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Delivery Address Section
-       Card(
-  child: Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: const [
-            Icon(Icons.location_on),
-            SizedBox(width: 8),
-            Text(
-              'Delivery Address',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.location_on),
+                        SizedBox(width: 8),
+                        Text(
+                          'Delivery Address',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(widget.address),
+                    if (widget.addressDetails.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(widget.addressDetails),
+                    ],
+                  ],
+                ),
               ),
             ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Text(widget.address),
-        if (widget.addressDetails.isNotEmpty) ...[
-          const SizedBox(height: 4),
-          Text(widget.addressDetails),
-        ],
-      ],
-    ),
-  ),
-),
-const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // Delivery Time Section
             Text(
@@ -108,8 +108,8 @@ const SizedBox(height: 24),
               maxLines: 3,
               decoration: InputDecoration(
                 hintText: 'leave at the door...',
-                 hintStyle:const TextStyle(
-                  color: Colors.grey, 
+                hintStyle: const TextStyle(
+                  color: Colors.grey,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -160,7 +160,7 @@ const SizedBox(height: 24),
                           ));
 
                       // Navigate to payment screen with full details
-                   Navigator.push(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => PaymentsScreen(
@@ -174,8 +174,7 @@ const SizedBox(height: 24),
                         ),
                       );
 
-                        (Route<dynamic> route) =>
-                          false;
+                      (Route<dynamic> route) => false;
                     }
                   : null,
               style: ElevatedButton.styleFrom(

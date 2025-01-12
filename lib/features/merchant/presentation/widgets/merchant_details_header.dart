@@ -102,8 +102,8 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
                     ),
                   ),
                   if (widget.merchant.isVerified)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 6.0),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 6.0),
                       child: Icon(
                         Icons.verified,
                         color: AppColors.accentColor,

@@ -29,7 +29,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       onWillPop: () async {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => BottomNav()),
+          MaterialPageRoute(builder: (context) => const BottomNav()),
           (route) => false, // Removes all previous routes from the stack
         );
         return false; // Prevent the default back navigation

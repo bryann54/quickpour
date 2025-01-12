@@ -33,6 +33,7 @@ class FilterProductsEvent extends ProductSearchEvent {
         category ?? '', // Provide a default empty string for null
         store ?? '', // Provide a default empty string for null
         priceRange ??
-            RangeValues(0, 10000), // Provide a default RangeValues for null
+            const RangeValues(
+                0, 10000), // Provide a default RangeValues for null
       ];
 }

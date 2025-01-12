@@ -20,8 +20,8 @@ class DrinkRequestScreen extends StatelessWidget {
               ),
             ),
           ),
-          Text('Item 2'),
-          Text('Item 3'),
+          const Text('Item 2'),
+          const Text('Item 3'),
         ],
       ),
     );

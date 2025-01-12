@@ -150,7 +150,7 @@ class MerchantsDetailsSection extends StatelessWidget {
                           RichText(
                             text: TextSpan(
                               text: 'Store is now ',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 16), // Style for the base text
                               children: [
@@ -187,7 +187,7 @@ class MerchantsDetailsSection extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(3),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
             gradient: LinearGradient(
               colors: [

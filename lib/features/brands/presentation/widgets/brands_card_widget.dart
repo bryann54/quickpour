@@ -87,7 +87,7 @@ class BrandCardWidget extends StatelessWidget {
             bottom: 0,
             right: 0,
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white,
                 boxShadow: [
@@ -97,7 +97,7 @@ class BrandCardWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.verified,
                 color: Colors.green,
                 size: 20,
@@ -175,7 +175,7 @@ class BrandCardWidget extends StatelessWidget {
         color: AppColors.accentColor.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Icon(
+      child: const Icon(
         Icons.chevron_right,
         color: AppColors.accentColor,
         size: 24,

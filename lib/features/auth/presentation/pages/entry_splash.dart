@@ -84,21 +84,19 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                   decoration: BoxDecoration(
                       color: Colors.blueGrey.withOpacity(.3),
                       gradient: LinearGradient(
-                    colors: [
+                        colors: [
                           AppColors.primaryColor.withOpacity(.9),
                           AppColors.primaryColor.withOpacity(.9),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  )),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )),
                 ),
               ),
               // Animated pattern overlayR
               Opacity(
                 opacity: _backgroundFadeAnimation.value * 0.1,
-                child: Container(
-                
-                ),
+                child: Container(),
               ),
               // Center logo with scale and fade animations
               Center(
@@ -144,7 +142,7 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                           ),
                         ),
                       ),
-),
+                    ),
 
                     // // App name with fade animation
                     Opacity(

@@ -196,7 +196,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: AppColors.accentColor,
           ),
         ),

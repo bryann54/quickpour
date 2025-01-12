@@ -119,7 +119,6 @@ class SettingsScreen extends StatelessWidget {
                       // TODO: Navigate to privacy policy
                     },
                   ),
-                
                 ],
               ),
             ],

@@ -5,14 +5,32 @@ import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
 import 'package:chupachap/features/orders/presentation/pages/order_details.dart';
 
+enum OrderStatus { received, processing, dispatched, delivered, completed }
+
 class OrderItemWidget extends StatelessWidget {
   final CompletedOrder order;
   const OrderItemWidget({super.key, required this.order});
 
+  Color _getStatusColor(OrderStatus status) {
+    switch (status) {
+      case OrderStatus.received:
+        return const Color(0xFFF39C12);
+      case OrderStatus.processing:
+        return const Color(0xFF3498DB);
+      case OrderStatus.dispatched:
+        return const Color(0xFF9B59B6);
+      case OrderStatus.delivered:
+        return const Color(0xFF1ABC9C);
+      case OrderStatus.completed:
+        return const Color(0xFF2ECC71);
+      default:
+        return Colors.grey;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -53,6 +71,10 @@ class OrderItemWidget extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     final theme = Theme.of(context);
+    final status = OrderStatus.values.firstWhere(
+        (s) => s.toString().split('.').last == order.status.toLowerCase(),
+        orElse: () => OrderStatus.received);
+    final statusColor = _getStatusColor(status);
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -75,7 +97,7 @@ class OrderItemWidget extends StatelessWidget {
                   ),
                   child: Text(
                     '#${order.id.substring(0, min(8, order.id.length))}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: AppColors.brandAccent,
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
@@ -87,20 +109,58 @@ class OrderItemWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          Hero(
-            tag: 'order-date-${order.id}',
-            child: Material(
-              color: Colors.transparent,
-              child: Text(
-                DateFormat('MMM dd, yyyy').format(order.date),
-                style: TextStyle(
-                  color: theme.brightness == Brightness.light
-                      ? AppColors.textSecondary
-                      : AppColors.textSecondaryDark,
-                  fontSize: 14,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Hero(
+                tag: 'order-date-${order.id}',
+                child: Material(
+                  color: Colors.transparent,
+                  child: Text(
+                    DateFormat('MMM dd, yyyy').format(order.date),
+                    style: TextStyle(
+                      color: theme.brightness == Brightness.light
+                          ? AppColors.textSecondary
+                          : AppColors.textSecondaryDark,
+                      fontSize: 14,
+                    ),
+                  ),
                 ),
               ),
-            ),
+              const SizedBox(height: 4),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: statusColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: statusColor,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      status.toString().split('.').last,
+                      style: TextStyle(
+                        color: statusColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -204,7 +264,7 @@ class OrderItemWidget extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.brandAccent,
+                  color: Colors.tealAccent,
                 ),
               ),
             ],

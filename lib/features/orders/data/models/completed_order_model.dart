@@ -5,21 +5,23 @@ class CompletedOrder {
   final DateTime date;
   final double total;
   final String address;
-  final String deliveryTime; 
+  final String deliveryTime;
   final String phoneNumber;
   final String paymentMethod;
   final List<OrderItem> items;
-  final String userEmail; 
-  final String userName; 
-  final String userId; 
+  final String userEmail;
+  final String userName;
+  final String userId;
+  final String status;
 
   CompletedOrder({
+    required this.status,
     required this.id,
     required this.date,
     required this.total,
-    this.deliveryTime = 'No delivery time specified', 
-    this.address = 'No address provided', 
-    this.phoneNumber = 'No phone number', 
+    this.deliveryTime = 'No delivery time specified',
+    this.address = 'No address provided',
+    this.phoneNumber = 'No phone number',
     this.paymentMethod = 'Not specified',
     required this.items,
     required this.userEmail,
@@ -33,7 +35,7 @@ class CompletedOrder {
     try {
       orderDate = DateTime.parse(data['date'] as String);
     } catch (e) {
-      orderDate = DateTime.now(); 
+      orderDate = DateTime.now();
     }
 
     List<OrderItem> orderItems = [];
@@ -60,6 +62,7 @@ class CompletedOrder {
       userEmail: data['userEmail'] as String? ?? 'No email provided',
       userName: data['userName'] as String? ?? 'No name provided',
       userId: data['userId'] as String? ?? 'No user ID provided',
+      status: data['status'] as String? ?? 'Not specified',
     );
   }
 }

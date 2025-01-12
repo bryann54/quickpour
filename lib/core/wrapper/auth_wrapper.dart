@@ -38,7 +38,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
         if (user != null) {
           // User is fully authenticated, navigate to BottomNav
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => BottomNav()),
+            MaterialPageRoute(builder: (_) => const BottomNav()),
           );
         } else {
           // No user details found, navigate to Splash/Signup
@@ -81,7 +81,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
                     child: child,
                   );
                 },
-                child: CircularProgressIndicator(
+                child: const CircularProgressIndicator(
                   color: AppColors.background,
                   strokeWidth: 10,
                 ),
@@ -117,7 +117,8 @@ class _AuthWrapperState extends State<AuthWrapper> {
                 },
                 child: Text(
                   isLogin ? "Sign Up" : "Login",
-                  style: TextStyle(color: AppColors.errorDark, fontSize: 20),
+                  style:
+                      const TextStyle(color: AppColors.errorDark, fontSize: 20),
                 ),
               ),
             ],

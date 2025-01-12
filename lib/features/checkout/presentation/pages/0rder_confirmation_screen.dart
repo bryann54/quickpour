@@ -108,7 +108,7 @@ class OrderConfirmationScreen extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 // Return to Home Button
-            // Inside OrderConfirmationScreen
+                // Inside OrderConfirmationScreen
                 OutlinedButton(
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
@@ -127,7 +127,6 @@ class OrderConfirmationScreen extends StatelessWidget {
                   ),
                   child: const Text('Return to Home'),
                 ),
-
               ],
             ),
           ),

@@ -237,7 +237,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: AppColors.accentColor,
           ),
         ),

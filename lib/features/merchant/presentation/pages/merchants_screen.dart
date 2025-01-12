@@ -35,7 +35,7 @@ class MerchantsScreen extends StatelessWidget {
               child: BlocBuilder<MerchantBloc, MerchantState>(
                 builder: (context, state) {
                   if (state is MerchantLoading) {
-                    return MerchantTileShimmer();
+                    return const MerchantTileShimmer();
                   } else if (state is MerchantLoaded) {
                     final merchants = state.merchants;
                     return ListView.builder(

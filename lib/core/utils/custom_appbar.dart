@@ -48,7 +48,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   void _handleNotificationTap(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => NotificationsScreen()),
+      MaterialPageRoute(builder: (context) => const NotificationsScreen()),
     );
   }
 

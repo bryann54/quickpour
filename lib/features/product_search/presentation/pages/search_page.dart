@@ -180,7 +180,7 @@ class _SearchPageState extends State<SearchPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => DrinkRequestScreen(),
+                              builder: (_) => const DrinkRequestScreen(),
                             ),
                           );
                         },

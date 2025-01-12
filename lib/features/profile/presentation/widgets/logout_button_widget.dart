@@ -90,7 +90,7 @@ class _LogOutButtonState extends State<LogOutButton> {
                                   AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           )
-                        : Text(
+                        : const Text(
                             'Logout',
                             style: TextStyle(
                               color: AppColors.textPrimaryDark,

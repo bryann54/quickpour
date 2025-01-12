@@ -6,9 +6,9 @@ abstract class CheckoutState {
   final String? paymentMethod;
   final String? deliveryTime;
   final String? specialInstructions;
-  final String? userEmail; // Add userEmail
-  final String? userName; // Add userName
-  final String? userId; // Add userId
+  final String? userEmail;
+  final String? userName;
+  final String? userId;
 
   const CheckoutState({
     this.address,
@@ -74,11 +74,13 @@ class CheckoutOrderPlacedState extends CheckoutState {
   final String orderId;
   final double totalAmount;
   final List<CartItem> cartItems;
+  final String status; // Added status field
 
   const CheckoutOrderPlacedState({
     required this.orderId,
     required this.totalAmount,
     required this.cartItems,
+    required this.status, // Make status required
     String? address,
     String? phoneNumber,
     String? paymentMethod,
@@ -108,11 +110,13 @@ class CheckoutOrderPlacedState extends CheckoutState {
     String? userEmail,
     String? userName,
     String? userId,
+    String? status, // Add status to copyWith
   }) {
     return CheckoutOrderPlacedState(
       orderId: orderId,
       totalAmount: totalAmount,
       cartItems: cartItems,
+      status: status ?? this.status, // Preserve existing status if not provided
       address: address ?? this.address,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       paymentMethod: paymentMethod ?? this.paymentMethod,

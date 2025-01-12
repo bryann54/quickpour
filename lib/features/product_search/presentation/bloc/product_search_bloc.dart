@@ -21,7 +21,7 @@ class ProductSearchBloc extends Bloc<ProductSearchEvent, ProductSearchState> {
       try {
         _allProducts = await productRepository.getProducts();
       } catch (e) {
-        emit(ProductSearchErrorState('Failed to load products'));
+        emit(const ProductSearchErrorState('Failed to load products'));
         return;
       }
     }
@@ -45,7 +45,7 @@ class ProductSearchBloc extends Bloc<ProductSearchEvent, ProductSearchState> {
       try {
         _allProducts = await productRepository.getProducts();
       } catch (e) {
-        emit(ProductSearchErrorState('Failed to load products'));
+        emit(const ProductSearchErrorState('Failed to load products'));
         return;
       }
     }

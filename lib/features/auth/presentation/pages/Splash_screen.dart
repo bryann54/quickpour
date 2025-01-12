@@ -82,7 +82,7 @@ class _SplashScreenState extends State<SplashScreen>
         children: [
           // Base gradient background
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 gradient: LinearGradient(
               colors: [
                 AppColors.primaryColor,
@@ -111,7 +111,7 @@ class _SplashScreenState extends State<SplashScreen>
                         width: 250,
                         decoration: BoxDecoration(
                           color: Colors.blueGrey.withOpacity(.3),
-                          border: GradientBoxBorder(
+                          border: const GradientBoxBorder(
                             gradient: LinearGradient(
                               colors: [
                                 Colors.blue,
@@ -142,7 +142,7 @@ class _SplashScreenState extends State<SplashScreen>
                         ),
                       ),
                     ),
-),
+                  ),
 
                   const SizedBox(height: 40),
 

@@ -79,7 +79,6 @@ class _SettingsDialogState extends State<SettingsDialog> {
                 ),
               ),
             ),
-            
             Container(
               decoration: BoxDecoration(
                 color: AppColors.backgroundDark.withOpacity(0.1),
@@ -104,7 +103,6 @@ class _SettingsDialogState extends State<SettingsDialog> {
                 ),
               ),
             ),
-            
             Container(
               decoration: BoxDecoration(
                 color: AppColors.backgroundDark.withOpacity(0.1),
@@ -170,5 +168,4 @@ class _SettingsDialogState extends State<SettingsDialog> {
       onTap: onTap,
     );
   }
-
 }

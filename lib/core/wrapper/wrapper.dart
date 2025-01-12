@@ -50,10 +50,10 @@ class _WrapperState extends State<Wrapper> {
             );
           } else if (state is Authenticated) {
             // If the user is authenticated, show the bottomnav
-            return BottomNav(); // Your home screen widget
+            return const BottomNav(); // Your home screen widget
           } else {
             // If not authenticated, show the login screen
-            return AuthWrapper();
+            return const AuthWrapper();
           }
         },
       ),

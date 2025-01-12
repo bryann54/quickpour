@@ -21,7 +21,7 @@ class FavoritesScreen extends StatelessWidget {
           BlocBuilder<FavoritesBloc, FavoritesState>(
             builder: (context, state) {
               if (state.favorites.items.isEmpty) {
-                return Center(
+                return const Center(
                   child: Column(
                     children: [
                       SizedBox(

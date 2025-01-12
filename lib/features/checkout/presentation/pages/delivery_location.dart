@@ -183,7 +183,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                               phoneNumber: widget.phoneNumber,
                             ));
 
-                    Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => DeliveryDetailsScreen(
@@ -194,7 +194,6 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                             ),
                           ),
                         );
-
                       }
                     },
                     child: const Text('Confirm Location'),

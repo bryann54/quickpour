@@ -189,7 +189,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 const SizedBox(height: 20),
 
                 // Proceed Button
-          ElevatedButton(
+                ElevatedButton(
                   onPressed: (_isAddressEmpty || _isPhoneEmpty)
                       ? null
                       : () {
@@ -217,7 +217,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                   child: const Text('Proceed to delivery'),
                 ),
-
               ],
             ),
           );

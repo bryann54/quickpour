@@ -6,18 +6,16 @@ class MerchantFirestoreService {
   static FirebaseFirestore? _merchantFirestore;
 
   static Future<void> initializeMerchantApp() async {
-    if (_merchantApp == null) {
-      _merchantApp = await Firebase.initializeApp(
-        name: 'MerchantApp',
-        options: FirebaseOptions(
-          apiKey: '<merchant-api-key>',
-          appId: '<merchant-app-id>',
-          messagingSenderId: '<merchant-messaging-sender-id>',
-          projectId: '<merchant-project-id>',
-          storageBucket: '<merchant-storage-bucket>',
-        ),
-      );
-    }
+    _merchantApp ??= await Firebase.initializeApp(
+      name: 'MerchantApp',
+      options: const FirebaseOptions(
+        apiKey: '<merchant-api-key>',
+        appId: '<merchant-app-id>',
+        messagingSenderId: '<merchant-messaging-sender-id>',
+        projectId: '<merchant-project-id>',
+        storageBucket: '<merchant-storage-bucket>',
+      ),
+    );
 
     _merchantFirestore = FirebaseFirestore.instanceFor(app: _merchantApp!);
   }

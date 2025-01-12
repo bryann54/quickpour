@@ -21,15 +21,14 @@ class ProfileStatisticsSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildStatisticWithDivider(
-            BlocBuilder<OrdersBloc, OrdersState>(
+              BlocBuilder<OrdersBloc, OrdersState>(
                 builder: (context, state) {
-                  int orderCount = 0; 
+                  int orderCount = 0;
 
                   if (state is OrdersLoaded) {
-                    orderCount =
-                        state.orders.length; 
+                    orderCount = state.orders.length;
                   } else if (state is OrdersEmpty) {
-                    orderCount = 0; 
+                    orderCount = 0;
                   }
 
                   return ProfileStatisticItem(
@@ -39,7 +38,6 @@ class ProfileStatisticsSection extends StatelessWidget {
                   );
                 },
               ),
-
             ),
             _buildStatisticWithDivider(
               BlocBuilder<FavoritesBloc, FavoritesState>(

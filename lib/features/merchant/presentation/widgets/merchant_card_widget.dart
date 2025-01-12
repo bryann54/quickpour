@@ -204,7 +204,7 @@ class MerchantCardWidget extends StatelessWidget {
                                 const SizedBox(width: 4),
                                 Text(
                                   merchant.rating.toStringAsFixed(1),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.accentColor,
                                     fontSize: 14,

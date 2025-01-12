@@ -26,6 +26,6 @@ class OrdersRepository {
     } catch (e) {
       print('Error fetching orders: $e');
       throw Exception('Failed to fetch orders: $e');
-    }  
+    }
   }
 }

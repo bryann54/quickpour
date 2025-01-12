@@ -48,7 +48,7 @@ class HomeScreenSearch extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: AppColors.accentColor,
               width: 1.5,
             ),
