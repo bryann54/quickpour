@@ -1,4 +1,3 @@
-// drink_request_list_tile.dart
 import 'package:chupachap/features/drink_request/data/models/drink_request.dart';
 import 'package:chupachap/features/drink_request/presentation/pages/offers_screen.dart';
 import 'package:flutter/material.dart';
@@ -72,10 +71,13 @@ class DrinkRequestListTile extends StatelessWidget {
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
+                            overflow: TextOverflow.ellipsis,  
+                            maxLines: 1, 
                           ),
                         ),
                       ),
                     ),
+                    const SizedBox(width: 8),
                     Hero(
                       tag: 'quantity_${request.id}',
                       child: Container(
@@ -100,26 +102,33 @@ class DrinkRequestListTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Hero(
-                      tag: 'timestamp_${request.id}',
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.schedule,
-                            size: 16,
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            DateFormat('MMM d, h:mm a')
-                                .format(request.timestamp.toLocal()),
-                            style: theme.textTheme.bodySmall?.copyWith(
+                
+                    Expanded(
+            
+                      child: Hero(
+                        tag: 'timestamp_${request.id}',
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.schedule,
+                              size: 16,
                               color: theme.colorScheme.onSurfaceVariant,
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 4),
+                            Expanded(
+                               
+                              child: Text(
+                                DateFormat('MMM d, h:mm a')
+                                    .format(request.timestamp.toLocal()),
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                                overflow: TextOverflow.ellipsis,  
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     IconButton(
@@ -128,6 +137,8 @@ class DrinkRequestListTile extends StatelessWidget {
                       style: IconButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: const Size(24, 24),
+                        tapTargetSize:
+                            MaterialTapTargetSize.shrinkWrap,
                       ),
                     ),
                   ],
