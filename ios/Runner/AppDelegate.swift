@@ -26,6 +26,9 @@ import GoogleMaps
       } else {
         result(FlutterMethodNotImplemented)
       }
+      if #available(iOS 10.0, *) {
+  UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+}
     })
     
     GeneratedPluginRegistrant.register(with: self)

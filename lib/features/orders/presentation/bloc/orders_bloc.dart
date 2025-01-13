@@ -1,4 +1,5 @@
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
+import 'package:chupachap/features/notifications/domain/repositories/notification_service.dart';
 import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
 import 'package:chupachap/features/orders/data/models/order_model.dart';
 import 'package:chupachap/features/orders/data/repositories/orders_repository.dart';
@@ -19,6 +20,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
     on<LoadOrdersFromCheckout>(_onLoadOrders);
     on<AddNewOrder>(_onAddNewOrder);
 
+    NotificationService.initialize();
     // Listen to checkout completion
     checkoutBloc.stream.listen((state) {
       if (state is CheckoutOrderPlacedState) {
@@ -44,6 +46,11 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
             userName: state.userName ?? 'No name provided',
             userId: state.userId ?? 'No user ID provided',
             status: state.status);
+              NotificationService.showOrderNotification(
+          title: 'Order Placed Successfully',
+          body: 'Your order #${state.orderId} has been confirmed',
+          payload: state.orderId,
+        );
 
         add(AddNewOrder(newOrder));
       }

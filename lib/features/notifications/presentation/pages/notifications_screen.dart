@@ -1,6 +1,5 @@
 // notifications_screen.dart
 import 'package:chupachap/features/notifications/data/models/notifications_model.dart';
-import 'package:chupachap/features/notifications/data/repositories/notifications_repository.dart';
 import 'package:chupachap/features/notifications/presentation/bloc/notifications_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,51 +10,48 @@ class NotificationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          NotificationsBloc(context.read<NotificationsRepository>())
-            ..add(FetchNotifications()),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Notifications'),
-          centerTitle: true,
-        ),
-        body: BlocBuilder<NotificationsBloc, NotificationsState>(
-          builder: (context, state) {
-            if (state.isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
+ 
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Notifications'),
+        centerTitle: true,
+      ),
+      body: BlocBuilder<NotificationsBloc, NotificationsState>(
+        builder: (context, state) {
 
-            if (state.error != null) {
-              return Center(
-                child: Text('Error: ${state.error}'),
-              );
-            }
-
-            if (state.notifications.isEmpty) {
-              return const Center(
-                child: Text('No notifications'),
-              );
-            }
-
-            return ListView.builder(
-              itemCount: state.notifications.length,
-              itemBuilder: (context, index) {
-                final notification = state.notifications[index];
-                return _NotificationTile(
-                  notification: notification,
-                  onTap: () {
-                    context
-                        .read<NotificationsBloc>()
-                        .add(MarkNotificationAsRead(notification.id));
-                  },
-                );
-              },
+          if (state.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          },
-        ),
+          }
+    
+          if (state.error != null) {
+            return Center(
+              child: Text('Error: ${state.error}'),
+            );
+          }
+    
+          if (state.notifications.isEmpty) {
+            return const Center(
+              child: Text('No notifications'),
+            );
+          }
+    
+          return ListView.builder(
+            itemCount: state.notifications.length,
+            itemBuilder: (context, index) {
+              final notification = state.notifications[index];
+              return _NotificationTile(
+                notification: notification,
+                onTap: () {
+                  context
+                      .read<NotificationsBloc>()
+                      .add(MarkNotificationAsRead(notification.id));
+                },
+              );
+            },
+          );
+        },
       ),
     );
   }

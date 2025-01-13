@@ -18,6 +18,7 @@ import 'package:chupachap/features/drink_request/presentation/bloc/drink_request
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:chupachap/features/merchant/data/repositories/merchants_repository.dart';
 import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
+import 'package:chupachap/features/notifications/data/models/notifications_model.dart';
 import 'package:chupachap/features/notifications/data/repositories/notifications_repository.dart';
 import 'package:chupachap/features/notifications/presentation/bloc/notifications_bloc.dart';
 import 'package:chupachap/features/orders/data/repositories/orders_repository.dart';
@@ -26,6 +27,7 @@ import 'package:chupachap/features/product/data/repositories/product_repository.
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -36,21 +38,28 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final merchantRepository = MerchantsRepository();
+    final firestore = FirebaseFirestore.instance;
+    final auth = FirebaseAuth.instance;
 
     return MultiProvider(
       providers: [
         Provider<FirebaseFirestore>(
-          create: (_) => FirebaseFirestore.instance,
+          create: (_) => firestore,
+        ),
+        Provider<FirebaseAuth>(
+          create: (_) => auth,
         ),
         Provider<NotificationsRepository>(
-          create: (_) => NotificationsRepository(),
+          create: (context) => NotificationsRepository(
+            firestore: context.read<FirebaseFirestore>(),
+            auth: context.read<FirebaseAuth>(),
+          ),
         ),
-      Provider<DrinkRequestRepository>(
+        Provider<DrinkRequestRepository>(
           create: (context) => DrinkRequestRepository(
             firestore: context.read<FirebaseFirestore>(),
           ),
         ),
-
       ],
       child: MultiBlocProvider(
         providers: [
@@ -66,10 +75,20 @@ class App extends StatelessWidget {
               context.read<DrinkRequestRepository>(),
             ),
           ),
-          BlocProvider(
-            create: (context) => NotificationsBloc(
-              context.read<NotificationsRepository>(),
-            ),
+          // Move NotificationsBloc after auth bloc
+          BlocProvider<NotificationsBloc>(
+            // Explicitly type the BlocProvider
+            lazy: false, // Create immediately instead of on first use
+            create: (context) {
+              final bloc = NotificationsBloc(
+                context.read<NotificationsRepository>(),
+              );
+              // Only fetch notifications if user is authenticated
+              if (FirebaseAuth.instance.currentUser != null) {
+                bloc.add(FetchNotifications());
+              }
+              return bloc;
+            },
           ),
           BlocProvider<ProductSearchBloc>(
             create: (context) => ProductSearchBloc(
@@ -81,19 +100,29 @@ class App extends StatelessWidget {
                 MerchantBloc(merchantRepository)..add(FetchMerchantEvent()),
           ),
           BlocProvider(create: (_) => CartBloc()),
-          BlocProvider(
+     BlocProvider(
             create: (context) {
               final checkoutBloc = CheckoutBloc(
                 firestore: context.read<FirebaseFirestore>(),
                 authUseCases: context.read<AuthBloc>().authUseCases,
               );
 
-              // Clear cart when order is placed
+              // Listen for checkout events to create notifications
               checkoutBloc.stream.listen((state) {
                 if (state is CheckoutOrderPlacedState) {
+                  final notificationsRepo =
+                      context.read<NotificationsRepository>();
+                  final userId = FirebaseAuth.instance.currentUser?.uid;
+                  if (userId != null) {
+                    notificationsRepo.createNotification(
+                      title: 'Order Confirmed',
+                      body: 'Your order #${state.orderId} has been confirmed',
+                      type: NotificationType.order,
+                      userId: userId,
+                    );
+                  }
                   context.read<CartBloc>().add(ClearCartEvent());
                 } else if (state is CheckoutErrorState) {
-                  // Handle errors
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(state.errorMessage),
