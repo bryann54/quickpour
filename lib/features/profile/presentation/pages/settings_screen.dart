@@ -49,34 +49,6 @@ class SettingsScreen extends StatelessWidget {
                   ),
                 ],
               ),
-
-              // const SizedBox(height: 20),
-
-              // // Account Settings
-              // _buildSettingsSection(
-              //   context,
-              //   title: 'Account',
-              //   children: [
-              //     _buildSettingsItem(
-              //       context,
-              //       icon: Icons.person_outline,
-              //       title: 'Edit Profile',
-              //       onTap: () {
-              //         // TODO: Navigate to edit profile screen
-              //       },
-              //     ),
-              //     _buildDivider(),
-              //     _buildSettingsItem(
-              //       context,
-              //       icon: Icons.lock_outline,
-              //       title: 'Change Password',
-              //       onTap: () {
-              //         // TODO: Navigate to change password screen
-              //       },
-              //     ),
-              //   ],
-              // ),
-
               const SizedBox(height: 20),
 
               // Notification Settings

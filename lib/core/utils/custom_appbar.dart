@@ -4,6 +4,7 @@ import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
+import 'package:chupachap/features/drink_request/presentation/pages/requests_screen.dart';
 import 'package:chupachap/features/notifications/presentation/pages/notifications_screen.dart';
 import 'package:chupachap/features/profile/presentation/pages/profile_screen.dart';
 import 'package:chupachap/features/profile/presentation/pages/settings_screen.dart';
@@ -174,6 +175,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                         builder: (context) => ProfileScreen(
                                               authUseCases: authUseCases,
                                             )));
+                                break;
+                              case 'Requests':
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            RequestsScreen()));
 
                                 break;
                               case 'logout':
@@ -199,6 +207,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                   FaIcon(FontAwesomeIcons.circleUser, size: 20),
                                   SizedBox(width: 10),
                                   Text('Profile'),
+                                ],
+                              ),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'Requests',
+                              child: Row(
+                                children: [
+                                  FaIcon(FontAwesomeIcons.envelope, size: 20),
+                                  SizedBox(width: 10),
+                                  Text('Requests'),
                                 ],
                               ),
                             ),

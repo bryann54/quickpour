@@ -33,14 +33,13 @@ class OrderHeader extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     return Padding(
-      padding: const EdgeInsets.only(left: 12,right: 12,top: 12),
+      padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-           color: isDark ? AppColors.cardColorDark : AppColors.surface,
+          color: isDark ? AppColors.cardColorDark : AppColors.surface,
         ),
         width: double.infinity,
-       
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

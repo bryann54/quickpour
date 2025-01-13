@@ -5,8 +5,10 @@ import 'package:chupachap/features/orders/data/models/completed_order_model.dart
 import 'package:chupachap/features/orders/presentation/bloc/orders_bloc.dart';
 import 'package:chupachap/features/orders/presentation/widgets/order_item_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
@@ -77,6 +79,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Widget _buildEmptyOrdersView(BuildContext context) {
+    
     return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -96,15 +99,26 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Widget _buildOrdersList(BuildContext context, List<CompletedOrder> orders) {
+     final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     return RefreshIndicator(
       onRefresh: () async {
         context.read<OrdersBloc>().add(LoadOrdersFromCheckout());
       },
       child: Column(
         children: [
-          Text(
-            'Orders',
-            style: Theme.of(context).textTheme.displayLarge,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Text('Orders',
+                  style: GoogleFonts.montaga(
+                    textStyle: theme.textTheme.displayLarge?.copyWith(
+                      color: isDarkMode
+                          ? AppColors.cardColor
+                          : AppColors.accentColorDark,
+                    ),
+                  )).animate().fadeIn(duration: 500.ms).slideY(begin: 0.1),
+            ),
           ),
           Expanded(
             child: ListView.builder(
