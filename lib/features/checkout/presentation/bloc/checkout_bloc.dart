@@ -22,24 +22,29 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
 
   void _onUpdateDeliveryInfo(
       UpdateDeliveryInfoEvent event, Emitter<CheckoutState> emit) {
+    // Remove any notification triggers from here
     emit(state.copyWith(
       address: event.address,
       phoneNumber: event.phoneNumber,
     ));
   }
 
-  void _onUpdatePaymentMethod(
+
+   void _onUpdatePaymentMethod(
       UpdatePaymentMethodEvent event, Emitter<CheckoutState> emit) {
+    // Remove any notification triggers from here
     emit(state.copyWith(paymentMethod: event.paymentMethod));
   }
 
   void _onUpdateDeliveryTime(
       UpdateDeliveryTimeEvent event, Emitter<CheckoutState> emit) {
+    // Remove any notification triggers from here
     emit(state.copyWith(
       deliveryTime: event.deliveryTime,
       specialInstructions: event.specialInstructions,
     ));
   }
+
 Future<void> _onPlaceOrder(
       PlaceOrderEvent event, Emitter<CheckoutState> emit) async {
     try {
@@ -87,10 +92,11 @@ Future<void> _onPlaceOrder(
       // Save to Firestore
       await orderRef.set(orderData);
 
-      // Trigger notification after successful order placement
+      // Only show notification after successful order placement
       await NotificationService.showOrderNotification(
         title: 'Order Placed Successfully!',
         body: 'Your order #$orderId has been placed.',
+        userId: userId, // Add this parameter
       );
 
       // Emit success state
@@ -119,5 +125,4 @@ Future<void> _onPlaceOrder(
       ));
     }
   }
-
 }

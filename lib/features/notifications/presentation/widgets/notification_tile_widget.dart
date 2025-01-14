@@ -13,6 +13,7 @@ class NotificationTile extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

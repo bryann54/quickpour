@@ -16,17 +16,19 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     on<FetchUnreadCount>(_onFetchUnreadCount);
   }
 
-  Future<void> _onFetchNotifications(
+Future<void> _onFetchNotifications(
     FetchNotifications event,
     Emitter<NotificationsState> emit,
   ) async {
     emit(state.copyWith(isLoading: true));
     try {
       final notifications = await _repository.fetchNotifications();
-      final unreadCount = notifications.where((n) => !n.isRead).length;
+      final uniqueNotifications = notifications.toSet().toList(); // Deduplicate
+
+      final unreadCount = uniqueNotifications.where((n) => !n.isRead).length;
 
       emit(state.copyWith(
-        notifications: notifications,
+        notifications: uniqueNotifications,
         unreadCount: unreadCount,
         isLoading: false,
       ));
@@ -37,6 +39,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       ));
     }
   }
+
 
   Future<void> _onMarkNotificationAsRead(
     MarkNotificationAsRead event,

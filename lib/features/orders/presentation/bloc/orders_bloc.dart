@@ -20,36 +20,36 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
     on<LoadOrdersFromCheckout>(_onLoadOrders);
     on<AddNewOrder>(_onAddNewOrder);
 
-    NotificationService.initialize();
     // Listen to checkout completion
     checkoutBloc.stream.listen((state) {
       if (state is CheckoutOrderPlacedState) {
         final newOrder = CompletedOrder(
-            id: state.orderId,
-            total: state.totalAmount,
-            date: DateTime.now(),
-            address: state.address ?? 'No address provided', // Default value
-            phoneNumber:
-                state.phoneNumber ?? 'No phone number', // Default value
-            paymentMethod:
-                state.paymentMethod ?? 'Not specified', // Default value
-            items: state.cartItems
-                .map((cartItem) => OrderItem(
-                      name:
-                          cartItem.product.productName, // Default value if null
-                      quantity: cartItem.quantity, // Default value if null
-                      price: cartItem.product.price, // Default value if null
-                    ))
-                .toList(),
-            userEmail: state.userEmail ??
-                'No email provided', // You must define userEmail in the state or obtain it from somewhere
-            userName: state.userName ?? 'No name provided',
-            userId: state.userId ?? 'No user ID provided',
-            status: state.status);
-              NotificationService.showOrderNotification(
+          id: state.orderId,
+          total: state.totalAmount,
+          date: DateTime.now(),
+          address: state.address ?? 'No address provided',
+          phoneNumber: state.phoneNumber ?? 'No phone number',
+          paymentMethod: state.paymentMethod ?? 'Not specified',
+          items: state.cartItems
+              .map((cartItem) => OrderItem(
+                    name: cartItem.product.productName,
+                    quantity: cartItem.quantity,
+                    price: cartItem.product.price,
+                  ))
+              .toList(),
+          userEmail: state.userEmail ?? 'No email provided',
+          userName: state.userName ?? 'No name provided',
+          userId: state.userId ?? 'No user ID provided',
+          status: state.status,
+        );
+
+        // Show notification with userId
+        NotificationService.showOrderNotification(
           title: 'Order Placed Successfully',
           body: 'Your order #${state.orderId} has been confirmed',
+          userId: state.userId ?? 'No user ID provided', // Add userId here
           payload: state.orderId,
+          
         );
 
         add(AddNewOrder(newOrder));

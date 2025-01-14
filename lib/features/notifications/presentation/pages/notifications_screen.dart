@@ -2,6 +2,7 @@ import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/notifications/presentation/bloc/notifications_bloc.dart';
 import 'package:chupachap/features/notifications/presentation/widgets/notification_tile_widget.dart';
+import 'package:chupachap/features/notifications/presentation/widgets/shimmer_notification_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,27 +61,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               builder: (context, state) {
                 if (state.isLoading) {
                   return const Center(
-                    child: CircularProgressIndicator(),
+                    child: NotificationTileShimmer(),
                   );
                 }
 
                 if (state.notifications.isEmpty) {
                   return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text('No notifications'),
-                        const SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: () {
-                            context.read<NotificationsBloc>()
-                              ..add(FetchNotifications())
-                              ..add(FetchUnreadCount());
-                          },
-                          child: const Text('Refresh'),
-                        ),
-                      ],
-                    ),
+                    child: Text('No notifications'),
                   );
                 }
 
@@ -91,21 +78,22 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       ..add(FetchUnreadCount());
                   },
                   child: ListView.builder(
-                    itemCount: state.notifications.length,
-                    itemBuilder: (context, index) {
-                      final notification = state.notifications[index];
-                      return NotificationTile(
-                        notification: notification,
-                        onTap: () {
-                          if (!notification.isRead) {
-                            context.read<NotificationsBloc>()
-                              ..add(MarkNotificationAsRead(notification.id))
-                              ..add(FetchUnreadCount());
-                          }
-                        },
-                      );
-                    },
-                  ),
+  itemCount: state.notifications.length,
+  itemBuilder: (context, index) {
+    final notification = state.notifications[index];
+    return NotificationTile(
+      key: ValueKey(notification.id), // Ensure a unique key for each tile
+      notification: notification,
+                          onTap: () {
+                            if (!notification.isRead) {
+                              context.read<NotificationsBloc>()
+                                ..add(MarkNotificationAsRead(notification.id))
+                                ..add(FetchUnreadCount());
+                            }
+                          },
+    );
+  },
+)
                 );
               },
             ),
