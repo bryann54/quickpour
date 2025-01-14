@@ -12,11 +12,14 @@ class NotificationsRepository {
   })  : _firestore = firestore ?? FirebaseFirestore.instance,
         _auth = auth ?? FirebaseAuth.instance;
 
-  Future<List<NotificationModel>> fetchNotifications() async {
+Future<List<NotificationModel>> fetchNotifications() async {
     try {
       final userId = _auth.currentUser?.uid;
+      // Debug log
+
       if (userId == null) {
-        throw Exception('User not authenticated');
+        // Debug log
+        return [];
       }
 
       final querySnapshot = await _firestore
@@ -25,8 +28,13 @@ class NotificationsRepository {
           .orderBy('timestamp', descending: true)
           .get();
 
-      return querySnapshot.docs.map((doc) {
+      // Debug log
+
+      final notifications = querySnapshot.docs.map((doc) {
         final data = doc.data();
+        // Debug log
+        // Debug log
+
         return NotificationModel(
           id: doc.id,
           title: data['title'] ?? '',
@@ -36,9 +44,12 @@ class NotificationsRepository {
           type: _getNotificationType(data['type'] ?? 'system'),
         );
       }).toList();
+
+      // Debug log
+      return notifications;
     } catch (e) {
-      print('Error fetching notifications: $e');
-      throw Exception('Failed to fetch notifications: $e');
+      // Debug log
+      rethrow;
     }
   }
 
@@ -54,10 +65,29 @@ class NotificationsRepository {
           .doc(notificationId)
           .update({'isRead': true});
     } catch (e) {
-      print('Error marking notification as read: $e');
       throw Exception('Failed to mark notification as read: $e');
     }
   }
+  Future<int> getUnreadNotificationsCount() async {
+    try {
+      final userId = _auth.currentUser?.uid;
+
+      if (userId == null) {
+        return 0;
+      }
+
+      final querySnapshot = await _firestore
+          .collection('notifications')
+          .where('userId', isEqualTo: userId)
+          .where('isRead', isEqualTo: false)
+          .get();
+
+      return querySnapshot.docs.length;
+    } catch (e) {
+      throw Exception('Failed to fetch unread notifications count: $e');
+    }
+  }
+
 
   Future<void> createNotification({
     required String title,
@@ -75,7 +105,6 @@ class NotificationsRepository {
         'userId': userId,
       });
     } catch (e) {
-      print('Error creating notification: $e');
       throw Exception('Failed to create notification: $e');
     }
   }

@@ -1,142 +1,117 @@
-// notifications_screen.dart
-import 'package:chupachap/features/notifications/data/models/notifications_model.dart';
+import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/notifications/presentation/bloc/notifications_bloc.dart';
+import 'package:chupachap/features/notifications/presentation/widgets/notification_tile_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class NotificationsScreen extends StatelessWidget {
+class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
- 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notifications'),
-        centerTitle: true,
-      ),
-      body: BlocBuilder<NotificationsBloc, NotificationsState>(
-        builder: (context, state) {
-
-          if (state.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-    
-          if (state.error != null) {
-            return Center(
-              child: Text('Error: ${state.error}'),
-            );
-          }
-    
-          if (state.notifications.isEmpty) {
-            return const Center(
-              child: Text('No notifications'),
-            );
-          }
-    
-          return ListView.builder(
-            itemCount: state.notifications.length,
-            itemBuilder: (context, index) {
-              final notification = state.notifications[index];
-              return _NotificationTile(
-                notification: notification,
-                onTap: () {
-                  context
-                      .read<NotificationsBloc>()
-                      .add(MarkNotificationAsRead(notification.id));
-                },
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
+  State<NotificationsScreen> createState() => _NotificationsScreenState();
 }
 
-class _NotificationTile extends StatelessWidget {
-  final NotificationModel notification;
-  final VoidCallback onTap;
-
-  const _NotificationTile({
-    required this.notification,
-    required this.onTap,
-  });
+class _NotificationsScreenState extends State<NotificationsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Fetch notifications and unread count when screen opens
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<NotificationsBloc>().add(FetchNotifications());
+      context.read<NotificationsBloc>().add(FetchUnreadCount());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: _buildLeadingIcon(),
-      title: Text(
-        notification.title,
-        style: TextStyle(
-          fontWeight: notification.isRead ? FontWeight.normal : FontWeight.bold,
-        ),
-      ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+    return Scaffold(
+      appBar: CustomAppBar(showNotification: false, showCart: false),
+      body: Column(
         children: [
-          Text(
-            notification.body,
-            style: TextStyle(
-              color: notification.isRead ? Colors.grey : Colors.black87,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Text(
+                'Notifications',
+                style: GoogleFonts.montaga(
+                  textStyle: theme.textTheme.displayLarge?.copyWith(
+                    color: isDarkMode
+                        ? AppColors.cardColor
+                        : AppColors.accentColorDark,
+                  ),
+                ),
+              ).animate().fadeIn(duration: 500.ms).slideY(begin: 0.1),
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            _formatTimestamp(notification.timestamp),
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[600],
+          Expanded(
+            child: BlocConsumer<NotificationsBloc, NotificationsState>(
+              listener: (context, state) {
+                if (state.error != null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(state.error!)),
+                  );
+                }
+              },
+              builder: (context, state) {
+                if (state.isLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                if (state.notifications.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('No notifications'),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            context.read<NotificationsBloc>()
+                              ..add(FetchNotifications())
+                              ..add(FetchUnreadCount());
+                          },
+                          child: const Text('Refresh'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    context.read<NotificationsBloc>()
+                      ..add(FetchNotifications())
+                      ..add(FetchUnreadCount());
+                  },
+                  child: ListView.builder(
+                    itemCount: state.notifications.length,
+                    itemBuilder: (context, index) {
+                      final notification = state.notifications[index];
+                      return NotificationTile(
+                        notification: notification,
+                        onTap: () {
+                          if (!notification.isRead) {
+                            context.read<NotificationsBloc>()
+                              ..add(MarkNotificationAsRead(notification.id))
+                              ..add(FetchUnreadCount());
+                          }
+                        },
+                      );
+                    },
+                  ),
+                );
+              },
             ),
           ),
         ],
       ),
-      trailing: !notification.isRead
-          ? Icon(Icons.circle, color: Theme.of(context).primaryColor, size: 12)
-          : null,
-      onTap: onTap,
     );
-  }
-
-  Widget _buildLeadingIcon() {
-    switch (notification.type) {
-      case NotificationType.order:
-        return const CircleAvatar(
-          backgroundColor: Colors.blue,
-          child: Icon(Icons.shopping_cart, color: Colors.white),
-        );
-      case NotificationType.promotion:
-        return const CircleAvatar(
-          backgroundColor: Colors.purple,
-          child: Icon(Icons.local_offer, color: Colors.white),
-        );
-      case NotificationType.delivery:
-        return const CircleAvatar(
-          backgroundColor: Colors.green,
-          child: Icon(Icons.local_shipping, color: Colors.white),
-        );
-      case NotificationType.system:
-        return const CircleAvatar(
-          backgroundColor: Colors.grey,
-          child: Icon(Icons.settings, color: Colors.white),
-        );
-    }
-  }
-
-  String _formatTimestamp(DateTime timestamp) {
-    final now = DateTime.now();
-    final difference = now.difference(timestamp);
-
-    if (difference.inHours < 1) {
-      return '${difference.inMinutes} min ago';
-    } else if (difference.inHours < 24) {
-      return '${difference.inHours} hr ago';
-    } else {
-      return DateFormat('MMM d, HH:mm').format(timestamp);
-    }
   }
 }

@@ -224,9 +224,12 @@ class OffersScreen extends StatelessWidget {
                                     color: theme.colorScheme.onSurfaceVariant,
                                   ),
                                 ),
+                             
                               ],
                             ),
                           ),
+                          Text('additional Instructions'),
+                             Text(request.additionalInstructions)
                         ],
                       ),
                     ),

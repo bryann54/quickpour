@@ -76,16 +76,15 @@ class App extends StatelessWidget {
             ),
           ),
           // Move NotificationsBloc after auth bloc
-          BlocProvider<NotificationsBloc>(
-            // Explicitly type the BlocProvider
-            lazy: false, // Create immediately instead of on first use
+        BlocProvider<NotificationsBloc>(
+            lazy: false,
             create: (context) {
               final bloc = NotificationsBloc(
                 context.read<NotificationsRepository>(),
               );
-              // Only fetch notifications if user is authenticated
               if (FirebaseAuth.instance.currentUser != null) {
                 bloc.add(FetchNotifications());
+                bloc.add(FetchUnreadCount());
               }
               return bloc;
             },

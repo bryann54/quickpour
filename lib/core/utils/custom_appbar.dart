@@ -5,6 +5,7 @@ import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
 import 'package:chupachap/features/drink_request/presentation/pages/requests_screen.dart';
+import 'package:chupachap/features/notifications/presentation/bloc/notifications_bloc.dart';
 import 'package:chupachap/features/notifications/presentation/pages/notifications_screen.dart';
 import 'package:chupachap/features/profile/presentation/pages/profile_screen.dart';
 import 'package:chupachap/features/profile/presentation/pages/settings_screen.dart';
@@ -45,11 +46,28 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.fabLocation,
     this.userName,
   }) : super(key: key);
-
-  void _handleNotificationTap(BuildContext context) {
+   void _handleNotificationTap(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const NotificationsScreen()),
+    );
+  }
+
+Widget _buildNotificationIcon(BuildContext context,
+      NotificationsState notificationsState, ThemeData currentTheme) {
+    final iconColorWithTheme = iconColor ?? currentTheme.iconTheme.color;
+
+    return badges.Badge(
+      badgeContent: Text(
+        '${notificationsState.unreadCount}',
+        style: const TextStyle(color: Colors.white, fontSize: 12),
+      ),
+      showBadge: notificationsState.unreadCount > 0,
+      child: FaIcon(
+        FontAwesomeIcons.bell,
+        size: 22,
+        color: iconColorWithTheme!.withOpacity(.7),
+      ),
     );
   }
 
@@ -112,17 +130,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (showNotification)
+                 if (showNotification)
                       SizedBox(
                         width: 40,
-                        child: IconButton(
-                          icon: FaIcon(
-                            FontAwesomeIcons.bell,
-                            size: 22,
-                            color: iconColorWithTheme!.withOpacity(.7),
-                          ),
-                          onPressed: () => _handleNotificationTap(context),
-                          padding: EdgeInsets.zero,
+                        child:
+                            BlocBuilder<NotificationsBloc, NotificationsState>(
+                          builder: (context, notificationsState) {
+                            return IconButton(
+                              icon: _buildNotificationIcon(
+                                context,
+                                notificationsState,
+                                currentTheme,
+                              ),
+                              onPressed: () => _handleNotificationTap(context),
+                              padding: EdgeInsets.zero,
+                            );
+                          },
                         ),
                       ),
                     if (showCart && !useCartFAB)
