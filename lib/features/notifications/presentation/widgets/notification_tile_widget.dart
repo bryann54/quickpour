@@ -1,3 +1,4 @@
+import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/notifications/data/models/notifications_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -16,62 +17,72 @@ class NotificationTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
-      color: notification.isRead
-          ? null
-          : theme.colorScheme.primary.withOpacity(0.05),
-      child: ListTile(
-        leading: _buildLeadingIcon(),
-        title: Text(
-          notification.title,
-          style: TextStyle(
-            fontWeight:
-                notification.isRead ? FontWeight.normal : FontWeight.bold,
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Container(
+      decoration: BoxDecoration(
             color: notification.isRead
-                ? theme.textTheme.bodyLarge?.color
-                : theme.colorScheme.primary,
+                ? null
+                : theme.colorScheme.primary.withOpacity(0.05),
+            border: notification.isRead
+                ? null
+                : Border.all(color: AppColors.accentColor.withOpacity(.3)),
+                borderRadius: BorderRadius.circular(8),
+                ),
+     
+        child: ListTile(
+          leading: _buildLeadingIcon(),
+          title: Text(
+            notification.title,
+            style: TextStyle(
+              fontWeight:
+                  notification.isRead ? FontWeight.normal : FontWeight.bold,
+              color: notification.isRead
+                  ? theme.textTheme.bodyLarge?.color
+                  : theme.colorScheme.primary,
+            ),
           ),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              notification.body,
-              style: TextStyle(
-                color: notification.isRead
-                    ? theme.textTheme.bodyMedium?.color
-                    : theme.textTheme.bodyLarge?.color,
-                height: 1.2,
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                notification.body,
+                style: TextStyle(
+                  color: notification.isRead
+                      ? theme.textTheme.bodyMedium?.color
+                      : theme.textTheme.bodyLarge?.color,
+                  height: 1.2,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                Icon(
-                  _getTypeIcon(),
-                  size: 12,
-                  color: theme.textTheme.bodySmall?.color,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  _formatTimestamp(notification.timestamp),
-                  style: theme.textTheme.bodySmall,
-                ),
-              ],
-            ),
-          ],
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  Icon(
+                    _getTypeIcon(),
+                    size: 12,
+                    color: theme.textTheme.bodySmall?.color,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    _formatTimestamp(notification.timestamp),
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          trailing: !notification.isRead
+              ? Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: theme.colorScheme.primary,
+                  ),
+                )
+              : null,
+          onTap: onTap,
         ),
-        trailing: !notification.isRead
-            ? Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: theme.colorScheme.primary,
-                ),
-              )
-            : null,
-        onTap: onTap,
       ),
     );
   }

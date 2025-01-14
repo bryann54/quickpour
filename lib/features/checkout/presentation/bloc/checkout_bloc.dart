@@ -1,4 +1,5 @@
 import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
+import 'package:chupachap/features/notifications/domain/repositories/notification_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,8 +40,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       specialInstructions: event.specialInstructions,
     ));
   }
-
-  Future<void> _onPlaceOrder(
+Future<void> _onPlaceOrder(
       PlaceOrderEvent event, Emitter<CheckoutState> emit) async {
     try {
       emit(const CheckoutLoadingState());
@@ -61,21 +61,16 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       final orderRef = firestore.collection('orders').doc();
       final orderId = orderRef.id;
 
-      // Create complete order data combining both sources
+      // Create complete order data
       final orderData = {
-        // User details from AuthUseCases
         'userId': userId,
         'userEmail': userDetails.email,
         'userName': '${userDetails.firstName} ${userDetails.lastName}',
-
-        // Order details from state
         'address': state.address,
         'phoneNumber': state.phoneNumber,
         'paymentMethod': event.paymentMethod,
         'deliveryTime': event.deliveryTime,
         'specialInstructions': event.specialInstructions,
-
-        // Cart details from event
         'cartItems': event.cart.items
             .map((item) => {
                   'productName': item.product.productName,
@@ -84,17 +79,21 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
                 })
             .toList(),
         'totalAmount': event.cart.totalPrice,
-
-        // Order metadata
         'orderId': orderId,
         'date': DateTime.now().toIso8601String(),
         'status': 'pending',
       };
 
-      // Save to Firestore using the generated reference
+      // Save to Firestore
       await orderRef.set(orderData);
 
-      // Emit success state with all combined data
+      // Trigger notification after successful order placement
+      await NotificationService.showOrderNotification(
+        title: 'Order Placed Successfully!',
+        body: 'Your order #$orderId has been placed.',
+      );
+
+      // Emit success state
       emit(CheckoutOrderPlacedState(
         orderId: orderId,
         totalAmount: event.cart.totalPrice,
@@ -107,7 +106,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         userEmail: userDetails.email,
         userName: '${userDetails.firstName} ${userDetails.lastName}',
         userId: userId,
-        status: state.specialInstructions.toString(),
+        status: 'pending',
       ));
     } catch (e) {
       emit(CheckoutErrorState(
@@ -120,4 +119,5 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       ));
     }
   }
+
 }
