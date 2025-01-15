@@ -13,9 +13,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RequestsScreen extends StatelessWidget {
+  const RequestsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-     final theme = Theme.of(context);
+    final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     context.read<DrinkRequestBloc>().add(FetchDrinkRequests());
 
@@ -25,9 +27,9 @@ class RequestsScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-           Padding(
-             padding: const EdgeInsets.all(8.0),
-             child: Center(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
               child: Text('Requests',
                   style: GoogleFonts.montaga(
                     textStyle: theme.textTheme.displayLarge?.copyWith(
@@ -36,13 +38,13 @@ class RequestsScreen extends StatelessWidget {
                           : AppColors.accentColorDark,
                     ),
                   )).animate().fadeIn(duration: 500.ms).slideY(begin: 0.1),
-                       ),
-           ),
+            ),
+          ),
           Expanded(
             child: BlocBuilder<DrinkRequestBloc, DrinkRequestState>(
               builder: (context, state) {
                 if (state is DrinkRequestLoading) {
-                  return Center(child: DrinkRequestListTileShimmer());
+                  return const Center(child: DrinkRequestListTileShimmer());
                 } else if (state is DrinkRequestSuccess) {
                   return ListView.builder(
                     itemCount: state.requests.length,
@@ -54,7 +56,7 @@ class RequestsScreen extends StatelessWidget {
                 } else if (state is DrinkRequestFailure) {
                   return Center(child: Text('Error: ${state.error}'));
                 } else {
-                  return Center(child: Text('No requests found.'));
+                  return const Center(child: Text('No requests found.'));
                 }
               },
             ),
@@ -62,9 +64,9 @@ class RequestsScreen extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        label: Text('Make request'),
+        label: const Text('Make request'),
         onPressed: () => _showRequestDialog(context),
-        icon: Icon(Icons.add),
+        icon: const Icon(Icons.add),
         tooltip: 'Add Drink Request',
       ),
     );
@@ -74,7 +76,7 @@ class RequestsScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) {
-        return DrinkRequestDialog();
+        return const DrinkRequestDialog();
       },
     );
   }

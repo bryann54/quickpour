@@ -1,5 +1,6 @@
 import 'package:chupachap/features/drink_request/data/models/drink_request.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 class DrinkRequestRepository {
   final FirebaseFirestore firestore;
 

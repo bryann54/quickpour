@@ -12,7 +12,7 @@ class NotificationsRepository {
   })  : _firestore = firestore ?? FirebaseFirestore.instance,
         _auth = auth ?? FirebaseAuth.instance;
 
-Future<List<NotificationModel>> fetchNotifications() async {
+  Future<List<NotificationModel>> fetchNotifications() async {
     try {
       final userId = _auth.currentUser?.uid;
       // Debug log
@@ -68,6 +68,7 @@ Future<List<NotificationModel>> fetchNotifications() async {
       throw Exception('Failed to mark notification as read: $e');
     }
   }
+
   Future<int> getUnreadNotificationsCount() async {
     try {
       final userId = _auth.currentUser?.uid;
@@ -87,7 +88,6 @@ Future<List<NotificationModel>> fetchNotifications() async {
       throw Exception('Failed to fetch unread notifications count: $e');
     }
   }
-
 
   Future<void> createNotification({
     required String title,

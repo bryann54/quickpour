@@ -224,12 +224,11 @@ class OffersScreen extends StatelessWidget {
                                     color: theme.colorScheme.onSurfaceVariant,
                                   ),
                                 ),
-                             
                               ],
                             ),
                           ),
-                          Text('additional Instructions'),
-                             Text(request.additionalInstructions)
+                          const Text('additional Instructions'),
+                          Text(request.additionalInstructions)
                         ],
                       ),
                     ),
@@ -242,10 +241,8 @@ class OffersScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                 Align(
-                  alignment: Alignment.center,
-                  child: Text('No offers yet')
-                 )
+                  const Align(
+                      alignment: Alignment.center, child: Text('No offers yet'))
                 ],
               ),
             ),

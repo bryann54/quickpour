@@ -49,7 +49,6 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
           body: 'Your order #${state.orderId} has been confirmed',
           userId: state.userId ?? 'No user ID provided', // Add userId here
           payload: state.orderId,
-          
         );
 
         add(AddNewOrder(newOrder));

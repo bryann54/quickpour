@@ -71,8 +71,8 @@ class DrinkRequestListTile extends StatelessWidget {
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
-                            overflow: TextOverflow.ellipsis,  
-                            maxLines: 1, 
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
                         ),
                       ),
@@ -103,9 +103,7 @@ class DrinkRequestListTile extends StatelessWidget {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                
                     Expanded(
-            
                       child: Hero(
                         tag: 'timestamp_${request.id}',
                         child: Row(
@@ -117,14 +115,13 @@ class DrinkRequestListTile extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Expanded(
-                               
                               child: Text(
                                 DateFormat('MMM d, h:mm a')
                                     .format(request.timestamp.toLocal()),
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: theme.colorScheme.onSurfaceVariant,
                                 ),
-                                overflow: TextOverflow.ellipsis,  
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
@@ -137,8 +134,7 @@ class DrinkRequestListTile extends StatelessWidget {
                       style: IconButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: const Size(24, 24),
-                        tapTargetSize:
-                            MaterialTapTargetSize.shrinkWrap,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                     ),
                   ],

@@ -46,14 +46,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.fabLocation,
     this.userName,
   }) : super(key: key);
-   void _handleNotificationTap(BuildContext context) {
+  void _handleNotificationTap(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const NotificationsScreen()),
     );
   }
 
-Widget _buildNotificationIcon(BuildContext context,
+  Widget _buildNotificationIcon(BuildContext context,
       NotificationsState notificationsState, ThemeData currentTheme) {
     final iconColorWithTheme = iconColor ?? currentTheme.iconTheme.color;
 
@@ -130,7 +130,7 @@ Widget _buildNotificationIcon(BuildContext context,
                   mainAxisAlignment: MainAxisAlignment.end,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                 if (showNotification)
+                    if (showNotification)
                       SizedBox(
                         width: 40,
                         child:
@@ -204,7 +204,7 @@ Widget _buildNotificationIcon(BuildContext context,
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            RequestsScreen()));
+                                            const RequestsScreen()));
 
                                 break;
                               case 'logout':

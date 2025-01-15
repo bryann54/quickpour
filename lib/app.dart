@@ -76,7 +76,7 @@ class App extends StatelessWidget {
             ),
           ),
           // Move NotificationsBloc after auth bloc
-        BlocProvider<NotificationsBloc>(
+          BlocProvider<NotificationsBloc>(
             lazy: false,
             create: (context) {
               final bloc = NotificationsBloc(
@@ -99,7 +99,7 @@ class App extends StatelessWidget {
                 MerchantBloc(merchantRepository)..add(FetchMerchantEvent()),
           ),
           BlocProvider(create: (_) => CartBloc()),
-     BlocProvider(
+          BlocProvider(
             create: (context) {
               final checkoutBloc = CheckoutBloc(
                 firestore: context.read<FirebaseFirestore>(),

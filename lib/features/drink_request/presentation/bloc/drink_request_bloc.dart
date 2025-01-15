@@ -4,6 +4,7 @@ import 'package:chupachap/features/drink_request/presentation/bloc/drink_request
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'drink_request_event.dart';
+
 class DrinkRequestBloc extends Bloc<DrinkRequestEvent, DrinkRequestState> {
   final DrinkRequestRepository repository;
 

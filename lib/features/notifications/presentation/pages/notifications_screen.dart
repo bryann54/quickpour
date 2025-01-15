@@ -66,24 +66,25 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 }
 
                 if (state.notifications.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: Text('No notifications'),
                   );
                 }
 
                 return RefreshIndicator(
-                  onRefresh: () async {
-                    context.read<NotificationsBloc>()
-                      ..add(FetchNotifications())
-                      ..add(FetchUnreadCount());
-                  },
-                  child: ListView.builder(
-  itemCount: state.notifications.length,
-  itemBuilder: (context, index) {
-    final notification = state.notifications[index];
-    return NotificationTile(
-      key: ValueKey(notification.id), // Ensure a unique key for each tile
-      notification: notification,
+                    onRefresh: () async {
+                      context.read<NotificationsBloc>()
+                        ..add(FetchNotifications())
+                        ..add(FetchUnreadCount());
+                    },
+                    child: ListView.builder(
+                      itemCount: state.notifications.length,
+                      itemBuilder: (context, index) {
+                        final notification = state.notifications[index];
+                        return NotificationTile(
+                          key: ValueKey(notification
+                              .id), // Ensure a unique key for each tile
+                          notification: notification,
                           onTap: () {
                             if (!notification.isRead) {
                               context.read<NotificationsBloc>()
@@ -91,10 +92,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 ..add(FetchUnreadCount());
                             }
                           },
-    );
-  },
-)
-                );
+                        );
+                      },
+                    ));
               },
             ),
           ),

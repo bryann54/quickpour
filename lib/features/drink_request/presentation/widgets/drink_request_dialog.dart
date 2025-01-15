@@ -37,7 +37,7 @@ class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: AppColors.brandPrimary,
               onPrimary: Colors.white,
               surface: AppColors.surface,
@@ -56,7 +56,7 @@ class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-              colorScheme: ColorScheme.light(
+              colorScheme: const ColorScheme.light(
                 primary: AppColors.brandPrimary,
                 onPrimary: Colors.white,
                 surface: AppColors.surface,
@@ -124,7 +124,7 @@ class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'New Drink Request',
                 style: TextStyle(
                   color: AppColors.textPrimary,
@@ -206,7 +206,7 @@ class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
                   ),
                   child: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.access_time,
                         color: AppColors.textSecondary,
                         size: 20,

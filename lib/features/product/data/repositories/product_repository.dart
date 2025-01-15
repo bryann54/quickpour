@@ -178,7 +178,7 @@ class ProductRepository {
         brand: brand.firstWhere((m) => m.id == '17'),
         productName: 'Senator Keg',
         imageUrls: [
-         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQWBkpcSYKL59O6NW4AzsBe-xPWrC1ptBKHw&s',
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQWBkpcSYKL59O6NW4AzsBe-xPWrC1ptBKHw&s',
         ],
         price: 100.00,
         description: 'Affordable local beer popular in Kenya.',
