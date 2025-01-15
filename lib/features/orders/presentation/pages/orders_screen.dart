@@ -79,7 +79,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Widget _buildEmptyOrdersView(BuildContext context) {
-    
     return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -99,7 +98,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Widget _buildOrdersList(BuildContext context, List<CompletedOrder> orders) {
-     final theme = Theme.of(context);
+    final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     return RefreshIndicator(
       onRefresh: () async {

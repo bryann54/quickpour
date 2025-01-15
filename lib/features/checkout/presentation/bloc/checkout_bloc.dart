@@ -29,8 +29,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     ));
   }
 
-
-   void _onUpdatePaymentMethod(
+  void _onUpdatePaymentMethod(
       UpdatePaymentMethodEvent event, Emitter<CheckoutState> emit) {
     // Remove any notification triggers from here
     emit(state.copyWith(paymentMethod: event.paymentMethod));
@@ -45,7 +44,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     ));
   }
 
-Future<void> _onPlaceOrder(
+  Future<void> _onPlaceOrder(
       PlaceOrderEvent event, Emitter<CheckoutState> emit) async {
     try {
       emit(const CheckoutLoadingState());

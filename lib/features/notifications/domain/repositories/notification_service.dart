@@ -84,5 +84,4 @@ class NotificationService {
       // You might want to handle this error differently
     }
   }
-
 }

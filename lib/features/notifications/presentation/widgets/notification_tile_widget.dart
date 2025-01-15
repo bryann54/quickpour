@@ -13,7 +13,6 @@ class NotificationTile extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -21,16 +20,15 @@ class NotificationTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Container(
-      decoration: BoxDecoration(
-            color: notification.isRead
-                ? null
-                : theme.colorScheme.primary.withOpacity(0.05),
-            border: notification.isRead
-                ? null
-                : Border.all(color: AppColors.accentColor.withOpacity(.3)),
-                borderRadius: BorderRadius.circular(8),
-                ),
-     
+        decoration: BoxDecoration(
+          color: notification.isRead
+              ? null
+              : theme.colorScheme.primary.withOpacity(0.05),
+          border: notification.isRead
+              ? null
+              : Border.all(color: AppColors.accentColor.withOpacity(.3)),
+          borderRadius: BorderRadius.circular(8),
+        ),
         child: ListTile(
           leading: _buildLeadingIcon(),
           title: Text(

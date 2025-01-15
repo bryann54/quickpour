@@ -16,7 +16,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     on<FetchUnreadCount>(_onFetchUnreadCount);
   }
 
-Future<void> _onFetchNotifications(
+  Future<void> _onFetchNotifications(
     FetchNotifications event,
     Emitter<NotificationsState> emit,
   ) async {
@@ -39,7 +39,6 @@ Future<void> _onFetchNotifications(
       ));
     }
   }
-
 
   Future<void> _onMarkNotificationAsRead(
     MarkNotificationAsRead event,
