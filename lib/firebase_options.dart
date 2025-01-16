@@ -47,28 +47,28 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyB_0S5ekJlsU9aLhx4GTs3bcdDk0zMZn_U',
-    appId: '1:1027765291967:web:acf75f58489b8ca87d6f0a',
-    messagingSenderId: '1027765291967',
-    projectId: 'chupachap-e861a',
-    authDomain: 'chupachap-e861a.firebaseapp.com',
-    storageBucket: 'chupachap-e861a.firebasestorage.app',
+    apiKey: 'AIzaSyBry2cNkj9Awiy8J9MUZwoOTYlKbEkk8bY',
+    appId: '1:100273481671:web:74941f2e6a754c6f839be2',
+    messagingSenderId: '100273481671',
+    projectId: 'alkohut-5bf97',
+    authDomain: 'alkohut-5bf97.firebaseapp.com',
+    storageBucket: 'alkohut-5bf97.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA9fO5uMctjAwGektoGriopf6NtBTKrxoY',
-    appId: '1:1027765291967:android:934900f6f511950b7d6f0a',
-    messagingSenderId: '1027765291967',
-    projectId: 'chupachap-e861a',
-    storageBucket: 'chupachap-e861a.firebasestorage.app',
+    apiKey: 'AIzaSyB-Rwdo1aZoU05bssybSHZKT5_truWe4D4',
+    appId: '1:100273481671:android:1247eaf290e41939839be2',
+    messagingSenderId: '100273481671',
+    projectId: 'alkohut-5bf97',
+    storageBucket: 'alkohut-5bf97.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAL7CNeUE7deCvd-mEn1qymazsjiliaeyo',
-    appId: '1:1027765291967:ios:e2d0c5ebcdb115f47d6f0a',
-    messagingSenderId: '1027765291967',
-    projectId: 'chupachap-e861a',
-    storageBucket: 'chupachap-e861a.firebasestorage.app',
+    apiKey: 'AIzaSyCoX8O2atc0OLxdnx3ILQdLheoC2nM6ONI',
+    appId: '1:100273481671:ios:25e8d611b0978264839be2',
+    messagingSenderId: '100273481671',
+    projectId: 'alkohut-5bf97',
+    storageBucket: 'alkohut-5bf97.firebasestorage.app',
     iosBundleId: 'com.example.chupachap',
   );
 }

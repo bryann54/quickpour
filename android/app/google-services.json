@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "1027765291967",
-    "project_id": "chupachap-e861a",
-    "storage_bucket": "chupachap-e861a.firebasestorage.app"
+    "project_number": "100273481671",
+    "project_id": "alkohut-5bf97",
+    "storage_bucket": "alkohut-5bf97.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1027765291967:android:934900f6f511950b7d6f0a",
+        "mobilesdk_app_id": "1:100273481671:android:1247eaf290e41939839be2",
         "android_client_info": {
           "package_name": "com.example.chupachap"
         }
@@ -15,7 +15,26 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyA9fO5uMctjAwGektoGriopf6NtBTKrxoY"
+          "current_key": "AIzaSyB-Rwdo1aZoU05bssybSHZKT5_truWe4D4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:100273481671:android:58dc868233636ad1839be2",
+        "android_client_info": {
+          "package_name": "com.example.quickpourmerchant"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-Rwdo1aZoU05bssybSHZKT5_truWe4D4"
         }
       ],
       "services": {
