@@ -1,126 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
 
 class MerchantsRepository {
-  Future<List<Merchants>> getMerchants() async {
-    await Future.delayed(const Duration(seconds: 2));
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-    return [
-      Merchants(
-        isOpen: false,
-        id: '1',
-        name: 'Whiskey Corner',
-        location: 'Nairobi, Kenya',
-        products: ['Whiskey', 'Vodka', 'Gin'],
-        experience: 15,
-        imageUrl:
-            'https://imageio.forbes.com/specials-images/imageserve/697222998/independent-liquor-store/960x0.jpg?format=jpg&width=960',
-        rating: 4.9,
-        isVerified: true,
-      ),
-      Merchants(
-        isOpen: true,
-        id: '2',
-        name: 'The Gin Vault',
-        location: 'Mombasa, Kenya',
-        products: ['Gin', 'Tonic Water', 'Cocktail Mixers'],
-        experience: 12,
-        imageUrl:
-            'https://www.logodesign.net/logo-new/ripple-effect-circle-with-liquor-bottle-and-star-9430ld.png?nwm=1&nws=1&industry=liquor-store&txt_keyword=All',
-        rating: 4.7,
-        isVerified: true,
-      ),
-      Merchants(
-        isOpen: true,
-        id: '3',
-        name: 'Bourbon Haven',
-        location: 'Kisumu, Kenya',
-        products: ['Bourbon', 'Craft Beer', 'Wine'],
-        experience: 10,
-        imageUrl: 'https://example.com/bourbon_haven.jpg',
-        rating: 4.6,
-        isVerified: true,
-      ),
-      Merchants(
-        isOpen: false,
-        id: '4',
-        name: 'Wine & Spirits Emporium',
-        location: 'Nakuru, Kenya',
-        products: ['Wine', 'Brandy', 'Champagne'],
-        experience: 8,
-        imageUrl:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbRoKam2LMEhmFKJ4UfWm4OvN5h5FRaWResQ&s',
-        rating: 4.5,
-        isVerified: false,
-      ),
-      Merchants(
-        isOpen: false,
-        id: '5',
-        name: 'The Liquor Store',
-        location: 'Eldoret, Kenya',
-        products: ['Rum', 'Tequila', 'Mezcal'],
-        experience: 9,
-        imageUrl:
-            'https://thumbs.dreamstime.com/b/vector-logo-liquor-store-black-round-sign-board-department-hypermarket-variety-cartoon-bottles-hard-alcohol-142206819.jpg',
-        rating: 4.4,
-        isVerified: true,
-      ),
-      Merchants(
-        isOpen: true,
-        id: '6',
-        name: 'Crafted Spirits Co.',
-        location: 'Nyeri, Kenya',
-        products: ['Craft Vodka', 'Flavored Whiskey', 'Premium Gin'],
-        experience: 11,
-        imageUrl:
-            'https://t3.ftcdn.net/jpg/03/94/71/36/360_F_394713609_N5MjKOrHqQN6vG8beLN4KAduAKmy3hFH.jpg',
-        rating: 4.8,
-        isVerified: true,
-      ),
-      Merchants(
-        isOpen: true,
-        id: '7',
-        name: 'Elite Liquor Lounge',
-        location: 'Thika, Kenya',
-        products: ['Single Malt Whiskey', 'Aged Brandy', 'Exotic Liqueurs'],
-        experience: 14,
-        imageUrl: 'https://example.com/elite_liquor.jpg',
-        rating: 4.9,
-        isVerified: true,
-      ),
-      Merchants(
-        isOpen: true,
-        id: '8',
-        name: 'Heritage Liquors',
-        location: 'Kericho, Kenya',
-        products: ['Craft Beers', 'Fine Wines', 'Signature Cocktails'],
-        experience: 10,
-        imageUrl:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdkOcxNyoTA8LhgD1iUoC-g4CzmZIARdcwIQ&s',
-        rating: 4.6,
-        isVerified: true,
-      ),
-      Merchants(
-        isOpen: true,
-        id: '9',
-        name: 'The Tequila Cove',
-        location: 'Malindi, Kenya',
-        products: ['Tequila', 'Mezcal', 'Cocktail Syrups'],
-        experience: 7,
-        imageUrl: 'https://example.com/tequila_cove.jpg',
-        rating: 4.5,
-        isVerified: false,
-      ),
-      Merchants(
-        isOpen: true,
-        id: '10',
-        name: 'Vintage Spirits',
-        location: 'Naivasha, Kenya',
-        products: ['Vintage Whiskey', 'Old World Wines', 'Rare Cognac'],
-        experience: 18,
-        imageUrl: 'https://example.com/vintage_spirits.jpg',
-        rating: 4.9,
-        isVerified: true,
-      ),
-    ];
+  Future<List<Merchants>> getMerchants() async {
+    try {
+      final QuerySnapshot querySnapshot =
+          await _firestore.collection('merchants').get();
+
+      return querySnapshot.docs.map((doc) {
+        // Assuming Firestore documents have the same fields as the Merchants model
+        return Merchants.fromJson(doc.data() as Map<String, dynamic>);
+      }).toList();
+    } catch (e) {
+      throw Exception('Error fetching merchants from Firestore: $e');
+    }
   }
 }

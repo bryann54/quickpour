@@ -82,7 +82,7 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                 opacity: _backgroundFadeAnimation.value,
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.blueGrey.withOpacity(.3),
+                      color: AppColors.primaryColor,
                       gradient: LinearGradient(
                         colors: [
                           AppColors.primaryColor.withOpacity(.9),
