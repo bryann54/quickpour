@@ -168,7 +168,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                     // Filter products for the current category
                     final categoryProducts = state.products
                         .where((product) =>
-                            product.category.id == widget.category.id)
+                            product.categoryName == widget.category.id)
                         .toList();
 
                     if (categoryProducts.isEmpty) {

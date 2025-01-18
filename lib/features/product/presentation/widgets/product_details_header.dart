@@ -49,21 +49,25 @@ class ProductDetailsHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Product Name with animated gradient
-              ShaderMask(
-                shaderCallback: (bounds) => LinearGradient(
-                  colors: isDarkMode
-                      ? [AppColors.brandAccent, AppColors.brandPrimary]
-                      : [AppColors.primaryColor, AppColors.brandPrimary],
-                ).createShader(bounds),
-                child: Text(
-                  product.productName,
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.5,
-                    height: 1.2,
+              Align(
+              alignment: 
+              Alignment.center,
+                child: ShaderMask(
+                  shaderCallback: (bounds) => LinearGradient(
+                    colors: isDarkMode
+                        ? [AppColors.brandAccent, AppColors.brandPrimary]
+                        : [AppColors.brandAccent, AppColors.brandPrimary],
+                  ).createShader(bounds),
+                  child: Text(
+                    product.productName,
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                      height: 1.2,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
 
@@ -119,8 +123,8 @@ class ProductDetailsHeader extends StatelessWidget {
                     child: _buildInfoCard(
                       context,
                       'Category',
-                      product.category.name,
-                      product.category.imageUrl,
+                      product.categoryName,
+                      product.brandName,
                       isDarkMode,
                     ),
                   ),
@@ -129,8 +133,8 @@ class ProductDetailsHeader extends StatelessWidget {
                     child: _buildInfoCard(
                       context,
                       'Brand',
-                      product.brand.name,
-                      product.brand.logoUrl,
+                      product.categoryName,
+                      product.brandName,
                       isDarkMode,
                     ),
                   ),

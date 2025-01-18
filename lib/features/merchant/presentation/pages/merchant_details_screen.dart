@@ -103,7 +103,7 @@ class MerchantDetailsScreen extends StatelessWidget {
                 if (state is ProductLoadedState) {
                   // Filter products for the current merchant
                   final merchantProducts = state.products
-                      .where((product) => product.merchants.id == merchant.id)
+                      .where((product) => product.merchantId == merchant.id)
                       .toList();
 
                   return SliverPadding(

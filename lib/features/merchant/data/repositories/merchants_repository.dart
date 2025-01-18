@@ -10,7 +10,6 @@ class MerchantsRepository {
           await _firestore.collection('merchants').get();
 
       return querySnapshot.docs.map((doc) {
-        // Assuming Firestore documents have the same fields as the Merchants model
         return Merchants.fromJson(doc.data() as Map<String, dynamic>);
       }).toList();
     } catch (e) {

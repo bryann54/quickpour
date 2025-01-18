@@ -41,7 +41,9 @@ class FavoritesWidget extends StatelessWidget {
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: CachedNetworkImage(
-              imageUrl: favoriteItem.product.imageUrls.first,
+             imageUrl: favoriteItem.product.imageUrls.isNotEmpty
+                  ? favoriteItem.product.imageUrls.first
+                  : 'fallback_image_url',
               width: 50,
               height: double.infinity,
               fit: BoxFit.cover,
@@ -67,22 +69,22 @@ class FavoritesWidget extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: isDarkMode
-                              ? AppColors.surface.withOpacity(.3)
-                              : AppColors.accentColor,
-                        )),
-                    child: CircleAvatar(
-                      radius: 10,
-                      backgroundImage: CachedNetworkImageProvider(
-                          favoriteItem.product.category.imageUrl),
-                    ),
-                  ),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //       shape: BoxShape.circle,
+                  //       border: Border.all(
+                  //         color: isDarkMode
+                  //             ? AppColors.surface.withOpacity(.3)
+                  //             : AppColors.accentColor,
+                  //       )),
+                  //   child: CircleAvatar(
+                  //     radius: 10,
+                  //     backgroundImage: CachedNetworkImageProvider(
+                  //         favoriteItem.product.category.imageUrl),
+                  //   ),
+                  // ),
                   Text(
-                    '  ${favoriteItem.product.category.name}',
+                    '  ${favoriteItem.product.categoryName}',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: isDarkMode
                           ? AppColors.surface.withOpacity(.3)
@@ -101,16 +103,16 @@ class FavoritesWidget extends StatelessWidget {
             ),
           ),
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProductDetailsScreen(
-                  product: favoriteItem.product,
-                  initialQuantity: 0,
-                  onQuantityChanged: (newQuantity) {},
-                ),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => ProductDetailsScreen(
+            //       product: favoriteItem.product,
+            //       initialQuantity: 0,
+            //       onQuantityChanged: (newQuantity) {},
+            //     ),
+            //   ),
+            // );
           },
           trailing: Container(
             decoration: BoxDecoration(
