@@ -4,7 +4,6 @@ import 'package:chupachap/features/cart/data/models/cart_model.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_event.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
-import 'package:chupachap/features/favorites/presentation/bloc/favorites_event.dart';
 import 'package:chupachap/features/product/presentation/pages/product_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +27,7 @@ class CartItemWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     final cartBloc = context.read<CartBloc>();
-    final favoritesBloc = context.read<FavoritesBloc>();
+    context.read<FavoritesBloc>();
 
     return GestureDetector(
       onTap: () {
@@ -57,20 +56,46 @@ class CartItemWidget extends StatelessWidget {
                 tag: 'product_image_${cartItem.product.id}',
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: CachedNetworkImage(
-                    imageUrl: cartItem.product.imageUrls.first,
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) =>
-                        const Center(child: CircularProgressIndicator.adaptive()),
-                    errorWidget: (context, url, error) => Container(
+                  child: Stack(children: [
+                    CachedNetworkImage(
+                      imageUrl: cartItem.product.imageUrls.isNotEmpty
+                          ? cartItem.product.imageUrls.first
+                          : 'fallback_image_url', // Provide a fallback URL
                       width: 100,
                       height: 100,
-                      color: Colors.grey[300],
-                      child: const Icon(Icons.error, color: Colors.red),
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator.adaptive()),
+                      errorWidget: (context, url, error) => Container(
+                        width: 100,
+                        height: 100,
+                        color: Colors.grey[300],
+                        child:
+                            Icon(Icons.error, color: AppColors.backgroundDark),
+                      ),
                     ),
-                  ),
+                    if (cartItem.product.discountPrice > 0) ...[
+                      Positioned(
+                        top: 5,
+                        right: 5,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4, vertical: 1),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            '${_calculateDiscountPercentage(cartItem.product.price, cartItem.product.discountPrice)}% Off',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      )
+                    ]
+                  ]),
                 ),
               ),
               const SizedBox(width: 12),
@@ -111,13 +136,6 @@ class CartItemWidget extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Text(
-                            '-${_calculateDiscountPercentage(cartItem.product.price, cartItem.product.discountPrice)}%',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                         ],
                       ],
                     ),
@@ -125,49 +143,56 @@ class CartItemWidget extends StatelessWidget {
                 ),
               ),
               // Quantity Control
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.remove_circle_outline,
-                      color: cartItem.quantity > 1
-                          ? (isDarkMode ? Colors.white : Colors.black)
-                          : Colors.grey,
+              Container(
+                decoration: BoxDecoration(
+                  border:
+                      Border.all(color: AppColors.accentColor.withOpacity(.3)),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.remove_circle_outline,
+                        color: cartItem.quantity > 1
+                            ? (isDarkMode ? Colors.white : Colors.black)
+                            : Colors.grey,
+                      ),
+                      onPressed: cartItem.quantity > 1
+                          ? () {
+                              cartBloc.add(UpdateCartQuantityEvent(
+                                product: cartItem.product,
+                                quantity: cartItem.quantity - 1,
+                              ));
+                            }
+                          : () {
+                              cartBloc.add(RemoveFromCartEvent(
+                                  product: cartItem.product));
+                            },
                     ),
-                    onPressed: cartItem.quantity > 1
-                        ? () {
-                            cartBloc.add(UpdateCartQuantityEvent(
-                              product: cartItem.product,
-                              quantity: cartItem.quantity - 1,
-                            ));
-                          }
-                        : () {
-                            cartBloc.add(RemoveFromCartEvent(
-                                product: cartItem.product));
-                          },
-                  ),
-                  Text(
-                    '${cartItem.quantity}',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+                    Text(
+                      '${cartItem.quantity}',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.add_circle_outline,
-                      color: isDarkMode
-                          ? AppColors.accentColor
-                          : AppColors.accentColorDark,
+                    IconButton(
+                      icon: FaIcon(
+                        FontAwesomeIcons.circlePlus,
+                        color: isDarkMode
+                            ? AppColors.accentColor
+                            : AppColors.accentColorDark,
+                      ),
+                      onPressed: () {
+                        cartBloc.add(UpdateCartQuantityEvent(
+                          product: cartItem.product,
+                          quantity: cartItem.quantity + 1,
+                        ));
+                      },
                     ),
-                    onPressed: () {
-                      cartBloc.add(UpdateCartQuantityEvent(
-                        product: cartItem.product,
-                        quantity: cartItem.quantity + 1,
-                      ));
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
               const SizedBox(width: 8),
               // Favorite Icon

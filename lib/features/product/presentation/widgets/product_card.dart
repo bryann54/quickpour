@@ -13,39 +13,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
 class ProductCard extends StatelessWidget {
   final ProductModel product;
 
   const ProductCard({Key? key, required this.product}) : super(key: key);
 
-int _calculateDiscountPercentage(double originalPrice, double discountPrice) {
-  if (originalPrice <= 0 || discountPrice <= 0) {
-    return 0; // Handle invalid values gracefully
+  int _calculateDiscountPercentage(double originalPrice, double discountPrice) {
+    if (originalPrice <= 0 || discountPrice <= 0) {
+      return 0; // Handle invalid values gracefully
+    }
+    final discount = ((originalPrice - discountPrice) / originalPrice) * 100;
+    return discount.round(); // Return rounded discount percentage
   }
-  final discount = ((originalPrice - discountPrice) / originalPrice) * 100;
-  return discount.round(); // Return rounded discount percentage
-}
 
   @override
   Widget build(BuildContext context) {
-        final theme = Theme.of(context);
+    final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
-       Future.microtask(() {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProductDetailsScreen(
-              product: product,
-              initialQuantity: 1, 
-              onQuantityChanged: (quantity) {
-              
-              },
+        Future.microtask(() {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProductDetailsScreen(
+                product: product,
+                initialQuantity: 1,
+                onQuantityChanged: (quantity) {},
+              ),
             ),
-          ),
-       );
+          );
         });
       },
       child: Card(
@@ -54,10 +51,10 @@ int _calculateDiscountPercentage(double originalPrice, double discountPrice) {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-            AspectRatio(
+                AspectRatio(
                   aspectRatio: 16 / 9,
                   child: Hero(
-                    tag: 'product-${product.id}', 
+                    tag: 'product-${product.id}',
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
@@ -103,15 +100,16 @@ int _calculateDiscountPercentage(double originalPrice, double discountPrice) {
                       ),
                       const SizedBox(height: 4),
                       // Price Section
-Row(
+                      Row(
                         children: [
                           Text(
-                            'KSH ${product.discountPrice > 0 ? product.discountPrice.toStringAsFixed(0) : product.price.toStringAsFixed(0)}',
+                            'KSH ${product.discountPrice > 0 && product.discountPrice < product.price ? product.discountPrice.toStringAsFixed(0) : product.price.toStringAsFixed(0)}',
                             style: Theme.of(context)
                                 .textTheme
                                 .titleSmall
                                 ?.copyWith(
-                                  color: product.discountPrice > 0
+                                  color: product.discountPrice > 0 &&
+                                          product.discountPrice < product.price
                                       ? AppColors.accentColor
                                       : Theme.of(context)
                                           .textTheme
@@ -121,7 +119,8 @@ Row(
                                 ),
                             overflow: TextOverflow.ellipsis,
                           ),
-                          if (product.discountPrice > 0) ...[
+                          if (product.discountPrice > 0 &&
+                              product.discountPrice < product.price) ...[
                             const SizedBox(width: 28),
                             Expanded(
                               child: Text(
@@ -136,11 +135,9 @@ Row(
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                         
                           ],
                         ],
                       ),
-
                       // Out of Stock Message
                       if (!product.isAvailable)
                         Text(
@@ -151,8 +148,8 @@ Row(
                               ?.copyWith(color: Colors.red),
                         ),
                       const SizedBox(height: 8),
-                   
-                   Row(
+
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
@@ -168,7 +165,6 @@ Row(
 
                                 return cartItem.quantity == 0
                                     ? ElevatedButton(
-                                      
                                         onPressed: () {
                                           context.read<CartBloc>().add(
                                                 AddToCartEvent(
@@ -183,17 +179,23 @@ Row(
                                         child: const Text('Add to Cart'),
                                       )
                                     : Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: isDarkMode?AppColors.background:AppColors.accentColor
-                                        ),
-                                        borderRadius: BorderRadius.circular(12)
-                                      ),
-                                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: isDarkMode
+                                                    ? AppColors.background
+                                                    : AppColors.accentColor),
+                                            borderRadius:
+                                                BorderRadius.circular(12)),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            SizedBox(width: 13,),
+                                            SizedBox(
+                                              width: 13,
+                                            ),
                                             IconButton(
-                                              icon: const FaIcon(FontAwesomeIcons.circleMinus),
+                                              icon: const FaIcon(
+                                                  FontAwesomeIcons.circleMinus),
                                               onPressed: () {
                                                 final newQuantity =
                                                     cartItem.quantity > 1
@@ -217,53 +219,58 @@ Row(
                                             // Quantity Increase Button
                                             IconButton(
                                               icon: const FaIcon(
-                                                  FontAwesomeIcons.circlePlus,color: AppColors.accentColor,),
+                                                FontAwesomeIcons.circlePlus,
+                                                color: AppColors.accentColor,
+                                              ),
                                               onPressed: () {
                                                 context.read<CartBloc>().add(
                                                       UpdateCartQuantityEvent(
                                                         product: product,
                                                         quantity:
-                                                            cartItem.quantity + 1,
+                                                            cartItem.quantity +
+                                                                1,
                                                       ),
                                                     );
                                               },
                                             ),
-                                             SizedBox(
+                                            SizedBox(
                                               width: 13,
                                             ),
                                           ],
                                         ),
-                                    );
+                                      );
                               },
                             ),
                           ),
                         ],
                       ),
-
                     ],
                   ),
                 ),
               ],
             ),
-            // Positioned Favorites Button
+            if (product.discountPrice > 0 &&
+                product.discountPrice < product.price) ...[
               Positioned(
-              top: 10,
-              left: 10,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  '${_calculateDiscountPercentage(product.price, product.discountPrice)}% OFF',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 11,
+                top: 10,
+                left: 10,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    '${_calculateDiscountPercentage(product.price, product.discountPrice)}% OFF',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 11,
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
             Positioned(
               top: 10,
               right: 10,

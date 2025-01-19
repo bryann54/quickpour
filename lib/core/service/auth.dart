@@ -22,4 +22,3 @@ class MerchantFirestoreService {
 
   static FirebaseFirestore get firestore => _merchantFirestore!;
 }
-

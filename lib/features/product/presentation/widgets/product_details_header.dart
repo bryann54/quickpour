@@ -50,8 +50,7 @@ class ProductDetailsHeader extends StatelessWidget {
             children: [
               // Product Name with animated gradient
               Align(
-              alignment: 
-              Alignment.center,
+                alignment: Alignment.center,
                 child: ShaderMask(
                   shaderCallback: (bounds) => LinearGradient(
                     colors: isDarkMode
@@ -124,7 +123,7 @@ class ProductDetailsHeader extends StatelessWidget {
                       context,
                       'Category',
                       product.categoryName,
-                      product.brandName,
+                      product.categoryName,
                       isDarkMode,
                     ),
                   ),
@@ -133,7 +132,7 @@ class ProductDetailsHeader extends StatelessWidget {
                     child: _buildInfoCard(
                       context,
                       'Brand',
-                      product.categoryName,
+                      product.brandName,
                       product.brandName,
                       isDarkMode,
                     ),

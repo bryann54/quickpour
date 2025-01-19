@@ -204,7 +204,8 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
                   if (state is ProductLoadedState) {
                     // Filter products for the current brand
                     final brandProducts = state.products
-                        .where((product) => product.brandName == widget.brand.id)
+                        .where(
+                            (product) => product.brandName == widget.brand.id)
                         .toList();
 
                     if (brandProducts.isEmpty) {

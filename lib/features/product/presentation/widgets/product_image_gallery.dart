@@ -86,7 +86,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                 ),
               ),
             ),
-              // Price details
+            // Price details
             Positioned(
               bottom: 10,
               left: 100,
@@ -120,15 +120,15 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                 ],
               ),
             ),
-                         
+
             // Favorite Icon (Similar to the original code)
-            BlocBuilder<FavoritesBloc, FavoritesState>(
-              builder: (context, favoritesState) {
-                final isFavorite = favoritesState.isFavorite(widget.product);
-                return Positioned(
-                  top: 10,
-                  right: 10,
-                  child: CircleAvatar(
+            Positioned(
+              top: 10,
+              right: 10,
+              child: BlocBuilder<FavoritesBloc, FavoritesState>(
+                builder: (context, favoritesState) {
+                  final isFavorite = favoritesState.isFavorite(widget.product);
+                  return CircleAvatar(
                     radius: 25,
                     backgroundColor: Colors.white.withOpacity(0.8),
                     child: IconButton(
@@ -148,9 +148,9 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                         }
                       },
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ],
         ),

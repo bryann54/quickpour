@@ -256,7 +256,6 @@ class MerchantsDetailsSection extends StatelessWidget {
         //       ),
         //     ),
         //   ),
-      
       ],
     );
   }

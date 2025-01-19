@@ -109,32 +109,25 @@ class OffersScreen extends StatelessWidget {
         slivers: [
           SliverAppBar(
             expandedHeight: 200,
+            iconTheme: const IconThemeData(color: Colors.white),
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          theme.colorScheme.secondaryContainer,
-                          theme.colorScheme.primaryContainer,
-                        ],
-                      ),
-                    ),
+                  Image.asset(
+                    'assets/111.png',
+                    fit: BoxFit.cover,
                   ),
-                  // Add a subtle overlay for better text readability
+                  // Gradient overlay for better text visibility
                   Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
+                          Colors.black.withOpacity(0.6),
                           Colors.black.withOpacity(0.3),
-                          Colors.transparent,
                         ],
                       ),
                     ),

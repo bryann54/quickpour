@@ -56,9 +56,7 @@ class App extends StatelessWidget {
           ),
         ),
         Provider<DrinkRequestRepository>(
-          create: (context) => DrinkRequestRepository(
-            firestore: context.read<FirebaseFirestore>(),
-          ),
+          create: (context) => DrinkRequestRepository(),
         ),
       ],
       child: MultiBlocProvider(

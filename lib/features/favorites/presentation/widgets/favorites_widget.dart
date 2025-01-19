@@ -3,7 +3,6 @@ import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/favorites/data/models/favorites_model.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_event.dart';
-import 'package:chupachap/features/product/presentation/pages/product_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +18,7 @@ class FavoritesWidget extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
       child: Container(
         decoration: BoxDecoration(
           color: isDarkMode
@@ -41,7 +40,7 @@ class FavoritesWidget extends StatelessWidget {
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: CachedNetworkImage(
-             imageUrl: favoriteItem.product.imageUrls.isNotEmpty
+              imageUrl: favoriteItem.product.imageUrls.isNotEmpty
                   ? favoriteItem.product.imageUrls.first
                   : 'fallback_image_url',
               width: 50,
@@ -84,7 +83,7 @@ class FavoritesWidget extends StatelessWidget {
                   //   ),
                   // ),
                   Text(
-                    '  ${favoriteItem.product.categoryName}',
+                    '  ${favoriteItem.product.brandName}',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: isDarkMode
                           ? AppColors.surface.withOpacity(.3)
