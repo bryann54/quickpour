@@ -131,7 +131,7 @@ class MerchantDetailsScreen extends StatelessWidget {
                   return SliverToBoxAdapter(
                     child: Center(
                       child: Text(
-                        state.errorMessage,
+                        'Error loading products for ${merchant.name}',
                         style: theme.textTheme.bodyLarge
                             ?.copyWith(color: Colors.red),
                       ),

@@ -17,8 +17,14 @@ class DrinkRequestFailure extends DrinkRequestState {
   DrinkRequestFailure(this.error);
 }
 
-class OffersLoadedState extends DrinkRequestState {
+class OffersLoaded extends DrinkRequestState {
   final List<Map<String, dynamic>> offers;
 
-  OffersLoadedState(this.offers);
+  OffersLoaded(this.offers);
 }
+// class OffersStreamLoadingState extends DrinkRequestState {}
+
+// class OffersStreamLoadedState extends DrinkRequestState {
+//   final List<Map<String, dynamic>> offers;
+//   OffersStreamLoadedState(this.offers);
+// }

@@ -2,11 +2,14 @@ import 'package:chupachap/features/drink_request/data/models/drink_request.dart'
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DrinkRequestRepository {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    final FirebaseFirestore _firestore =
+      FirebaseFirestore.instance; // Use _firestore directly
+
+
 
   DrinkRequestRepository();
 
-  // Add a drink request to the 'drinkRequests' collection
   Future<void> addDrinkRequest(DrinkRequest request) async {
     try {
       await _firestore.collection('drinkRequests').add(request.toMap());
@@ -15,7 +18,6 @@ class DrinkRequestRepository {
     }
   }
 
-  // Delete a drink request by ID
   Future<void> deleteDrinkRequest(String id) async {
     try {
       await _firestore.collection('drinkRequests').doc(id).delete();
@@ -23,27 +25,53 @@ class DrinkRequestRepository {
       throw Exception('Failed to delete drink request: $e');
     }
   }
+// Stream<List<Map<String, dynamic>>> streamOffers(String drinkRequestId) {
+//     return _firestore
+//         .collection('drinkRequests') // Access the main collection
+//         .doc(drinkRequestId) // Specify the document ID for the drink request
+//         .collection('offers') // Access the nested "offers" collection
+//         .orderBy('timestamp', descending: true) // Order the offers by timestamp
+//         .snapshots() // Get real-time updates
+//         .map((snapshot) => snapshot.docs
+//             .map((doc) => {
+//                   'id': doc.id, // Include the document ID if needed
+//                   ...doc.data() as Map<String, dynamic>, // Add document fields
+//                 })
+//             .toList());
+//   }
 
-  // Fetch all drink requests with their IDs
-  Future<List<DrinkRequest>> fetchDrinkRequests() async {
+
+  Future<List<DrinkRequest>> getDrinkRequests() async {
     try {
-      final snapshot = await _firestore
+      final QuerySnapshot snapshot = await _firestore
           .collection('drinkRequests')
           .orderBy('timestamp', descending: true)
           .get();
 
       return snapshot.docs
-          .map((doc) => DrinkRequest.fromMap({...doc.data(), 'id': doc.id}))
+          .map(
+              (doc) => DrinkRequest.fromMap(doc.data() as Map<String, dynamic>))
           .toList();
     } catch (e) {
       throw Exception('Failed to fetch drink requests: $e');
     }
   }
 
-  // Fetch offers for a specific drink request
+  Stream<List<DrinkRequest>> streamDrinkRequests() {
+    return _firestore
+        .collection('drinkRequests')
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) =>
+                DrinkRequest.fromMap(doc.data() as Map<String, dynamic>))
+            .toList());
+  }
+
   Future<List<Map<String, dynamic>>> getOffers(String requestId) async {
     try {
-      final snapshot = await _firestore
+      // Fetch from nested 'offers' collection
+      final QuerySnapshot snapshot = await _firestore
           .collection('drinkRequests')
           .doc(requestId)
           .collection('offers')
@@ -58,45 +86,5 @@ class DrinkRequestRepository {
     }
   }
 
-  // Fetch all drink requests along with their nested offers
-  Future<List<DrinkRequest>> fetchDrinkRequestsWithOffers() async {
-    try {
-      final drinkRequestSnapshot = await _firestore
-          .collection('drinkRequests')
-          .orderBy('timestamp', descending: true)
-          .get();
 
-      final List<DrinkRequest> drinkRequests = [];
-
-      for (final doc in drinkRequestSnapshot.docs) {
-        final requestData = doc.data();
-        final requestId = doc.id;
-
-        // Fetch nested offers for each drink request
-        final offersSnapshot = await _firestore
-            .collection('drinkRequests')
-            .doc(requestId)
-            .collection('offers')
-            .orderBy('timestamp', descending: true)
-            .get();
-
-        final offers = offersSnapshot.docs
-            .map((offerDoc) => offerDoc.data() as Map<String, dynamic>)
-            .toList();
-
-        // Include the offers in the drink request
-        drinkRequests.add(
-          DrinkRequest.fromMap({
-            ...requestData,
-            'id': requestId,
-            'offers': offers,
-          }),
-        );
-      }
-
-      return drinkRequests;
-    } catch (e) {
-      throw Exception('Failed to fetch drink requests with offers: $e');
-    }
-  }
 }

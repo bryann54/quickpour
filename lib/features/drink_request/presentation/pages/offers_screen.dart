@@ -1,3 +1,6 @@
+import 'package:chupachap/features/drink_request/data/repositories/drink_request_repository.dart';
+import 'package:chupachap/features/drink_request/presentation/bloc/drink_request_state.dart';
+import 'package:chupachap/features/drink_request/presentation/widgets/offer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chupachap/features/drink_request/data/models/drink_request.dart';
@@ -13,7 +16,11 @@ class OffersScreen extends StatelessWidget {
     super.key,
     required this.request,
   });
-
+Future<List<Map<String, dynamic>>> _fetchOffers() {
+    final repository = DrinkRequestRepository();
+    return repository.getOffers(request.id);
+  }
+  
   Future<bool> _showDeleteConfirmation(BuildContext context) async {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return await showCupertinoDialog<bool>(
@@ -103,7 +110,7 @@ class OffersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+  
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -227,16 +234,153 @@ class OffersScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Text(
-                    'Available Offers',
+                Text(
+                    'Offers',
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  const Align(
-                      alignment: Alignment.center, child: Text('No offers yet'))
-                ],
+                
+       FutureBuilder<List<Map<String, dynamic>>>(
+                    future: _fetchOffers(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text(
+                            'Failed to load offers: ${snapshot.error}',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.error),
+                          ),
+                        );
+                      } else if (snapshot.hasData &&
+                          snapshot.data!.isNotEmpty) {
+                        return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            final offer = snapshot.data![index];
+                            return Card(
+                              margin: const EdgeInsets.symmetric(vertical: 1),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 6,right: 5),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          offer['storeName'] ?? 'Unknown Store',
+                                          style: theme.textTheme.titleMedium
+                                              ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Ksh ${offer['price']}',
+                                          style: theme.textTheme.titleLarge
+                                              ?.copyWith(
+                                            color: theme.colorScheme.primary,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.location_on_outlined,
+                                          size: 16,
+                                          color: theme
+                                              .colorScheme.onSurfaceVariant,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          offer['location'] ??
+                                              'Location not specified',
+                                          style: theme.textTheme.bodyMedium
+                                              ?.copyWith(
+                                            color: theme
+                                                .colorScheme.onSurfaceVariant,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.access_time,
+                                          size: 16,
+                                          color: theme
+                                              .colorScheme.onSurfaceVariant,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          'Delivery by: ${DateFormat('MMM d, h:mm a').format(
+                                            DateTime.parse(
+                                                offer['deliveryTime']),
+                                          )}',
+                                          style: theme.textTheme.bodyMedium,
+                                        ),
+                                      ],
+                                    ),
+                                    if (offer['notes']?.isNotEmpty ??
+                                        false) ...[
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'Notes:',
+                                        style: theme.textTheme.bodyMedium
+                                            ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        offer['notes'],
+                                        style: theme.textTheme.bodyMedium
+                                            ?.copyWith(
+                                          color: theme
+                                              .colorScheme.onSurfaceVariant,
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.local_offer_outlined,
+                                size: 48,
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                            
+                              Text(
+                                'No offers yet',
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                  ) ],
+              
               ),
             ),
           ),
