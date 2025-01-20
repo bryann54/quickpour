@@ -1,4 +1,5 @@
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
@@ -28,7 +29,7 @@ class _BottomNavState extends State<BottomNav> {
   // List of screens corresponding to navigation items
   final List<Widget> _screens = [
   
-    const SearchPage(),
+     SearchPage(authRepository: AuthRepository(),),
     const FavoritesScreen(),
       const HomeScreen(),
     const CartPage(),

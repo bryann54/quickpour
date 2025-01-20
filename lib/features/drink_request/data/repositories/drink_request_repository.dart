@@ -1,56 +1,52 @@
+import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/drink_request/data/models/drink_request.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DrinkRequestRepository {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final AuthRepository _authRepository;
 
-    final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance; // Use _firestore directly
-
-
-
-  DrinkRequestRepository();
+  DrinkRequestRepository(this._authRepository);
 
   Future<void> addDrinkRequest(DrinkRequest request) async {
     try {
-      await _firestore.collection('drinkRequests').add(request.toMap());
+      String? userId = _authRepository.getCurrentUserId();
+      if (userId == null) throw Exception('User not authenticated');
+
+      // Create a new request with the current user's ID
+      final requestWithUser = DrinkRequest(
+        id: request.id,
+        drinkName: request.drinkName,
+        userId: userId,
+        quantity: request.quantity,
+        timestamp: request.timestamp,
+        merchantId: request.merchantId,
+        additionalInstructions: request.additionalInstructions,
+        preferredTime: request.preferredTime,
+      );
+
+      await _firestore.collection('drinkRequests').add(requestWithUser.toMap());
     } catch (e) {
       throw Exception('Failed to add drink request: $e');
     }
   }
 
-  Future<void> deleteDrinkRequest(String id) async {
-    try {
-      await _firestore.collection('drinkRequests').doc(id).delete();
-    } catch (e) {
-      throw Exception('Failed to delete drink request: $e');
-    }
-  }
-// Stream<List<Map<String, dynamic>>> streamOffers(String drinkRequestId) {
-//     return _firestore
-//         .collection('drinkRequests') // Access the main collection
-//         .doc(drinkRequestId) // Specify the document ID for the drink request
-//         .collection('offers') // Access the nested "offers" collection
-//         .orderBy('timestamp', descending: true) // Order the offers by timestamp
-//         .snapshots() // Get real-time updates
-//         .map((snapshot) => snapshot.docs
-//             .map((doc) => {
-//                   'id': doc.id, // Include the document ID if needed
-//                   ...doc.data() as Map<String, dynamic>, // Add document fields
-//                 })
-//             .toList());
-//   }
-
-
   Future<List<DrinkRequest>> getDrinkRequests() async {
     try {
+      String? userId = _authRepository.getCurrentUserId();
+      if (userId == null) throw Exception('User not authenticated');
+
       final QuerySnapshot snapshot = await _firestore
           .collection('drinkRequests')
+          .where('userId', isEqualTo: userId)
           .orderBy('timestamp', descending: true)
           .get();
 
       return snapshot.docs
-          .map(
-              (doc) => DrinkRequest.fromMap(doc.data() as Map<String, dynamic>))
+          .map((doc) => DrinkRequest.fromMap({
+                'id': doc.id,
+                ...doc.data() as Map<String, dynamic>,
+              }))
           .toList();
     } catch (e) {
       throw Exception('Failed to fetch drink requests: $e');
@@ -58,33 +54,65 @@ class DrinkRequestRepository {
   }
 
   Stream<List<DrinkRequest>> streamDrinkRequests() {
+    String? userId = _authRepository.getCurrentUserId();
+    if (userId == null) throw Exception('User not authenticated');
+
     return _firestore
         .collection('drinkRequests')
+        .where('userId', isEqualTo: userId)
         .orderBy('timestamp', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) =>
-                DrinkRequest.fromMap(doc.data() as Map<String, dynamic>))
+            .map((doc) => DrinkRequest.fromMap({
+                  'id': doc.id,
+                  ...doc.data() as Map<String, dynamic>,
+                }))
             .toList());
+  }
+
+  Future<void> deleteDrinkRequest(String id) async {
+    try {
+      String? userId = _authRepository.getCurrentUserId();
+      if (userId == null) throw Exception('User not authenticated');
+
+      // Verify the request belongs to the current user before deleting
+      final doc = await _firestore.collection('drinkRequests').doc(id).get();
+      if (doc.exists &&
+          (doc.data() as Map<String, dynamic>)['userId'] == userId) {
+        await _firestore.collection('drinkRequests').doc(id).delete();
+      } else {
+        throw Exception('Unauthorized to delete this request');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete drink request: $e');
+    }
   }
 
   Future<List<Map<String, dynamic>>> getOffers(String requestId) async {
     try {
-      // Fetch from nested 'offers' collection
-      final QuerySnapshot snapshot = await _firestore
-          .collection('drinkRequests')
-          .doc(requestId)
-          .collection('offers')
-          .orderBy('timestamp', descending: true)
-          .get();
+      String? userId = _authRepository.getCurrentUserId();
+      if (userId == null) throw Exception('User not authenticated');
 
-      return snapshot.docs
-          .map((doc) => doc.data() as Map<String, dynamic>)
-          .toList();
+      // Verify the request belongs to the current user before fetching offers
+      final doc =
+          await _firestore.collection('drinkRequests').doc(requestId).get();
+      if (doc.exists &&
+          (doc.data() as Map<String, dynamic>)['userId'] == userId) {
+        final QuerySnapshot snapshot = await _firestore
+            .collection('drinkRequests')
+            .doc(requestId)
+            .collection('offers')
+            .orderBy('timestamp', descending: true)
+            .get();
+
+        return snapshot.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList();
+      } else {
+        throw Exception('Unauthorized to view these offers');
+      }
     } catch (e) {
       throw Exception('Failed to fetch offers: $e');
     }
   }
-
-
 }

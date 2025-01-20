@@ -1,4 +1,5 @@
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/drink_request/presentation/pages/requests_screen.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +18,12 @@ import 'package:chupachap/features/product_search/presentation/bloc/product_sear
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_state.dart';
 
 class SearchPage extends StatefulWidget {
+   final AuthRepository authRepository;
   final TextEditingController? searchController;
 
   const SearchPage({
     super.key,
-    this.searchController,
+    this.searchController, required this.authRepository,
   });
 
   @override
@@ -33,6 +35,7 @@ class _SearchPageState extends State<SearchPage> {
   late ProductSearchBloc _productSearchBloc;
   late TextEditingController _searchController;
   final _searchSubject = PublishSubject<String>();
+  
 
   @override
   void initState() {
@@ -180,7 +183,7 @@ class _SearchPageState extends State<SearchPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => const RequestsScreen(),
+                              builder: (_) =>  RequestsScreen(authRepository: widget.authRepository,),
                             ),
                           );
                         },

@@ -1,6 +1,5 @@
+import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/drink_request/data/repositories/drink_request_repository.dart';
-import 'package:chupachap/features/drink_request/presentation/bloc/drink_request_state.dart';
-import 'package:chupachap/features/drink_request/presentation/widgets/offer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chupachap/features/drink_request/data/models/drink_request.dart';
@@ -17,10 +16,11 @@ class OffersScreen extends StatelessWidget {
     required this.request,
   });
 Future<List<Map<String, dynamic>>> _fetchOffers() {
-    final repository = DrinkRequestRepository();
+  final authRepository = AuthRepository();
+    final repository = DrinkRequestRepository(authRepository);
     return repository.getOffers(request.id);
   }
-  
+
   Future<bool> _showDeleteConfirmation(BuildContext context) async {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return await showCupertinoDialog<bool>(
@@ -249,6 +249,7 @@ Future<List<Map<String, dynamic>>> _fetchOffers() {
                           child: CircularProgressIndicator(),
                         );
                       } else if (snapshot.hasError) {
+                        print(snapshot.error);
                         return Center(
                           child: Text(
                             'Failed to load offers: ${snapshot.error}',

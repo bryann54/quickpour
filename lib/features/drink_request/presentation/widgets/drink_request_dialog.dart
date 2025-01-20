@@ -1,4 +1,5 @@
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/drink_request/data/models/drink_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,11 +8,17 @@ import 'package:chupachap/features/drink_request/presentation/bloc/drink_request
 import 'package:intl/intl.dart';
 
 class DrinkRequestDialog extends StatefulWidget {
-  const DrinkRequestDialog({super.key});
+  final AuthRepository authRepository;
+
+  const DrinkRequestDialog({
+    super.key,
+    required this.authRepository,
+  });
 
   @override
   State<DrinkRequestDialog> createState() => _DrinkRequestDialogState();
 }
+
 
 class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
   final _formKey = GlobalKey<FormState>();
@@ -93,9 +100,21 @@ class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
       return;
     }
 
+    final userId = widget.authRepository.getCurrentUserId();
+    if (userId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please log in to create a request'),
+          backgroundColor: AppColors.error,
+        ),
+      );
+      return;
+    }
+
     final drinkRequest = DrinkRequest(
       id: DateTime.now().toIso8601String(),
       drinkName: _drinkNameController.text.trim(),
+      userId: userId, // Add the user ID here
       quantity: int.parse(_quantityController.text),
       timestamp: DateTime.now(),
       merchantId: '',

@@ -38,6 +38,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final merchantRepository = MerchantsRepository();
+    
     final firestore = FirebaseFirestore.instance;
     final auth = FirebaseAuth.instance;
 
@@ -56,7 +57,7 @@ class App extends StatelessWidget {
           ),
         ),
         Provider<DrinkRequestRepository>(
-          create: (context) => DrinkRequestRepository(),
+          create: (context) => DrinkRequestRepository(AuthRepository()),
         ),
       ],
       child: MultiBlocProvider(

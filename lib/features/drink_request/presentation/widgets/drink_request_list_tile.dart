@@ -1,3 +1,4 @@
+import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/drink_request/data/models/drink_request.dart';
 import 'package:chupachap/features/drink_request/presentation/pages/offers_screen.dart';
 import 'package:flutter/material.dart';
@@ -5,10 +6,12 @@ import 'package:intl/intl.dart';
 
 class DrinkRequestListTile extends StatelessWidget {
   final DrinkRequest request;
+  final AuthRepository authRepository;
 
   const DrinkRequestListTile({
     super.key,
     required this.request,
+    required this.authRepository,
   });
 
   void _navigateToOffers(BuildContext context) {
