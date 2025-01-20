@@ -1,7 +1,7 @@
 class DrinkRequest {
   final String id;
   final String drinkName;
-  final String userId; // Add userId field
+  final String userId;
   final int quantity;
   final DateTime timestamp;
   final String merchantId;
@@ -11,7 +11,7 @@ class DrinkRequest {
   DrinkRequest({
     required this.id,
     required this.drinkName,
-    required this.userId, // Add to constructor
+    required this.userId,
     required this.quantity,
     required this.timestamp,
     required this.merchantId,
@@ -23,7 +23,7 @@ class DrinkRequest {
     return {
       'id': id,
       'drinkName': drinkName,
-      'userId': userId, // Add to map
+      'userId': userId,
       'quantity': quantity,
       'timestamp': timestamp.toIso8601String(),
       'merchantId': merchantId,

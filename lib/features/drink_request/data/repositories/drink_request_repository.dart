@@ -77,8 +77,7 @@ class DrinkRequestRepository {
 
       // Verify the request belongs to the current user before deleting
       final doc = await _firestore.collection('drinkRequests').doc(id).get();
-      if (doc.exists &&
-          (doc.data() as Map<String, dynamic>)['userId'] == userId) {
+      if (doc.exists && (doc.data() as Map<String, dynamic>)['userId'] == userId) {
         await _firestore.collection('drinkRequests').doc(id).delete();
       } else {
         throw Exception('Unauthorized to delete this request');
@@ -87,32 +86,22 @@ class DrinkRequestRepository {
       throw Exception('Failed to delete drink request: $e');
     }
   }
-
-  Future<List<Map<String, dynamic>>> getOffers(String requestId) async {
+Future<List<Map<String, dynamic>>> getOffers(String requestId) async {
     try {
-      String? userId = _authRepository.getCurrentUserId();
-      if (userId == null) throw Exception('User not authenticated');
+      // Fetch from nested 'offers' collection
+      final QuerySnapshot snapshot = await _firestore
+          .collection('drinkRequests')
+          .doc(requestId)
+          .collection('offers')
+          .orderBy('timestamp', descending: true)
+          .get();
 
-      // Verify the request belongs to the current user before fetching offers
-      final doc =
-          await _firestore.collection('drinkRequests').doc(requestId).get();
-      if (doc.exists &&
-          (doc.data() as Map<String, dynamic>)['userId'] == userId) {
-        final QuerySnapshot snapshot = await _firestore
-            .collection('drinkRequests')
-            .doc(requestId)
-            .collection('offers')
-            .orderBy('timestamp', descending: true)
-            .get();
-
-        return snapshot.docs
-            .map((doc) => doc.data() as Map<String, dynamic>)
-            .toList();
-      } else {
-        throw Exception('Unauthorized to view these offers');
-      }
+      return snapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
     } catch (e) {
       throw Exception('Failed to fetch offers: $e');
     }
   }
+
 }

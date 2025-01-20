@@ -15,11 +15,17 @@ class OffersScreen extends StatelessWidget {
     super.key,
     required this.request,
   });
-Future<List<Map<String, dynamic>>> _fetchOffers() {
-  final authRepository = AuthRepository();
+Future<List<Map<String, dynamic>>> _fetchOffers() async {
+  try {
+    final authRepository = AuthRepository();
     final repository = DrinkRequestRepository(authRepository);
-    return repository.getOffers(request.id);
+    print('Fetching offers for request ID: ${request.id}');
+    return await repository.getOffers(request.id);
+  } catch (e) {
+    print('Error fetching offers: $e');
+    rethrow; // This will propagate the error to the FutureBuilder
   }
+}
 
   Future<bool> _showDeleteConfirmation(BuildContext context) async {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
