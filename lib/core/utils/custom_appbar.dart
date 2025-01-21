@@ -206,20 +206,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                             RequestsScreen(authRepository: AuthRepository(),)));
+                                        builder: (context) => RequestsScreen(
+                                              authRepository: AuthRepository(),
+                                            )));
 
                                 break;
                               case 'logout':
-                               CustomLogoutDialog(
-          onConfirm: () {
-            Navigator.of(context).pop(); // Close the dialog
-            context.read<AuthBloc>().add(LogoutEvent());
-          },
-          onCancel: () {
-            Navigator.of(context).pop(); // Close the dialog
-          },
-        );
+                                CustomLogoutDialog(
+                                  onConfirm: () {
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
+                                    context.read<AuthBloc>().add(LogoutEvent());
+                                  },
+                                  onCancel: () {
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
+                                  },
+                                );
                                 break;
                             }
                           },

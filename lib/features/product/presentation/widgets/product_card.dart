@@ -190,7 +190,7 @@ class ProductCard extends StatelessWidget {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 13,
                                             ),
                                             IconButton(
@@ -233,7 +233,7 @@ class ProductCard extends StatelessWidget {
                                                     );
                                               },
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 13,
                                             ),
                                           ],
@@ -263,7 +263,7 @@ class ProductCard extends StatelessWidget {
                   ),
                   child: Text(
                     '${_calculateDiscountPercentage(product.price, product.discountPrice)}% OFF',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 11,
                     ),

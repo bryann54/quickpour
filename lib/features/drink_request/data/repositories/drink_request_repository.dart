@@ -65,7 +65,7 @@ class DrinkRequestRepository {
         .map((snapshot) => snapshot.docs
             .map((doc) => DrinkRequest.fromMap({
                   'id': doc.id,
-                  ...doc.data() as Map<String, dynamic>,
+                  ...doc.data(),
                 }))
             .toList());
   }
@@ -77,7 +77,8 @@ class DrinkRequestRepository {
 
       // Verify the request belongs to the current user before deleting
       final doc = await _firestore.collection('drinkRequests').doc(id).get();
-      if (doc.exists && (doc.data() as Map<String, dynamic>)['userId'] == userId) {
+      if (doc.exists &&
+          (doc.data() as Map<String, dynamic>)['userId'] == userId) {
         await _firestore.collection('drinkRequests').doc(id).delete();
       } else {
         throw Exception('Unauthorized to delete this request');
@@ -86,7 +87,8 @@ class DrinkRequestRepository {
       throw Exception('Failed to delete drink request: $e');
     }
   }
-Future<List<Map<String, dynamic>>> getOffers(String requestId) async {
+
+  Future<List<Map<String, dynamic>>> getOffers(String requestId) async {
     try {
       // Fetch from nested 'offers' collection
       final QuerySnapshot snapshot = await _firestore
@@ -103,5 +105,4 @@ Future<List<Map<String, dynamic>>> getOffers(String requestId) async {
       throw Exception('Failed to fetch offers: $e');
     }
   }
-
 }

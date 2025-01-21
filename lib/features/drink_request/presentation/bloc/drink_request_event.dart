@@ -24,4 +24,3 @@ class LoadOffers extends DrinkRequestEvent {
 
   LoadOffers(this.requestId);
 }
-

@@ -28,10 +28,11 @@ class _BottomNavState extends State<BottomNav> {
 
   // List of screens corresponding to navigation items
   final List<Widget> _screens = [
-  
-     SearchPage(authRepository: AuthRepository(),),
+    SearchPage(
+      authRepository: AuthRepository(),
+    ),
     const FavoritesScreen(),
-      const HomeScreen(),
+    const HomeScreen(),
     const CartPage(),
     const OrdersScreen(),
   ];
@@ -45,8 +46,8 @@ class _BottomNavState extends State<BottomNav> {
         index: _currentIndex,
         height: 60.0,
         items: [
-         
-          const FaIcon(FontAwesomeIcons.magnifyingGlass, size: 25, color: Colors.white),
+          const FaIcon(FontAwesomeIcons.magnifyingGlass,
+              size: 25, color: Colors.white),
 
           // Favorites with badge
           BlocBuilder<FavoritesBloc, FavoritesState>(
@@ -62,7 +63,7 @@ class _BottomNavState extends State<BottomNav> {
               );
             },
           ),
-           const FaIcon(FontAwesomeIcons.houseChimney,
+          const FaIcon(FontAwesomeIcons.houseChimney,
               size: 25, color: Colors.white),
 
           // Cart with badge

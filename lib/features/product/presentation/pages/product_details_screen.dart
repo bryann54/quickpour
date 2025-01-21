@@ -100,7 +100,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   size: 50, color: Colors.grey),
                             ),
                           ),
-              
+
                           Positioned(
                             top: 10,
                             right: 10,
@@ -223,7 +223,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ProductDetailsHeader(product: widget.product),
                       const SizedBox(height: 20),
                       MerchantsDetailsSection(product: widget.product),
-                     
                     ],
                   ),
                 ),

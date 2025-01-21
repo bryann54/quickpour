@@ -117,7 +117,8 @@ class ProductDetailsHeader extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Category and Brand Section with enhanced styling
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     child: _buildInfoCard(

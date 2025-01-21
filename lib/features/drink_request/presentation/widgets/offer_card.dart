@@ -1,6 +1,5 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class OfferCard extends StatelessWidget {
@@ -27,8 +26,8 @@ class OfferCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text('Store:'),
-                SizedBox(width: 12),
+                const Text('Store:'),
+                const SizedBox(width: 12),
                 Text(
                   offer['storeName'],
                   style: theme.textTheme.titleMedium?.copyWith(
@@ -45,9 +44,9 @@ class OfferCard extends StatelessWidget {
                   size: 16,
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
-                SizedBox(width: 4),
-                Text('Store location:'),
-                SizedBox(width: 12),
+                const SizedBox(width: 4),
+                const Text('Store location:'),
+                const SizedBox(width: 12),
                 Text(
                   offer['location'],
                   style: theme.textTheme.bodyMedium?.copyWith(
@@ -91,7 +90,7 @@ class OfferCard extends StatelessWidget {
               ),
             ],
             const SizedBox(height: 12),
-    Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
@@ -101,15 +100,17 @@ class OfferCard extends StatelessWidget {
                       vertical: 12,
                     ),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: theme.colorScheme.onSurfaceVariant.withOpacity(.11),
-                      )
-                    ),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: theme.colorScheme.onSurfaceVariant
+                              .withOpacity(.11),
+                        )),
                     child: Text(
                       'Total: Ksh ${offer['price'].toStringAsFixed(0)}',
                       style: theme.textTheme.titleSmall?.copyWith(
-                        color: isDarkMode?AppColors.background:AppColors.backgroundDark,
+                        color: isDarkMode
+                            ? AppColors.background
+                            : AppColors.backgroundDark,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,
@@ -120,8 +121,9 @@ class OfferCard extends StatelessWidget {
                 Expanded(
                   child: TextButton.icon(
                     style: TextButton.styleFrom(
-                      backgroundColor: 
-                      isDarkMode?AppColors.background: theme.colorScheme.primaryContainer,
+                      backgroundColor: isDarkMode
+                          ? AppColors.background
+                          : theme.colorScheme.primaryContainer,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -154,7 +156,7 @@ class OfferCard extends StatelessWidget {
                 ),
               ],
             ),
- ],
+          ],
         ),
       ),
     );

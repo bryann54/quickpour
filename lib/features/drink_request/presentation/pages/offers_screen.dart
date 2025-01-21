@@ -124,7 +124,10 @@ class OffersScreen extends StatelessWidget {
         slivers: [
           SliverAppBar(
             expandedHeight: 200,
-            iconTheme:  IconThemeData(color:isDarkMode? AppColors.background:AppColors.backgroundDark),
+            iconTheme: IconThemeData(
+                color: isDarkMode
+                    ? AppColors.background
+                    : AppColors.backgroundDark),
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
@@ -155,8 +158,8 @@ class OffersScreen extends StatelessWidget {
                   color: Colors.transparent,
                   child: Text(
                     request.drinkName,
-                    style:  TextStyle(
-                      color:isDarkMode? Colors.white:Colors.black,
+                    style: TextStyle(
+                      color: isDarkMode ? Colors.white : Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -372,7 +375,7 @@ class OffersScreen extends StatelessWidget {
               ),
             ),
           ),
-        ),       
+        ),
       ),
     );
   }

@@ -70,8 +70,8 @@ class CartItemWidget extends StatelessWidget {
                         width: 100,
                         height: 100,
                         color: Colors.grey[300],
-                        child:
-                            Icon(Icons.error, color: AppColors.backgroundDark),
+                        child: const Icon(Icons.error,
+                            color: AppColors.backgroundDark),
                       ),
                     ),
                     if (cartItem.product.discountPrice > 0) ...[
