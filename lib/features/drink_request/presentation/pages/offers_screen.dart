@@ -117,13 +117,14 @@ class OffersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
 
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             expandedHeight: 200,
-            iconTheme: const IconThemeData(color: Colors.white),
+            iconTheme:  IconThemeData(color:isDarkMode? AppColors.background:AppColors.backgroundDark),
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
@@ -154,8 +155,8 @@ class OffersScreen extends StatelessWidget {
                   color: Colors.transparent,
                   child: Text(
                     request.drinkName,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style:  TextStyle(
+                      color:isDarkMode? Colors.white:Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -294,7 +295,7 @@ class OffersScreen extends StatelessWidget {
                       } else if (snapshot.hasError) {
                         return Center(
                           child: Text(
-                            'Failed to load offers: ${snapshot.error}',
+                            'Failed to load offers',
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.error),
                           ),
