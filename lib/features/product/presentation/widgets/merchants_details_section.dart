@@ -42,44 +42,40 @@ class MerchantsDetailsSection extends StatelessWidget {
                 )
               : null,
         ),
-        child: Padding(
+   child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: isDarkMode
-                            ? [AppColors.accentColor, AppColors.primaryColor]
-                            : [AppColors.primaryColor, AppColors.accentColor],
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.store,
-                          size: 14,
-                          color: Colors.white.withOpacity(0.9),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Store Details',
-                          style: theme.textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: isDarkMode
+                        ? [AppColors.accentColor, AppColors.primaryColor]
+                        : [AppColors.primaryColor, AppColors.accentColor],
                   ),
-                ],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.store,
+                      size: 14,
+                      color: Colors.white.withOpacity(0.9),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Store Details',
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 6),
               Container(
@@ -95,82 +91,67 @@ class MerchantsDetailsSection extends StatelessWidget {
                         : AppColors.primaryColor.withOpacity(0.1),
                   ),
                 ),
-                child: Row(
-                  children: [
-                    _buildMerchantsAvatar(),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  product.merchantId,
-                                  style: theme.textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: isDarkMode
-                                        ? Colors.white
-                                        : AppColors.primaryColor,
+                child: IntrinsicHeight(
+                  // Add this to ensure proper height constraints
+                  child: Row(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start, // Align to top
+                    children: [
+                      _buildMerchantsAvatar(),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    product.merchantId,
+                                    style:
+                                        theme.textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: isDarkMode
+                                          ? Colors.white
+                                          : AppColors.primaryColor,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                              _buildMerchantsRating(context, isDarkMode),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.locationDot,
-                                size: 14,
-                                color: isDarkMode
-                                    ? AppColors.accentColor
-                                    : AppColors.primaryColor,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  product.merchantId,
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: isDarkMode
-                                        ? Colors.white70
-                                        : Colors.black87,
+                                _buildMerchantsRating(context, isDarkMode),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.locationDot,
+                                  size: 14,
+                                  color: isDarkMode
+                                      ? AppColors.accentColor
+                                      : AppColors.primaryColor,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    product.merchantId,
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      color: isDarkMode
+                                          ? Colors.white70
+                                          : Colors.black87,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                            ],
-                          ),
-                          // RichText(
-                          //   text: TextSpan(
-                          //     text: 'Store is now ',
-                          //     style: const TextStyle(
-                          //         color: Colors.black,
-                          //         fontSize: 16), // Style for the base text
-                          //     children: [
-                          //       TextSpan(
-                          //         text: product.merchants.isOpen
-                          //             ? 'Open'
-                          //             : 'Closed',
-                          //         style: TextStyle(
-                          //           color: product.merchants.isOpen
-                          //               ? Colors.green
-                          //               : Colors.red, // Color for the status
-                          //           fontWeight: FontWeight.bold,
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // )
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -179,84 +160,25 @@ class MerchantsDetailsSection extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildMerchantsAvatar() {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        // Container(
-        //   padding: const EdgeInsets.all(3),
-        //   decoration: const BoxDecoration(
-        //     shape: BoxShape.circle,
-        //     gradient: LinearGradient(
-        //       colors: [
-        //         AppColors.accentColor,
-        //         AppColors.primaryColor,
-        //       ],
-        //     ),
-        //   ),
-        //   child: Container(
-        //     padding: const EdgeInsets.all(2),
-        //     decoration: const BoxDecoration(
-        //       shape: BoxShape.circle,
-        //       color: Colors.white,
-        //     ),
-        //     child: CachedNetworkImage(
-        //       imageUrl: product.merchants.imageUrl.toString(),
-        //       imageBuilder: (context, imageProvider) => CircleAvatar(
-        //         radius: 30,
-        //         backgroundImage: imageProvider,
-        //       ),
-        //       placeholder: (context, url) => const CircleAvatar(
-        //         radius: 30,
-        //         child: CircularProgressIndicator(
-        //           strokeWidth: 2,
-        //         ),
-        //       ),
-        //       errorWidget: (context, url, error) => CircleAvatar(
-        //         radius: 30,
-        //         backgroundColor: AppColors.accentColor.withOpacity(0.1),
-        //         child: const FaIcon(
-        //           FontAwesomeIcons.store,
-        //           size: 24,
-        //           color: AppColors.accentColor,
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        // if (product.merchants.isVerified)
-        //   Positioned(
-        //     bottom: -4,
-        //     right: -4,
-        //     child: Container(
-        //       padding: const EdgeInsets.all(4),
-        //       decoration: BoxDecoration(
-        //         color: Colors.white,
-        //         shape: BoxShape.circle,
-        //         boxShadow: [
-        //           BoxShadow(
-        //             color: Colors.black.withOpacity(0.2),
-        //             blurRadius: 4,
-        //             offset: const Offset(0, 2),
-        //           )
-        //         ],
-        //       ),
-        //       child: Container(
-        //         padding: const EdgeInsets.all(2),
-        //         decoration: const BoxDecoration(
-        //           color: AppColors.accentColor,
-        //           shape: BoxShape.circle,
-        //         ),
-        //         child: const Icon(
-        //           Icons.verified,
-        //           color: Colors.white,
-        //           size: 14,
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-      ],
+Widget _buildMerchantsAvatar() {
+    return ClipOval(
+      // Wrap with ClipOval to ensure proper clipping
+      child: Container(
+        width: 60, // Give explicit dimensions
+        height: 60,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColors.accentColor,
+        ),
+        child: Center(
+          // Center the icon
+          child: FaIcon(
+            FontAwesomeIcons.store,
+            size: 24,
+            color: Colors.white,
+          ),
+        ),
+      ),
     );
   }
 

@@ -38,7 +38,7 @@ class OfferCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    '\$${offer['price'].toStringAsFixed(2)}',
+                    '\Total: Ksh ${offer['price'].toStringAsFixed(0)}',
                     style: theme.textTheme.titleSmall?.copyWith(
                       color: theme.colorScheme.onPrimaryContainer,
                       fontWeight: FontWeight.bold,
@@ -83,9 +83,19 @@ class OfferCard extends StatelessWidget {
             ),
             if (offer['notes']?.isNotEmpty ?? false) ...[
               const SizedBox(height: 8),
-              Text(
-                offer['notes'],
-                style: theme.textTheme.bodyMedium,
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: theme.colorScheme.onSurfaceVariant.withOpacity(.2),
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                  ),
+                child: Text(
+                  offer['notes'],
+                  style: theme.textTheme.bodyMedium,
+                ),
               ),
             ],
           ],

@@ -74,6 +74,7 @@ class ProductDetailsHeader extends StatelessWidget {
 
               // Description Section with custom styling
               Container(
+                width: double.infinity,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: isDarkMode
@@ -116,7 +117,7 @@ class ProductDetailsHeader extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Category and Brand Section with enhanced styling
-              Row(
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     child: _buildInfoCard(
@@ -193,31 +194,29 @@ class ProductDetailsHeader extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: isDarkMode
-                        ? AppColors.brandAccent
-                        : AppColors.brandPrimary,
-                    fontWeight: FontWeight.w500,
-                  ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: isDarkMode
+                      ? AppColors.brandAccent
+                      : AppColors.brandPrimary,
+                  fontWeight: FontWeight.w500,
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  name,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: isDarkMode ? Colors.white : Colors.black87,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 2),
+              Text(
+                name,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: isDarkMode ? Colors.white : Colors.black87,
                 ),
-              ],
-            ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
         ],
       ),

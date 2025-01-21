@@ -1,5 +1,7 @@
+import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/drink_request/data/repositories/drink_request_repository.dart';
+import 'package:chupachap/features/drink_request/presentation/widgets/offer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chupachap/features/drink_request/data/models/drink_request.dart';
@@ -15,17 +17,16 @@ class OffersScreen extends StatelessWidget {
     super.key,
     required this.request,
   });
-Future<List<Map<String, dynamic>>> _fetchOffers() async {
-  try {
-    final authRepository = AuthRepository();
-    final repository = DrinkRequestRepository(authRepository);
-    print('Fetching offers for request ID: ${request.id}');
-    return await repository.getOffers(request.id);
-  } catch (e) {
-    print('Error fetching offers: $e');
-    rethrow; // This will propagate the error to the FutureBuilder
+
+  Future<List<Map<String, dynamic>>> _fetchOffers() async {
+    try {
+      final authRepository = AuthRepository();
+      final repository = DrinkRequestRepository(authRepository);
+      return await repository.getOffers(request.id);
+    } catch (e) {
+      rethrow; // This will propagate the error to the FutureBuilder
+    }
   }
-}
 
   Future<bool> _showDeleteConfirmation(BuildContext context) async {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
@@ -116,7 +117,7 @@ Future<List<Map<String, dynamic>>> _fetchOffers() async {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-  
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -183,11 +184,15 @@ Future<List<Map<String, dynamic>>> _fetchOffers() async {
                                   child: Image.asset(
                                     'assets/111.png',
                                     width: 150,
-                                    height: 100,
+                                    height: 80,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
+                            ],
+                          ),
+                          Row(
+                            children: [
                               Hero(
                                 tag: 'quantity_${request.id}',
                                 child: Container(
@@ -200,7 +205,7 @@ Future<List<Map<String, dynamic>>> _fetchOffers() async {
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Text(
-                                    'x${request.quantity}',
+                                    ' requested drink quantity: ${request.quantity}',
                                     style:
                                         theme.textTheme.titleMedium?.copyWith(
                                       color:
@@ -215,39 +220,71 @@ Future<List<Map<String, dynamic>>> _fetchOffers() async {
                           const SizedBox(height: 16),
                           Hero(
                             tag: 'timestamp_${request.id}',
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.schedule,
-                                  size: 20,
-                                  color: theme.colorScheme.onSurfaceVariant,
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: theme.colorScheme.onSurfaceVariant
+                                      .withOpacity(.2),
                                 ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  DateFormat('MMM d, h:mm a')
-                                      .format(request.timestamp.toLocal()),
-                                  style: theme.textTheme.bodyLarge?.copyWith(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.schedule,
+                                    size: 20,
                                     color: theme.colorScheme.onSurfaceVariant,
                                   ),
-                                ),
+                                  // const Text(' Preffered time:'),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    DateFormat('MMM d, h:mm a')
+                                        .format(request.timestamp.toLocal()),
+                                    style: theme.textTheme.bodyLarge?.copyWith(
+                                      color: theme.colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: theme.colorScheme.onSurfaceVariant
+                                    .withOpacity(.2),
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('additional Instructions',
+                                    style: TextStyle(
+                                        color: AppColors.accentColor,
+                                        fontWeight: FontWeight.bold)),
+                                Text(request.additionalInstructions)
                               ],
                             ),
                           ),
-                          const Text('additional Instructions'),
-                          Text(request.additionalInstructions)
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 24),
-                Text(
+                  Text(
                     'Offers',
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                
-       FutureBuilder<List<Map<String, dynamic>>>(
+                  // Corrected FutureBuilder placement inside a container
+                  FutureBuilder<List<Map<String, dynamic>>>(
                     future: _fetchOffers(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -255,7 +292,6 @@ Future<List<Map<String, dynamic>>> _fetchOffers() async {
                           child: CircularProgressIndicator(),
                         );
                       } else if (snapshot.hasError) {
-                        print(snapshot.error);
                         return Center(
                           child: Text(
                             'Failed to load offers: ${snapshot.error}',
@@ -271,97 +307,7 @@ Future<List<Map<String, dynamic>>> _fetchOffers() async {
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
                             final offer = snapshot.data![index];
-                            return Card(
-                              margin: const EdgeInsets.symmetric(vertical: 1),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 6,right: 5),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          offer['storeName'] ?? 'Unknown Store',
-                                          style: theme.textTheme.titleMedium
-                                              ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Ksh ${offer['price']}',
-                                          style: theme.textTheme.titleLarge
-                                              ?.copyWith(
-                                            color: theme.colorScheme.primary,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.location_on_outlined,
-                                          size: 16,
-                                          color: theme
-                                              .colorScheme.onSurfaceVariant,
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          offer['location'] ??
-                                              'Location not specified',
-                                          style: theme.textTheme.bodyMedium
-                                              ?.copyWith(
-                                            color: theme
-                                                .colorScheme.onSurfaceVariant,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.access_time,
-                                          size: 16,
-                                          color: theme
-                                              .colorScheme.onSurfaceVariant,
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          'Delivery by: ${DateFormat('MMM d, h:mm a').format(
-                                            DateTime.parse(
-                                                offer['deliveryTime']),
-                                          )}',
-                                          style: theme.textTheme.bodyMedium,
-                                        ),
-                                      ],
-                                    ),
-                                    if (offer['notes']?.isNotEmpty ??
-                                        false) ...[
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        'Notes:',
-                                        style: theme.textTheme.bodyMedium
-                                            ?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        offer['notes'],
-                                        style: theme.textTheme.bodyMedium
-                                            ?.copyWith(
-                                          color: theme
-                                              .colorScheme.onSurfaceVariant,
-                                        ),
-                                      ),
-                                    ],
-                                  ],
-                                ),
-                              ),
-                            );
+                            return OfferCard(offer: offer);
                           },
                         );
                       } else {
@@ -374,7 +320,6 @@ Future<List<Map<String, dynamic>>> _fetchOffers() async {
                                 size: 48,
                                 color: theme.colorScheme.onSurfaceVariant,
                               ),
-                            
                               Text(
                                 'No offers yet',
                                 style: theme.textTheme.titleMedium?.copyWith(
@@ -386,8 +331,8 @@ Future<List<Map<String, dynamic>>> _fetchOffers() async {
                         );
                       }
                     },
-                  ) ],
-              
+                  ),
+                ],
               ),
             ),
           ),
@@ -426,7 +371,7 @@ Future<List<Map<String, dynamic>>> _fetchOffers() async {
               ),
             ),
           ),
-        ),
+        ),       
       ),
     );
   }

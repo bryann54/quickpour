@@ -24,24 +24,19 @@ class CartFooter extends StatelessWidget {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
 
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: BlocBuilder<CartBloc, CartState>(
-        builder: (context, cartState) {
-          final cartItem = cartState.cart.items.isNotEmpty
-              ? cartState.cart.items.firstWhere(
-                  (item) => item.product.id == product.id,
-                  orElse: () => CartItem(product: product, quantity: 0),
-                )
-              : CartItem(product: product, quantity: 0);
-
-          return cartItem.quantity == 0
-              ? _buildAddToCartButton(context)
-              : _buildQuantityControls(context, isDarkMode, cartItem.quantity);
-        },
-      ),
+    return BlocBuilder<CartBloc, CartState>(
+      builder: (context, cartState) {
+        final cartItem = cartState.cart.items.isNotEmpty
+            ? cartState.cart.items.firstWhere(
+                (item) => item.product.id == product.id,
+                orElse: () => CartItem(product: product, quantity: 0),
+              )
+            : CartItem(product: product, quantity: 0);
+    
+        return cartItem.quantity == 0
+            ? _buildAddToCartButton(context)
+            : _buildQuantityControls(context, isDarkMode, cartItem.quantity);
+      },
     );
   }
 

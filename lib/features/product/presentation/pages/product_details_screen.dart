@@ -100,7 +100,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   size: 50, color: Colors.grey),
                             ),
                           ),
-
+              
                           Positioned(
                             top: 10,
                             right: 10,
@@ -202,19 +202,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     widget.product.discountPrice <
                                         widget.product.price) ...[
                                   const SizedBox(width: 28),
-                                  Expanded(
-                                    child: Text(
-                                      'KSH ${widget.product.price.toStringAsFixed(0)}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                            color: Colors.grey,
-                                            decoration:
-                                                TextDecoration.lineThrough,
-                                          ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                  Text(
+                                    'KSH ${widget.product.price.toStringAsFixed(0)}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          color: Colors.grey,
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                        ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ],
@@ -225,6 +223,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ProductDetailsHeader(product: widget.product),
                       const SizedBox(height: 20),
                       MerchantsDetailsSection(product: widget.product),
+                     
                     ],
                   ),
                 ),
