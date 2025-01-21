@@ -1,8 +1,6 @@
-// blocs/drink_request/drink_request_bloc.dart
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chupachap/features/drink_request/data/repositories/drink_request_repository.dart';
 import 'package:chupachap/features/drink_request/presentation/bloc/drink_request_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'drink_request_event.dart';
 
 class DrinkRequestBloc extends Bloc<DrinkRequestEvent, DrinkRequestState> {
@@ -22,10 +20,14 @@ class DrinkRequestBloc extends Bloc<DrinkRequestEvent, DrinkRequestState> {
     on<FetchDrinkRequests>((event, emit) async {
       try {
         emit(DrinkRequestLoading());
-        final requests = await repository.fetchDrinkRequests();
+        final requests = await repository.getDrinkRequests();
         emit(DrinkRequestSuccess(requests));
       } catch (e) {
-        emit(DrinkRequestFailure(e.toString()));
+        if (e.toString().contains('User not authenticated')) {
+          emit(DrinkRequestFailure('Please login to view your requests'));
+        } else {
+          emit(DrinkRequestFailure(e.toString()));
+        }
       }
     });
 
@@ -34,6 +36,16 @@ class DrinkRequestBloc extends Bloc<DrinkRequestEvent, DrinkRequestState> {
         emit(DrinkRequestLoading());
         await repository.deleteDrinkRequest(event.id);
         add(FetchDrinkRequests());
+      } catch (e) {
+        emit(DrinkRequestFailure(e.toString()));
+      }
+    });
+
+    on<LoadOffers>((event, emit) async {
+      try {
+        emit(DrinkRequestLoading());
+        final offers = await repository.getOffers(event.requestId);
+        emit(OffersLoaded(offers));
       } catch (e) {
         emit(DrinkRequestFailure(e.toString()));
       }

@@ -204,7 +204,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const RequestsScreen()));
+                                             RequestsScreen(authRepository: AuthRepository(),)));
 
                                 break;
                               case 'logout':

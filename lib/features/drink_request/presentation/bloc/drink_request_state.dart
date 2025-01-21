@@ -16,3 +16,15 @@ class DrinkRequestFailure extends DrinkRequestState {
   final String error;
   DrinkRequestFailure(this.error);
 }
+
+class OffersLoaded extends DrinkRequestState {
+  final List<Map<String, dynamic>> offers;
+
+  OffersLoaded(this.offers);
+}
+// class OffersStreamLoadingState extends DrinkRequestState {}
+
+// class OffersStreamLoadedState extends DrinkRequestState {
+//   final List<Map<String, dynamic>> offers;
+//   OffersStreamLoadedState(this.offers);
+// }

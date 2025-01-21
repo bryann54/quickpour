@@ -1,4 +1,5 @@
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
@@ -23,13 +24,14 @@ class BottomNav extends StatefulWidget {
 
 class _BottomNavState extends State<BottomNav> {
   final GlobalKey _bottomNavigationKey = GlobalKey();
-  int _currentIndex = 0;
+  int _currentIndex = 2;
 
   // List of screens corresponding to navigation items
   final List<Widget> _screens = [
-    const HomeScreen(),
-    const SearchPage(),
+  
+     SearchPage(authRepository: AuthRepository(),),
     const FavoritesScreen(),
+      const HomeScreen(),
     const CartPage(),
     const OrdersScreen(),
   ];
@@ -43,9 +45,8 @@ class _BottomNavState extends State<BottomNav> {
         index: _currentIndex,
         height: 60.0,
         items: [
-          const FaIcon(FontAwesomeIcons.houseChimney,
-              size: 25, color: Colors.white),
-          const FaIcon(FontAwesomeIcons.search, size: 25, color: Colors.white),
+         
+          const FaIcon(FontAwesomeIcons.magnifyingGlass, size: 25, color: Colors.white),
 
           // Favorites with badge
           BlocBuilder<FavoritesBloc, FavoritesState>(
@@ -61,6 +62,8 @@ class _BottomNavState extends State<BottomNav> {
               );
             },
           ),
+           const FaIcon(FontAwesomeIcons.houseChimney,
+              size: 25, color: Colors.white),
 
           // Cart with badge
           BlocBuilder<CartBloc, CartState>(

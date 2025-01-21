@@ -1,16 +1,17 @@
-// data/models/drink_request.dart
 class DrinkRequest {
   final String id;
   final String drinkName;
+  final String userId;
   final int quantity;
   final DateTime timestamp;
-  final String merchantId; // Added field for the merchant
-  final String additionalInstructions; // Added field for instructions
-  final DateTime preferredTime; // Added field for preferred delivery time
+  final String merchantId;
+  final String additionalInstructions;
+  final DateTime preferredTime;
 
   DrinkRequest({
     required this.id,
     required this.drinkName,
+    required this.userId,
     required this.quantity,
     required this.timestamp,
     required this.merchantId,
@@ -22,6 +23,7 @@ class DrinkRequest {
     return {
       'id': id,
       'drinkName': drinkName,
+      'userId': userId,
       'quantity': quantity,
       'timestamp': timestamp.toIso8601String(),
       'merchantId': merchantId,
@@ -34,6 +36,7 @@ class DrinkRequest {
     return DrinkRequest(
       id: map['id'],
       drinkName: map['drinkName'],
+      userId: map['userId'], // Add to fromMap
       quantity: map['quantity'],
       timestamp: DateTime.parse(map['timestamp']),
       merchantId: map['merchantId'],

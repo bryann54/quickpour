@@ -3,7 +3,6 @@ import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/favorites/data/models/favorites_model.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_event.dart';
-import 'package:chupachap/features/product/presentation/pages/product_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +18,7 @@ class FavoritesWidget extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
       child: Container(
         decoration: BoxDecoration(
           color: isDarkMode
@@ -41,7 +40,9 @@ class FavoritesWidget extends StatelessWidget {
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: CachedNetworkImage(
-              imageUrl: favoriteItem.product.imageUrls.first,
+              imageUrl: favoriteItem.product.imageUrls.isNotEmpty
+                  ? favoriteItem.product.imageUrls.first
+                  : 'fallback_image_url',
               width: 50,
               height: double.infinity,
               fit: BoxFit.cover,
@@ -67,22 +68,22 @@ class FavoritesWidget extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: isDarkMode
-                              ? AppColors.surface.withOpacity(.3)
-                              : AppColors.accentColor,
-                        )),
-                    child: CircleAvatar(
-                      radius: 10,
-                      backgroundImage: CachedNetworkImageProvider(
-                          favoriteItem.product.category.imageUrl),
-                    ),
-                  ),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //       shape: BoxShape.circle,
+                  //       border: Border.all(
+                  //         color: isDarkMode
+                  //             ? AppColors.surface.withOpacity(.3)
+                  //             : AppColors.accentColor,
+                  //       )),
+                  //   child: CircleAvatar(
+                  //     radius: 10,
+                  //     backgroundImage: CachedNetworkImageProvider(
+                  //         favoriteItem.product.category.imageUrl),
+                  //   ),
+                  // ),
                   Text(
-                    '  ${favoriteItem.product.category.name}',
+                    '  ${favoriteItem.product.brandName}',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: isDarkMode
                           ? AppColors.surface.withOpacity(.3)
@@ -101,16 +102,16 @@ class FavoritesWidget extends StatelessWidget {
             ),
           ),
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProductDetailsScreen(
-                  product: favoriteItem.product,
-                  initialQuantity: 0,
-                  onQuantityChanged: (newQuantity) {},
-                ),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => ProductDetailsScreen(
+            //       product: favoriteItem.product,
+            //       initialQuantity: 0,
+            //       onQuantityChanged: (newQuantity) {},
+            //     ),
+            //   ),
+            // );
           },
           trailing: Container(
             decoration: BoxDecoration(

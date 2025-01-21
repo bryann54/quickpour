@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyAL7CNeUE7deCvd-mEn1qymazsjiliaeyo</string>
+	<string>AIzaSyCoX8O2atc0OLxdnx3ILQdLheoC2nM6ONI</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1027765291967</string>
+	<string>100273481671</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.chupachap</string>
 	<key>PROJECT_ID</key>
-	<string>chupachap-e861a</string>
+	<string>alkohut-5bf97</string>
 	<key>STORAGE_BUCKET</key>
-	<string>chupachap-e861a.firebasestorage.app</string>
+	<string>alkohut-5bf97.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1027765291967:ios:e2d0c5ebcdb115f47d6f0a</string>
+	<string>1:100273481671:ios:25e8d611b0978264839be2</string>
 </dict>
 </plist>

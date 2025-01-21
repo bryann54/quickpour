@@ -29,7 +29,8 @@ class BrandsScreen extends StatelessWidget {
               child: BlocBuilder<BrandsBloc, BrandsState>(
                 builder: (context, state) {
                   if (state is BrandsLoadingState) {
-                    return const CircularProgressIndicator();
+                    return Center(
+                        child: const CircularProgressIndicator.adaptive());
                   } else if (state is BrandsLoadedState) {
                     return ListView.builder(
                       itemCount: state.brands.length,

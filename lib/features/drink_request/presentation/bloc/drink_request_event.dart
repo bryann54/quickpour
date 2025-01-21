@@ -13,3 +13,15 @@ class DeleteDrinkRequest extends DrinkRequestEvent {
   final String id;
   DeleteDrinkRequest(this.id);
 }
+
+// class StreamOffersEvent extends DrinkRequestEvent {
+//   final String requestId;
+
+//   StreamOffersEvent({required this.requestId});
+// }
+class LoadOffers extends DrinkRequestEvent {
+  final String requestId;
+
+  LoadOffers(this.requestId);
+}
+

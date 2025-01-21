@@ -24,22 +24,19 @@ class CartFooter extends StatelessWidget {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
 
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: BlocBuilder<CartBloc, CartState>(
-        builder: (context, cartState) {
-          final cartItem = cartState.cart.items.firstWhere(
-            (item) => item.product.id == product.id,
-            orElse: () => CartItem(product: product, quantity: 0),
-          );
-
-          return cartItem.quantity == 0
-              ? _buildAddToCartButton(context)
-              : _buildQuantityControls(context, isDarkMode, cartItem.quantity);
-        },
-      ),
+    return BlocBuilder<CartBloc, CartState>(
+      builder: (context, cartState) {
+        final cartItem = cartState.cart.items.isNotEmpty
+            ? cartState.cart.items.firstWhere(
+                (item) => item.product.id == product.id,
+                orElse: () => CartItem(product: product, quantity: 0),
+              )
+            : CartItem(product: product, quantity: 0);
+    
+        return cartItem.quantity == 0
+            ? _buildAddToCartButton(context)
+            : _buildQuantityControls(context, isDarkMode, cartItem.quantity);
+      },
     );
   }
 
@@ -187,6 +184,9 @@ class CartFooter extends StatelessWidget {
   Widget _buildTotalPrice(BuildContext context, int quantity) {
     final screenWidth = MediaQuery.of(context).size.width;
 
+    // Use discounted price if available, else fall back to product price.
+    final price = product.discountPrice;
+
     return SizedBox(
       width: screenWidth * 0.5,
       child: FittedBox(
@@ -201,7 +201,7 @@ class CartFooter extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             Text(
-              'KSh ${(product.price * quantity).toStringAsFixed(0)}',
+              'KSh ${(price * quantity).toStringAsFixed(0)}',
               style: Theme.of(context)
                   .textTheme
                   .headlineSmall

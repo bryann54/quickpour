@@ -49,21 +49,24 @@ class ProductDetailsHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Product Name with animated gradient
-              ShaderMask(
-                shaderCallback: (bounds) => LinearGradient(
-                  colors: isDarkMode
-                      ? [AppColors.brandAccent, AppColors.brandPrimary]
-                      : [AppColors.primaryColor, AppColors.brandPrimary],
-                ).createShader(bounds),
-                child: Text(
-                  product.productName,
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.5,
-                    height: 1.2,
+              Align(
+                alignment: Alignment.center,
+                child: ShaderMask(
+                  shaderCallback: (bounds) => LinearGradient(
+                    colors: isDarkMode
+                        ? [AppColors.brandAccent, AppColors.brandPrimary]
+                        : [AppColors.brandAccent, AppColors.brandPrimary],
+                  ).createShader(bounds),
+                  child: Text(
+                    product.productName,
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                      height: 1.2,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
 
@@ -71,6 +74,7 @@ class ProductDetailsHeader extends StatelessWidget {
 
               // Description Section with custom styling
               Container(
+                width: double.infinity,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: isDarkMode
@@ -113,14 +117,14 @@ class ProductDetailsHeader extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Category and Brand Section with enhanced styling
-              Row(
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     child: _buildInfoCard(
                       context,
                       'Category',
-                      product.category.name,
-                      product.category.imageUrl,
+                      product.categoryName,
+                      product.categoryName,
                       isDarkMode,
                     ),
                   ),
@@ -129,8 +133,8 @@ class ProductDetailsHeader extends StatelessWidget {
                     child: _buildInfoCard(
                       context,
                       'Brand',
-                      product.brand.name,
-                      product.brand.logoUrl,
+                      product.brandName,
+                      product.brandName,
                       isDarkMode,
                     ),
                   ),
@@ -190,31 +194,29 @@ class ProductDetailsHeader extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: isDarkMode
-                        ? AppColors.brandAccent
-                        : AppColors.brandPrimary,
-                    fontWeight: FontWeight.w500,
-                  ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: isDarkMode
+                      ? AppColors.brandAccent
+                      : AppColors.brandPrimary,
+                  fontWeight: FontWeight.w500,
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  name,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: isDarkMode ? Colors.white : Colors.black87,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 2),
+              Text(
+                name,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: isDarkMode ? Colors.white : Colors.black87,
                 ),
-              ],
-            ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
         ],
       ),

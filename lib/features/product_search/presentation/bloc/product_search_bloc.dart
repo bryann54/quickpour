@@ -30,7 +30,7 @@ class ProductSearchBloc extends Bloc<ProductSearchEvent, ProductSearchState> {
     final searchResults = _allProducts.where((product) {
       return product.productName.toLowerCase().contains(query) ||
           product.description.toLowerCase().contains(query) ||
-          product.category.name.toLowerCase().contains(query);
+          product.categoryName.toLowerCase().contains(query);
     }).toList();
 
     emit(ProductSearchLoadedState(searchResults));
@@ -52,10 +52,10 @@ class ProductSearchBloc extends Bloc<ProductSearchEvent, ProductSearchState> {
 
     final filteredProducts = _allProducts.where((product) {
       bool matchesCategory =
-          event.category == null || product.category.name == event.category;
+          event.category == null || product.categoryName == event.category;
 
       bool matchesStore =
-          event.store == null || product.merchants.name == event.store;
+          event.store == null || product.merchantId == event.store;
 
       bool matchesPrice = event.priceRange == null ||
           (product.price >= event.priceRange!.start &&

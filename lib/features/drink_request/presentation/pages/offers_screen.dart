@@ -1,3 +1,7 @@
+import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
+import 'package:chupachap/features/drink_request/data/repositories/drink_request_repository.dart';
+import 'package:chupachap/features/drink_request/presentation/widgets/offer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chupachap/features/drink_request/data/models/drink_request.dart';
@@ -13,6 +17,16 @@ class OffersScreen extends StatelessWidget {
     super.key,
     required this.request,
   });
+
+  Future<List<Map<String, dynamic>>> _fetchOffers() async {
+    try {
+      final authRepository = AuthRepository();
+      final repository = DrinkRequestRepository(authRepository);
+      return await repository.getOffers(request.id);
+    } catch (e) {
+      rethrow; // This will propagate the error to the FutureBuilder
+    }
+  }
 
   Future<bool> _showDeleteConfirmation(BuildContext context) async {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
@@ -109,32 +123,25 @@ class OffersScreen extends StatelessWidget {
         slivers: [
           SliverAppBar(
             expandedHeight: 200,
+            iconTheme: const IconThemeData(color: Colors.white),
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          theme.colorScheme.secondaryContainer,
-                          theme.colorScheme.primaryContainer,
-                        ],
-                      ),
-                    ),
+                  Image.asset(
+                    'assets/111.png',
+                    fit: BoxFit.cover,
                   ),
-                  // Add a subtle overlay for better text readability
+                  // Gradient overlay for better text visibility
                   Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
+                          Colors.black.withOpacity(0.6),
                           Colors.black.withOpacity(0.3),
-                          Colors.transparent,
                         ],
                       ),
                     ),
@@ -177,11 +184,15 @@ class OffersScreen extends StatelessWidget {
                                   child: Image.asset(
                                     'assets/111.png',
                                     width: 150,
-                                    height: 100,
+                                    height: 80,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
+                            ],
+                          ),
+                          Row(
+                            children: [
                               Hero(
                                 tag: 'quantity_${request.id}',
                                 child: Container(
@@ -194,7 +205,7 @@ class OffersScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Text(
-                                    'x${request.quantity}',
+                                    ' requested drink quantity: ${request.quantity}',
                                     style:
                                         theme.textTheme.titleMedium?.copyWith(
                                       color:
@@ -209,40 +220,118 @@ class OffersScreen extends StatelessWidget {
                           const SizedBox(height: 16),
                           Hero(
                             tag: 'timestamp_${request.id}',
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.schedule,
-                                  size: 20,
-                                  color: theme.colorScheme.onSurfaceVariant,
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: theme.colorScheme.onSurfaceVariant
+                                      .withOpacity(.2),
                                 ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  DateFormat('MMM d, h:mm a')
-                                      .format(request.timestamp.toLocal()),
-                                  style: theme.textTheme.bodyLarge?.copyWith(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.schedule,
+                                    size: 20,
                                     color: theme.colorScheme.onSurfaceVariant,
                                   ),
-                                ),
+                                  // const Text(' Preffered time:'),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    DateFormat('MMM d, h:mm a')
+                                        .format(request.timestamp.toLocal()),
+                                    style: theme.textTheme.bodyLarge?.copyWith(
+                                      color: theme.colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: theme.colorScheme.onSurfaceVariant
+                                    .withOpacity(.2),
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('additional Instructions',
+                                    style: TextStyle(
+                                        color: AppColors.accentColor,
+                                        fontWeight: FontWeight.bold)),
+                                Text(request.additionalInstructions)
                               ],
                             ),
                           ),
-                          const Text('additional Instructions'),
-                          Text(request.additionalInstructions)
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'Available Offers',
+                    'Offers',
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  const Align(
-                      alignment: Alignment.center, child: Text('No offers yet'))
+                  // Corrected FutureBuilder placement inside a container
+                  FutureBuilder<List<Map<String, dynamic>>>(
+                    future: _fetchOffers(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text(
+                            'Failed to load offers: ${snapshot.error}',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.error),
+                          ),
+                        );
+                      } else if (snapshot.hasData &&
+                          snapshot.data!.isNotEmpty) {
+                        return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            final offer = snapshot.data![index];
+                            return OfferCard(offer: offer);
+                          },
+                        );
+                      } else {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.local_offer_outlined,
+                                size: 48,
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                              Text(
+                                'No offers yet',
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
@@ -282,7 +371,7 @@ class OffersScreen extends StatelessWidget {
               ),
             ),
           ),
-        ),
+        ),       
       ),
     );
   }
