@@ -13,7 +13,6 @@ import 'package:chupachap/features/categories/presentation/widgets/horizontal_li
 import 'package:chupachap/features/categories/presentation/widgets/shimmer_widget.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
-import 'package:chupachap/features/product_search/presentation/widgets/home_screen_search.dart';
 import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
 import 'package:chupachap/features/merchant/presentation/pages/merchants_screen.dart';
 import 'package:chupachap/features/merchant/presentation/widgets/merchant_horizontal_list_widget.dart';
@@ -23,6 +22,7 @@ import 'package:chupachap/features/product/presentation/bloc/product_event.dart'
 import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_card.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_shimmer_widget.dart';
+import 'package:chupachap/features/promotions/presentation/widgets/promotions_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -93,9 +93,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: Column(
           children: [
-            HomeScreenSearch(
-              controller: _searchController,
-            ),
+            // HomeScreenSearch(
+            //   controller: _searchController,
+            // ),
+
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -167,6 +168,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                         return const SizedBox.shrink();
                       },
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      child: PromotionsCarousel(),
                     ),
                     Padding(
                       padding:
