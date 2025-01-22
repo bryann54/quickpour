@@ -296,6 +296,14 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                       if (product.discountPrice < product.price)
+                     const Text(
+                        'was ',
+                        style:  TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                          ),
+                          ),
+                      if (product.discountPrice < product.price)
                         Expanded(
                           flex: 1,
                           child: Text(
