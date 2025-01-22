@@ -166,7 +166,7 @@ class ProductCard extends StatelessWidget {
                        
                           color: isFavorite
                               ? AppColors.accentColor
-                              : Colors.white.withOpacity(0.8),
+                              : AppColors.accentColor.withOpacity(0.1),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.3),

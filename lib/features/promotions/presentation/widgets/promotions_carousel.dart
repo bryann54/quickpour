@@ -102,8 +102,8 @@ class PromotionsCarousel extends StatelessWidget {
                           ),
                           // Discount Badge
                           Positioned(
-                            top: 10,
-                            right: 10,
+                            top: 0,
+                            right: 0,
                             child: Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 4),
