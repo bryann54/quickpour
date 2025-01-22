@@ -78,21 +78,44 @@ class CartItemWidget extends StatelessWidget {
                       Positioned(
                         top: 5,
                         right: 5,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 4, vertical: 1),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            '${_calculateDiscountPercentage(cartItem.product.price, cartItem.product.discountPrice)}% Off',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                        child:    Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Colors.red, Colors.orangeAccent],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              // borderRadius: BorderRadius.circular(8),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 4,
+                                  offset: const Offset(2, 2),
+                                ),
+                              ],
+                              border: Border.all(color: Colors.white, width: 1),
                             ),
-                          ),
-                        ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.local_offer_rounded,
+                                  color: Colors.white,
+                                  size: 14,
+                                ),
+                                const SizedBox(width: 4),
+                               Text(
+                                  '${_calculateDiscountPercentage(cartItem.product.price, cartItem.product.discountPrice)}% Off',
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
                       )
                     ]
                   ]),

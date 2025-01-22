@@ -163,6 +163,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         return const SizedBox.shrink();
                       },
                     ),
+                      Text(
+                      'Promotions',
+                      style: GoogleFonts.montaga(
+                        fontSize: 20,
+                          textStyle: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        
+                      )),
+                    ),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 8.0),
                       child: PromotionsCarousel(),
@@ -170,6 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text(
                       'Recommended for you',
                       style: GoogleFonts.montaga(
+                          fontSize: 20,
                           textStyle: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       )),

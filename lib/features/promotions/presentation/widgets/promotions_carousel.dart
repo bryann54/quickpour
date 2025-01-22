@@ -29,6 +29,7 @@ class PromotionsCarousel extends StatelessWidget {
   }
 
   Widget _buildCarousel(BuildContext context, List<ProductModel> products) {
+     final theme = Theme.of(context);
     if (products.isEmpty) {
       return const Center(child: Text('No promotions available.'));
     }
@@ -104,21 +105,45 @@ class PromotionsCarousel extends StatelessWidget {
                             top: 10,
                             right: 10,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                '${_calculateDiscountPercentage(product.price, product.discountPrice)}% Off',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [Colors.red, Colors.orangeAccent],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  // borderRadius: BorderRadius.circular(8),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 4,
+                                      offset: const Offset(2, 2),
+                                    ),
+                                  ],
+                                  border:
+                                      Border.all(color: Colors.white, width: 1),
                                 ),
-                              ),
-                            ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.local_offer_rounded,
+                                      color: Colors.white,
+                                      size: 14,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      '${_calculateDiscountPercentage(product.price, product.discountPrice)}% Off',
+                                      style:
+                                          theme.textTheme.bodySmall?.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
                           ),
                           Positioned(
                             bottom: 10,

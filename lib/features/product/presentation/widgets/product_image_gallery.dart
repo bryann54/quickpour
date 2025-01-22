@@ -6,6 +6,7 @@ import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.da
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_event.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProductImageGallery extends StatefulWidget {
   final ProductModel product;
@@ -55,7 +56,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                   ),
                   child: CachedNetworkImage(
                     imageUrl: widget.product.imageUrls[_currentImageIndex],
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                     errorWidget: (context, error, stackTrace) => Icon(
                       Icons.error,
                       size: 64,
@@ -72,19 +73,41 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
               top: 10,
               left: 10,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  '${_calculateDiscountPercentage(widget.product.price, widget.product.discountPrice)}% OFF',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 3, vertical: 4),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Colors.red, Colors.orange],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 4,
+                            offset: const Offset(2, 2),
+                          ),
+                        ],
                       ),
-                ),
-              ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            FontAwesomeIcons.tag,
+                            color: Colors.white,
+                            size: 12,
+                          ),
+                          const SizedBox(width: 4),
+                         Text(
+                      '${_calculateDiscountPercentage(widget.product.price, widget.product.discountPrice)}% OFF',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                        ],
+                      ),
+                    ),
             ),
             // Price details
             Positioned(
@@ -106,7 +129,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                       'KSH ${widget.product.price.toStringAsFixed(0)}',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             decoration: TextDecoration.lineThrough,
-                            color: Colors.grey,
+                            color: Colors.red,
                           ),
                     ),
                   ],

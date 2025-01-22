@@ -27,7 +27,7 @@ class ProductDetailsHeader extends StatelessWidget {
           width: 1,
         ),
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 8),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
@@ -43,7 +43,7 @@ class ProductDetailsHeader extends StatelessWidget {
               : null,
         ),
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(5.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
