@@ -1,4 +1,3 @@
-import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/brands/data/repositories/brand_repository.dart';
 import 'package:chupachap/features/brands/presentation/bloc/brands_bloc.dart';
 import 'package:chupachap/features/brands/presentation/widgets/brands_card_widget.dart';
@@ -11,15 +10,11 @@ class BrandsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      // appBar: CustomAppBar(),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Brands',
-              style: Theme.of(context).textTheme.displayLarge,
-            ),
+          const SizedBox(
+            height: 20,
           ),
           Expanded(
             child: BlocProvider(

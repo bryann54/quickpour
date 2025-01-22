@@ -1,4 +1,3 @@
-import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/categories/presentation/widgets/shimmer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +11,7 @@ class CategoriesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      // appBar: CustomAppBar(),
       body: BlocBuilder<CategoriesBloc, CategoriesState>(
         builder: (context, state) {
           if (state is CategoriesLoading) {
@@ -23,12 +22,8 @@ class CategoriesScreen extends StatelessWidget {
           } else if (state is CategoriesLoaded) {
             return Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Text(
-                    'Categories',
-                    style: Theme.of(context).textTheme.displayLarge,
-                  ),
+                const SizedBox(
+                  height: 20,
                 ),
                 Expanded(
                   child: GridView.builder(

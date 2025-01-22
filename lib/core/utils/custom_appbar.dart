@@ -31,9 +31,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final ThemeData? theme;
   final String? title;
   final FloatingActionButtonLocation? fabLocation;
+  final PreferredSizeWidget? bottom;
   final userEmail =
       FirebaseAuth.instance.currentUser?.email ?? 'No email found';
   final authUseCases = AuthUseCases(authRepository: AuthRepository());
+  final double toolbarHeight; 
 
   CustomAppBar({
     Key? key,
@@ -42,11 +44,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showCart = true,
     this.showProfile = true,
     this.useCartFAB = false,
+     this.bottom,
     this.iconSize = 27,
     this.iconColor,
     this.theme,
     this.title,
     this.fabLocation,
+     this.toolbarHeight = 60,
     this.userName,
   }) : super(key: key);
   void _handleNotificationTap(BuildContext context) {
@@ -104,6 +108,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final iconColorWithTheme = iconColor ?? currentTheme.iconTheme.color;
 
     return AppBar(
+      toolbarHeight: toolbarHeight,
       title: title != null
           ? Text(title!, style: currentTheme.textTheme.titleLarge)
           : Row(
@@ -276,29 +281,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ],
             ),
       backgroundColor: currentTheme.appBarTheme.backgroundColor,
+       bottom: bottom, 
     );
   }
+
+ @override
+  Size get preferredSize => Size.fromHeight(toolbarHeight +
+      (bottom?.preferredSize.height ??
+          0.0));
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(context),
-      floatingActionButton: showCart && useCartFAB
-          ? BlocBuilder<CartBloc, CartState>(
-              builder: (context, cartState) {
-                return FloatingActionButton(
-                  onPressed: () => _handleCartTap(context),
-                  child: _buildCartIcon(context, cartState, Theme.of(context)),
-                );
-              },
-            )
-          : null,
-      floatingActionButtonLocation: useCartFAB
-          ? (fabLocation ?? FloatingActionButtonLocation.endFloat)
-          : null,
-    );
+    return _buildAppBar(
+        context); 
   }
 
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

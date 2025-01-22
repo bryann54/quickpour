@@ -1,4 +1,3 @@
-import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/merchant/data/repositories/merchants_repository.dart';
 import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
 import 'package:chupachap/features/merchant/presentation/widgets/merchant_card_widget.dart';
@@ -12,21 +11,12 @@ class MerchantsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      // appBar: CustomAppBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Partner Stores',
-                  style: Theme.of(context).textTheme.displayLarge,
-                ),
-              ],
-            ),
+          const SizedBox(
+            height: 20,
           ),
           Expanded(
             child: BlocProvider(
