@@ -26,6 +26,8 @@ import 'package:chupachap/features/orders/presentation/bloc/orders_bloc.dart';
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
+import 'package:chupachap/features/promotions/presentation/bloc/promotions_bloc.dart';
+import 'package:chupachap/features/promotions/presentation/bloc/promotions_event.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +40,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final merchantRepository = MerchantsRepository();
-    
+
     final firestore = FirebaseFirestore.instance;
     final auth = FirebaseAuth.instance;
 
@@ -88,6 +90,9 @@ class App extends StatelessWidget {
               return bloc;
             },
           ),
+          BlocProvider(
+              create: (_) =>
+                  PromotionsBloc(ProductRepository())..add(FetchPromotions())),
           BlocProvider<ProductSearchBloc>(
             create: (context) => ProductSearchBloc(
               productRepository: ProductRepository(),

@@ -32,7 +32,7 @@ class CartFooter extends StatelessWidget {
                 orElse: () => CartItem(product: product, quantity: 0),
               )
             : CartItem(product: product, quantity: 0);
-    
+
         return cartItem.quantity == 0
             ? _buildAddToCartButton(context)
             : _buildQuantityControls(context, isDarkMode, cartItem.quantity);

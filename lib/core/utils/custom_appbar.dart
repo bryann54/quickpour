@@ -1,6 +1,8 @@
 import 'package:chupachap/core/utils/custom_greetings.dart';
 import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
+import 'package:chupachap/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:chupachap/features/auth/presentation/bloc/auth_event.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
@@ -9,6 +11,7 @@ import 'package:chupachap/features/notifications/presentation/bloc/notifications
 import 'package:chupachap/features/notifications/presentation/pages/notifications_screen.dart';
 import 'package:chupachap/features/profile/presentation/pages/profile_screen.dart';
 import 'package:chupachap/features/profile/presentation/pages/settings_screen.dart';
+import 'package:chupachap/features/profile/presentation/widgets/logout_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,9 +31,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final ThemeData? theme;
   final String? title;
   final FloatingActionButtonLocation? fabLocation;
+  final PreferredSizeWidget? bottom;
   final userEmail =
       FirebaseAuth.instance.currentUser?.email ?? 'No email found';
   final authUseCases = AuthUseCases(authRepository: AuthRepository());
+  final double toolbarHeight;
 
   CustomAppBar({
     Key? key,
@@ -39,11 +44,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showCart = true,
     this.showProfile = true,
     this.useCartFAB = false,
+    this.bottom,
     this.iconSize = 27,
     this.iconColor,
     this.theme,
     this.title,
     this.fabLocation,
+    this.toolbarHeight = 60,
     this.userName,
   }) : super(key: key);
   void _handleNotificationTap(BuildContext context) {
@@ -101,6 +108,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final iconColorWithTheme = iconColor ?? currentTheme.iconTheme.color;
 
     return AppBar(
+      toolbarHeight: toolbarHeight,
       title: title != null
           ? Text(title!, style: currentTheme.textTheme.titleLarge)
           : Row(
@@ -203,12 +211,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                             RequestsScreen(authRepository: AuthRepository(),)));
+                                        builder: (context) => RequestsScreen(
+                                              authRepository: AuthRepository(),
+                                            )));
 
                                 break;
                               case 'logout':
-                                print('Logout tapped');
+                                CustomLogoutDialog(
+                                  onConfirm: () {
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
+                                    context.read<AuthBloc>().add(LogoutEvent());
+                                  },
+                                  onCancel: () {
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
+                                  },
+                                );
                                 break;
                             }
                           },
@@ -262,29 +281,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ],
             ),
       backgroundColor: currentTheme.appBarTheme.backgroundColor,
+      bottom: bottom,
     );
   }
+
+  @override
+  Size get preferredSize =>
+      Size.fromHeight(toolbarHeight + (bottom?.preferredSize.height ?? 0.0));
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(context),
-      floatingActionButton: showCart && useCartFAB
-          ? BlocBuilder<CartBloc, CartState>(
-              builder: (context, cartState) {
-                return FloatingActionButton(
-                  onPressed: () => _handleCartTap(context),
-                  child: _buildCartIcon(context, cartState, Theme.of(context)),
-                );
-              },
-            )
-          : null,
-      floatingActionButtonLocation: useCartFAB
-          ? (fabLocation ?? FloatingActionButtonLocation.endFloat)
-          : null,
-    );
+    return _buildAppBar(context);
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

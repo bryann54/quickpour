@@ -18,12 +18,13 @@ import 'package:chupachap/features/product_search/presentation/bloc/product_sear
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_state.dart';
 
 class SearchPage extends StatefulWidget {
-   final AuthRepository authRepository;
+  final AuthRepository authRepository;
   final TextEditingController? searchController;
 
   const SearchPage({
     super.key,
-    this.searchController, required this.authRepository,
+    this.searchController,
+    required this.authRepository,
   });
 
   @override
@@ -35,7 +36,6 @@ class _SearchPageState extends State<SearchPage> {
   late ProductSearchBloc _productSearchBloc;
   late TextEditingController _searchController;
   final _searchSubject = PublishSubject<String>();
-  
 
   @override
   void initState() {
@@ -183,7 +183,9 @@ class _SearchPageState extends State<SearchPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) =>  RequestsScreen(authRepository: widget.authRepository,),
+                              builder: (_) => RequestsScreen(
+                                authRepository: widget.authRepository,
+                              ),
                             ),
                           );
                         },

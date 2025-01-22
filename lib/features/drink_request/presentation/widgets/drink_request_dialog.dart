@@ -19,7 +19,6 @@ class DrinkRequestDialog extends StatefulWidget {
   State<DrinkRequestDialog> createState() => _DrinkRequestDialogState();
 }
 
-
 class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
   final _formKey = GlobalKey<FormState>();
   final _drinkNameController = TextEditingController();

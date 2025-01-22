@@ -1,21 +1,14 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
-import 'package:chupachap/features/brands/presentation/bloc/brands_bloc.dart';
-import 'package:chupachap/features/brands/presentation/pages/brands_screen.dart';
-import 'package:chupachap/features/brands/presentation/widgets/horizontal_list_widget.dart';
 import 'package:chupachap/features/categories/data/repositories/category_repository.dart';
 import 'package:chupachap/features/categories/domain/usecases/fetch_categories.dart';
 import 'package:chupachap/features/categories/presentation/bloc/categories_bloc.dart';
 import 'package:chupachap/features/categories/presentation/bloc/categories_event.dart';
-import 'package:chupachap/features/categories/presentation/bloc/categories_state.dart';
-import 'package:chupachap/features/categories/presentation/pages/categories_screen.dart';
-import 'package:chupachap/features/categories/presentation/widgets/horizontal_list_widget.dart';
 import 'package:chupachap/features/categories/presentation/widgets/shimmer_widget.dart';
+import 'package:chupachap/features/merchant/presentation/pages/tab_view.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
-import 'package:chupachap/features/product_search/presentation/widgets/home_screen_search.dart';
 import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
-import 'package:chupachap/features/merchant/presentation/pages/merchants_screen.dart';
 import 'package:chupachap/features/merchant/presentation/widgets/merchant_horizontal_list_widget.dart';
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
@@ -23,6 +16,7 @@ import 'package:chupachap/features/product/presentation/bloc/product_event.dart'
 import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_card.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_shimmer_widget.dart';
+import 'package:chupachap/features/promotions/presentation/widgets/promotions_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -93,9 +87,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: Column(
           children: [
-            HomeScreenSearch(
-              controller: _searchController,
-            ),
+            // HomeScreenSearch(
+            //   controller: _searchController,
+            // ),
+
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -134,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const MerchantsScreen(),
+                                  builder: (context) => const StoreTabsScreen(),
                                 ),
                               );
                             },
@@ -168,110 +163,23 @@ class _HomeScreenState extends State<HomeScreen> {
                         return const SizedBox.shrink();
                       },
                     ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 3, top: 2, bottom: 2),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Top Brands',
-                              style: GoogleFonts.montaga(
-                                textStyle:
-                                    theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )),
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const BrandsScreen(),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                'See All',
-                                style: GoogleFonts.montaga(
-                                  textStyle: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(
-                                        color: isDarkMode
-                                            ? Colors.teal
-                                            : AppColors.accentColor,
-                                      ),
-                                ),
-                              )),
-                        ],
-                      ),
+                      Text(
+                      'Promotions',
+                      style: GoogleFonts.montaga(
+                        fontSize: 20,
+                          textStyle: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        
+                      )),
                     ),
-                    BlocBuilder<BrandsBloc, BrandsState>(
-                      builder: (context, state) {
-                        if (state is BrandsLoadedState) {
-                          return HorizontalBrandsListWidget(
-                              brands: state.brands);
-                        }
-                        if (state is BrandsLoadingState) {
-                          return const Center(child: LoadingHorizontalList());
-                        }
-                        if (state is BrandsErrorState) {
-                          return Center(child: Text(state.errorMessage));
-                        }
-                        return const SizedBox.shrink();
-                      },
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 3, top: 2, bottom: 2),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Categories',
-                              style: GoogleFonts.montaga(
-                                textStyle:
-                                    theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )),
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const CategoriesScreen(),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                'See All',
-                                style: GoogleFonts.montaga(
-                                  textStyle: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(
-                                        color: isDarkMode
-                                            ? Colors.teal
-                                            : AppColors.accentColor,
-                                      ),
-                                ),
-                              )),
-                        ],
-                      ),
-                    ),
-                    BlocBuilder<CategoriesBloc, CategoriesState>(
-                      builder: (context, state) {
-                        if (state is CategoriesLoaded) {
-                          return HorizontalCategoriesListWidget(
-                              categories: state.categories);
-                        }
-                        return const Center(child: LoadingHorizontalList());
-                      },
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      child: PromotionsCarousel(),
                     ),
                     Text(
                       'Recommended for you',
                       style: GoogleFonts.montaga(
+                          fontSize: 20,
                           textStyle: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       )),

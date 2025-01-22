@@ -112,14 +112,9 @@ class RequestsScreen extends StatelessWidget {
                     },
                   );
                 } else if (state is DrinkRequestFailure) {
-                 
-              return Center(
+                  return const Center(
                     child: Text('error getting requests'),
                   );
-
-                 
-
-                  
                 } else {
                   return const Center(child: Text('No requests found.'));
                 }

@@ -7,77 +7,113 @@ class MerchantTileShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
-    final baseColor = isDarkTheme ? Colors.grey[400]! : Colors.grey[400]!;
-    final highlightColor = isDarkTheme ? Colors.grey[500]! : Colors.grey[100]!;
+    final baseColor = isDarkTheme ? Colors.grey[700]! : Colors.grey[300]!;
+    final highlightColor = isDarkTheme ? Colors.grey[600]! : Colors.grey[100]!;
 
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      itemCount: 7,
+      padding: EdgeInsets.zero,
+      itemCount: 5,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        return Shimmer.fromColors(
-          baseColor: baseColor,
-          highlightColor: highlightColor,
-          child: Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            margin: const EdgeInsets.symmetric(vertical: 8),
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 1,
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Shimmer.fromColors(
+            baseColor: baseColor,
+            highlightColor: highlightColor,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
-                  // Shimmer for Avatar
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.grey[600],
+                  // Profile Image Shimmer
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
                   ),
+
                   const SizedBox(width: 16),
+
+                  // Merchant Details Shimmer
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Shimmer for Name
-                        Container(
-                          width: double.infinity,
-                          height: 20,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(height: 4),
-                        // Shimmer for Location
                         Row(
                           children: [
-                            Icon(
-                              Icons.location_on,
-                              size: 16,
-                              color: baseColor,
+                            // Name Shimmer
+                            Expanded(
+                              child: Container(
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
                             ),
-                            const SizedBox(width: 4),
+                            const SizedBox(width: 8),
+                            // Status Indicator Shimmer
                             Container(
-                              width: 150,
-                              height: 16,
-                              color: Colors.white,
+                              width: 60,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 8),
-                        // Shimmer for Store Status
+                        // Location Shimmer
+                        Row(
+                          children: [
+                            Container(
+                              width: 16,
+                              height: 16,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: Container(
+                                height: 16,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        // Rating Shimmer
                         Container(
-                          width: 100,
-                          height: 16,
-                          color: Colors.white,
+                          width: 80,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  // Shimmer for Rating
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    width: 60,
-                    height: 30,
-                    color: Colors.white,
                   ),
                 ],
               ),

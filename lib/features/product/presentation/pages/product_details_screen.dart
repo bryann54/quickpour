@@ -100,7 +100,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   size: 50, color: Colors.grey),
                             ),
                           ),
-              
+
                           Positioned(
                             top: 10,
                             right: 10,
@@ -156,20 +156,39 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               left: 10,
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
+                                    horizontal: 3, vertical: 4),
                                 decoration: BoxDecoration(
-                                  color: Colors.red,
+                                  gradient: const LinearGradient(
+                                    colors: [Colors.red, Colors.orange],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
                                   borderRadius: BorderRadius.circular(8),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 4,
+                                      offset: const Offset(2, 2),
+                                    ),
+                                  ],
                                 ),
-                                child: Text(
-                                  '${_calculateDiscountPercentage(widget.product.price, widget.product.discountPrice)}% OFF',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      FontAwesomeIcons.tag,
+                                      color: Colors.white,
+                                      size: 12,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      '${_calculateDiscountPercentage(widget.product.price,widget.product.discountPrice)}% OFF',
+                                      style: const TextStyle(
                                         color: Colors.white,
+                                        fontSize: 11,
                                         fontWeight: FontWeight.bold,
                                       ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -223,7 +242,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ProductDetailsHeader(product: widget.product),
                       const SizedBox(height: 20),
                       MerchantsDetailsSection(product: widget.product),
-                     
                     ],
                   ),
                 ),

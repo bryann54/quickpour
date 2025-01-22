@@ -42,14 +42,14 @@ class MerchantsDetailsSection extends StatelessWidget {
                 )
               : null,
         ),
-   child: Padding(
-          padding: const EdgeInsets.all(20.0),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: isDarkMode
@@ -160,7 +160,8 @@ class MerchantsDetailsSection extends StatelessWidget {
       ),
     );
   }
-Widget _buildMerchantsAvatar() {
+
+  Widget _buildMerchantsAvatar() {
     return ClipOval(
       // Wrap with ClipOval to ensure proper clipping
       child: Container(
@@ -170,7 +171,7 @@ Widget _buildMerchantsAvatar() {
           shape: BoxShape.circle,
           color: AppColors.accentColor,
         ),
-        child: Center(
+        child: const Center(
           // Center the icon
           child: FaIcon(
             FontAwesomeIcons.store,
@@ -200,15 +201,15 @@ Widget _buildMerchantsAvatar() {
           ),
         ],
       ),
-      child: Row(
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(
+          Icon(
             Icons.star,
             color: Colors.white,
             size: 16,
           ),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           // Text(
           //   product.merchants.rating.toStringAsFixed(1),
           //   style: Theme.of(context).textTheme.bodySmall?.copyWith(
