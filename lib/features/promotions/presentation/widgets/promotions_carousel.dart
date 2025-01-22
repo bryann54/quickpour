@@ -92,7 +92,7 @@ class PromotionsCarousel extends StatelessWidget {
                                 imageUrl: product.imageUrls.isNotEmpty
                                     ? product.imageUrls.first
                                     : 'assets/111.png',
-                                fit: BoxFit.contain,
+                                fit: BoxFit.cover,
                                 width: double.infinity,
                                 height: 170,
                                 errorWidget: (context, url, error) =>

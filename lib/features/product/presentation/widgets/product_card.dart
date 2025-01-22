@@ -55,7 +55,7 @@ class ProductCard extends StatelessWidget {
                       : 'assets/111.png',
                   fit: BoxFit.contain,
                   width: double.infinity,
-                  height: 150,
+                  height: 130,
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
 
@@ -65,13 +65,8 @@ class ProductCard extends StatelessWidget {
                   left: 0,
                   child: Container(
                     decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.accentColor.withOpacity(0.5),
-                          blurRadius: 2,
-                          offset: const Offset(2, 2),
-                        ),
-                      ],
+                        color: AppColors.accentColor.withOpacity(0.6),
+                     
                     ),
                     child: BlocBuilder<CartBloc, CartState>(
                       builder: (context, state) {
@@ -91,7 +86,10 @@ class ProductCard extends StatelessWidget {
                                       Brightness.dark
                                   ? AppColors.background
                                   : null,
-                              borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: AppColors.accentColor
+                                  )
+                              // borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -165,19 +163,19 @@ class ProductCard extends StatelessWidget {
                       final isFavorite = state.isFavorite(product);
                       return Container(
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
+                       
                           color: isFavorite
                               ? AppColors.accentColor
                               : Colors.white.withOpacity(0.8),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 4,
+                              color: Colors.black.withOpacity(0.3),
+                            
                               offset: const Offset(2, 2),
                             ),
                           ],
                         ),
-                        margin: const EdgeInsets.all(8),
+                      
                         child: IconButton(
                           icon: Icon(
                             isFavorite
@@ -211,15 +209,16 @@ class ProductCard extends StatelessWidget {
                     bottom: 0,
                     right: 60,
                     child: Container(
+
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 3, vertical: 4),
+                          horizontal: 15, vertical: 4),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [Colors.red, Colors.orange],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        // borderRadius: BorderRadius.circular(8),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.2),
@@ -228,7 +227,7 @@ class ProductCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Row(
+                      child: Row(mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const Icon(
                             FontAwesomeIcons.tag,

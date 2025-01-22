@@ -15,7 +15,7 @@ class MerchantCardWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+    
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -68,7 +68,7 @@ class MerchantCardWidget extends StatelessWidget {
                             height: 80,
                             fit: BoxFit.cover,
                             placeholder: (context, url) => Container(
-                              color: Colors.grey[200],
+                              // color: Colors.grey[200],
                               child: const Center(
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
@@ -76,7 +76,7 @@ class MerchantCardWidget extends StatelessWidget {
                               ),
                             ),
                             errorWidget: (context, url, error) => Container(
-                              color: Colors.grey[200],
+                              // color: Colors.grey[200],
                               child: const Icon(Icons.error),
                             ),
                           ),
