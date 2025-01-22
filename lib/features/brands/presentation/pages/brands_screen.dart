@@ -1,6 +1,7 @@
 import 'package:chupachap/features/brands/data/repositories/brand_repository.dart';
 import 'package:chupachap/features/brands/presentation/bloc/brands_bloc.dart';
 import 'package:chupachap/features/brands/presentation/widgets/brands_card_widget.dart';
+import 'package:chupachap/features/merchant/presentation/widgets/merchant_tile_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,7 +11,6 @@ class BrandsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: CustomAppBar(),
       body: Column(
         children: [
           const SizedBox(
@@ -24,8 +24,7 @@ class BrandsScreen extends StatelessWidget {
               child: BlocBuilder<BrandsBloc, BrandsState>(
                 builder: (context, state) {
                   if (state is BrandsLoadingState) {
-                    return const Center(
-                        child: CircularProgressIndicator.adaptive());
+                    return const Center(child: MerchantTileShimmer());
                   } else if (state is BrandsLoadedState) {
                     return ListView.builder(
                       itemCount: state.brands.length,

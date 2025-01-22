@@ -35,7 +35,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final userEmail =
       FirebaseAuth.instance.currentUser?.email ?? 'No email found';
   final authUseCases = AuthUseCases(authRepository: AuthRepository());
-  final double toolbarHeight; 
+  final double toolbarHeight;
 
   CustomAppBar({
     Key? key,
@@ -44,13 +44,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showCart = true,
     this.showProfile = true,
     this.useCartFAB = false,
-     this.bottom,
+    this.bottom,
     this.iconSize = 27,
     this.iconColor,
     this.theme,
     this.title,
     this.fabLocation,
-     this.toolbarHeight = 60,
+    this.toolbarHeight = 60,
     this.userName,
   }) : super(key: key);
   void _handleNotificationTap(BuildContext context) {
@@ -281,19 +281,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ],
             ),
       backgroundColor: currentTheme.appBarTheme.backgroundColor,
-       bottom: bottom, 
+      bottom: bottom,
     );
   }
 
- @override
-  Size get preferredSize => Size.fromHeight(toolbarHeight +
-      (bottom?.preferredSize.height ??
-          0.0));
+  @override
+  Size get preferredSize =>
+      Size.fromHeight(toolbarHeight + (bottom?.preferredSize.height ?? 0.0));
 
   @override
   Widget build(BuildContext context) {
-    return _buildAppBar(
-        context); 
+    return _buildAppBar(context);
   }
-
 }

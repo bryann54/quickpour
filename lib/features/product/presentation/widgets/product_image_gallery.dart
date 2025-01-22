@@ -94,7 +94,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                 children: [
                   if (widget.product.discountPrice > 0)
                     Text(
-                      'KSH ${widget.product.discountPrice.toStringAsFixed(2)}',
+                      'KSH ${widget.product.discountPrice.toStringAsFixed(0)}',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             color: Colors.green,
                             fontWeight: FontWeight.bold,
@@ -103,7 +103,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                   if (widget.product.discountPrice > 0) ...[
                     const SizedBox(width: 8),
                     Text(
-                      'KSH ${widget.product.price.toStringAsFixed(2)}',
+                      'KSH ${widget.product.price.toStringAsFixed(0)}',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             decoration: TextDecoration.lineThrough,
                             color: Colors.grey,
@@ -112,7 +112,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                   ],
                   if (widget.product.discountPrice <= 0)
                     Text(
-                      'KSH ${widget.product.price.toStringAsFixed(2)}',
+                      'KSH ${widget.product.price.toStringAsFixed(0)}',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/product/data/models/product_model.dart';
@@ -168,32 +167,32 @@ class ProductDetailsHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            padding: const EdgeInsets.all(2),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                colors: isDarkMode
-                    ? [AppColors.brandAccent, AppColors.brandPrimary]
-                    : [AppColors.primaryColor, AppColors.brandPrimary],
-              ),
-            ),
-            child: CircleAvatar(
-              radius: 16,
-              backgroundColor: Colors.white,
-              child: ClipOval(
-                child: CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  width: 28,
-                  height: 28,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) =>
-                      const CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                ),
-              ),
-            ),
-          ),
+          // Container(
+          //   padding: const EdgeInsets.all(2),
+          //   decoration: BoxDecoration(
+          //     shape: BoxShape.circle,
+          //     gradient: LinearGradient(
+          //       colors: isDarkMode
+          //           ? [AppColors.brandAccent, AppColors.brandPrimary]
+          //           : [AppColors.primaryColor, AppColors.brandPrimary],
+          //     ),
+          //   ),
+          //   child: CircleAvatar(
+          //     radius: 16,
+          //     backgroundColor: Colors.white,
+          //     child: ClipOval(
+          //       child: CachedNetworkImage(
+          //         imageUrl: imageUrl,
+          //         width: 28,
+          //         height: 28,
+          //         fit: BoxFit.cover,
+          //         placeholder: (context, url) =>
+          //             const CircularProgressIndicator(),
+          //         errorWidget: (context, url, error) => const Icon(Icons.error),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

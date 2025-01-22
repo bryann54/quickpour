@@ -18,12 +18,11 @@ class StoreTabsScreen extends StatelessWidget {
       child: Scaffold(
         appBar: CustomAppBar(
           toolbarHeight: 70.0,
-        
           showNotification: true,
           showCart: true,
           showProfile: true,
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(48.0), 
+            preferredSize: const Size.fromHeight(48.0),
             child: TabBar(
               tabs: const [
                 Tab(text: 'Stores'),
@@ -33,7 +32,9 @@ class StoreTabsScreen extends StatelessWidget {
               labelStyle: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
-                color: isDarkMode ? AppColors.background : AppColors.backgroundDark,
+                color: isDarkMode
+                    ? AppColors.background
+                    : AppColors.backgroundDark,
               ),
               unselectedLabelStyle: TextStyle(
                 fontWeight: FontWeight.normal,
@@ -42,8 +43,7 @@ class StoreTabsScreen extends StatelessWidget {
                     ? AppColors.brandAccent
                     : AppColors.shadowColorDark,
               ),
-              padding: const EdgeInsets.only(
-                  bottom: 8), 
+              padding: const EdgeInsets.only(bottom: 8),
             ),
           ),
         ),
