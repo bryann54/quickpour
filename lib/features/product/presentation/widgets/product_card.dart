@@ -52,7 +52,7 @@ class ProductCard extends StatelessWidget {
                 CachedNetworkImage(
                   imageUrl: product.imageUrls.isNotEmpty
                       ? product.imageUrls.first
-                      : 'assets/111.png',
+                      : '',
                   fit: BoxFit.contain,
                   width: double.infinity,
                   height: 130,
@@ -69,6 +69,8 @@ class ProductCard extends StatelessWidget {
                      
                     ),
                     child: BlocBuilder<CartBloc, CartState>(
+                      buildWhen: (previous, current) =>
+                          current is CartLoadedState,
                       builder: (context, state) {
                         final cartItem = state is CartLoadedState
                             ? state.cart.items.firstWhere(
@@ -102,6 +104,7 @@ class ProductCard extends StatelessWidget {
                                       ? AppColors.backgroundDark
                                       : AppColors.background,
                                   onPressed: () {
+                                    
                                     final newQuantity = cartItem.quantity > 1
                                         ? cartItem.quantity - 1
                                         : 0;
