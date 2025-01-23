@@ -59,7 +59,12 @@ class ProductCard extends StatelessWidget {
                   fit: BoxFit.contain,
                   width: double.infinity,
                   height: 130,
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  errorWidget: (context, url, error) => Container(
+                                      width: double.infinity,
+                      height: 130,
+                      color: isDarkMode?Colors.grey.shade800
+                          :Colors.grey.shade100,
+                    child: const Icon(Icons.error)),
                 ),
 
                 // Cart Controls
@@ -171,6 +176,7 @@ class ProductCard extends StatelessWidget {
                     builder: (context, state) {
                       final isFavorite = state.isFavorite(product);
                       return Container(
+                        height: 40,
                         decoration: BoxDecoration(
                           color: isFavorite
                               ? AppColors.accentColor
