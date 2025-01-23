@@ -28,159 +28,147 @@ class MerchantCardAvatar extends StatelessWidget {
           ),
         );
       },
-      child: Stack(
-        children: [
-          Container(
-            width: 100,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: isFirst || isLast
-                    ? Colors.transparent
-                    : AppColors.accentColor.withOpacity(0.5),
-              ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            margin: EdgeInsets.only(
-              left: isFirst ? 4.0 : 0.0,
-              right: isLast ? 4.0 : 8.0,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 2.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildAvatarWithBadge(),
-                  const SizedBox(height: 4),
-                  _buildMerchantName(context),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            top: 4,
-            left: 4,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: merchant.isOpen ? Colors.green : Colors.red,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                merchant.isOpen ? 'Open' : 'Closed',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAvatarWithBadge() {
-    return Stack(
-      children: [
-        _buildAvatarImage(),
-        if (merchant.isVerified)
-          Positioned(
-            bottom: 4,
-            right: 4,
-            child: Container(
-              padding: const EdgeInsets.all(2),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 2,
-                  ),
-                ],
-              ),
-              child: const FaIcon(
-                Icons.verified,
-                size: 14,
-                color: AppColors.accentColor,
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildAvatarImage() {
-    return Container(
-      width: 50,
-      height: 50,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: AppColors.accentColor,
-          width: 2,
+      child: Container(
+        width: 100,
+        height: 150,
+        margin: EdgeInsets.only(
+          left: isFirst ? 4.0 : 0.0,
+          right: isLast ? 4.0 : 8.0,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.accentColor.withOpacity(0.2),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: isFirst || isLast
+                ? Colors.transparent
+                : AppColors.accentColor.withOpacity(0.5),
           ),
-        ],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              spreadRadius: 2,
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            _buildBackgroundImage(),
+            _buildMerchantInfo(context),
+            _buildStatusBadge(),
+          ],
+        ),
       ),
-      child: Hero(
-        tag: 'Merchant_avatar_${merchant.id}',
-        child: ClipOval(
-          child: CachedNetworkImage(
-            imageUrl: merchant.imageUrl,
-            placeholder: (context, url) => Container(
-              color: Colors.grey[200],
-              child: const Center(
-                child: SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator.adaptive(
-                    strokeWidth: 2,
-                  ),
-                ),
+    );
+  }
+
+  Widget _buildBackgroundImage() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: CachedNetworkImage(
+        imageUrl: merchant.imageUrl,
+        width: 100,
+        height: 150,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => Container(
+          color: Colors.grey[200],
+          child: const Center(
+            child: SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator.adaptive(
+                strokeWidth: 2,
               ),
             ),
-            errorWidget: (context, url, error) => Container(
-              color: Colors.grey[200],
-              child: FaIcon(
-                FontAwesomeIcons.houseChimneyUser,
-                size: 35,
-                color: Colors.grey[400],
-              ),
-            ),
-            fit: BoxFit.cover,
+          ),
+        ),
+        errorWidget: (context, url, error) => Container(
+          color: Colors.grey[200],
+          child: FaIcon(
+            Icons.error,
+            size: 35,
+            color: Colors.grey[400],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildMerchantName(BuildContext context) {
+  Widget _buildMerchantInfo(BuildContext context) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Text(
-            merchant.name,
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 12,
-              color: isDarkMode ? Colors.white70 : Colors.black87,
-            ),
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.5),
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
           ),
-        ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              merchant.name,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 12,
+                color: isDarkMode ? Colors.white70 : Colors.white,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            if (merchant.isVerified) const SizedBox(height: 4),
+            if (merchant.isVerified)
+              Row(
+                children: [
+                  const FaIcon(
+                    Icons.verified,
+                    size: 14,
+                    color: AppColors.accentColor,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Verified',
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: isDarkMode ? Colors.white70 : Colors.white,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ],
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatusBadge() {
+    return Positioned(
+      top: 0,
+      left: 0,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: merchant.isOpen ? Colors.green : Colors.red,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Text(
+          merchant.isOpen ? 'Open' : 'Closed',
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
