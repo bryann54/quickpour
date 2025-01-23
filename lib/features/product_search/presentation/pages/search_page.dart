@@ -185,6 +185,7 @@ class _SearchPageState extends State<SearchPage> {
                             MaterialPageRoute(
                               builder: (_) => RequestsScreen(
                                 authRepository: widget.authRepository,
+                                initialDrinkName: _searchController.text,
                               ),
                             ),
                           );

@@ -163,14 +163,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         return const SizedBox.shrink();
                       },
                     ),
-                      Text(
+                    Text(
                       'Promotions',
                       style: GoogleFonts.montaga(
-                        fontSize: 20,
+                          fontSize: 20,
                           textStyle: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        
-                      )),
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 8.0),
@@ -181,8 +180,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: GoogleFonts.montaga(
                           fontSize: 20,
                           textStyle: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      )),
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
                     const SizedBox(height: 8),
                     BlocBuilder<ProductBloc, ProductState>(

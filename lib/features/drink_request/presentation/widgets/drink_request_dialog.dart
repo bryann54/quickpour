@@ -9,9 +9,11 @@ import 'package:intl/intl.dart';
 
 class DrinkRequestDialog extends StatefulWidget {
   final AuthRepository authRepository;
+  final String? initialDrinkName;
 
   const DrinkRequestDialog({
     super.key,
+     this.initialDrinkName,
     required this.authRepository,
   });
 
@@ -20,6 +22,14 @@ class DrinkRequestDialog extends StatefulWidget {
 }
 
 class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
+  @override
+  void initState() {
+    super.initState();
+    // Prefill the drink name if provided
+    if (widget.initialDrinkName != null) {
+      _drinkNameController.text = widget.initialDrinkName!;
+    }
+  }
   final _formKey = GlobalKey<FormState>();
   final _drinkNameController = TextEditingController();
   final _quantityController = TextEditingController();

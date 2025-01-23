@@ -12,21 +12,51 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RequestsScreen extends StatelessWidget {
+class RequestsScreen extends StatefulWidget {
   final AuthRepository authRepository;
+  final String? initialDrinkName;
 
   const RequestsScreen({
     super.key,
+    this.initialDrinkName,
     required this.authRepository,
   });
 
+  @override
+  State<RequestsScreen> createState() => _RequestsScreenState();
+}
+
+class _RequestsScreenState extends State<RequestsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    
+    // Use WidgetsBinding to ensure the context is ready
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.initialDrinkName != null) {
+        _showRequestDialog(context);
+      }
+    });
+  }
+
+  void _showRequestDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return DrinkRequestDialog(
+          authRepository: widget.authRepository,
+          initialDrinkName: widget.initialDrinkName,
+        );
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
 
     // Only fetch requests if user is authenticated
-    if (authRepository.isUserSignedIn()) {
+    if (widget.authRepository.isUserSignedIn()) {
       context.read<DrinkRequestBloc>().add(FetchDrinkRequests());
     }
 
@@ -55,7 +85,7 @@ class RequestsScreen extends StatelessWidget {
             child: BlocBuilder<DrinkRequestBloc, DrinkRequestState>(
               builder: (context, state) {
                 // Check authentication status
-                if (!authRepository.isUserSignedIn()) {
+                if (!widget.authRepository.isUserSignedIn()) {
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -107,7 +137,7 @@ class RequestsScreen extends StatelessWidget {
                       final request = state.requests[index];
                       return DrinkRequestListTile(
                         request: request,
-                        authRepository: authRepository,
+                        authRepository: widget.authRepository,
                       );
                     },
                   );
@@ -123,7 +153,7 @@ class RequestsScreen extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: authRepository.isUserSignedIn()
+      floatingActionButton: widget.authRepository.isUserSignedIn()
           ? FloatingActionButton.extended(
               label: const Text('Make request'),
               onPressed: () => _showRequestDialog(context),
@@ -134,14 +164,4 @@ class RequestsScreen extends StatelessWidget {
     );
   }
 
-  void _showRequestDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return DrinkRequestDialog(
-          authRepository: authRepository,
-        );
-      },
-    );
-  }
 }

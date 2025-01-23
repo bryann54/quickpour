@@ -15,11 +15,8 @@ class CartItemWidget extends StatelessWidget {
   const CartItemWidget({Key? key, required this.cartItem}) : super(key: key);
 
   int _calculateDiscountPercentage(double originalPrice, double discountPrice) {
-    if (originalPrice <= 0 || discountPrice <= 0) {
-      return 0; // Handle invalid values gracefully
-    }
-    final discount = ((originalPrice - discountPrice) / originalPrice) * 100;
-    return discount.round(); // Return rounded discount percentage
+    if (originalPrice <= 0 || discountPrice <= 0) return 0;
+    return ((originalPrice - discountPrice) / originalPrice * 100).round();
   }
 
   @override
@@ -74,11 +71,13 @@ class CartItemWidget extends StatelessWidget {
                             color: AppColors.backgroundDark),
                       ),
                     ),
-                    if (cartItem.product.discountPrice > 0) ...[
+                    if (cartItem.product.discountPrice > 0 &&
+                        cartItem.product.discountPrice <
+                            cartItem.product.price) ...[
                       Positioned(
-                        top: 5,
-                        right: 5,
-                        child:    Container(
+                          top: 5,
+                          right: 5,
+                          child: Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
@@ -106,7 +105,7 @@ class CartItemWidget extends StatelessWidget {
                                   size: 14,
                                 ),
                                 const SizedBox(width: 4),
-                               Text(
+                                Text(
                                   '${_calculateDiscountPercentage(cartItem.product.price, cartItem.product.discountPrice)}% Off',
                                   style: theme.textTheme.bodySmall?.copyWith(
                                     color: Colors.white,
@@ -115,8 +114,7 @@ class CartItemWidget extends StatelessWidget {
                                 ),
                               ],
                             ),
-                          )
-                      )
+                          ))
                     ]
                   ]),
                 ),
@@ -143,25 +141,56 @@ class CartItemWidget extends StatelessWidget {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        Text(
-                          'KSh ${cartItem.product.price.toStringAsFixed(2)}',
-                          style: theme.textTheme.titleSmall?.copyWith(
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        if (cartItem.product.discountPrice > 0) ...[
-                          const SizedBox(width: 8),
-                          Text(
-                            'KSh ${cartItem.product.discountPrice.toStringAsFixed(2)}',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              decoration: TextDecoration.lineThrough,
+                        if (cartItem.product.discountPrice > 0 &&
+                            cartItem.product.discountPrice <
+                                cartItem.product.price)
+                          Expanded(
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        'Ksh ${cartItem.product.discountPrice.toStringAsFixed(0)}',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.accentColor,
+                                    ),
+                                  ),
+                                  const TextSpan(
+                                    text: ' was ',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        'Ksh ${cartItem.product.price.toStringAsFixed(0)}',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.red,
+                                      decoration: TextDecoration.lineThrough,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          const SizedBox(width: 8),
-                        ],
+                        if (cartItem.product.discountPrice >=
+                            cartItem.product.price)
+                          Expanded(
+                            child: Text(
+                              'Ksh ${cartItem.product.price.toStringAsFixed(0)}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.accentColor,
+                              ),
+                            ),
+                          ),
                       ],
-                    ),
+                    )
                   ],
                 ),
               ),

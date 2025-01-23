@@ -71,7 +71,7 @@ class BrandCardWidget extends StatelessWidget {
           tag: 'brand_logo_${brand.id}',
           child: CircleAvatar(
             radius: 40,
-            backgroundColor: Colors.grey.shade100,
+            backgroundColor: Colors.grey.shade50,
             child: CachedNetworkImage(
               imageUrl: brand.logoUrl,
               placeholder: (context, url) => _buildPlaceholderLoader(),
@@ -89,7 +89,7 @@ class BrandCardWidget extends StatelessWidget {
             child: Container(
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white,
+                // color: Colors.white,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black26,
@@ -119,7 +119,7 @@ class BrandCardWidget extends StatelessWidget {
 
   Widget _buildErrorIcon() {
     return Icon(
-      Icons.business,
+      Icons.error,
       color: Colors.grey.shade500,
       size: 40,
     );

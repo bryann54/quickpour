@@ -19,6 +19,8 @@ class PromotionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     return Card(
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
@@ -42,15 +44,10 @@ class PromotionCard extends StatelessWidget {
                 top: 0,
                 child: Container(
                   decoration: BoxDecoration(
-                    // color: AppColors.accentColor.withOpacity(.8),
-                    // borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.accentColor.withOpacity(0.5),
-                        blurRadius: 2,
-                        offset: const Offset(2, 2),
-                      ),
-                    ],
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? AppColors.background
+                        : AppColors.accentColor,
+                    // borderRadius: BorderRadius.circular(12),
                   ),
                   child: BlocBuilder<CartBloc, CartState>(
                     builder: (context, state) {
@@ -99,9 +96,11 @@ class PromotionCard extends StatelessWidget {
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                               IconButton(
-                                icon: const FaIcon(
+                                icon: FaIcon(
                                   FontAwesomeIcons.circlePlus,
-                                  color: AppColors.accentColor,
+                                  color: isDarkMode
+                                      ? AppColors.accentColor
+                                      : AppColors.background,
                                 ),
                                 onPressed: () {
                                   context.read<CartBloc>().add(
@@ -122,9 +121,11 @@ class PromotionCard extends StatelessWidget {
                                   AddToCartEvent(product: product, quantity: 1),
                                 );
                           },
-                          icon: const Icon(
+                          icon: Icon(
                             FontAwesomeIcons.cartShopping,
-                            color: Colors.white,
+                            color: isDarkMode
+                                ? AppColors.accentColorDark
+                                : Colors.white,
                             size: 18,
                           ),
                         );
@@ -188,7 +189,16 @@ class PromotionCard extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
-                  maxLines: 2,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  product.categoryName,
+                  style: const TextStyle(
+                    fontSize: 12,
+                  ),
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),

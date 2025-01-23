@@ -6,8 +6,8 @@ import 'package:chupachap/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:chupachap/features/auth/presentation/pages/entry_splash.dart';
 import 'package:chupachap/features/brands/data/repositories/brand_repository.dart';
 import 'package:chupachap/features/brands/presentation/bloc/brands_bloc.dart';
+import 'package:chupachap/features/cart/data/repositories/cart_repository.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
-import 'package:chupachap/features/cart/presentation/bloc/cart_event.dart';
 import 'package:chupachap/features/categories/data/repositories/category_repository.dart';
 import 'package:chupachap/features/categories/domain/usecases/fetch_categories.dart';
 import 'package:chupachap/features/categories/presentation/bloc/categories_bloc.dart';
@@ -18,7 +18,6 @@ import 'package:chupachap/features/drink_request/presentation/bloc/drink_request
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:chupachap/features/merchant/data/repositories/merchants_repository.dart';
 import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
-import 'package:chupachap/features/notifications/data/models/notifications_model.dart';
 import 'package:chupachap/features/notifications/data/repositories/notifications_repository.dart';
 import 'package:chupachap/features/notifications/presentation/bloc/notifications_bloc.dart';
 import 'package:chupachap/features/orders/data/repositories/orders_repository.dart';
@@ -102,38 +101,18 @@ class App extends StatelessWidget {
             create: (_) =>
                 MerchantBloc(merchantRepository)..add(FetchMerchantEvent()),
           ),
-          BlocProvider(create: (_) => CartBloc()),
+          BlocProvider(
+            create: (context) => CartBloc(
+              cartRepository: CartRepository(firestore: firestore),
+              userId: FirebaseAuth.instance.currentUser!.uid,
+            ),
+          ),
           BlocProvider(
             create: (context) {
               final checkoutBloc = CheckoutBloc(
                 firestore: context.read<FirebaseFirestore>(),
                 authUseCases: context.read<AuthBloc>().authUseCases,
               );
-
-              // Listen for checkout events to create notifications
-              checkoutBloc.stream.listen((state) {
-                if (state is CheckoutOrderPlacedState) {
-                  final notificationsRepo =
-                      context.read<NotificationsRepository>();
-                  final userId = FirebaseAuth.instance.currentUser?.uid;
-                  if (userId != null) {
-                    notificationsRepo.createNotification(
-                      title: 'Order Confirmed',
-                      body: 'Your order #${state.orderId} has been confirmed',
-                      type: NotificationType.order,
-                      userId: userId,
-                    );
-                  }
-                  context.read<CartBloc>().add(ClearCartEvent());
-                } else if (state is CheckoutErrorState) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.errorMessage),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                }
-              });
 
               return checkoutBloc;
             },

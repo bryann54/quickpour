@@ -96,7 +96,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             height: 200,
                             color: Colors.grey[300],
                             child: const Center(
-                              child: Icon(Icons.image,
+                              child: Icon(Icons.error,
                                   size: 50, color: Colors.grey),
                             ),
                           ),
@@ -181,7 +181,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
-                                      '${_calculateDiscountPercentage(widget.product.price,widget.product.discountPrice)}% OFF',
+                                      '${_calculateDiscountPercentage(widget.product.price, widget.product.discountPrice)}% OFF',
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 11,
