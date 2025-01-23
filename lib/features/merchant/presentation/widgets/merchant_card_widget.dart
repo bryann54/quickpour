@@ -18,7 +18,6 @@ class MerchantCardWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-    
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -46,11 +45,12 @@ class MerchantCardWidget extends StatelessWidget {
               },
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color:isDarkMode?AppColors.accentColor.withOpacity(.3): Colors.grey.withOpacity(0.5),
-              )
-            ),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: isDarkMode
+                      ? AppColors.accentColor.withOpacity(.3)
+                      : Colors.grey.withOpacity(0.5),
+                )),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
@@ -60,20 +60,19 @@ class MerchantCardWidget extends StatelessWidget {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.2),
-                              spreadRadius: 1,
-                              blurRadius: 6,
-                            ),
-                          ],
-                           border: Border.all(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                spreadRadius: 1,
+                                blurRadius: 6,
+                              ),
+                            ],
+                            border: Border.all(
                               color: isDarkMode
                                   ? AppColors.accentColor.withOpacity(.3)
                                   : Colors.grey.withOpacity(0.3),
-                            )
-                        ),
+                            )),
                         child: Hero(
                           tag: 'merchant_image_${merchant.id}',
                           child: ClipOval(
@@ -124,9 +123,9 @@ class MerchantCardWidget extends StatelessWidget {
                         ),
                     ],
                   ),
-            
+
                   const SizedBox(width: 16),
-            
+
                   // Enhanced Merchant Details
                   Expanded(
                     child: Column(
@@ -162,8 +161,9 @@ class MerchantCardWidget extends StatelessWidget {
                               child: Text(
                                 merchant.isOpen ? 'Open' : 'Closed',
                                 style: TextStyle(
-                                  color:
-                                      merchant.isOpen ? Colors.green : Colors.red,
+                                  color: merchant.isOpen
+                                      ? Colors.green
+                                      : Colors.red,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
                                 ),

@@ -6,10 +6,9 @@ import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   final CartRepository cartRepository;
-  final String
-      userId;
+  final String userId;
 
-CartBloc({required this.cartRepository, required this.userId})
+  CartBloc({required this.cartRepository, required this.userId})
       : super(const CartInitialState()) {
     on<AddToCartEvent>(_onAddToCart);
     on<RemoveFromCartEvent>(_onRemoveFromCart);
@@ -30,17 +29,14 @@ CartBloc({required this.cartRepository, required this.userId})
     }
   }
 
-void _onAddToCart(AddToCartEvent event, Emitter<CartState> emit) async {
+  void _onAddToCart(AddToCartEvent event, Emitter<CartState> emit) async {
     try {
-
       await cartRepository.addToCart(
           userId, CartItem(product: event.product, quantity: event.quantity));
 
-
       final updatedItems = await cartRepository.getCartItems(userId);
 
-      for (var item in updatedItems) {
-      }
+      
 
       emit(CartLoadedState(cart: Cart(items: updatedItems)));
     } catch (e) {

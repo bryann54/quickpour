@@ -40,17 +40,15 @@ class _CartPageState extends State<CartPage>
           content: const Text('Are you sure you want to clear your cart?'),
           actions: <Widget>[
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child:  Text('Cancel',style: TextStyle(
-                color: Theme.of(
-                  context,
-                  ).colorScheme.onBackground,
-                  )
-                )
-              
-            ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Cancel',
+                    style: TextStyle(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface,
+                    ))),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();

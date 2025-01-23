@@ -181,7 +181,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
-                                      '${_calculateDiscountPercentage(widget.product.price,widget.product.discountPrice)}% OFF',
+                                      '${_calculateDiscountPercentage(widget.product.price, widget.product.discountPrice)}% OFF',
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 11,

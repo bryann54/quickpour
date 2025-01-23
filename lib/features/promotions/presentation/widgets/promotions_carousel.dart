@@ -29,7 +29,7 @@ class PromotionsCarousel extends StatelessWidget {
   }
 
   Widget _buildCarousel(BuildContext context, List<ProductModel> products) {
-     final theme = Theme.of(context);
+    final theme = Theme.of(context);
     if (products.isEmpty) {
       return const Center(child: Text('No promotions available.'));
     }
@@ -102,9 +102,9 @@ class PromotionsCarousel extends StatelessWidget {
                           ),
                           // Discount Badge
                           Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Container(
+                              top: 0,
+                              right: 0,
+                              child: Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 4),
                                 decoration: BoxDecoration(
@@ -143,8 +143,7 @@ class PromotionsCarousel extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                              )
-                          ),
+                              )),
                           Positioned(
                             bottom: 10,
                             left: 10,
@@ -161,7 +160,7 @@ class PromotionsCarousel extends StatelessWidget {
                                     color: Colors.white,
                                     shadows: [
                                       Shadow(
-                                        blurRadius:1,
+                                        blurRadius: 1,
                                         color: Colors.black,
                                         offset: Offset(2.0, 2.0),
                                       ),
@@ -218,7 +217,6 @@ class PromotionsCarousel extends StatelessWidget {
           ),
         ),
         // Optional: Add a "View All" button
-    
       ],
     );
   }

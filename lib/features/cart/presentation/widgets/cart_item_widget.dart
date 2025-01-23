@@ -71,11 +71,13 @@ class CartItemWidget extends StatelessWidget {
                             color: AppColors.backgroundDark),
                       ),
                     ),
-                    if (cartItem.product.discountPrice > 0) ...[
+                    if (cartItem.product.discountPrice > 0 &&
+                        cartItem.product.discountPrice <
+                            cartItem.product.price) ...[
                       Positioned(
-                        top: 5,
-                        right: 5,
-                        child:    Container(
+                          top: 5,
+                          right: 5,
+                          child: Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
@@ -103,7 +105,7 @@ class CartItemWidget extends StatelessWidget {
                                   size: 14,
                                 ),
                                 const SizedBox(width: 4),
-                               Text(
+                                Text(
                                   '${_calculateDiscountPercentage(cartItem.product.price, cartItem.product.discountPrice)}% Off',
                                   style: theme.textTheme.bodySmall?.copyWith(
                                     color: Colors.white,
@@ -112,8 +114,7 @@ class CartItemWidget extends StatelessWidget {
                                 ),
                               ],
                             ),
-                          )
-                      )
+                          ))
                     ]
                   ]),
                 ),
@@ -138,7 +139,7 @@ class CartItemWidget extends StatelessWidget {
                       style: theme.textTheme.bodySmall,
                     ),
                     const SizedBox(height: 4),
-           Row(
+                    Row(
                       children: [
                         if (cartItem.product.discountPrice > 0 &&
                             cartItem.product.discountPrice <
@@ -150,13 +151,13 @@ class CartItemWidget extends StatelessWidget {
                                   TextSpan(
                                     text:
                                         'Ksh ${cartItem.product.discountPrice.toStringAsFixed(0)}',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
                                       color: AppColors.accentColor,
                                     ),
                                   ),
-                                  TextSpan(
+                                  const TextSpan(
                                     text: ' was ',
                                     style: TextStyle(
                                       fontSize: 14,
@@ -166,7 +167,7 @@ class CartItemWidget extends StatelessWidget {
                                   TextSpan(
                                     text:
                                         'Ksh ${cartItem.product.price.toStringAsFixed(0)}',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 14,
                                       color: Colors.red,
                                       decoration: TextDecoration.lineThrough,
@@ -181,7 +182,7 @@ class CartItemWidget extends StatelessWidget {
                           Expanded(
                             child: Text(
                               'Ksh ${cartItem.product.price.toStringAsFixed(0)}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                                 color: AppColors.accentColor,
@@ -190,7 +191,7 @@ class CartItemWidget extends StatelessWidget {
                           ),
                       ],
                     )
-  ],
+                  ],
                 ),
               ),
               // Quantity Control

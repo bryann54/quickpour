@@ -16,5 +16,4 @@ class ProductRepository {
       throw Exception('Error fetching products from Firestore: $e');
     }
   }
-
 }

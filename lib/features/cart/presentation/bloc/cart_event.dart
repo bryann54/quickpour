@@ -37,6 +37,7 @@ class UpdateCartQuantityEvent extends CartEvent {
   @override
   List<Object> get props => [product, quantity];
 }
+
 class LoadCartEvent extends CartEvent {
   const LoadCartEvent();
 

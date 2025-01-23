@@ -19,7 +19,7 @@ class PromotionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      final theme = Theme.of(context);
+    final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -43,7 +43,7 @@ class PromotionCard extends StatelessWidget {
               Positioned(
                 top: 0,
                 child: Container(
-                   decoration: BoxDecoration(
+                  decoration: BoxDecoration(
                     color: Theme.of(context).brightness == Brightness.dark
                         ? AppColors.background
                         : AppColors.accentColor,
@@ -96,9 +96,11 @@ class PromotionCard extends StatelessWidget {
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                               IconButton(
-                                icon:  FaIcon(
+                                icon: FaIcon(
                                   FontAwesomeIcons.circlePlus,
-                                  color:isDarkMode?AppColors.accentColor: AppColors.background,
+                                  color: isDarkMode
+                                      ? AppColors.accentColor
+                                      : AppColors.background,
                                 ),
                                 onPressed: () {
                                   context.read<CartBloc>().add(
@@ -119,9 +121,11 @@ class PromotionCard extends StatelessWidget {
                                   AddToCartEvent(product: product, quantity: 1),
                                 );
                           },
-                          icon:  Icon(
+                          icon: Icon(
                             FontAwesomeIcons.cartShopping,
-                            color:isDarkMode?AppColors.accentColorDark: Colors.white,
+                            color: isDarkMode
+                                ? AppColors.accentColorDark
+                                : Colors.white,
                             size: 18,
                           ),
                         );
@@ -193,7 +197,6 @@ class PromotionCard extends StatelessWidget {
                   product.categoryName,
                   style: const TextStyle(
                     fontSize: 12,
-                   
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

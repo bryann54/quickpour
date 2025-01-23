@@ -25,7 +25,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     final theme = Theme.of(context);
+    final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return GestureDetector(
@@ -68,8 +68,7 @@ class ProductCard extends StatelessWidget {
                   left: 0,
                   child: Container(
                     decoration: BoxDecoration(
-                        color: AppColors.accentColor.withOpacity(0.8),
-                     
+                      color: AppColors.accentColor.withOpacity(0.8),
                     ),
                     child: BlocBuilder<CartBloc, CartState>(
                       buildWhen: (previous, current) =>
@@ -87,15 +86,13 @@ class ProductCard extends StatelessWidget {
                           return Container(
                             height: 40,
                             decoration: BoxDecoration(
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? AppColors.background
-                                  : null,
-                                  border: Border.all(
-                                    color: AppColors.accentColor
-                                  )
-                              // borderRadius: BorderRadius.circular(12),
-                            ),
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? AppColors.background
+                                    : null,
+                                border: Border.all(color: AppColors.accentColor)
+                                // borderRadius: BorderRadius.circular(12),
+                                ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -107,7 +104,6 @@ class ProductCard extends StatelessWidget {
                                       ? AppColors.backgroundDark
                                       : AppColors.background,
                                   onPressed: () {
-                                    
                                     final newQuantity = cartItem.quantity > 1
                                         ? cartItem.quantity - 1
                                         : 0;
@@ -121,15 +117,19 @@ class ProductCard extends StatelessWidget {
                                 ),
                                 Text(
                                   '${cartItem.quantity}',
-                                  style: TextStyle(color: isDarkMode?AppColors.accentColor:AppColors.background,
+                                  style: TextStyle(
+                                    color: isDarkMode
+                                        ? AppColors.accentColor
+                                        : AppColors.background,
                                     fontSize: 20,
                                   ),
                                 ),
                                 IconButton(
-                                  icon:  FaIcon(
+                                  icon: FaIcon(
                                     FontAwesomeIcons.circlePlus,
-                                    color:isDarkMode? AppColors.accentColor:AppColors.background,
-                               
+                                    color: isDarkMode
+                                        ? AppColors.accentColor
+                                        : AppColors.background,
                                   ),
                                   onPressed: () {
                                     context.read<CartBloc>().add(
@@ -172,19 +172,16 @@ class ProductCard extends StatelessWidget {
                       final isFavorite = state.isFavorite(product);
                       return Container(
                         decoration: BoxDecoration(
-                       
                           color: isFavorite
                               ? AppColors.accentColor
                               : AppColors.accentColor.withOpacity(0.1),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.1),
-                            
                               offset: const Offset(2, 2),
                             ),
                           ],
                         ),
-                      
                         child: IconButton(
                           icon: Icon(
                             isFavorite
@@ -218,7 +215,6 @@ class ProductCard extends StatelessWidget {
                     bottom: 0,
                     right: 60,
                     child: Container(
-
                       padding: const EdgeInsets.symmetric(
                           horizontal: 15, vertical: 4),
                       decoration: BoxDecoration(
@@ -236,7 +232,8 @@ class ProductCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Row(mainAxisAlignment: MainAxisAlignment.start,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const Icon(
                             FontAwesomeIcons.tag,
@@ -256,10 +253,9 @@ class ProductCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  
               ],
             ),
-    Padding(
+            Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,13 +301,13 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                       if (product.discountPrice < product.price)
-                     const Text(
-                        'was ',
-                        style:  TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
+                        const Text(
+                          'was ',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
                           ),
-                          ),
+                        ),
                       if (product.discountPrice < product.price)
                         Expanded(
                           flex: 1,
@@ -328,7 +324,8 @@ class ProductCard extends StatelessWidget {
                   ),
                 ],
               ),
-            ), ],
+            ),
+          ],
         ),
       ),
     );

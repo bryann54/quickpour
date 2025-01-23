@@ -7,7 +7,7 @@ class CartRepository {
 
   CartRepository({required this.firestore});
 
-Future<void> addToCart(String userId, CartItem cartItem) async {
+  Future<void> addToCart(String userId, CartItem cartItem) async {
     final cartRef =
         firestore.collection('users').doc(userId).collection('cart');
     await cartRef.doc(cartItem.product.id).set({
@@ -21,18 +21,20 @@ Future<void> addToCart(String userId, CartItem cartItem) async {
     });
   }
 
-
   Future<void> removeFromCart(String userId, String productId) async {
-    final cartRef = firestore.collection('users').doc(userId).collection('cart');
+    final cartRef =
+        firestore.collection('users').doc(userId).collection('cart');
     await cartRef.doc(productId).delete();
   }
 
-  Future<void> updateCartQuantity(String userId, String productId, int quantity) async {
-    final cartRef = firestore.collection('users').doc(userId).collection('cart');
+  Future<void> updateCartQuantity(
+      String userId, String productId, int quantity) async {
+    final cartRef =
+        firestore.collection('users').doc(userId).collection('cart');
     await cartRef.doc(productId).update({'quantity': quantity});
   }
 
-Future<List<CartItem>> getCartItems(String userId) async {
+  Future<List<CartItem>> getCartItems(String userId) async {
     final cartRef =
         firestore.collection('users').doc(userId).collection('cart');
     final snapshot = await cartRef.get();
@@ -50,9 +52,11 @@ Future<List<CartItem>> getCartItems(String userId) async {
                 imageUrls: data['imageUrls'] != null
                     ? List<String>.from(data['imageUrls'])
                     : [],
-               discountPrice:
-                    (data['discountPrice'] ?? data['price']).toDouble(),
-
+                    discountPrice: data['discountPrice'] != null &&
+                        data['discountPrice'] > 0 &&
+                        data['discountPrice'] < data['price']
+                    ? data['discountPrice'].toDouble()
+                    : data['price'].toDouble(),
                 merchantId: '',
                 brandName: '',
                 categoryName: '',
@@ -70,8 +74,7 @@ Future<List<CartItem>> getCartItems(String userId) async {
             return null;
           }
         })
-        .whereType<CartItem>() // Remove any null entries
+        .whereType<CartItem>() 
         .toList();
   }
-
 }

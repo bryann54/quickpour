@@ -50,7 +50,7 @@ class ProfileStatisticsSection extends StatelessWidget {
                 },
               ),
             ),
-          _buildStatisticWithDivider(
+            _buildStatisticWithDivider(
               BlocBuilder<FavoritesBloc, FavoritesState>(
                 builder: (context, state) {
                   return ProfileStatisticItem(

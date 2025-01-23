@@ -104,8 +104,7 @@ class App extends StatelessWidget {
           BlocProvider(
             create: (context) => CartBloc(
               cartRepository: CartRepository(firestore: firestore),
-              userId: FirebaseAuth
-                  .instance.currentUser!.uid, 
+              userId: FirebaseAuth.instance.currentUser!.uid,
             ),
           ),
           BlocProvider(
@@ -114,8 +113,6 @@ class App extends StatelessWidget {
                 firestore: context.read<FirebaseFirestore>(),
                 authUseCases: context.read<AuthBloc>().authUseCases,
               );
-
-             
 
               return checkoutBloc;
             },
