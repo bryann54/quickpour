@@ -15,6 +15,7 @@ Future<void> addToCart(String userId, CartItem cartItem) async {
       'quantity': cartItem.quantity,
       'productName': cartItem.product.productName,
       'price': cartItem.product.price,
+      'discountPrice': cartItem.product.discountPrice,
       'imageUrls': cartItem.product.imageUrls,
       'createdAt': FieldValue.serverTimestamp(),
     });
@@ -49,7 +50,9 @@ Future<List<CartItem>> getCartItems(String userId) async {
                 imageUrls: data['imageUrls'] != null
                     ? List<String>.from(data['imageUrls'])
                     : [],
-                discountPrice: (data['discountPrice'] ?? 0.0).toDouble(),
+               discountPrice:
+                    (data['discountPrice'] ?? data['price']).toDouble(),
+
                 merchantId: '',
                 brandName: '',
                 categoryName: '',

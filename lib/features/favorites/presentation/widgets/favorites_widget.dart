@@ -94,13 +94,59 @@ class FavoritesWidget extends StatelessWidget {
               ),
             ],
           ),
-          subtitle: Text(
-            'KSh ${favoriteItem.product.price.toStringAsFixed(0)}',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.green,
-              fontWeight: FontWeight.bold,
-            ),
+          subtitle: Row(
+            children: [
+              if (favoriteItem.product.discountPrice > 0 &&
+                  favoriteItem.product.discountPrice < favoriteItem.product.price)
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    'Ksh ${favoriteItem.product.discountPrice.toStringAsFixed(0)}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.accentColor,
+                    ),
+                  ),
+                ),
+              if (favoriteItem.product.discountPrice > 0 &&
+                  favoriteItem.product.discountPrice < favoriteItem.product.price)
+                const Text(
+                  'was ',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
+                ),
+              if (favoriteItem.product.discountPrice > 0 &&
+                  favoriteItem.product.discountPrice < favoriteItem.product.price)
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    'Ksh ${favoriteItem.product.price.toStringAsFixed(0)}',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.red,
+                      decoration: TextDecoration.lineThrough,
+                    ),
+                  ),
+                ),
+              if (favoriteItem.product.discountPrice <= 0 ||
+                  favoriteItem.product.discountPrice >= favoriteItem.product.price)
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    'Ksh ${favoriteItem.product.price.toStringAsFixed(0)}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.accentColor,
+                    ),
+                  ),
+                ),
+            ],
           ),
+
           onTap: () {
             // Navigator.push(
             //   context,

@@ -17,14 +17,4 @@ class ProductRepository {
     }
   }
 
-  Future<void> uploadProduct(ProductModel product) async {
-    try {
-      await _firestore.collection('products').doc(product.id).set(
-            product.toJson(),
-            SetOptions(merge: true),
-          );
-    } catch (e) {
-      throw Exception('Error uploading product to Firestore: $e');
-    }
-  }
 }

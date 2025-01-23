@@ -25,6 +25,9 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -65,7 +68,7 @@ class ProductCard extends StatelessWidget {
                   left: 0,
                   child: Container(
                     decoration: BoxDecoration(
-                        color: AppColors.accentColor.withOpacity(0.6),
+                        color: AppColors.accentColor.withOpacity(0.8),
                      
                     ),
                     child: BlocBuilder<CartBloc, CartState>(
@@ -118,12 +121,15 @@ class ProductCard extends StatelessWidget {
                                 ),
                                 Text(
                                   '${cartItem.quantity}',
-                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  style: TextStyle(color: isDarkMode?AppColors.accentColor:AppColors.background,
+                                    fontSize: 20,
+                                  ),
                                 ),
                                 IconButton(
-                                  icon: const FaIcon(
+                                  icon:  FaIcon(
                                     FontAwesomeIcons.circlePlus,
-                                    color: AppColors.accentColor,
+                                    color:isDarkMode? AppColors.accentColor:AppColors.background,
+                               
                                   ),
                                   onPressed: () {
                                     context.read<CartBloc>().add(
