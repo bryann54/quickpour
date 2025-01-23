@@ -52,20 +52,19 @@ class ProductCard extends StatelessWidget {
             Stack(
               children: [
                 // Product Image
-                CachedNetworkImage(
-                  imageUrl: product.imageUrls.isNotEmpty
-                      ? product.imageUrls.first
-                      : '',
-                  fit: BoxFit.contain,
-                  width: double.infinity,
-                  height: 130,
-                  errorWidget: (context, url, error) => Container(
-                                      width: double.infinity,
-                      height: 130,
-                      color: isDarkMode?Colors.grey.shade800
-                          :Colors.grey.shade100,
-                    child: const Icon(Icons.error)),
-                ),
+              CachedNetworkImage(
+  imageUrl: product.imageUrls.isNotEmpty ? product.imageUrls.first : '',
+  fit: BoxFit.contain,
+  width: double.infinity,
+  height: 130,
+  errorWidget: (context, url, error) => Container(
+    width: double.infinity,
+    height: 130,
+    color: isDarkMode ? Colors.grey.shade800 : Colors.grey.shade100,
+    child: const Icon(Icons.error),
+  ),
+)
+,
 
                 // Cart Controls
                 Positioned(
@@ -266,18 +265,19 @@ class ProductCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      product.productName,
-                      style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
+                 SizedBox(
+  width: double.infinity,
+  child: Text(
+    product.productName,
+    style: const TextStyle(
+      fontSize: 15,
+      fontWeight: FontWeight.bold,
+    ),
+    maxLines: 2,
+    overflow: TextOverflow.ellipsis,
+  ),
+)
+,
                   const SizedBox(height: 4), // Add spacing between texts
                   SizedBox(
                     width: double.infinity,
@@ -300,7 +300,7 @@ class ProductCard extends StatelessWidget {
                         child: Text(
                           'Ksh ${product.discountPrice.toStringAsFixed(0)}',
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: AppColors.accentColor,
                           ),
@@ -320,7 +320,7 @@ class ProductCard extends StatelessWidget {
                           child: Text(
                             'Ksh ${product.price.toStringAsFixed(0)}',
                             style: const TextStyle(
-                              fontSize: 14,
+                              fontSize: 12,
                               color: Colors.red,
                               decoration: TextDecoration.lineThrough,
                             ),
