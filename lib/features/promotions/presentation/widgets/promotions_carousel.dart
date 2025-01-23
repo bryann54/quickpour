@@ -170,7 +170,7 @@ class PromotionsCarousel extends StatelessWidget {
                                 ),
                                 // Price with shadow effect and discounted price in Ksh
                                 Text(
-                                  'Ksh ${product.discountPrice.toStringAsFixed(2)}',
+                                  'Ksh ${product.discountPrice.toStringAsFixed(0)}',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,

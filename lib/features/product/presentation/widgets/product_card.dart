@@ -169,7 +169,7 @@ class ProductCard extends StatelessWidget {
                               : AppColors.accentColor.withOpacity(0.1),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
+                              color: Colors.black.withOpacity(0.1),
                             
                               offset: const Offset(2, 2),
                             ),
@@ -247,6 +247,7 @@ class ProductCard extends StatelessWidget {
                       ),
                     ),
                   ),
+                  
               ],
             ),
     Padding(

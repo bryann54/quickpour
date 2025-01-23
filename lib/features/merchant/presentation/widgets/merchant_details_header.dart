@@ -199,7 +199,7 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
     return Align(
       alignment: Alignment.center,
       child: FaIcon(
-        FontAwesomeIcons.houseChimneyUser,
+      Icons.error,
         color: Colors.grey.shade500,
         size: 40,
       ),

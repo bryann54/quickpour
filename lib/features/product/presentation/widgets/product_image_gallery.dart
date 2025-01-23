@@ -56,7 +56,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                   ),
                   child: CachedNetworkImage(
                     imageUrl: widget.product.imageUrls[_currentImageIndex],
-                    fit: BoxFit.contain,
+                    fit: BoxFit.fitWidth,
                     errorWidget: (context, error, stackTrace) => Icon(
                       Icons.error,
                       size: 64,

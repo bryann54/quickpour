@@ -96,7 +96,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             height: 200,
                             color: Colors.grey[300],
                             child: const Center(
-                              child: Icon(Icons.image,
+                              child: Icon(Icons.error,
                                   size: 50, color: Colors.grey),
                             ),
                           ),

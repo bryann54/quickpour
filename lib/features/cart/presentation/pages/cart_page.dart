@@ -43,7 +43,13 @@ class _CartPageState extends State<CartPage>
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child:  Text('Cancel',style: TextStyle(
+                color: Theme.of(
+                  context,
+                  ).colorScheme.onBackground,
+                  )
+                )
+              
             ),
             TextButton(
               onPressed: () {

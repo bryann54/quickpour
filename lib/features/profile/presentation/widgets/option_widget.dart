@@ -50,10 +50,16 @@ class ProfileStatisticsSection extends StatelessWidget {
                 },
               ),
             ),
-            const ProfileStatisticItem(
-              icon: Icons.request_quote_sharp,
-              label: "Requests",
-              count: "0",
+          _buildStatisticWithDivider(
+              BlocBuilder<FavoritesBloc, FavoritesState>(
+                builder: (context, state) {
+                  return ProfileStatisticItem(
+                    icon: Icons.favorite_rounded,
+                    label: "Favorites",
+                    count: state.favorites.items.length.toString(),
+                  );
+                },
+              ),
             ),
           ],
         ),
