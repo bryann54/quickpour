@@ -38,21 +38,14 @@ class PromotionCard extends StatelessWidget {
                 fit: BoxFit.contain,
                 width: double.infinity,
                 height: 200,
-                errorWidget: (context, url, error) =>  Container(
-                    width: double.infinity,
-                    height: 130,
-                    color: isDarkMode
-                        ? Colors.grey.shade800
-                        : Colors.grey.shade100,
-                    child: const Icon(Icons.error)),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
               Positioned(
                 top: 0,
                 child: Container(
-                  height: 45,
                   decoration: BoxDecoration(
                     color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.grey.withOpacity(.4)
+                        ? AppColors.background
                         : AppColors.accentColor,
                     // borderRadius: BorderRadius.circular(12),
                   ),

@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/features/profile/presentation/widgets/change_password.dart';
 import 'package:chupachap/features/profile/presentation/widgets/edit_profile_dialog.dart';
 import 'package:chupachap/features/profile/presentation/widgets/option_widget.dart';
 import 'package:chupachap/features/profile/presentation/widgets/profile_shimmer.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
@@ -55,7 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (snapshot.hasError) {
             return Center(
               child: Text(
-                'Error fetching profile data',
+                'Error: ${snapshot.error}',
                 style: theme.textTheme.bodyLarge?.copyWith(color: Colors.red),
               ),
             );
@@ -115,16 +115,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildUserProfileHeader(BuildContext context, User user) {
     return Row(
       children: [
-       Hero(
+        Hero(
           tag: 'profile_avatar',
           child: CircleAvatar(
             radius: 50,
             backgroundColor: AppColors.accentColor.withOpacity(0.2),
-            // ignore: unnecessary_null_comparison
-            child: user.profileImage != null
-                ? CachedNetworkImage(
-                 imageUrl:  user.profileImage)
-                : Icon(Icons.person, size: 50, color: AppColors.accentColor),
+            child: const FaIcon(
+              FontAwesomeIcons.userLarge,
+              color: Color.fromARGB(61, 60, 62, 65),
+              size: 50,
+            ),
           ),
         ),
         const SizedBox(width: 16),

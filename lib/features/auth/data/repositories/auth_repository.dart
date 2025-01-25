@@ -97,8 +97,7 @@ class AuthRepository {
           return User(
               email: userDoc['email'],
               firstName: userDoc['firstName'],
-              lastName: userDoc['lastName'],
-               profileImage:userDoc['profileImage']);
+              lastName: userDoc['lastName']);
         }
       }
       return null;

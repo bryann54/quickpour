@@ -174,7 +174,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                     if (categoryProducts.isEmpty) {
                       return Center(
                         child: Text(
-                          'No products for ${(widget.category.name)}',
+                          'No products found for this category',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       );

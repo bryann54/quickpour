@@ -15,9 +15,7 @@ import 'package:chupachap/features/categories/presentation/bloc/categories_event
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:chupachap/features/drink_request/data/repositories/drink_request_repository.dart';
 import 'package:chupachap/features/drink_request/presentation/bloc/drink_request_bloc.dart';
-import 'package:chupachap/features/favorites/data/repositories/favorites_repository.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
-import 'package:chupachap/features/favorites/presentation/bloc/favorites_event.dart';
 import 'package:chupachap/features/merchant/data/repositories/merchants_repository.dart';
 import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
 import 'package:chupachap/features/notifications/data/repositories/notifications_repository.dart';
@@ -78,19 +76,19 @@ class App extends StatelessWidget {
             ),
           ),
           // Move NotificationsBloc after auth bloc
-       BlocProvider<NotificationsBloc>(
-  lazy: false,
-  create: (context) {
-    final bloc = NotificationsBloc(
-      context.read<NotificationsRepository>(),
-    );
-    if (FirebaseAuth.instance.currentUser != null) {
-      bloc.add(FetchNotifications());
-      bloc.add(FetchUnreadCount());
-    }
-    return bloc;
-  },
-),
+          BlocProvider<NotificationsBloc>(
+            lazy: false,
+            create: (context) {
+              final bloc = NotificationsBloc(
+                context.read<NotificationsRepository>(),
+              );
+              if (FirebaseAuth.instance.currentUser != null) {
+                bloc.add(FetchNotifications());
+                bloc.add(FetchUnreadCount());
+              }
+              return bloc;
+            },
+          ),
           BlocProvider(
               create: (_) =>
                   PromotionsBloc(ProductRepository())..add(FetchPromotions())),
@@ -136,14 +134,7 @@ class App extends StatelessWidget {
               FetchCategories(CategoryRepository()),
             )..add(LoadCategories()),
           ),
-BlocProvider(
-  create: (context) => FavoritesBloc(
-    favoritesRepository: FavoritesRepository(
-      firestore: FirebaseFirestore.instance,
-      authRepository: AuthRepository(),
-    )
-  )..add(LoadFavoritesEvent()),
-),
+          BlocProvider(create: (_) => FavoritesBloc()),
           BlocProvider(
             create: (context) => ProductBloc(
               productRepository: ProductRepository(),

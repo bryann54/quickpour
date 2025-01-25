@@ -75,7 +75,8 @@ class CartItemWidget extends StatelessWidget {
                         cartItem.product.discountPrice <
                             cartItem.product.price) ...[
                       Positioned(
-                         
+                          top: 5,
+                          right: 5,
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
