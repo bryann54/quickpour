@@ -41,10 +41,10 @@ class _LogOutButtonState extends State<LogOutButton> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is Unauthenticated) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const EntrySplashScreen()));
+         Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => const EntrySplashScreen()),
+            (route) => false,
+          );
         } else if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
