@@ -57,8 +57,9 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
 
     // Navigate to home screen after animation completes
     Future.delayed(const Duration(seconds: 4), () {
-      Navigator.of(context).pushReplacement(
+     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const Wrapper()),
+        (route) => false,
       );
     });
   }
