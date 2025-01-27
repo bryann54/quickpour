@@ -14,11 +14,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class MerchantDetailsScreen extends StatelessWidget {
+class MerchantDetailsScreen extends StatefulWidget {
   final Merchants merchant;
 
   const MerchantDetailsScreen({Key? key, required this.merchant})
       : super(key: key);
+
+  @override
+  State<MerchantDetailsScreen> createState() => _MerchantDetailsScreenState();
+}
+
+class _MerchantDetailsScreenState extends State<MerchantDetailsScreen> {
+  String _searchQuery = '';
+
+  void _onSearch(String query) {
+    setState(() {
+      _searchQuery = query.toLowerCase();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,16 +44,16 @@ class MerchantDetailsScreen extends StatelessWidget {
       child: Scaffold(
         body: CustomScrollView(
           slivers: [
-            // SliverAppBar with MerchantDetailsHeader and Cart Icon
             SliverAppBar(
               expandedHeight: 200,
               floating: false,
               pinned: true,
+              iconTheme:const IconThemeData(
+                color: AppColors.background
+              ),
               actions: [
-                // Cart icon in top-right corner, only show if cart has items
                 BlocBuilder<CartBloc, CartState>(
                   builder: (context, cartState) {
-                    // Only show the cart icon if the total quantity is greater than 0
                     if (cartState.cart.totalQuantity > 0) {
                       return Padding(
                         padding: const EdgeInsets.all(12.0),
@@ -73,27 +86,26 @@ class MerchantDetailsScreen extends StatelessWidget {
                           ),
                         ),
                       );
-                    } else {
-                      // Return an empty widget if the cart is empty
-                      return const SizedBox.shrink();
                     }
+                    return const SizedBox.shrink();
                   },
                 ),
               ],
               flexibleSpace: FlexibleSpaceBar(
-                background: MerchantDetailsHeader(merchant: merchant),
+                background: MerchantDetailsHeader(
+                  merchant: widget.merchant,
+                  onSearch: _onSearch,
+                ),
                 collapseMode: CollapseMode.parallax,
               ),
             ),
-
             BlocBuilder<ProductBloc, ProductState>(
               builder: (context, state) {
                 if (state is ProductLoadingState) {
                   return const SliverToBoxAdapter(
                     child: Padding(
                       padding: EdgeInsets.only(top: 100.0),
-                      child: Align(
-                        alignment: Alignment.center,
+                      child: Center(
                         child: CircularProgressIndicator.adaptive(),
                       ),
                     ),
@@ -101,10 +113,31 @@ class MerchantDetailsScreen extends StatelessWidget {
                 }
 
                 if (state is ProductLoadedState) {
-                  // Filter products for the current merchant
-                  final merchantProducts = state.products
-                      .where((product) => product.merchantId == merchant.id)
-                      .toList();
+                  final merchantProducts = state.products.where((product) {
+                    final matchesMerchant =
+                        product.merchantId == widget.merchant.id;
+                    final matchesSearch = _searchQuery.isEmpty ||
+                        product.productName
+                            .toLowerCase()
+                            .contains(_searchQuery);
+                    return matchesMerchant && matchesSearch;
+                  }).toList();
+
+                  if (merchantProducts.isEmpty) {
+                    return SliverToBoxAdapter(
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 100.0),
+                          child: Text(
+                            _searchQuery.isEmpty
+                                ? 'No products found for ${widget.merchant.name}'
+                                : 'No products match your search',
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
 
                   return SliverPadding(
                     padding: const EdgeInsets.only(top: 16, left: 3, right: 3),
@@ -131,7 +164,7 @@ class MerchantDetailsScreen extends StatelessWidget {
                   return SliverToBoxAdapter(
                     child: Center(
                       child: Text(
-                        'Error loading products for ${merchant.name}',
+                        'Error loading products for ${widget.merchant.name}',
                         style: theme.textTheme.bodyLarge
                             ?.copyWith(color: Colors.red),
                       ),

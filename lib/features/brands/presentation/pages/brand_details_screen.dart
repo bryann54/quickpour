@@ -66,6 +66,9 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
               expandedHeight: 200,
               floating: false,
               pinned: true,
+              iconTheme:const IconThemeData(
+                color: AppColors.background
+              ),
               actions: [
                 BlocBuilder<CartBloc, CartState>(
                   builder: (context, cartState) {

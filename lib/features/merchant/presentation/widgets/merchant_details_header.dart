@@ -7,7 +7,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MerchantDetailsHeader extends StatefulWidget {
   final Merchants merchant;
-  const MerchantDetailsHeader({super.key, required this.merchant});
+  final Function(String) onSearch;
+
+  const MerchantDetailsHeader({
+    super.key,
+    required this.merchant,
+    required this.onSearch,
+  });
 
   @override
   State<MerchantDetailsHeader> createState() => _MerchantDetailsHeaderState();
@@ -15,7 +21,6 @@ class MerchantDetailsHeader extends StatefulWidget {
 
 class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
   late TextEditingController _searchController;
-  String _searchQuery = '';
 
   @override
   void initState() {
@@ -30,17 +35,14 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
   }
 
   void _onSearch(String query) {
-    setState(() {
-      _searchQuery = query;
-    });
-    // Implement search functionality here
-    print('Search query: $_searchQuery');
+    widget.onSearch(query);
   }
 
   void _onFilterTap() {
-    // Implement filter functionality here
     print('Filter button tapped');
   }
+
+
 
   @override
   Widget build(BuildContext context) {
