@@ -28,7 +28,7 @@ class BrandCardWidget extends StatelessWidget {
           children: [
             // Brand Image with Hero
             Hero(
-              tag: 'category_image_${brand.id}',
+              tag: 'brand_image_${brand.id}',
               child: ClipRRect(
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(16)),

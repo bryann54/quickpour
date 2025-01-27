@@ -31,7 +31,7 @@ class Cart extends Equatable {
 
   const Cart({this.items = const []});
 
-double get totalPrice => items.fold(0, (total, item) {
+  double get totalPrice => items.fold(0, (total, item) {
         final itemPrice = item.product.discountPrice > 0 &&
                 item.product.discountPrice < item.product.price
             ? item.product.discountPrice

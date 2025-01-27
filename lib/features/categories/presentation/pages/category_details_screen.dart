@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/core/utils/custom_appbar.dart';
+import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
+import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
 import 'package:chupachap/features/categories/domain/entities/category.dart';
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
@@ -10,6 +12,8 @@ import 'package:chupachap/features/product/presentation/widgets/product_card.dar
 import 'package:chupachap/features/product_search/presentation/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:badges/badges.dart' as badges;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CategoryDetailsScreen extends StatefulWidget {
   final Category category;
@@ -22,7 +26,6 @@ class CategoryDetailsScreen extends StatefulWidget {
   @override
   State<CategoryDetailsScreen> createState() => _CategoryDetailsScreenState();
 }
-// [Previous imports remain the same]
 
 class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
   late TextEditingController _searchController;
@@ -57,16 +60,79 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
         productRepository: ProductRepository(),
       )..add(FetchProductsEvent()),
       child: Scaffold(
-        appBar: CustomAppBar(
-          showNotification: false,
-          showProfile: false,
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeroSection(),
-            _buildSearchBar(),
-            if (_searchQuery.isNotEmpty) _buildSearchQueryText(),
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              expandedHeight: 200,
+              floating: false,
+              pinned: true,
+              actions: [
+                BlocBuilder<CartBloc, CartState>(
+                  builder: (context, cartState) {
+                    if (cartState.cart.totalQuantity > 0) {
+                      return Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: badges.Badge(
+                          badgeContent: Text(
+                            '${cartState.cart.totalQuantity}',
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          showBadge: cartState.cart.totalQuantity > 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.accentColor,
+                              borderRadius: BorderRadius.circular(35),
+                            ),
+                            child: IconButton(
+                              icon: FaIcon(
+                                FontAwesomeIcons.cartShopping,
+                                size: 20,
+                                color: Theme.of(context).iconTheme.color,
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const CartPage(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                ),
+              ],
+              flexibleSpace: FlexibleSpaceBar(
+                background: _buildHeroSection(),
+                collapseMode: CollapseMode.parallax,
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+                child: CustomSearchBar(
+                  controller: _searchController,
+                  onSearch: _onSearch,
+                  onFilterTap: _onFilterTap,
+                ),
+              ),
+            ),
+            if (_searchQuery.isNotEmpty)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Text(
+                    'Displaying results for: $_searchQuery',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              ),
             _buildProductList(),
           ],
         ),
@@ -81,7 +147,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
           tag: 'category_image_${widget.category.id}',
           child: Container(
             width: double.infinity,
-            height: 100,
+            height: 200,
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.accentColor.withOpacity(0.4)),
               image: DecorationImage(
@@ -105,7 +171,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
         ),
         Container(
           width: double.infinity,
-          height: 100,
+          height: 200,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -140,29 +206,8 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
     );
   }
 
-  Widget _buildSearchBar() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-      child: CustomSearchBar(
-        controller: _searchController,
-        onSearch: _onSearch,
-        onFilterTap: _onFilterTap,
-      ),
-    );
-  }
-
-  Widget _buildSearchQueryText() {
-    return Padding(
-      padding: const EdgeInsets.all(6.0),
-      child: Text(
-        'Displaying results for: $_searchQuery',
-        style: Theme.of(context).textTheme.bodyMedium,
-      ),
-    );
-  }
-
   Widget _buildProductList() {
-    return Expanded(
+    return SliverFillRemaining(
       child: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
           if (state is ProductLoadingState) {

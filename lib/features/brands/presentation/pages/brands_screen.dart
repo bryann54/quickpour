@@ -32,8 +32,7 @@ class BrandsScreen extends StatelessWidget {
                       final brand = state.brands[index];
                       return BrandCardWidget(
                         brand: brand,
-                        isVerified: index % 3 ==
-                            0,
+                        isVerified: index % 3 == 0,
                       );
                     },
                   ),

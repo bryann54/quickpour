@@ -13,7 +13,7 @@ class DrinkRequestDialog extends StatefulWidget {
 
   const DrinkRequestDialog({
     super.key,
-     this.initialDrinkName,
+    this.initialDrinkName,
     required this.authRepository,
   });
 
@@ -30,6 +30,7 @@ class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
       _drinkNameController.text = widget.initialDrinkName!;
     }
   }
+
   final _formKey = GlobalKey<FormState>();
   final _drinkNameController = TextEditingController();
   final _quantityController = TextEditingController();

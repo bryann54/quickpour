@@ -78,19 +78,19 @@ class App extends StatelessWidget {
             ),
           ),
           // Move NotificationsBloc after auth bloc
-       BlocProvider<NotificationsBloc>(
-  lazy: false,
-  create: (context) {
-    final bloc = NotificationsBloc(
-      context.read<NotificationsRepository>(),
-    );
-    if (FirebaseAuth.instance.currentUser != null) {
-      bloc.add(FetchNotifications());
-      bloc.add(FetchUnreadCount());
-    }
-    return bloc;
-  },
-),
+          BlocProvider<NotificationsBloc>(
+            lazy: false,
+            create: (context) {
+              final bloc = NotificationsBloc(
+                context.read<NotificationsRepository>(),
+              );
+              if (FirebaseAuth.instance.currentUser != null) {
+                bloc.add(FetchNotifications());
+                bloc.add(FetchUnreadCount());
+              }
+              return bloc;
+            },
+          ),
           BlocProvider(
               create: (_) =>
                   PromotionsBloc(ProductRepository())..add(FetchPromotions())),
@@ -136,14 +136,14 @@ class App extends StatelessWidget {
               FetchCategories(CategoryRepository()),
             )..add(LoadCategories()),
           ),
-BlocProvider(
-  create: (context) => FavoritesBloc(
-    favoritesRepository: FavoritesRepository(
-      firestore: FirebaseFirestore.instance,
-      authRepository: AuthRepository(),
-    )
-  )..add(LoadFavoritesEvent()),
-),
+          BlocProvider(
+            create: (context) => FavoritesBloc(
+                favoritesRepository: FavoritesRepository(
+              firestore: FirebaseFirestore.instance,
+              authRepository: AuthRepository(),
+            ))
+              ..add(LoadFavoritesEvent()),
+          ),
           BlocProvider(
             create: (context) => ProductBloc(
               productRepository: ProductRepository(),

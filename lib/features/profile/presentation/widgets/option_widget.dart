@@ -50,9 +50,8 @@ class ProfileStatisticsSection extends StatelessWidget {
                 },
               ),
             ),
-          const  ProfileStatisticItem(
+            const ProfileStatisticItem(
                 icon: Icons.request_page, label: 'Requests', count: '0')
-           
           ],
         ),
       ),

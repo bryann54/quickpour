@@ -43,7 +43,7 @@ class ProductCard extends StatelessWidget {
         );
       },
       child: ConstrainedBox(
-         constraints: BoxConstraints(
+        constraints: BoxConstraints(
           maxWidth: screenWidth * 0.5, // Limit card width
           maxHeight: 320, // Set a max height
         ),
@@ -58,20 +58,23 @@ class ProductCard extends StatelessWidget {
               Stack(
                 children: [
                   // Product Image
-                CachedNetworkImage(
-          imageUrl: product.imageUrls.isNotEmpty ? product.imageUrls.first : '',
-          fit: BoxFit.contain,
-          width: double.infinity,
-          height: 130,
-          errorWidget: (context, url, error) => Container(
-            width: double.infinity,
-            height: 130,
-            color: isDarkMode ? Colors.grey.shade800 : Colors.grey.shade100,
-            child: const Icon(Icons.error),
-          ),
-        )
-        ,
-        
+                  CachedNetworkImage(
+                    imageUrl: product.imageUrls.isNotEmpty
+                        ? product.imageUrls.first
+                        : '',
+                    fit: BoxFit.contain,
+                    width: double.infinity,
+                    height: 130,
+                    errorWidget: (context, url, error) => Container(
+                      width: double.infinity,
+                      height: 130,
+                      color: isDarkMode
+                          ? Colors.grey.shade800
+                          : Colors.grey.shade100,
+                      child: const Icon(Icons.error),
+                    ),
+                  ),
+
                   // Cart Controls
                   Positioned(
                     top: 0,
@@ -91,7 +94,7 @@ class ProductCard extends StatelessWidget {
                                       CartItem(product: product, quantity: 0),
                                 )
                               : CartItem(product: product, quantity: 0);
-        
+
                           if (cartItem.quantity > 0) {
                             return Container(
                               height: 40,
@@ -100,11 +103,13 @@ class ProductCard extends StatelessWidget {
                                           Brightness.dark
                                       ? AppColors.background
                                       : null,
-                                  border: Border.all(color: AppColors.accentColor)
+                                  border:
+                                      Border.all(color: AppColors.accentColor)
                                   // borderRadius: BorderRadius.circular(12),
                                   ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   IconButton(
                                     icon: const FaIcon(
@@ -172,7 +177,7 @@ class ProductCard extends StatelessWidget {
                       ),
                     ),
                   ),
-        
+
                   // Favorites Button
                   Positioned(
                     top: 0,
@@ -206,7 +211,8 @@ class ProductCard extends StatelessWidget {
                             onPressed: () {
                               if (isFavorite) {
                                 context.read<FavoritesBloc>().add(
-                                      RemoveFromFavoritesEvent(product: product),
+                                      RemoveFromFavoritesEvent(
+                                          product: product),
                                     );
                               } else {
                                 context.read<FavoritesBloc>().add(
@@ -219,7 +225,7 @@ class ProductCard extends StatelessWidget {
                       },
                     ),
                   ),
-        
+
                   // Discount Tag
                   if (product.discountPrice < product.price)
                     Positioned(
@@ -271,19 +277,18 @@ class ProductCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                   SizedBox(
-          width: double.infinity,
-          child: Text(
-            product.productName,
-            style: const TextStyle(
-        fontSize: 15,
-        fontWeight: FontWeight.bold,
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        )
-        ,
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        product.productName,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                     const SizedBox(height: 4), // Add spacing between texts
                     SizedBox(
                       width: double.infinity,

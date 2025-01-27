@@ -52,7 +52,7 @@ class CartRepository {
                 imageUrls: data['imageUrls'] != null
                     ? List<String>.from(data['imageUrls'])
                     : [],
-                    discountPrice: data['discountPrice'] != null &&
+                discountPrice: data['discountPrice'] != null &&
                         data['discountPrice'] > 0 &&
                         data['discountPrice'] < data['price']
                     ? data['discountPrice'].toDouble()
@@ -74,7 +74,7 @@ class CartRepository {
             return null;
           }
         })
-        .whereType<CartItem>() 
+        .whereType<CartItem>()
         .toList();
   }
 }

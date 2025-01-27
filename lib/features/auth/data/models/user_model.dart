@@ -8,6 +8,6 @@ class User {
     required this.email,
     required this.firstName,
     required this.lastName,
-   required this.profileImage,
+    required this.profileImage,
   });
 }

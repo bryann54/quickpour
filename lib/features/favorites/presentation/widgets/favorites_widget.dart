@@ -86,7 +86,6 @@ class FavoritesWidget extends StatelessWidget {
                       Text(
                         favoriteItem.product.brandName,
                         style: theme.textTheme.bodyMedium?.copyWith(
-                         
                           fontSize: 12,
                           color: isDarkMode
                               ? AppColors.surface.withOpacity(.6)

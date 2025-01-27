@@ -196,7 +196,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           final address = _addressController.text;
                           final phoneNumber = _phoneController.text;
 
-                         final totalAmount = cartState.cart.totalPrice;
+                          final totalAmount = cartState.cart.totalPrice;
 
                           Navigator.push(
                             context,

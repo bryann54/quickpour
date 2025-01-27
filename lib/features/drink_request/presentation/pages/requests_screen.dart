@@ -30,7 +30,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     // Use WidgetsBinding to ensure the context is ready
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.initialDrinkName != null) {
@@ -50,6 +50,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -163,5 +164,4 @@ class _RequestsScreenState extends State<RequestsScreen> {
           : null,
     );
   }
-
 }

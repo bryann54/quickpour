@@ -41,7 +41,7 @@ class _LogOutButtonState extends State<LogOutButton> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is Unauthenticated) {
-         Navigator.of(context).pushAndRemoveUntil(
+          Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (_) => const EntrySplashScreen()),
             (route) => false,
           );

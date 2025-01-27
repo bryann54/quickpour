@@ -138,10 +138,9 @@ class MerchantCardAvatar extends StatelessWidget {
                   Text(
                     'Verified',
                     style: TextStyle(
-                      fontSize: 10,
-                      color: isDarkMode ? Colors.white70 : Colors.white,
-                      fontWeight: FontWeight.bold
-                    ),
+                        fontSize: 10,
+                        color: isDarkMode ? Colors.white70 : Colors.white,
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

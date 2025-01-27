@@ -115,16 +115,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildUserProfileHeader(BuildContext context, User user) {
     return Row(
       children: [
-       Hero(
+        Hero(
           tag: 'profile_avatar',
           child: CircleAvatar(
             radius: 50,
             backgroundColor: AppColors.accentColor.withOpacity(0.2),
             // ignore: unnecessary_null_comparison
             child: user.profileImage != null
-                ? CachedNetworkImage(
-                 imageUrl:  user.profileImage)
-                : Icon(Icons.person, size: 50, color: AppColors.accentColor),
+                ? CachedNetworkImage(imageUrl: user.profileImage)
+                : const Icon(Icons.person, size: 50, color: AppColors.accentColor),
           ),
         ),
         const SizedBox(width: 16),
@@ -205,13 +204,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 builder: (context) => const ChangePassword(),
               ).then((success) {
                 if (success == true) {
-                 ScaffoldMessenger(child: 
-                 SnackBar(content: Text('Password changed successfully')));
+                  const ScaffoldMessenger(
+                      child: SnackBar(
+                          content: Text('Password changed successfully')));
                 }
               });
             },
           ),
-        
         ],
       ),
     );

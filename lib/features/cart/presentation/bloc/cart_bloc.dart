@@ -36,8 +36,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
       final updatedItems = await cartRepository.getCartItems(userId);
 
-      
-
       emit(CartLoadedState(cart: Cart(items: updatedItems)));
     } catch (e) {
       emit(CartErrorState(cart: state.cart, errorMessage: e.toString()));

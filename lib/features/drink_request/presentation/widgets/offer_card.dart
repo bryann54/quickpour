@@ -144,7 +144,7 @@ class OfferCard extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 16),
-            Expanded(
+        Expanded(
           child: TextButton.icon(
             style: TextButton.styleFrom(
               backgroundColor: isDarkMode
@@ -179,7 +179,6 @@ class OfferCard extends StatelessWidget {
             ),
           ),
         ),
-             
       ],
     );
   }

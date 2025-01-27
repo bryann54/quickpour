@@ -38,7 +38,7 @@ class PromotionCard extends StatelessWidget {
                 fit: BoxFit.contain,
                 width: double.infinity,
                 height: 200,
-                errorWidget: (context, url, error) =>  Container(
+                errorWidget: (context, url, error) => Container(
                     width: double.infinity,
                     height: 130,
                     color: isDarkMode

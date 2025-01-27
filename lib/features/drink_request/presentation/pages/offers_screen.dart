@@ -178,52 +178,54 @@ class OffersScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       child: Column(
                         children: [
-              Row(
- mainAxisAlignment: MainAxisAlignment.spaceBetween,
- children: [
-   Flexible(
-     flex: 1,
-     child: Hero(
-       tag: 'drink_icon_${request.id}',
-       child: ClipRRect(
-         borderRadius: BorderRadius.circular(16),
-         child: Image.asset(
-           'assets/111.png',
-           width: 100,
-           height: 80,
-           fit: BoxFit.cover,
-         ),
-       ),
-     ),
-   ),
-   const SizedBox(width: 16),
-   Flexible(
-     flex: 1,
-     child: Hero(
-       tag: 'quantity_${request.id}',
-       child: Container(
-         padding: const EdgeInsets.symmetric(
-           horizontal: 12,
-           vertical: 4,
-         ),
-         decoration: BoxDecoration(
-           color: theme.colorScheme.primaryContainer,
-           borderRadius: BorderRadius.circular(20),
-         ),
-         child: Text(
-           'Quantity: ${request.quantity}',
-           style: theme.textTheme.titleMedium?.copyWith(
-             color: theme.colorScheme.onPrimaryContainer,
-             fontWeight: FontWeight.bold,
-             fontSize: 12
-           ),
-           overflow: TextOverflow.ellipsis,
-         ),
-       ),
-     ),
-   ),
- ],
-),   const SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                child: Hero(
+                                  tag: 'drink_icon_${request.id}',
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: Image.asset(
+                                      'assets/111.png',
+                                      width: 100,
+                                      height: 80,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Flexible(
+                                flex: 1,
+                                child: Hero(
+                                  tag: 'quantity_${request.id}',
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: theme.colorScheme.primaryContainer,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Text(
+                                      'Quantity: ${request.quantity}',
+                                      style: theme.textTheme.titleMedium
+                                          ?.copyWith(
+                                              color: theme.colorScheme
+                                                  .onPrimaryContainer,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
                           Hero(
                             tag: 'timestamp_${request.id}',
                             child: Container(
