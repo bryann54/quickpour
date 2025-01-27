@@ -11,7 +11,7 @@ class ProductSearchBloc extends Bloc<ProductSearchEvent, ProductSearchState> {
   ProductSearchBloc({required this.productRepository})
       : super(ProductSearchInitialState()) {
     on<SearchProductsEvent>(_onSearchProducts);
-    on<FilterProductsEvent>(_onFilterProducts); // Add this line
+    on<FilterProductsEvent>(_onFilterProducts);
   }
 
   void _onSearchProducts(

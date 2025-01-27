@@ -29,6 +29,8 @@ import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
 import 'package:chupachap/features/promotions/presentation/bloc/promotions_bloc.dart';
 import 'package:chupachap/features/promotions/presentation/bloc/promotions_event.dart';
+import 'package:chupachap/features/user_data/data/repositories/user_data_repository_impl.dart';
+import 'package:chupachap/features/user_data/presentation/bloc/user_data_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +73,11 @@ class App extends StatelessWidget {
                 authRepository: AuthRepository(),
               ),
             ),
+          ),
+           BlocProvider(
+            create: (context) => UserDataBloc(
+              repository: UserDataRepositoryImpl(authRepository: AuthRepository()),
+            )..add(FetchUserData()),
           ),
           BlocProvider(
             create: (context) => DrinkRequestBloc(

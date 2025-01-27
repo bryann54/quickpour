@@ -1,4 +1,4 @@
-import 'package:chupachap/core/utils/custom_greetings.dart';
+import 'package:chupachap/features/user_data/presentation/widgets/custom_greetings.dart';
 import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
 import 'package:chupachap/features/auth/presentation/bloc/auth_bloc.dart';
@@ -116,7 +116,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               children: [
                 // Conditional Greeting or Logo
                 showGreeting
-                    ? CustomGreeting(authUseCases: authUseCases)
+                    ? CustomGreeting()
                     : ShaderMask(
                         shaderCallback: (bounds) => const LinearGradient(
                           colors: [
