@@ -115,24 +115,27 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Conditional Greeting or Logo
-                showGreeting
-                    ? CustomGreeting()
-                    : ShaderMask(
-                        shaderCallback: (bounds) => const LinearGradient(
-                          colors: [
-                            Color(0xFFE74C3C),
-                            Color(0xFFF39C12),
-                          ],
-                        ).createShader(bounds),
-                        child: Text(
-                          'Alko Hut',
-                          style: GoogleFonts.acme(
-                            fontSize: 25,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white,
+                Expanded(
+                  flex: 3,
+                  child: showGreeting
+                      ? CustomGreeting()
+                      : ShaderMask(
+                          shaderCallback: (bounds) => const LinearGradient(
+                            colors: [
+                              Color(0xFFE74C3C),
+                              Color(0xFFF39C12),
+                            ],
+                          ).createShader(bounds),
+                          child: Text(
+                            'Alko Hut',
+                            style: GoogleFonts.acme(
+                              fontSize: 25,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                      ),
+                ),
                 // Icons Row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,

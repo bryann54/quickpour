@@ -1,9 +1,8 @@
-// custom_greeting.dart
-import 'package:chupachap/features/user_data/presentation/bloc/user_data_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:chupachap/features/user_data/presentation/bloc/user_data_bloc.dart';
 
 class CustomGreeting extends StatelessWidget {
   const CustomGreeting({super.key});
@@ -60,7 +59,7 @@ class CustomGreeting extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${_getGreeting()}, ${state.userData.name}!',
+                '${_getGreeting()}, ${state.userData.name}! 👋',
                 style: GoogleFonts.instrumentSerif(
                   textStyle: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
