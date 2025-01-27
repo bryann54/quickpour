@@ -205,20 +205,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 builder: (context) => const ChangePassword(),
               ).then((success) {
                 if (success == true) {
-                  // Handle successful password change
+                 ScaffoldMessenger(child: 
+                 SnackBar(content: Text('Password changed successfully')));
                 }
               });
             },
           ),
-          // _buildDivider(),
-          // _buildProfileOptionItem(
-          //   context,
-          //   icon: Icons.help_outline,
-          //   title: 'Help & Support',
-          //   onTap: () {
-          //     // TODO: Implement help & support navigation
-          //   },
-          // ),
+        
         ],
       ),
     );

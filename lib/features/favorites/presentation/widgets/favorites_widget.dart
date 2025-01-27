@@ -76,7 +76,7 @@ class FavoritesWidget extends StatelessWidget {
                         favoriteItem.product.productName,
                         style: theme.textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontSize: 14,
                           color: isDarkMode
                               ? AppColors.surface.withOpacity(.8)
                               : Colors.black,
@@ -86,8 +86,8 @@ class FavoritesWidget extends StatelessWidget {
                       Text(
                         favoriteItem.product.brandName,
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                         
+                          fontSize: 12,
                           color: isDarkMode
                               ? AppColors.surface.withOpacity(.6)
                               : Colors.black,
