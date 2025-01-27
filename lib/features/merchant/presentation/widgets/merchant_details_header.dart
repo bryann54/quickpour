@@ -42,8 +42,6 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
     print('Filter button tapped');
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

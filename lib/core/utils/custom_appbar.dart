@@ -118,7 +118,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Expanded(
                   flex: 3,
                   child: showGreeting
-                      ? CustomGreeting()
+                      ? const CustomGreeting()
                       : ShaderMask(
                           shaderCallback: (bounds) => const LinearGradient(
                             colors: [

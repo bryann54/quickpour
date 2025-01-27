@@ -123,7 +123,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // ignore: unnecessary_null_comparison
             child: user.profileImage != null
                 ? CachedNetworkImage(imageUrl: user.profileImage)
-                : const Icon(Icons.person, size: 50, color: AppColors.accentColor),
+                : const Icon(Icons.person,
+                    size: 50, color: AppColors.accentColor),
           ),
         ),
         const SizedBox(width: 16),

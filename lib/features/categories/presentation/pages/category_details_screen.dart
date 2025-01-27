@@ -66,7 +66,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
               expandedHeight: 200,
               floating: false,
               pinned: true,
-               iconTheme:const IconThemeData(color: AppColors.background),
+              iconTheme: const IconThemeData(color: AppColors.background),
               actions: [
                 BlocBuilder<CartBloc, CartState>(
                   builder: (context, cartState) {
@@ -228,7 +228,6 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
 
             if (categoryProducts.isEmpty) {
               return Center(
-                
                 child: Text(
                   _searchQuery.isEmpty
                       ? 'No products found in ${widget.category.name}'

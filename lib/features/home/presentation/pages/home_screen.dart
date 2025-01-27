@@ -6,6 +6,7 @@ import 'package:chupachap/features/categories/presentation/bloc/categories_bloc.
 import 'package:chupachap/features/categories/presentation/bloc/categories_event.dart';
 import 'package:chupachap/features/categories/presentation/widgets/shimmer_widget.dart';
 import 'package:chupachap/features/merchant/presentation/pages/tab_view.dart';
+import 'package:chupachap/features/product/presentation/widgets/product_section.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
 import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
@@ -13,9 +14,6 @@ import 'package:chupachap/features/merchant/presentation/widgets/merchant_horizo
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_event.dart';
-import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
-import 'package:chupachap/features/product/presentation/widgets/product_card.dart';
-import 'package:chupachap/features/product/presentation/widgets/product_shimmer_widget.dart';
 import 'package:chupachap/features/promotions/presentation/widgets/promotions_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -175,63 +173,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: EdgeInsets.symmetric(vertical: 8.0),
                       child: PromotionsCarousel(),
                     ),
-                    Text(
-                      'Recommended for you',
-                      style: GoogleFonts.montaga(
-                          fontSize: 20,
-                          textStyle: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ),
+             
                     const SizedBox(height: 8),
-                    BlocBuilder<ProductBloc, ProductState>(
-                      builder: (context, state) {
-                        if (state is ProductLoadingState) {
-                          return GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.7,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                            ),
-                            itemCount: 6,
-                            padding: const EdgeInsets.all(10),
-                            itemBuilder: (context, index) =>
-                                const ProductCardShimmer(),
-                          );
-                        }
-
-                        if (state is ProductErrorState) {
-                          return Center(child: Text(state.errorMessage));
-                        }
-
-                        if (state is ProductLoadedState) {
-                          return GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            padding: const EdgeInsets.all(10),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.7,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                            ),
-                            itemCount: state.products.length,
-                            itemBuilder: (context, index) {
-                              final product = state.products[index];
-                              return ProductCard(product: product);
-                            },
-                          );
-                        }
-
-                        return const SizedBox.shrink();
-                      },
-                    ),
-                  ],
+           const ProductSection(), ],
                 ),
               ),
             ),

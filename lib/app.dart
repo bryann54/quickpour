@@ -74,9 +74,10 @@ class App extends StatelessWidget {
               ),
             ),
           ),
-           BlocProvider(
+          BlocProvider(
             create: (context) => UserDataBloc(
-              repository: UserDataRepositoryImpl(authRepository: AuthRepository()),
+              repository:
+                  UserDataRepositoryImpl(authRepository: AuthRepository()),
             )..add(FetchUserData()),
           ),
           BlocProvider(

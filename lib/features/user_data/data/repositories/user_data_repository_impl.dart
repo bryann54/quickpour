@@ -4,9 +4,6 @@ import 'package:chupachap/features/user_data/domain/repositories/user_data_repos
 
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
-import 'package:chupachap/features/user_data/domain/entities/user_data.dart';
-import 'package:chupachap/features/user_data/domain/repositories/user_data_repository.dart';
 
 class UserDataRepositoryImpl implements UserDataRepository {
   final AuthRepository _authRepository;
