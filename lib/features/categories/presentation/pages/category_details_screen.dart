@@ -22,6 +22,7 @@ class CategoryDetailsScreen extends StatefulWidget {
   @override
   State<CategoryDetailsScreen> createState() => _CategoryDetailsScreenState();
 }
+// [Previous imports remain the same]
 
 class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
   late TextEditingController _searchController;
@@ -41,12 +42,11 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
 
   void _onSearch(String query) {
     setState(() {
-      _searchQuery = query;
+      _searchQuery = query.toLowerCase();
     });
   }
 
   void _onFilterTap() {
-    // Handle filter button functionality here
     print('Filter button tapped');
   }
 
@@ -64,157 +64,160 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Hero image or category banner
-            Stack(
-              children: [
-                Hero(
-                  tag: 'category_image_${widget.category.id}',
-                  child: Container(
-                    width: double.infinity,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                          color: AppColors.accentColor.withOpacity(0.4)),
-                      image: DecorationImage(
-                        image: CachedNetworkImageProvider(
-                            widget.category.imageUrl),
-                        fit: BoxFit.cover,
-                        colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(
-                              0.3), // Darkens the image for better text visibility
-                          BlendMode.darken,
-                        ),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          spreadRadius: 1,
-                          blurRadius: 5,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                  ),
+            _buildHeroSection(),
+            _buildSearchBar(),
+            if (_searchQuery.isNotEmpty) _buildSearchQueryText(),
+            _buildProductList(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeroSection() {
+    return Stack(
+      children: [
+        Hero(
+          tag: 'category_image_${widget.category.id}',
+          child: Container(
+            width: double.infinity,
+            height: 100,
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.accentColor.withOpacity(0.4)),
+              image: DecorationImage(
+                image: CachedNetworkImageProvider(widget.category.imageUrl),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.3),
+                  BlendMode.darken,
                 ),
-                Container(
-                  // Gradient overlay for better text visibility
-                  width: double.infinity,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.black.withOpacity(0.1),
-                        Colors.black.withOpacity(0.5),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned.fill(
-                  child: Center(
-                    child: Text(
-                      widget.category.name,
-                      style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        shadows: [
-                          Shadow(
-                            offset: const Offset(1, 1),
-                            blurRadius: 3.0,
-                            color: Colors.black.withOpacity(0.5),
-                          ),
-                        ],
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 1,
+                  blurRadius: 5,
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
-
-            // Search Bar
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-              child: CustomSearchBar(
-                controller: _searchController,
-                onSearch: _onSearch,
-                onFilterTap: _onFilterTap,
-              ),
+          ),
+        ),
+        Container(
+          width: double.infinity,
+          height: 100,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.black.withOpacity(0.1),
+                Colors.black.withOpacity(0.5),
+              ],
             ),
+          ),
+        ),
+        Positioned.fill(
+          child: Center(
+            child: Text(
+              widget.category.name,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                shadows: [
+                  Shadow(
+                    offset: const Offset(1, 1),
+                    blurRadius: 3.0,
+                    color: Colors.black.withOpacity(0.5),
+                  ),
+                ],
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
-            // Display search results
-            if (_searchQuery.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.all(6.0),
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+      child: CustomSearchBar(
+        controller: _searchController,
+        onSearch: _onSearch,
+        onFilterTap: _onFilterTap,
+      ),
+    );
+  }
+
+  Widget _buildSearchQueryText() {
+    return Padding(
+      padding: const EdgeInsets.all(6.0),
+      child: Text(
+        'Displaying results for: $_searchQuery',
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
+    );
+  }
+
+  Widget _buildProductList() {
+    return Expanded(
+      child: BlocBuilder<ProductBloc, ProductState>(
+        builder: (context, state) {
+          if (state is ProductLoadingState) {
+            return const Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
+          }
+
+          if (state is ProductLoadedState) {
+            final categoryProducts = state.products.where((product) {
+              final matchesCategory = product.categoryName.toLowerCase() ==
+                  widget.category.name.toLowerCase();
+              final matchesSearch = _searchQuery.isEmpty ||
+                  product.productName.toLowerCase().contains(_searchQuery);
+              return matchesCategory && matchesSearch;
+            }).toList();
+
+            if (categoryProducts.isEmpty) {
+              return Center(
                 child: Text(
-                  'Displaying results for: $_searchQuery',
+                  _searchQuery.isEmpty
+                      ? 'No products found in ${widget.category.name}'
+                      : 'No products match your search',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
+              );
+            }
+
+            return GridView.builder(
+              padding: const EdgeInsets.only(top: 16, left: 3, right: 3),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.7,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
               ),
+              itemCount: categoryProducts.length,
+              itemBuilder: (context, index) {
+                final product = categoryProducts[index];
+                return ProductCard(product: product);
+              },
+            );
+          }
 
-            // Products Content
-            Expanded(
-              child: BlocBuilder<ProductBloc, ProductState>(
-                builder: (context, state) {
-                  if (state is ProductLoadingState) {
-                    return const Center(
-                        child: CircularProgressIndicator.adaptive());
-                  }
-
-                  if (state is ProductLoadedState) {
-                    // Filter products for the current category
-                    final categoryProducts = state.products
-                        .where((product) =>
-                            product.categoryName == widget.category.id)
-                        .toList();
-
-                    if (categoryProducts.isEmpty) {
-                      return Center(
-                        child: Text(
-                          'No products for ${(widget.category.name)}',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      );
-                    }
-
-                    return GridView.builder(
-                      padding: const EdgeInsets.all(6.0),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.7,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                      ),
-                      itemCount: categoryProducts.length,
-                      itemBuilder: (context, index) {
-                        final product = categoryProducts[index];
-                        return ProductCard(product: product);
-                      },
-                    );
-                  }
-
-                  if (state is ProductErrorState) {
-                    return Center(
-                      child: Text(
-                        state.errorMessage,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(color: Colors.red),
-                      ),
-                    );
-                  }
-
-                  return const SizedBox.shrink();
-                },
+          if (state is ProductErrorState) {
+            return Center(
+              child: Text(
+                'Error loading products for ${widget.category.name}',
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
-            ),
-          ],
-        ),
+            );
+          }
+
+          return const SizedBox.shrink();
+        },
       ),
     );
   }

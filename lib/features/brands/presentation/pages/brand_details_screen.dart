@@ -42,7 +42,7 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
 
   void _onSearch(String query) {
     setState(() {
-      _searchQuery = query;
+      _searchQuery = query.toLowerCase();
     });
   }
 
@@ -77,7 +77,7 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
     return Stack(
       children: [
         Hero(
-          tag: 'category_image_${widget.brand.id}',
+          tag: 'brand_image_${widget.brand.id}',
           child: Container(
             width: double.infinity,
             height: 100,
@@ -91,6 +91,14 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
                   BlendMode.darken,
                 ),
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 1,
+                  blurRadius: 5,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
           ),
         ),
@@ -133,7 +141,6 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
                   child: Text(
                     widget.brand.description,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
                       color: Colors.white,
                       shadows: [
                         Shadow(
@@ -182,25 +189,33 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
       child: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
           if (state is ProductLoadingState) {
-            return const Center(child: CircularProgressIndicator.adaptive());
+            return const Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
           }
 
           if (state is ProductLoadedState) {
-            final brandProducts = state.products
-                .where((product) => product.brandName == widget.brand.id)
-                .toList();
+            final brandProducts = state.products.where((product) {
+              final matchesBrand = product.brandName.toLowerCase() ==
+                  widget.brand.name.toLowerCase();
+              final matchesSearch = _searchQuery.isEmpty ||
+                  product.productName.toLowerCase().contains(_searchQuery);
+              return matchesBrand && matchesSearch;
+            }).toList();
 
             if (brandProducts.isEmpty) {
               return Center(
                 child: Text(
-                  'No products found for ${widget.brand.name}.',
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  _searchQuery.isEmpty
+                      ? 'No products found in ${widget.brand.name}'
+                      : 'No products match your search',
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               );
             }
 
             return GridView.builder(
-              padding: const EdgeInsets.all(6.0),
+              padding: const EdgeInsets.only(top: 16, left: 3, right: 3),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 0.7,
@@ -218,10 +233,8 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
           if (state is ProductErrorState) {
             return Center(
               child: Text(
-                state.errorMessage,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Colors.red,
-                    ),
+                'Error loading products for ${widget.brand.name}',
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             );
           }
