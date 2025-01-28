@@ -2,6 +2,7 @@ import 'package:chupachap/features/product/data/repositories/product_repository.
 import 'package:chupachap/features/product/presentation/bloc/product_event.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 // product_bloc.dart
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final ProductRepository productRepository;

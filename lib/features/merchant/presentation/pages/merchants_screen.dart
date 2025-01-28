@@ -1,4 +1,3 @@
-import 'package:chupachap/features/merchant/data/repositories/merchants_repository.dart';
 import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
 import 'package:chupachap/features/merchant/presentation/widgets/merchant_card_widget.dart';
 import 'package:chupachap/features/merchant/presentation/widgets/merchant_tile_shimmer.dart';

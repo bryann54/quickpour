@@ -1,5 +1,3 @@
-
-
 import 'package:chupachap/features/product/data/models/product_model.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_state.dart';

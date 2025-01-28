@@ -1,4 +1,3 @@
-import 'package:chupachap/features/brands/data/repositories/brand_repository.dart';
 import 'package:chupachap/features/brands/presentation/bloc/brands_bloc.dart';
 import 'package:chupachap/features/brands/presentation/widgets/brands_card_widget.dart';
 import 'package:chupachap/features/brands/presentation/widgets/brands_shimmer.dart';

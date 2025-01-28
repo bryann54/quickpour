@@ -72,15 +72,14 @@ class _HomeScreenState extends State<HomeScreen> {
           // HomeScreenSearch(
           //   controller: _searchController,
           // ),
-    
+
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding:
-                        const EdgeInsets.only(left: 3, top: 2, bottom: 2),
+                    padding: const EdgeInsets.only(left: 3, top: 2, bottom: 2),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -157,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.symmetric(vertical: 8.0),
                     child: PromotionsCarousel(),
                   ),
-          ProductSection(),
+                  const ProductSection(),
                 ],
               ),
             ),
