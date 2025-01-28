@@ -29,7 +29,6 @@ class NotificationService {
     await _notificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (details) {
-        print('Notification tapped: ${details.payload}');
       },
     );
 
@@ -80,8 +79,7 @@ class NotificationService {
         payload: payload,
       );
     } catch (e) {
-      print('Error showing notification: $e');
-      // You might want to handle this error differently
+      throw Exception('Failed to show order notification');
     }
   }
 }

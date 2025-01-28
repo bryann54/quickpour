@@ -7,16 +7,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:chupachap/features/product/data/models/product_model.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PromotionsCarousel extends StatelessWidget {
   const PromotionsCarousel({super.key});
 
   @override
   Widget build(BuildContext context) {
+     final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     return BlocBuilder<PromotionsBloc, PromotionsState>(
       builder: (context, state) {
         if (state is PromotionsLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return  Center(child: Shimmer.fromColors(
+             baseColor: isDarkMode ? Colors.grey[400]! : Colors.grey[400]!,
+            highlightColor: Colors.grey[100]!,
+            child: Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: Container(
+                height: 190,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.grey[500],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+          ));
         } else if (state is PromotionsError) {
           return Center(child: Text('Error: ${state.message}'));
         } else if (state is PromotionsLoaded) {
