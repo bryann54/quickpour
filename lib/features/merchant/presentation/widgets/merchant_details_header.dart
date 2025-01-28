@@ -84,11 +84,14 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: CachedNetworkImage(
-              imageUrl: widget.merchant.imageUrl,
-              placeholder: (context, url) => _buildPlaceholderLoader(),
-              errorWidget: (context, url, error) => _buildErrorIcon(),
-              fit: BoxFit.cover,
+            child: Hero(
+              tag: 'merchant_image_${widget.merchant.id}',
+              child: CachedNetworkImage(
+                imageUrl: widget.merchant.imageUrl,
+                placeholder: (context, url) => _buildPlaceholderLoader(),
+                errorWidget: (context, url, error) => _buildErrorIcon(),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),
@@ -119,20 +122,26 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
               // Merchant Name and Verified Badge
               Row(
                 children: [
-                  Text(
-                    widget.merchant.name,
-                    style: theme.textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                Hero(
+                    tag: 'merchant-name-${widget.merchant.id}',
+                    child: Text(
+                      widget.merchant.name,
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                   if (widget.merchant.isVerified)
-                    const Padding(
+                     Padding(
                       padding: EdgeInsets.only(left: 6.0),
-                      child: Icon(
-                        Icons.verified,
-                        color: AppColors.accentColor,
-                        size: 20,
+                      child:  Hero(
+                        tag: 'verified-${widget.merchant.id}',
+                        child: Icon(
+                          Icons.verified,
+                          color: AppColors.accentColor,
+                          size: 20,
+                        ),
                       ),
                     ),
                 ],
@@ -177,19 +186,22 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
                       ),
                     ],
                   ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: widget.merchant.isOpen ? Colors.green : Colors.red,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      widget.merchant.isOpen ? 'Open' : 'Closed',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
+                    Hero(
+                    tag: 'merchant-open-${widget.merchant.id}',
+                    child: Container(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: widget.merchant.isOpen ? Colors.green : Colors.red,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        widget.merchant.isOpen ? 'Open' : 'Closed',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

@@ -169,8 +169,8 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
   Widget _buildHeroSection() {
     return Stack(
       children: [
-        Hero(
-          tag: 'brand_image_${widget.brand.id}',
+          Hero(
+          tag: 'brand_image${widget.brand.id}', 
           child: Container(
             width: double.infinity,
             height: 200,
@@ -214,20 +214,23 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  widget.brand.name,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    shadows: [
-                      Shadow(
-                        offset: const Offset(1, 1),
-                        blurRadius: 3.0,
-                        color: Colors.black.withOpacity(0.5),
-                      ),
-                    ],
+               Hero(
+                  tag: 'brand_name${widget.brand.id}', 
+                  child: Text(
+                    widget.brand.name,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      shadows: [
+                        Shadow(
+                          offset: const Offset(1, 1),
+                          blurRadius: 3.0,
+                          color: Colors.black.withOpacity(0.5),
+                        ),
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 4),
                 Flexible(
@@ -316,4 +319,6 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
       ),
     );
   }
+
+
 }

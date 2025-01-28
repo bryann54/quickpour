@@ -77,34 +77,36 @@ class BrandCardAvatar extends StatelessWidget {
           ),
         ],
       ),
-      child: Hero(
-        tag: 'brand_avatar_${brand.id}',
+    
         child: ClipOval(
-          child: CachedNetworkImage(
-            imageUrl: brand.logoUrl,
-            placeholder: (context, url) => Container(
-              color: Colors.grey[200],
-              child: const Center(
-                child: CircularProgressIndicator.adaptive(
-                  strokeWidth: 2,
+          child:  Hero(
+          tag: 'brand_image${brand.id}', 
+            child: CachedNetworkImage(
+              imageUrl: brand.logoUrl,
+              placeholder: (context, url) => Container(
+                color: Colors.grey[200],
+                child: const Center(
+                  child: CircularProgressIndicator.adaptive(
+                    strokeWidth: 2,
+                  ),
                 ),
               ),
-            ),
-            errorWidget: (context, url, error) => Container(
-              color: Colors.grey[200],
-              child: Align(
-                alignment: Alignment.center,
-                child: FaIcon(
-                  FontAwesomeIcons.bootstrap,
-                  size: 35,
-                  color: Colors.grey[400],
+              errorWidget: (context, url, error) => Container(
+                color: Colors.grey[200],
+                child: Align(
+                  alignment: Alignment.center,
+                  child: FaIcon(
+                    FontAwesomeIcons.bootstrap,
+                    size: 35,
+                    color: Colors.grey[400],
+                  ),
                 ),
               ),
+              fit: BoxFit.contain,
             ),
-            fit: BoxFit.contain,
           ),
         ),
-      ),
+      
     );
   }
 
@@ -112,17 +114,20 @@ class BrandCardAvatar extends StatelessWidget {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
 
-    return Text(
-      brand.name,
-      style: TextStyle(
-        fontWeight: FontWeight.w600,
-        fontSize: 12,
-        color: isDarkMode ? Colors.white70 : Colors.black87,
-        letterSpacing: 0.5,
+    return  Hero(
+      tag: 'brand_name${brand.id}', 
+      child: Text(
+        brand.name,
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 12,
+          color: isDarkMode ? Colors.white70 : Colors.black87,
+          letterSpacing: 0.5,
+        ),
+        textAlign: TextAlign.center,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
-      textAlign: TextAlign.center,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
     );
   }
 

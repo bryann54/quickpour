@@ -48,23 +48,26 @@ class ProductDetailsHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Product Name with animated gradient
-              Align(
-                alignment: Alignment.center,
-                child: ShaderMask(
-                  shaderCallback: (bounds) => LinearGradient(
-                    colors: isDarkMode
-                        ? [AppColors.brandAccent, AppColors.brandPrimary]
-                        : [AppColors.brandAccent, AppColors.brandPrimary],
-                  ).createShader(bounds),
-                  child: Text(
-                    product.productName,
-                    style: theme.textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.5,
-                      height: 1.2,
+              Hero(
+                tag: 'product-name-${product.id}',
+                child: Align(
+                  alignment: Alignment.center,
+                  child: ShaderMask(
+                    shaderCallback: (bounds) => LinearGradient(
+                      colors: isDarkMode
+                          ? [AppColors.brandAccent, AppColors.brandPrimary]
+                          : [AppColors.brandAccent, AppColors.brandPrimary],
+                    ).createShader(bounds),
+                    child: Text(
+                      product.productName,
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.5,
+                        height: 1.2,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),

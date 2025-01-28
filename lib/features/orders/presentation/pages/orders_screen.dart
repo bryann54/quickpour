@@ -4,6 +4,7 @@ import 'package:chupachap/features/home/presentation/widgets/bottom_nav.dart';
 import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
 import 'package:chupachap/features/orders/presentation/bloc/orders_bloc.dart';
 import 'package:chupachap/features/orders/presentation/widgets/order_item_widget.dart';
+import 'package:chupachap/features/orders/presentation/widgets/order_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,7 +45,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           builder: (context, state) {
             if (state is OrdersInitial) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: OrderShimmer(),
               );
             } else if (state is OrdersEmpty) {
               return _buildEmptyOrdersView(context);

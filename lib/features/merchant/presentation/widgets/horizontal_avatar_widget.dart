@@ -65,29 +65,32 @@ class MerchantCardAvatar extends StatelessWidget {
   Widget _buildBackgroundImage() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
-      child: CachedNetworkImage(
-        imageUrl: merchant.imageUrl,
-        width: 100,
-        height: 150,
-        fit: BoxFit.cover,
-        placeholder: (context, url) => Container(
-          color: Colors.grey[200],
-          child: const Center(
-            child: SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator.adaptive(
-                strokeWidth: 2,
+      child: Hero(
+        tag: 'merchant_image_${merchant.id}',
+        child: CachedNetworkImage(
+          imageUrl: merchant.imageUrl,
+          width: 100,
+          height: 150,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => Container(
+            color: Colors.grey[200],
+            child: const Center(
+              child: SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator.adaptive(
+                  strokeWidth: 2,
+                ),
               ),
             ),
           ),
-        ),
-        errorWidget: (context, url, error) => Container(
-          color: Colors.grey[200],
-          child: FaIcon(
-            Icons.error,
-            size: 35,
-            color: Colors.grey[400],
+          errorWidget: (context, url, error) => Container(
+            color: Colors.grey[200],
+            child: FaIcon(
+              Icons.error,
+              size: 35,
+              color: Colors.grey[400],
+            ),
           ),
         ),
       ),
@@ -114,25 +117,31 @@ class MerchantCardAvatar extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              merchant.name,
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 12,
-                color: isDarkMode ? Colors.white70 : Colors.white,
+            Hero(
+              tag: 'merchant-name-${merchant.id}',
+              child: Text(
+                merchant.name,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                  color: isDarkMode ? Colors.white70 : Colors.white,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
             if (merchant.isVerified) const SizedBox(height: 4),
             if (merchant.isVerified)
               Row(
                 children: [
-                  const FaIcon(
-                    Icons.verified,
-                    size: 14,
-                    color: AppColors.accentColor,
+                  Hero(
+                    tag: 'verified-${merchant.id}',
+                    child: const FaIcon(
+                      Icons.verified,
+                      size: 14,
+                      color: AppColors.accentColor,
+                    ),
                   ),
                   const SizedBox(width: 4),
                   Text(

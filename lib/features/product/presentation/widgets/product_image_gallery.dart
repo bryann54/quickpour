@@ -23,10 +23,10 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
 
   int _calculateDiscountPercentage(double originalPrice, double discountPrice) {
     if (originalPrice <= 0 || discountPrice <= 0) {
-      return 0; // Handle invalid values gracefully
+      return 0;
     }
     final discount = ((originalPrice - discountPrice) / originalPrice) * 100;
-    return discount.round(); // Return rounded discount percentage
+    return discount.round();
   }
 
   @override
@@ -39,7 +39,8 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
         Stack(
           children: [
             Hero(
-              tag: widget.product.id, // Unique tag for hero animation
+              tag:
+                  'product-image-${widget.product.id}', // Updated to match ProductCard
               child: AspectRatio(
                 aspectRatio: 1.0,
                 child: Container(
@@ -56,7 +57,8 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                   ),
                   child: CachedNetworkImage(
                     imageUrl: widget.product.imageUrls[_currentImageIndex],
-                    fit: BoxFit.fitWidth,
+                    fit: BoxFit
+                        .contain, // Changed to contain to match ProductCard
                     errorWidget: (context, error, stackTrace) => Icon(
                       Icons.error,
                       size: 64,
@@ -69,60 +71,76 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
               ),
             ),
             // Discount Tag
-            Positioned(
-              top: 10,
-              left: 10,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 4),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Colors.red, Colors.orange],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 4,
-                      offset: const Offset(2, 2),
+            if (widget.product.discountPrice < widget.product.price)
+              Positioned(
+                top: 10,
+                left: 10,
+                child: Hero(
+                  tag: 'product-badge-${widget.product.id}',
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Colors.red, Colors.orange],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 4,
+                          offset: const Offset(2, 2),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      FontAwesomeIcons.tag,
-                      color: Colors.white,
-                      size: 12,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${_calculateDiscountPercentage(widget.product.price, widget.product.discountPrice)}% OFF',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    child: Row(
+                      children: [
+                        const Icon(
+                          FontAwesomeIcons.tag,
+                          color: Colors.white,
+                          size: 12,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${_calculateDiscountPercentage(widget.product.price, widget.product.discountPrice)}% OFF',
+                          style: const TextStyle(
                             color: Colors.white,
+                            fontSize: 11,
                             fontWeight: FontWeight.bold,
                           ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-            // Price details
+            // Price details with Hero animation
             Positioned(
               bottom: 10,
-              left: 100,
+              left: 10,
               child: Row(
                 children: [
-                  if (widget.product.discountPrice > 0)
-                    Text(
-                      'KSH ${widget.product.discountPrice.toStringAsFixed(0)}',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  if (widget.product.discountPrice > 0 &&
+                      widget.product.discountPrice < widget.product.price)
+                    Hero(
+                      tag:
+                          'product-price-${widget.product.id}', // Added Hero animation for price
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Text(
+                          'KSH ${widget.product.discountPrice.toStringAsFixed(0)}',
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    color: AppColors.accentColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                      ),
                     ),
-                  if (widget.product.discountPrice > 0) ...[
+                  if (widget.product.discountPrice > 0 &&
+                      widget.product.discountPrice < widget.product.price) ...[
                     const SizedBox(width: 8),
                     Text(
                       'KSH ${widget.product.price.toStringAsFixed(0)}',
@@ -132,43 +150,55 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                           ),
                     ),
                   ],
-                  if (widget.product.discountPrice <= 0)
-                    Text(
-                      'KSH ${widget.product.price.toStringAsFixed(0)}',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                  if (!(widget.product.discountPrice > 0 &&
+                      widget.product.discountPrice < widget.product.price))
+                    Hero(
+                      tag: 'product-price-${widget.product.id}',
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Text(
+                          'KSH ${widget.product.price.toStringAsFixed(0)}',
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.accentColor,
+                                  ),
+                        ),
+                      ),
                     ),
                 ],
               ),
             ),
 
-            // Favorite Icon (Similar to the original code)
-            Positioned(
+            // Favorite Icon
+           Positioned(
               top: 10,
               right: 10,
               child: BlocBuilder<FavoritesBloc, FavoritesState>(
                 builder: (context, favoritesState) {
                   final isFavorite = favoritesState.isFavorite(widget.product);
-                  return CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Colors.white.withOpacity(0.8),
-                    child: IconButton(
-                      icon: Icon(
-                        isFavorite ? Icons.favorite : Icons.favorite_outline,
-                        size: 35,
+                  return Hero(
+                    tag: 'product-favorite-${widget.product.id}',
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.white.withOpacity(0.8),
+                      child: IconButton(
+                        icon: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_outline,
+                          size: 35,
+                        ),
+                        color: AppColors.accentColor,
+                        onPressed: () {
+                          if (isFavorite) {
+                            context.read<FavoritesBloc>().add(
+                                RemoveFromFavoritesEvent(
+                                    product: widget.product));
+                          } else {
+                            context.read<FavoritesBloc>().add(
+                                AddToFavoritesEvent(product: widget.product));
+                          }
+                        },
                       ),
-                      color: AppColors.accentColor,
-                      onPressed: () {
-                        if (isFavorite) {
-                          context.read<FavoritesBloc>().add(
-                              RemoveFromFavoritesEvent(
-                                  product: widget.product));
-                        } else {
-                          context.read<FavoritesBloc>().add(
-                              AddToFavoritesEvent(product: widget.product));
-                        }
-                      },
                     ),
                   );
                 },
@@ -177,7 +207,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
           ],
         ),
         const SizedBox(height: 10),
-        // Thumbnails Row for Image Selection (Similar to the original code)
+        // Thumbnails Row
         if (widget.product.imageUrls.length > 1)
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
