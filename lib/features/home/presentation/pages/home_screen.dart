@@ -1,9 +1,5 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
-import 'package:chupachap/features/categories/data/repositories/category_repository.dart';
-import 'package:chupachap/features/categories/domain/usecases/fetch_categories.dart';
-import 'package:chupachap/features/categories/presentation/bloc/categories_bloc.dart';
-import 'package:chupachap/features/categories/presentation/bloc/categories_event.dart';
 import 'package:chupachap/features/categories/presentation/widgets/shimmer_widget.dart';
 import 'package:chupachap/features/merchant/presentation/pages/tab_view.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_section.dart';
@@ -36,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<ProductBloc>().add(FetchProductsEvent());
     _scrollController = ScrollController();
     _productSearchBloc = ProductSearchBloc(
       productRepository: ProductRepository(),
@@ -63,124 +60,109 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => ProductBloc(
-            productRepository: ProductRepository(),
-          )..add(FetchProductsEvent()),
-        ),
-        BlocProvider(
-          create: (context) => CategoriesBloc(
-            FetchCategories(CategoryRepository()),
-          )..add(LoadCategories()),
-        ),
-      ],
-      child: Scaffold(
-        appBar: CustomAppBar(
-          showNotification: true,
-          showCart: false,
-          showProfile: true,
-          showGreeting: true,
-        ),
-        body: Column(
-          children: [
-            // HomeScreenSearch(
-            //   controller: _searchController,
-            // ),
-
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 3, top: 2, bottom: 2),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Text('Verified  Stores',
-                                  style: GoogleFonts.montaga(
-                                    textStyle: theme.textTheme.titleMedium
-                                        ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 17,
-                                            color: theme.colorScheme.onSurface,
-                                            letterSpacing: 1),
-                                  )),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Icon(
-                                Icons.verified,
-                                color: isDarkMode
-                                    ? Colors.teal
-                                    : AppColors.accentColor,
-                              )
-                            ],
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const StoreTabsScreen(),
-                                ),
-                              );
-                            },
-                            child: Text('See All',
+    return Scaffold(
+      appBar: CustomAppBar(
+        showNotification: true,
+        showCart: false,
+        showProfile: true,
+        showGreeting: true,
+      ),
+      body: Column(
+        children: [
+          // HomeScreenSearch(
+          //   controller: _searchController,
+          // ),
+    
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 3, top: 2, bottom: 2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Text('Verified  Stores',
                                 style: GoogleFonts.montaga(
-                                  textStyle: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
+                                  textStyle: theme.textTheme.titleMedium
                                       ?.copyWith(
-                                        color: isDarkMode
-                                            ? Colors.teal
-                                            : AppColors.accentColor,
-                                      ),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 17,
+                                          color: theme.colorScheme.onSurface,
+                                          letterSpacing: 1),
                                 )),
-                          ),
-                        ],
-                      ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Icon(
+                              Icons.verified,
+                              color: isDarkMode
+                                  ? Colors.teal
+                                  : AppColors.accentColor,
+                            )
+                          ],
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const StoreTabsScreen(),
+                              ),
+                            );
+                          },
+                          child: Text('See All',
+                              style: GoogleFonts.montaga(
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                      color: isDarkMode
+                                          ? Colors.teal
+                                          : AppColors.accentColor,
+                                    ),
+                              )),
+                        ),
+                      ],
                     ),
-                    BlocBuilder<MerchantBloc, MerchantState>(
-                      builder: (context, state) {
-                        if (state is MerchantLoaded) {
-                          return HorizontalMerchantsListWidget(
-                              merchant: state.merchants);
-                        }
-                        if (state is MerchantLoading) {
-                          return const Center(child: LoadingHorizontalList());
-                        }
-                        if (state is MerchantError) {
-                          return Center(child: Text(state.message));
-                        }
-                        return const SizedBox.shrink();
-                      },
-                    ),
-                    Text(
-                      'Promotions',
-                      style: GoogleFonts.montaga(
-                          fontSize: 20,
-                          textStyle: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
-                      child: PromotionsCarousel(),
-                    ),
-             
-                    const SizedBox(height: 8),
-           const ProductSection(), ],
-                ),
+                  ),
+                  BlocBuilder<MerchantBloc, MerchantState>(
+                    builder: (context, state) {
+                      if (state is MerchantLoaded) {
+                        return HorizontalMerchantsListWidget(
+                            merchant: state.merchants);
+                      }
+                      if (state is MerchantLoading) {
+                        return const Center(child: LoadingHorizontalList());
+                      }
+                      if (state is MerchantError) {
+                        return Center(child: Text(state.message));
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                  Text(
+                    'Promotions',
+                    style: GoogleFonts.montaga(
+                        fontSize: 20,
+                        textStyle: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: PromotionsCarousel(),
+                  ),
+          ProductSection(),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

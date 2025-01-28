@@ -13,34 +13,30 @@ class BrandsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: BlocProvider(
-          create: (context) => BrandsBloc(brandRepository: BrandRepository())
-            ..add(FetchBrandsEvent()),
-          child: BlocBuilder<BrandsBloc, BrandsState>(
-            builder: (context, state) {
-              if (state is BrandsLoadingState) {
-                return const Center(child: BrandsScreenShimmer());
-              } else if (state is BrandsLoadedState) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: MasonryGridView.count(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
-                    itemCount: state.brands.length,
-                    itemBuilder: (context, index) {
-                      final brand = state.brands[index];
-                      return BrandCardWidget(
-                        brand: brand,
-                        isVerified: index % 3 == 0,
-                      );
-                    },
-                  ),
-                );
-              }
-              return const Center(child: Text('Failed to load brands'));
-            },
-          ),
+        child: BlocBuilder<BrandsBloc, BrandsState>(
+          builder: (context, state) {
+            if (state is BrandsLoadingState) {
+              return const Center(child: BrandsScreenShimmer());
+            } else if (state is BrandsLoadedState) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: MasonryGridView.count(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  itemCount: state.brands.length,
+                  itemBuilder: (context, index) {
+                    final brand = state.brands[index];
+                    return BrandCardWidget(
+                      brand: brand,
+                      isVerified: index % 3 == 0,
+                    );
+                  },
+                ),
+              );
+            }
+            return const Center(child: Text('Failed to load brands'));
+          },
         ),
       ),
     );

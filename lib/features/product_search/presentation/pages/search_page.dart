@@ -112,11 +112,7 @@ class _SearchPageState extends State<SearchPage> {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => ProductBloc(
-            productRepository: ProductRepository(),
-          )..add(FetchProductsEvent()),
-        ),
+     
         BlocProvider.value(
           value: _productSearchBloc,
         ),

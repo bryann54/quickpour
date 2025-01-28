@@ -18,34 +18,30 @@ class MerchantsScreen extends StatelessWidget {
             height: 20,
           ),
           Expanded(
-            child: BlocProvider(
-              create: (context) => MerchantBloc(MerchantsRepository())
-                ..add(FetchMerchantEvent()),
-              child: BlocBuilder<MerchantBloc, MerchantState>(
-                builder: (context, state) {
-                  if (state is MerchantLoading) {
-                    return const MerchantTileShimmer();
-                  } else if (state is MerchantLoaded) {
-                    final merchants = state.merchants;
-                    return ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      itemCount: merchants.length,
-                      itemBuilder: (context, index) {
-                        final merchant = merchants[index];
-                        return MerchantCardWidget(merchant: merchant);
-                      },
-                    );
-                  } else if (state is MerchantError) {
-                    return Center(
-                      child: Text(
-                        state.message,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    );
-                  }
-                  return const SizedBox.shrink();
-                },
-              ),
+            child: BlocBuilder<MerchantBloc, MerchantState>(
+              builder: (context, state) {
+                if (state is MerchantLoading) {
+                  return const MerchantTileShimmer();
+                } else if (state is MerchantLoaded) {
+                  final merchants = state.merchants;
+                  return ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    itemCount: merchants.length,
+                    itemBuilder: (context, index) {
+                      final merchant = merchants[index];
+                      return MerchantCardWidget(merchant: merchant);
+                    },
+                  );
+                } else if (state is MerchantError) {
+                  return Center(
+                    child: Text(
+                      state.message,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
             ),
           ),
         ],
