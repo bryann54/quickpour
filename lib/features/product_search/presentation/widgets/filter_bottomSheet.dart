@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/categories/data/repositories/category_repository.dart';
 import 'package:chupachap/features/merchant/data/repositories/merchants_repository.dart';
+import 'package:chupachap/features/brands/data/repositories/brand_repository.dart';
 
 class FilterBottomSheet extends StatefulWidget {
   final Function(Map<String, dynamic>) onApplyFilters;
@@ -16,15 +17,18 @@ class FilterBottomSheet extends StatefulWidget {
 }
 
 class _FilterBottomSheetState extends State<FilterBottomSheet> {
+  String? selectedBrand;
   String? selectedCategory;
   String? selectedStore;
   RangeValues _currentRangeValues = const RangeValues(0, 10000);
   bool _isLoading = true;
+  List<String> brands = [];
   List<String> categories = [];
   List<String> stores = [];
 
   bool get _isFilterSelected {
     return selectedCategory != null ||
+        selectedBrand != null ||
         selectedStore != null ||
         _currentRangeValues != const RangeValues(0, 10000);
   }
@@ -42,14 +46,17 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     try {
       final categoryRepository = CategoryRepository();
       final merchantsRepository = MerchantsRepository();
+      final brandRepository = BrandRepository();
 
       final categoriesList = await categoryRepository.getCategories();
       final merchantsList = await merchantsRepository.getMerchants();
+      final brandsList = await brandRepository.getBrands();
 
       if (mounted) {
         setState(() {
           categories = categoriesList.map((category) => category.name).toList();
           stores = merchantsList.map((merchant) => merchant.name).toList();
+          brands = brandsList.map((brand) => brand.name).toList();
           _isLoading = false;
         });
       }
@@ -63,6 +70,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
   void _applyFilters() {
     widget.onApplyFilters({
+      'brand': selectedBrand,
       'category': selectedCategory,
       'store': selectedStore,
       'priceRange': _currentRangeValues,
@@ -136,6 +144,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     _buildCategoryChips(),
                     const SizedBox(height: 24),
 
+                    // Brands
+                    _buildSectionTitle('Brands'),
+                    const SizedBox(height: 8),
+                    _buildBrandChips(),
+                    const SizedBox(height: 24),
+
                     // Stores
                     _buildSectionTitle('Stores'),
                     const SizedBox(height: 8),
@@ -157,7 +171,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: SizedBox(
-            
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _applyFilters,
@@ -168,14 +181,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'Apply Filter',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
+                  child: const Text('Apply Filters'),
                 ),
               ),
             ),
@@ -196,21 +202,32 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   Widget _buildCategoryChips() {
     return Wrap(
       spacing: 8,
-      runSpacing: 8,
       children: categories.map((category) {
-        final isSelected = selectedCategory == category;
-        return FilterChip(
+        return ChoiceChip(
           label: Text(category),
-          selected: isSelected,
-          onSelected: (bool selected) {
+          selected: selectedCategory == category,
+          onSelected: (selected) {
             setState(() {
               selectedCategory = selected ? category : null;
             });
           },
-          backgroundColor: isSelected ? AppColors.accentColor : null,
-          labelStyle: TextStyle(
-            color: isSelected ? Colors.white : null,
-          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildBrandChips() {
+    return Wrap(
+      spacing: 8,
+      children: brands.map((brand) {
+        return ChoiceChip(
+          label: Text(brand),
+          selected: selectedBrand == brand,
+          onSelected: (selected) {
+            setState(() {
+              selectedBrand = selected ? brand : null;
+            });
+          },
         );
       }).toList(),
     );
@@ -219,61 +236,35 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   Widget _buildStoreChips() {
     return Wrap(
       spacing: 8,
-      runSpacing: 8,
       children: stores.map((store) {
-        final isSelected = selectedStore == store;
-        return FilterChip(
+        return ChoiceChip(
           label: Text(store),
-          selected: isSelected,
-          onSelected: (bool selected) {
+          selected: selectedStore == store,
+          onSelected: (selected) {
             setState(() {
               selectedStore = selected ? store : null;
             });
           },
-          backgroundColor: isSelected ? AppColors.accentColor : null,
-          labelStyle: TextStyle(
-            color: isSelected ? Colors.white : null,
-          ),
         );
       }).toList(),
     );
   }
 
   Widget _buildPriceRangeSlider(bool isDarkMode) {
-    return Column(
-      children: [
-        RangeSlider(
-          values: _currentRangeValues,
-          max: 10000,
-          divisions: 100,
-          labels: RangeLabels(
-            'KES ${_currentRangeValues.start.round()}',
-            'KES ${_currentRangeValues.end.round()}',
-          ),
-          onChanged: (RangeValues values) {
-            setState(() {
-              _currentRangeValues = values;
-            });
-          },
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'KES ${_currentRangeValues.start.round()}',
-              style: TextStyle(
-                color: isDarkMode ? Colors.white70 : Colors.grey[600],
-              ),
-            ),
-            Text(
-              'KES ${_currentRangeValues.end.round()}',
-              style: TextStyle(
-                color: isDarkMode ? Colors.white70 : Colors.grey[600],
-              ),
-            ),
-          ],
-        ),
-      ],
+    return RangeSlider(
+      values: _currentRangeValues,
+      min: 0,
+      max: 10000,
+      divisions: 100,
+      labels: RangeLabels(
+        '\$${_currentRangeValues.start.round()}',
+        '\$${_currentRangeValues.end.round()}',
+      ),
+      onChanged: (values) {
+        setState(() {
+          _currentRangeValues = values;
+        });
+      },
     );
   }
 }
