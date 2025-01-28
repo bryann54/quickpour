@@ -273,7 +273,7 @@ class ProductCard extends StatelessWidget {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -303,42 +303,48 @@ class ProductCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const SizedBox(height: 8), // Add spacing before prices
+
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            'Ksh ${product.discountPrice.toStringAsFixed(0)}',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.accentColor,
-                            ),
-                          ),
-                        ),
-                        if (product.discountPrice < product.price)
-                          const Text(
-                            'was ',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        if (product.discountPrice < product.price)
+                        if (product.discountPrice > 0 &&
+                            product.discountPrice < product.price)
                           Expanded(
-                            flex: 1,
+                            child: Text(
+                              'Ksh ${product.discountPrice.toStringAsFixed(0)}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.accentColor,
+                              ),
+                            ),
+                          ),
+                        if (product.discountPrice > 0 &&
+                            product.discountPrice < product.price)
+                          Expanded(
                             child: Text(
                               'Ksh ${product.price.toStringAsFixed(0)}',
                               style: const TextStyle(
-                                fontSize: 12,
+                                fontSize: 11,
                                 color: Colors.red,
                                 decoration: TextDecoration.lineThrough,
                               ),
                             ),
                           ),
+                        if (!(product.discountPrice > 0 &&
+                            product.discountPrice < product.price))
+                          Expanded(
+                            child: Text(
+                              'Ksh ${product.price.toStringAsFixed(0)}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.accentColor,
+                              ),
+                            ),
+                          ),
                       ],
-                    ),
+                    )
                   ],
                 ),
               ),

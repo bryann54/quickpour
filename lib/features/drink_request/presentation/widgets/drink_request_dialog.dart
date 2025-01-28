@@ -1,10 +1,13 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
+import 'package:chupachap/features/brands/presentation/bloc/brands_bloc.dart';
 import 'package:chupachap/features/drink_request/data/models/drink_request.dart';
+import 'package:chupachap/features/merchant/presentation/bloc/merchant_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chupachap/features/drink_request/presentation/bloc/drink_request_bloc.dart';
 import 'package:chupachap/features/drink_request/presentation/bloc/drink_request_event.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class DrinkRequestDialog extends StatefulWidget {
@@ -36,6 +39,8 @@ class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
   final _quantityController = TextEditingController();
   final _instructionsController = TextEditingController();
   DateTime? _selectedDateTime;
+  String? _selectedBrand;
+  String? _selectedMerchant;
 
   @override
   void dispose() {
@@ -138,12 +143,7 @@ class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      elevation: 0,
-      backgroundColor: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+    return Dialog.fullscreen(
       child: Container(
         constraints: const BoxConstraints(maxWidth: 400),
         padding: const EdgeInsets.all(24),
@@ -153,13 +153,33 @@ class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'New Drink Request',
-                style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ShaderMask(
+                    shaderCallback: (bounds) => const LinearGradient(
+                      colors: [
+                        AppColors.brandAccent,
+                        AppColors.brandPrimary,
+                      ],
+                    ).createShader(bounds),
+                    child: Text(
+                      'New Drink Request',
+                      style: GoogleFonts.acme(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.textSecondary,
+                    ),
+                    child: const Text('Cancel'),
+                  ),
+                ],
               ),
               const SizedBox(height: 24),
               TextFormField(
@@ -180,7 +200,70 @@ class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
                 validator: (value) =>
                     value?.isEmpty ?? true ? 'Required' : null,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
+              // Brand Dropdown
+              BlocBuilder<BrandsBloc, BrandsState>(
+                builder: (context, state) {
+                  if (state is BrandsLoadingState) {
+                    return const LinearProgressIndicator();
+                  } else if (state is BrandsLoadedState) {
+                    return DropdownButtonFormField<String>(
+                      value: _selectedBrand,
+                      decoration: InputDecoration(
+                        labelText: 'Brand',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        prefixIcon: const Icon(Icons.branding_watermark),
+                      ),
+                      items: state.brands.map((brand) {
+                        return DropdownMenuItem<String>(
+                          value: brand.name,
+                          child: Text(brand.name),
+                        );
+                      }).toList(),
+                      onChanged: (value) =>
+                          setState(() => _selectedBrand = value),
+                      validator: (value) =>
+                          value == null ? 'Select a brand' : null,
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+              const SizedBox(height: 24),
+              // Brand Dropdown
+              BlocBuilder<MerchantBloc, MerchantState>(
+                builder: (context, state) {
+                  if (state is MerchantLoading) {
+                    return const LinearProgressIndicator();
+                  } else if (state is MerchantLoaded) {
+                    return DropdownButtonFormField<String>(
+                      value: _selectedMerchant,
+                      decoration: InputDecoration(
+                        labelText: 'merchant',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        prefixIcon: const Icon(Icons.branding_watermark),
+                      ),
+                      items: state.merchants.map((merchant) {
+                        return DropdownMenuItem<String>(
+                          value: merchant.name,
+                          child: Text(merchant.name),
+                        );
+                      }).toList(),
+                      onChanged: (value) =>
+                          setState(() => _selectedMerchant = value),
+                      validator: (value) =>
+                          value == null ? 'Select a merchant' : null,
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+              const SizedBox(height: 24),
+
               TextFormField(
                 controller: _quantityController,
                 keyboardType: TextInputType.number,
@@ -244,7 +327,7 @@ class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
                       Expanded(
                         child: Text(
                           _selectedDateTime == null
-                              ? 'Select delivery time'
+                              ? 'Select expected delivery time'
                               : DateFormat('MMM d, y • h:mm a')
                                   .format(_selectedDateTime!),
                           style: TextStyle(
@@ -260,31 +343,24 @@ class _DrinkRequestDialogState extends State<DrinkRequestDialog> {
               ),
               const SizedBox(height: 24),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppColors.textSecondary,
-                    ),
-                    child: const Text('Cancel'),
-                  ),
-                  const SizedBox(width: 12),
-                  ElevatedButton(
-                    onPressed: () => _submitRequest(context),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.brandPrimary,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () => _submitRequest(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.brandPrimary,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                      child: const Text('Submit'),
                     ),
-                    child: const Text('Submit'),
                   ),
                 ],
               ),

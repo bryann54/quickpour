@@ -2,6 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
+import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
+import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
+import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,12 +34,14 @@ class BrandDetailsScreen extends StatefulWidget {
 class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
   late final TextEditingController _searchController;
   String _searchQuery = '';
+   late ProductSearchBloc _productSearchBloc;
 
   @override
   void initState() {
     super.initState();
     _searchController = TextEditingController();
   }
+  
 
   @override
   void dispose() {
@@ -51,7 +56,27 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
   }
 
   void _onFilterTap() {
-    // Implement filter functionality
+   showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.75,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        builder: (_, controller) => FilterBottomSheet(
+          onApplyFilters: (filters) {
+            _productSearchBloc.add(
+              FilterProductsEvent(
+                category: filters['category'] as String?,
+                store: filters['store'] as String?,
+                priceRange: filters['priceRange'] as RangeValues?,
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 
   @override

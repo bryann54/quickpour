@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
+import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
+import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
+import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -21,6 +24,7 @@ class MerchantDetailsHeader extends StatefulWidget {
 
 class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
   late TextEditingController _searchController;
+  late ProductSearchBloc _productSearchBloc;
 
   @override
   void initState() {
@@ -35,11 +39,32 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
   }
 
   void _onSearch(String query) {
-    widget.onSearch(query);
+    setState(() {
+    });
   }
 
   void _onFilterTap() {
-    print('Filter button tapped');
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.75,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        builder: (_, controller) => FilterBottomSheet(
+          onApplyFilters: (filters) {
+            _productSearchBloc.add(
+              FilterProductsEvent(
+                category: filters['category'] as String?,
+                store: filters['store'] as String?,
+                priceRange: filters['priceRange'] as RangeValues?,
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 
   @override

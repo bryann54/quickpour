@@ -29,6 +29,8 @@ class OffersScreen extends StatelessWidget {
   }
 
   Future<bool> _showDeleteConfirmation(BuildContext context) async {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return await showCupertinoDialog<bool>(
             context: context,
@@ -46,7 +48,11 @@ class OffersScreen extends StatelessWidget {
                 CupertinoDialogAction(
                   isDefaultAction: true,
                   onPressed: () => Navigator.pop(context, false),
-                  child: const Text('Cancel'),
+                  child: Text('Cancel',
+                      style: TextStyle(
+                          color: isDarkMode
+                              ? AppColors.background
+                              : AppColors.backgroundDark)),
                 ),
               ],
             ),
@@ -125,9 +131,8 @@ class OffersScreen extends StatelessWidget {
           SliverAppBar(
             expandedHeight: 200,
             iconTheme: IconThemeData(
-                color: isDarkMode
-                    ? AppColors.background
-                    : AppColors.backgroundDark),
+                color:
+                    isDarkMode ? AppColors.background : AppColors.background),
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
@@ -225,7 +230,6 @@ class OffersScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 16),
                           Hero(
                             tag: 'timestamp_${request.id}',
                             child: Container(

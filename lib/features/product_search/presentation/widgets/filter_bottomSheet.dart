@@ -1,5 +1,5 @@
-import 'package:chupachap/core/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/categories/data/repositories/category_repository.dart';
 import 'package:chupachap/features/merchant/data/repositories/merchants_repository.dart';
 
@@ -16,7 +16,19 @@ class FilterBottomSheet extends StatefulWidget {
 }
 
 class _FilterBottomSheetState extends State<FilterBottomSheet> {
-  // Add this at the top of the FilterBottomSheet class
+  String? selectedCategory;
+  String? selectedStore;
+  RangeValues _currentRangeValues = const RangeValues(0, 10000);
+  bool _isLoading = true;
+  List<String> categories = [];
+  List<String> stores = [];
+
+  bool get _isFilterSelected {
+    return selectedCategory != null ||
+        selectedStore != null ||
+        _currentRangeValues != const RangeValues(0, 10000);
+  }
+
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -26,7 +38,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     );
   }
 
-// Update the _loadFilters method
   Future<void> _loadFilters() async {
     try {
       final categoryRepository = CategoryRepository();
@@ -50,15 +61,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     }
   }
 
-// Update the _applyFilters method
   void _applyFilters() {
-    if (selectedCategory == null &&
-        selectedStore == null &&
-        _currentRangeValues == const RangeValues(0, 10000)) {
-      _showErrorSnackBar('Please select at least one filter');
-      return;
-    }
-
     widget.onApplyFilters({
       'category': selectedCategory,
       'store': selectedStore,
@@ -66,13 +69,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     });
     Navigator.pop(context);
   }
-
-  String? selectedCategory;
-  String? selectedStore;
-  RangeValues _currentRangeValues = const RangeValues(0, 10000);
-  bool _isLoading = true;
-  List<String> categories = [];
-  List<String> stores = [];
 
   @override
   void initState() {
@@ -106,10 +102,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Filters',
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    'Filters',
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 IconButton(
@@ -149,30 +147,35 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     const SizedBox(height: 16),
                     _buildPriceRangeSlider(isDarkMode),
                     const SizedBox(height: 24),
-
-                    // Apply Button
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _applyFilters,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.accentColor,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: const Text(
-                          'Apply Filters',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
+                ),
+              ),
+            ),
+
+          // Apply Button (conditionally rendered)
+          if (_isFilterSelected)
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SizedBox(
+            
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _applyFilters,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.accentColor,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'Apply Filter',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ),

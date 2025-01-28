@@ -30,18 +30,25 @@ class PromotionsCarousel extends StatelessWidget {
 
   Widget _buildCarousel(BuildContext context, List<ProductModel> products) {
     final theme = Theme.of(context);
-    if (products.isEmpty) {
+
+    // Filter products with valid discounts
+    final discountedProducts = products.where((product) {
+      return product.discountPrice > 0 && product.discountPrice < product.price;
+    }).toList();
+
+    if (discountedProducts.isEmpty) {
       return const Center(child: Text('No promotions available.'));
     }
 
-    final sortedProducts = List<ProductModel>.from(products)
-      ..sort((a, b) {
-        double discountA = ((a.price - a.discountPrice) / a.price);
-        double discountB = ((b.price - b.discountPrice) / b.price);
-        return discountB.compareTo(discountA);
-      });
+    // Sort products by discount percentage
+    discountedProducts.sort((a, b) {
+      double discountA = ((a.price - a.discountPrice) / a.price);
+      double discountB = ((b.price - b.discountPrice) / b.price);
+      return discountB.compareTo(discountA);
+    });
 
-    final topDiscountedProducts = sortedProducts.take(5).toList();
+    // Select top 5 discounted products
+    final topDiscountedProducts = discountedProducts.take(5).toList();
 
     return CarouselSlider(
       items: topDiscountedProducts.map((product) {
@@ -49,7 +56,8 @@ class PromotionsCarousel extends StatelessWidget {
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => PromotionScreen(promotions: sortedProducts),
+              builder: (context) =>
+                  PromotionScreen(promotions: discountedProducts),
             ),
           ),
           child: Card(
@@ -156,16 +164,18 @@ class PromotionsCarousel extends StatelessWidget {
                           children: [
                             Text(
                               'Ksh ${product.discountPrice.toStringAsFixed(0)}',
-                              style: theme.textTheme.titleMedium?.copyWith(
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
                                 color: AppColors.accentColor,
-                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 8),
                             Text(
                               'Ksh ${product.price.toStringAsFixed(0)}',
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: Colors.white70,
+                              style: const TextStyle(
+                                fontSize: 11,
+                                color: Colors.red,
                                 decoration: TextDecoration.lineThrough,
                               ),
                             ),

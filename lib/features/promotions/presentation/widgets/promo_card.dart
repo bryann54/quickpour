@@ -23,6 +23,8 @@ class PromotionCard extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
     return Card(
       clipBehavior: Clip.antiAlias,
+      elevation: 5,
+      shadowColor: isDarkMode ? Colors.grey.shade800 : Colors.grey.shade100,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
@@ -212,25 +214,44 @@ class PromotionCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Ksh ${product.discountPrice.toStringAsFixed(0)}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.accentColor,
+                    if (product.discountPrice > 0 &&
+                        product.discountPrice < product.price)
+                      Expanded(
+                        child: Text(
+                          'Ksh ${product.discountPrice.toStringAsFixed(0)}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.accentColor,
+                          ),
+                        ),
                       ),
-                    ),
-                    if (product.discountPrice < product.price)
-                      Text(
-                        'Ksh ${product.price.toStringAsFixed(0)}',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.red,
-                          decoration: TextDecoration.lineThrough,
+                    if (product.discountPrice > 0 &&
+                        product.discountPrice < product.price)
+                      Expanded(
+                        child: Text(
+                          'Ksh ${product.price.toStringAsFixed(0)}',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: Colors.red,
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                        ),
+                      ),
+                    if (!(product.discountPrice > 0 &&
+                        product.discountPrice < product.price))
+                      Expanded(
+                        child: Text(
+                          'Ksh ${product.price.toStringAsFixed(0)}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.accentColor,
+                          ),
                         ),
                       ),
                   ],
-                ),
+                )
               ],
             ),
           ),

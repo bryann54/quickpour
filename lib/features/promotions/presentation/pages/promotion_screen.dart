@@ -30,7 +30,7 @@ class PromotionScreen extends StatelessWidget {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(9.0),
             child: Center(
               child: Text('Promotions',
                   style: GoogleFonts.montaga(
@@ -44,7 +44,7 @@ class PromotionScreen extends StatelessWidget {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(6.0),
               child: MasonryGridView.count(
                 crossAxisCount: 2,
                 mainAxisSpacing: 5,
