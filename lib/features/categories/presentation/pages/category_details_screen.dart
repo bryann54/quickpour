@@ -80,88 +80,83 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ProductBloc(
-        productRepository: ProductRepository(),
-      )..add(FetchProductsEvent()),
-      child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              expandedHeight: 200,
-              floating: false,
-              pinned: true,
-              iconTheme: const IconThemeData(color: AppColors.background),
-              actions: [
-                BlocBuilder<CartBloc, CartState>(
-                  builder: (context, cartState) {
-                    if (cartState.cart.totalQuantity > 0) {
-                      return Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: badges.Badge(
-                          badgeContent: Text(
-                            '${cartState.cart.totalQuantity}',
-                            style: const TextStyle(color: Colors.white),
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 200,
+            floating: false,
+            pinned: true,
+            iconTheme: const IconThemeData(color: AppColors.background),
+            actions: [
+              BlocBuilder<CartBloc, CartState>(
+                builder: (context, cartState) {
+                  if (cartState.cart.totalQuantity > 0) {
+                    return Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: badges.Badge(
+                        badgeContent: Text(
+                          '${cartState.cart.totalQuantity}',
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        showBadge: cartState.cart.totalQuantity > 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.accentColor,
+                            borderRadius: BorderRadius.circular(35),
                           ),
-                          showBadge: cartState.cart.totalQuantity > 0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.accentColor,
-                              borderRadius: BorderRadius.circular(35),
+                          child: IconButton(
+                            icon: FaIcon(
+                              FontAwesomeIcons.cartShopping,
+                              size: 20,
+                              color: Theme.of(context).iconTheme.color,
                             ),
-                            child: IconButton(
-                              icon: FaIcon(
-                                FontAwesomeIcons.cartShopping,
-                                size: 20,
-                                color: Theme.of(context).iconTheme.color,
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const CartPage(),
-                                  ),
-                                );
-                              },
-                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CartPage(),
+                                ),
+                              );
+                            },
                           ),
                         ),
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                ),
-              ],
-              flexibleSpace: FlexibleSpaceBar(
-                background: _buildHeroSection(),
-                collapseMode: CollapseMode.parallax,
+                      ),
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              ),
+            ],
+            flexibleSpace: FlexibleSpaceBar(
+              background: _buildHeroSection(),
+              collapseMode: CollapseMode.parallax,
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+              child: CustomSearchBar(
+                controller: _searchController,
+                onSearch: _onSearch,
+                onFilterTap: _onFilterTap,
               ),
             ),
+          ),
+          if (_searchQuery.isNotEmpty)
             SliverToBoxAdapter(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-                child: CustomSearchBar(
-                  controller: _searchController,
-                  onSearch: _onSearch,
-                  onFilterTap: _onFilterTap,
+                padding: const EdgeInsets.all(6.0),
+                child: Text(
+                  'Displaying results for: $_searchQuery',
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
             ),
-            if (_searchQuery.isNotEmpty)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Text(
-                    'Displaying results for: $_searchQuery',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ),
-              ),
-            _buildProductList(),
-          ],
-        ),
+          _buildProductList(),
+        ],
       ),
     );
   }

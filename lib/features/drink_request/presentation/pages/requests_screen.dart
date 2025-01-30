@@ -71,7 +71,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Center(
               child: Text(
-                'Requests',
+                'Drink Requests',
                 style: GoogleFonts.montaga(
                   textStyle: theme.textTheme.displayLarge?.copyWith(
                     color: isDarkMode

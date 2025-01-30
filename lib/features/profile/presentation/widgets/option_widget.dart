@@ -1,9 +1,13 @@
+import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
+import 'package:chupachap/features/drink_request/presentation/pages/requests_screen.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_state.dart';
+import 'package:chupachap/features/favorites/presentation/pages/favorites_screen.dart';
 import 'package:chupachap/features/orders/presentation/bloc/orders_bloc.dart';
-import 'package:chupachap/features/profile/presentation/widgets/stattic_item_widget.dart';
+import 'package:chupachap/features/orders/presentation/pages/orders_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProfileStatisticsSection extends StatelessWidget {
   const ProfileStatisticsSection({super.key});
@@ -16,12 +20,14 @@ class ProfileStatisticsSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
           children: [
-            _buildStatisticWithDivider(
-              BlocBuilder<OrdersBloc, OrdersState>(
+            _buildStatisticTile(
+              context,
+              icon: FontAwesomeIcons.cartShopping,
+              label: "Your Orders",
+              blocBuilder: BlocBuilder<OrdersBloc, OrdersState>(
                 builder: (context, state) {
                   int orderCount = 0;
 
@@ -31,46 +37,87 @@ class ProfileStatisticsSection extends StatelessWidget {
                     orderCount = 0;
                   }
 
-                  return ProfileStatisticItem(
-                    icon: Icons.shopping_cart_outlined,
-                    label: "Orders",
-                    count: orderCount.toString(),
-                  );
+                  return Text(orderCount.toString(),
+                      style: Theme.of(context).textTheme.bodyLarge);
                 },
               ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          OrdersScreen()),
+                );
+              },
             ),
-            _buildStatisticWithDivider(
-              BlocBuilder<FavoritesBloc, FavoritesState>(
+            const Divider(),
+            _buildStatisticTile(
+              context,
+              icon: Icons.favorite_rounded,
+              label: "Your Favorites",
+              blocBuilder: BlocBuilder<FavoritesBloc, FavoritesState>(
                 builder: (context, state) {
-                  return ProfileStatisticItem(
-                    icon: Icons.favorite_rounded,
-                    label: "Favorites",
-                    count: state.favorites.items.length.toString(),
-                  );
+                  return Text(state.favorites.items.length.toString(),
+                      style: Theme.of(context).textTheme.bodyLarge);
                 },
               ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          FavoritesScreen()),
+                );
+              },
             ),
-            const ProfileStatisticItem(
-                icon: Icons.request_page, label: 'Requests', count: '0')
+            const Divider(),
+            _buildStatisticTile(
+              context,
+              icon: Icons.request_page,
+              label: "Your Requests",
+              blocBuilder: const Text(
+                '0',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          RequestsScreen(
+                            authRepository: AuthRepository(),
+                          )),
+                );
+              },
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStatisticWithDivider(Widget statisticItem) {
-    return Row(
-      children: [
-        statisticItem,
-        Container(
-          height: 50,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: VerticalDivider(
-            color: Colors.grey[300],
-            thickness: 1.5,
-          ),
-        ),
-      ],
+  Widget _buildStatisticTile(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required Widget blocBuilder,
+    required VoidCallback onTap,
+  }) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
+    return ListTile(
+      leading:
+          Icon(icon, size: 28, color: isDarkMode ? Colors.white : Colors.grey),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: theme.textTheme.bodyMedium),
+          blocBuilder,
+        ],
+      ),
+      trailing:  Icon(Icons.arrow_forward_ios,color: isDarkMode ? Colors.white : Colors.grey),
+      onTap: onTap, 
     );
   }
 }

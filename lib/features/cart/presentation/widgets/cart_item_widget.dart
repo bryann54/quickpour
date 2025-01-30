@@ -57,7 +57,7 @@ class CartItemWidget extends StatelessWidget {
                     CachedNetworkImage(
                       imageUrl: cartItem.product.imageUrls.isNotEmpty
                           ? cartItem.product.imageUrls.first
-                          : 'fallback_image_url', // Provide a fallback URL
+                          : 'fallback_image_url',
                       width: 100,
                       height: 100,
                       fit: BoxFit.cover,
@@ -123,15 +123,18 @@ class CartItemWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      cartItem.product.productName,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
+                    Hero(
+                      tag: 'product_name_${cartItem.product.id}',
+                      child: Text(
+                        cartItem.product.productName,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 4), 
                     Text(
                       cartItem.product.brandName,
                       style: theme.textTheme.bodySmall,
@@ -140,7 +143,7 @@ class CartItemWidget extends StatelessWidget {
                     Row(
                       children: [
                         if (cartItem.product.discountPrice > 0 &&
-                            cartItem.product.discountPrice <
+                            cartItem.product.discountPrice < 
                                 cartItem.product.price)
                           Expanded(
                             child: RichText(

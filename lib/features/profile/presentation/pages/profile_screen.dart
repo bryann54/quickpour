@@ -5,7 +5,6 @@ import 'package:chupachap/features/profile/presentation/widgets/option_widget.da
 import 'package:chupachap/features/profile/presentation/widgets/profile_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
 import 'package:chupachap/features/profile/presentation/widgets/logout_button_widget.dart';
 import 'package:chupachap/features/auth/data/models/user_model.dart';
@@ -44,7 +43,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: CustomAppBar(showProfile: false),
       body: FutureBuilder<User?>(
         future: _userFuture,
         builder: (context, snapshot) {
@@ -72,85 +70,105 @@ class _ProfileScreenState extends State<ProfileScreen> {
             );
           }
 
-          return SingleChildScrollView(
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Text(
-                      'Profile',
-                      style: GoogleFonts.montaga(
-                        textStyle: theme.textTheme.displayLarge?.copyWith(
-                          color: isDarkMode
-                              ? AppColors.cardColor
-                              : AppColors.accentColorDark,
-                        ),
+          return CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                expandedHeight: 250.0,
+                floating: true,
+                pinned: true,
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Text(
+                    'Profile',
+                    style: GoogleFonts.montaga(
+                      textStyle: theme.textTheme.displayLarge?.copyWith(
+                        color: isDarkMode
+                            ? AppColors.background
+                            : AppColors.backgroundDark.withOpacity(.5),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  _buildUserProfileHeader(context, user),
-                  const SizedBox(height: 24),
-                  _buildSectionTitle(context, 'Your Activity'),
-                  const SizedBox(height: 12),
-                  const ProfileStatisticsSection(),
-                  const SizedBox(height: 24),
-                  _buildSectionTitle(context, 'Account'),
-                  const SizedBox(height: 12),
-                  _buildProfileOptions(context, user),
-                  const SizedBox(height: 24),
-                  const LogOutButton(),
-                ],
+                  background: _buildUserProfileHeader(user),
+                ),
               ),
-            ),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 14.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                         
+                          _buildSectionTitle(context, 'Your Activity'),
+                          const SizedBox(height: 5),
+                          const ProfileStatisticsSection(),
+                          const SizedBox(height: 5),
+                          _buildSectionTitle(context, 'Account'),
+                          const SizedBox(height: 5),
+                          _buildProfileOptions(context, user),
+                          const SizedBox(height: 10),
+                          const LogOutButton(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           );
         },
       ),
     );
   }
 
-  Widget _buildUserProfileHeader(BuildContext context, User user) {
-    return Row(
-      children: [
-        Hero(
-          tag: 'profile_avatar',
-          child: CircleAvatar(
+  Widget _buildUserProfileHeader(User user) {
+        final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.grey.withOpacity(0.5),
+            Colors.grey.withOpacity(0.5),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircleAvatar(
             radius: 50,
             backgroundColor: AppColors.accentColor.withOpacity(0.2),
-            // ignore: unnecessary_null_comparison
             child: user.profileImage != null
                 ? CachedNetworkImage(imageUrl: user.profileImage)
                 : const Icon(Icons.person,
                     size: 50, color: AppColors.accentColor),
           ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${user.firstName}  ${user.lastName}',
-                style: GoogleFonts.acme(
-                  textStyle: Theme.of(context).textTheme.headlineSmall,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                user.email,
-                style: GoogleFonts.montaga(
-                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey,
-                      ),
-                ),
-              ),
-            ],
+          const SizedBox(height: 16),
+          Text(
+            '${user.firstName} ${user.lastName}',
+            style: GoogleFonts.acme(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color:isDarkMode? Colors.white:AppColors.backgroundDark.withOpacity(.7),
+            ),
           ),
-        ),
-      ],
+          const SizedBox(height: 8),
+          Text(
+            user.email,
+            style: GoogleFonts.montaga(
+              fontSize: 14,
+              color: isDarkMode
+                  ? Colors.white
+                  : AppColors.backgroundDark.withOpacity(.7),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -166,14 +184,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfileOptions(BuildContext context, User user) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.backgroundDark.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.accentColor.withOpacity(0.2),
-        ),
-      ),
+    return Card(
+        elevation: 4,
+   
       child: Column(
         children: [
           _buildProfileOptionItem(
@@ -198,16 +211,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _buildProfileOptionItem(
             context,
             icon: Icons.lock,
-            title: 'change Password',
+            title: 'Change Password',
             onTap: () {
               showDialog(
                 context: context,
                 builder: (context) => const ChangePassword(),
               ).then((success) {
                 if (success == true) {
-                  const ScaffoldMessenger(
-                      child: SnackBar(
-                          content: Text('Password changed successfully')));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Password changed successfully'),
+                    ),
+                  );
                 }
               });
             },
@@ -223,6 +238,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required String title,
     required VoidCallback onTap,
   }) {
+     final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     return ListTile(
       leading: Icon(
         icon,
@@ -232,9 +249,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title,
         style: GoogleFonts.acme(fontSize: 16, fontWeight: FontWeight.normal),
       ),
-      trailing: const Icon(
-        Icons.chevron_right,
+      trailing:  Icon(
+        Icons.arrow_forward_ios,
         size: 20,
+        color: isDarkMode ? Colors.white : Colors.grey
       ),
       onTap: onTap,
     );
@@ -245,7 +263,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Divider(
         height: 1,
-        color: AppColors.dividerColorDark.withOpacity(0.3),
+        color: AppColors.dividerColorDark.withOpacity(0.1),
       ),
     );
   }

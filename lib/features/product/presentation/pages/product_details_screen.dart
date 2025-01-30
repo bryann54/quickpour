@@ -95,7 +95,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                          Hero(
                             tag: 'product-image-${widget.product.id}',
                             child: Container(
-                              height: 200,
+                              height: 250,
                               color: Colors.grey[300],
                               child: const Center(
                                 child: Icon(Icons.error,
@@ -205,7 +205,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           // Price details
                           Positioned(
                             bottom: 10,
-                            left: 180,
+                            left: 100,
                             child:  Hero(
                                tag: 'product-price-${widget.product.id}',
                               child: Row(
