@@ -19,7 +19,12 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
- 
+  @override
+  void initState() {
+    super.initState();
+    // Load orders when screen initializes
+    context.read<OrdersBloc>().add(LoadOrdersFromCheckout());
+  }
 
   @override
   Widget build(BuildContext context) {

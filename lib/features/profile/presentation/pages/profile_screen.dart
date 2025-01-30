@@ -143,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           CircleAvatar(
             radius: 50,
             backgroundColor: AppColors.accentColor.withOpacity(0.2),
-            child: user.profileImage != null
+            child: user.profileImage.isNotEmpty
                 ? CachedNetworkImage(imageUrl: user.profileImage)
                 : const Icon(Icons.person,
                     size: 50, color: AppColors.accentColor),

@@ -38,7 +38,7 @@ class ProfileStatisticsSection extends StatelessWidget {
                   }
 
                   return Text(orderCount.toString(),
-                      style: Theme.of(context).textTheme.bodyLarge);
+                      style: Theme.of(context).textTheme.displayLarge);
                 },
               ),
               onTap: () {
@@ -58,7 +58,7 @@ class ProfileStatisticsSection extends StatelessWidget {
               blocBuilder: BlocBuilder<FavoritesBloc, FavoritesState>(
                 builder: (context, state) {
                   return Text(state.favorites.items.length.toString(),
-                      style: Theme.of(context).textTheme.bodyLarge);
+                      style: Theme.of(context).textTheme.displayLarge);
                 },
               ),
               onTap: () {
@@ -73,20 +73,26 @@ class ProfileStatisticsSection extends StatelessWidget {
             const Divider(),
             _buildStatisticTile(
               context,
-              icon: Icons.request_page,
+             icon: Icons.request_page,
               label: "Your Requests",
-              blocBuilder: const Text(
-                '0',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              blocBuilder: BlocBuilder<OrdersBloc, OrdersState>(
+                builder: (context, state) {
+                  int orderCount = 0;
+
+                  if (state is OrdersLoaded) {
+                    orderCount = state.orders.length;
+                  } else if (state is OrdersEmpty) {
+                    orderCount = 0;
+                  }
+
+                  return Text(orderCount.toString(),
+                      style: Theme.of(context).textTheme.displayLarge);
+                },
               ),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          RequestsScreen(
-                            authRepository: AuthRepository(),
-                          )),
+                  MaterialPageRoute(builder: (context) => OrdersScreen()),
                 );
               },
             ),
