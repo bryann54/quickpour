@@ -134,7 +134,7 @@ class CartItemWidget extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const SizedBox(height: 4), 
+                    const SizedBox(height: 4),
                     Text(
                       cartItem.product.brandName,
                       style: theme.textTheme.bodySmall,
@@ -143,7 +143,7 @@ class CartItemWidget extends StatelessWidget {
                     Row(
                       children: [
                         if (cartItem.product.discountPrice > 0 &&
-                            cartItem.product.discountPrice < 
+                            cartItem.product.discountPrice <
                                 cartItem.product.price)
                           Expanded(
                             child: RichText(

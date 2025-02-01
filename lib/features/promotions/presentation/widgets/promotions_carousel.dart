@@ -14,13 +14,14 @@ class PromotionsCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     final theme = Theme.of(context);
+    final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     return BlocBuilder<PromotionsBloc, PromotionsState>(
       builder: (context, state) {
         if (state is PromotionsLoading) {
-          return  Center(child: Shimmer.fromColors(
-             baseColor: isDarkMode ? Colors.grey[400]! : Colors.grey[400]!,
+          return Center(
+              child: Shimmer.fromColors(
+            baseColor: isDarkMode ? Colors.grey[400]! : Colors.grey[400]!,
             highlightColor: Colors.grey[100]!,
             child: Padding(
               padding: const EdgeInsets.all(14.0),

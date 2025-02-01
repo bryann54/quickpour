@@ -28,7 +28,7 @@ class BrandCardWidget extends StatelessWidget {
           children: [
             // Brand Image with Hero
             Hero(
-              tag: 'brand_avatar_${brand.id}', 
+              tag: 'brand_avatar_${brand.id}',
               child: ClipRRect(
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(16)),
@@ -54,8 +54,8 @@ class BrandCardWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                 Hero(
-                    tag: 'brand_name${brand.id}', 
+                  Hero(
+                    tag: 'brand_name${brand.id}',
                     child: Text(
                       brand.name,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(

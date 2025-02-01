@@ -153,7 +153,7 @@ class MerchantCardWidget extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          Hero(
+                            Hero(
                               tag: 'merchant-open-${merchant.id}',
                               child: Container(
                                 padding: const EdgeInsets.symmetric(

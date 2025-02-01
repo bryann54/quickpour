@@ -171,7 +171,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
             ),
 
             // Favorite Icon
-           Positioned(
+            Positioned(
               top: 10,
               right: 10,
               child: BlocBuilder<FavoritesBloc, FavoritesState>(

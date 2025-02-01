@@ -58,7 +58,7 @@ class ProductCard extends StatelessWidget {
               Stack(
                 children: [
                   // Product Image
-               Hero(
+                  Hero(
                     tag: 'product-image-${product.id}',
                     child: CachedNetworkImage(
                       imageUrl: product.imageUrls.isNotEmpty
@@ -77,7 +77,6 @@ class ProductCard extends StatelessWidget {
                       ),
                     ),
                   ),
-
 
                   // Cart Controls
                   Positioned(
@@ -190,7 +189,7 @@ class ProductCard extends StatelessWidget {
                       builder: (context, state) {
                         final isFavorite = state.isFavorite(product);
                         return Hero(
-                                tag: 'product-favorite-${product.id}',
+                          tag: 'product-favorite-${product.id}',
                           child: Container(
                             height: 40,
                             decoration: BoxDecoration(

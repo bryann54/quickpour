@@ -39,8 +39,7 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
   }
 
   void _onSearch(String query) {
-    setState(() {
-    });
+    setState(() {});
   }
 
   void _onFilterTap() {
@@ -74,7 +73,7 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
       children: [
         // Background Image
         Container(
-          height: 150,
+          height: 300,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
@@ -122,7 +121,7 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
               // Merchant Name and Verified Badge
               Row(
                 children: [
-                Hero(
+                  Hero(
                     tag: 'merchant-name-${widget.merchant.id}',
                     child: Text(
                       widget.merchant.name,
@@ -133,11 +132,11 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
                     ),
                   ),
                   if (widget.merchant.isVerified)
-                     Padding(
-                      padding: EdgeInsets.only(left: 6.0),
-                      child:  Hero(
+                    Padding(
+                      padding: const EdgeInsets.only(left: 6.0),
+                      child: Hero(
                         tag: 'verified-${widget.merchant.id}',
-                        child: Icon(
+                        child: const Icon(
                           Icons.verified,
                           color: AppColors.accentColor,
                           size: 20,
@@ -186,13 +185,14 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
                       ),
                     ],
                   ),
-                    Hero(
+                  Hero(
                     tag: 'merchant-open-${widget.merchant.id}',
                     child: Container(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: widget.merchant.isOpen ? Colors.green : Colors.red,
+                        color:
+                            widget.merchant.isOpen ? Colors.green : Colors.red,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(

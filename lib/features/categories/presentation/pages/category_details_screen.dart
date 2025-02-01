@@ -4,9 +4,7 @@ import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
 import 'package:chupachap/features/categories/domain/entities/category.dart';
-import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
-import 'package:chupachap/features/product/presentation/bloc/product_event.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_card.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
@@ -32,7 +30,7 @@ class CategoryDetailsScreen extends StatefulWidget {
 
 class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
   late TextEditingController _searchController;
- 
+
   String _searchQuery = '';
   late ProductSearchBloc _productSearchBloc;
 
@@ -165,7 +163,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
     return Stack(
       children: [
         Hero(
-          tag: 'category_image${widget.category.id}', 
+          tag: 'category_image${widget.category.id}',
           child: Container(
             width: double.infinity,
             height: 200,
@@ -206,8 +204,8 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
         ),
         Positioned.fill(
           child: Center(
-            child:  Hero(
-              tag: 'category_name${widget.category.id}', 
+            child: Hero(
+              tag: 'category_name${widget.category.id}',
               child: Text(
                 widget.category.name,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(

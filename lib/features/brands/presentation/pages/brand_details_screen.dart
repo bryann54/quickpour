@@ -10,9 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/brands/data/models/brands_model.dart';
-import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
-import 'package:chupachap/features/product/presentation/bloc/product_event.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_card.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/search_bar.dart';
@@ -34,14 +32,13 @@ class BrandDetailsScreen extends StatefulWidget {
 class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
   late final TextEditingController _searchController;
   String _searchQuery = '';
-   late ProductSearchBloc _productSearchBloc;
+  late ProductSearchBloc _productSearchBloc;
 
   @override
   void initState() {
     super.initState();
     _searchController = TextEditingController();
   }
-  
 
   @override
   void dispose() {
@@ -56,7 +53,7 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
   }
 
   void _onFilterTap() {
-   showModalBottomSheet(
+    showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -137,8 +134,8 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0, vertical: 15.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 15.0),
               child: CustomSearchBar(
                 controller: _searchController,
                 onSearch: _onSearch,
@@ -165,8 +162,8 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
   Widget _buildHeroSection() {
     return Stack(
       children: [
-          Hero(
-          tag: 'brand_image${widget.brand.id}', 
+        Hero(
+          tag: 'brand_image${widget.brand.id}',
           child: Container(
             width: double.infinity,
             height: 200,
@@ -210,8 +207,8 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-               Hero(
-                  tag: 'brand_name${widget.brand.id}', 
+                Hero(
+                  tag: 'brand_name${widget.brand.id}',
                   child: Text(
                     widget.brand.name,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -315,6 +312,4 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
       ),
     );
   }
-
-
 }

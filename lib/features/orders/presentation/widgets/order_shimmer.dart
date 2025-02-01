@@ -6,7 +6,7 @@ class OrderShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        final theme = Theme.of(context);
+    final theme = Theme.of(context);
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 8),
       itemCount: 5,
@@ -111,6 +111,5 @@ class OrderShimmer extends StatelessWidget {
         );
       },
     );
-    
   }
 }

@@ -4,9 +4,7 @@ import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
 import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
 import 'package:chupachap/features/merchant/presentation/widgets/merchant_details_header.dart';
-import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
-import 'package:chupachap/features/product/presentation/bloc/product_event.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_card.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
@@ -28,7 +26,7 @@ class MerchantDetailsScreen extends StatefulWidget {
 }
 
 class _MerchantDetailsScreenState extends State<MerchantDetailsScreen> {
- late final TextEditingController _searchController;
+  late final TextEditingController _searchController;
   String _searchQuery = '';
   late ProductSearchBloc _productSearchBloc;
 
@@ -146,18 +144,16 @@ class _MerchantDetailsScreenState extends State<MerchantDetailsScreen> {
                   ),
                 );
               }
-    
+
               if (state is ProductLoadedState) {
                 final merchantProducts = state.products.where((product) {
                   final matchesMerchant =
                       product.merchantId == widget.merchant.id;
                   final matchesSearch = _searchQuery.isEmpty ||
-                      product.productName
-                          .toLowerCase()
-                          .contains(_searchQuery);
+                      product.productName.toLowerCase().contains(_searchQuery);
                   return matchesMerchant && matchesSearch;
                 }).toList();
-    
+
                 if (merchantProducts.isEmpty) {
                   return SliverToBoxAdapter(
                     child: Center(
@@ -173,7 +169,7 @@ class _MerchantDetailsScreenState extends State<MerchantDetailsScreen> {
                     ),
                   );
                 }
-    
+
                 return SliverPadding(
                   padding: const EdgeInsets.only(top: 16, left: 3, right: 3),
                   sliver: SliverGrid(
@@ -194,7 +190,7 @@ class _MerchantDetailsScreenState extends State<MerchantDetailsScreen> {
                   ),
                 );
               }
-    
+
               if (state is ProductErrorState) {
                 return SliverToBoxAdapter(
                   child: Center(
@@ -206,7 +202,7 @@ class _MerchantDetailsScreenState extends State<MerchantDetailsScreen> {
                   ),
                 );
               }
-    
+
               return const SliverToBoxAdapter(child: SizedBox.shrink());
             },
           ),

@@ -37,8 +37,8 @@ class CategoryCard extends StatelessWidget {
                 border: Border.all(color: AppColors.accentColor)),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child:    Hero(
-                tag: 'category_image${category.id}', 
+              child: Hero(
+                tag: 'category_image${category.id}',
                 child: Container(
                   width: 100,
                   height: 60,
@@ -51,7 +51,8 @@ class CategoryCard extends StatelessWidget {
                     placeholder: (context, url) => const Center(
                       child: CircularProgressIndicator.adaptive(),
                     ),
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -60,7 +61,7 @@ class CategoryCard extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Hero(
-            tag: 'category_name${category.id}', 
+            tag: 'category_name${category.id}',
             child: Text(
               category.name,
               style: const TextStyle(

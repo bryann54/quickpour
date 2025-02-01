@@ -130,7 +130,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
             child: TextField(
               controller: _searchController,
-               textAlign: TextAlign.center,
+              textAlign: TextAlign.center,
               decoration: InputDecoration(
                 hintText: 'Search product',
                 hintStyle: Theme.of(context).textTheme.bodyMedium,

@@ -28,8 +28,7 @@ class NotificationService {
 
     await _notificationsPlugin.initialize(
       initializationSettings,
-      onDidReceiveNotificationResponse: (details) {
-      },
+      onDidReceiveNotificationResponse: (details) {},
     );
 
     _initialized = true;
