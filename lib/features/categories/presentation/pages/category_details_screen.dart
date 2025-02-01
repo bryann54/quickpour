@@ -99,9 +99,9 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                         ),
                         showBadge: cartState.cart.totalQuantity > 0,
                         child: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: AppColors.accentColor,
-                            borderRadius: BorderRadius.circular(35),
+                            shape: BoxShape.circle,
                           ),
                           child: IconButton(
                             icon: FaIcon(

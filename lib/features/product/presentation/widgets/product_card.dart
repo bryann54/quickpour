@@ -47,10 +47,23 @@ class ProductCard extends StatelessWidget {
           maxWidth: screenWidth * 0.5, // Limit card width
           maxHeight: 320, // Set a max height
         ),
-        child: Card(
+        child: Container(
           clipBehavior: Clip.antiAlias,
-          shape: RoundedRectangleBorder(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: isDarkMode
+                  ? Colors.white.withOpacity(.3)
+                  : Colors.grey.shade400.withOpacity(.4),
+            ),
             borderRadius: BorderRadius.circular(12),
+            color: isDarkMode ? Colors.grey.shade800 : Colors.white,
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: Colors.black.withOpacity(0.1),
+            //     blurRadius: 4,
+            //     offset: const Offset(2, 2),
+            //   ),
+            // ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,14 +115,13 @@ class ProductCard extends StatelessWidget {
                             return Container(
                               height: 40,
                               decoration: BoxDecoration(
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? AppColors.background
-                                      : null,
-                                  border:
-                                      Border.all(color: AppColors.accentColor)
-                                  // borderRadius: BorderRadius.circular(12),
-                                  ),
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? AppColors.background
+                                    : null,
+                                border:
+                                    Border.all(color: AppColors.accentColor),
+                              ),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -248,7 +260,6 @@ class ProductCard extends StatelessWidget {
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
-                            // borderRadius: BorderRadius.circular(8),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withOpacity(0.2),
@@ -301,21 +312,19 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 4), // Add spacing between texts
+                    const SizedBox(height: 4),
                     SizedBox(
                       width: double.infinity,
                       child: Text(
                         product.categoryName,
                         style: const TextStyle(
                           fontSize: 14,
-                          color:
-                              Colors.grey, // Added color for better distinction
+                          color: Colors.grey,
                         ),
-                        maxLines: 1, // Reduced to 1 line to save space
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -357,7 +366,7 @@ class ProductCard extends StatelessWidget {
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
-                                color: AppColors.accentColor,
+                                color: AppColors.backgroundDark,
                               ),
                             ),
                           ),

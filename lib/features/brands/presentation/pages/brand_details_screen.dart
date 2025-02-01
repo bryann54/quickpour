@@ -99,9 +99,9 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
                         ),
                         showBadge: cartState.cart.totalQuantity > 0,
                         child: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: AppColors.accentColor,
-                            borderRadius: BorderRadius.circular(35),
+                            shape: BoxShape.circle,
                           ),
                           child: IconButton(
                             icon: FaIcon(
@@ -128,7 +128,7 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
-              background: _buildHeroSection(),
+              background: _buildSection(),
               collapseMode: CollapseMode.parallax,
             ),
           ),
@@ -159,11 +159,11 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
     );
   }
 
-  Widget _buildHeroSection() {
+  Widget _buildSection() {
     return Stack(
       children: [
         Hero(
-          tag: 'brand_image${widget.brand.id}',
+          tag: 'brand-image-${widget.brand.logoUrl}',
           child: Container(
             width: double.infinity,
             height: 200,
@@ -208,7 +208,7 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Hero(
-                  tag: 'brand_name${widget.brand.id}',
+                  tag: 'brand-name-${widget.brand.name}',
                   child: Text(
                     widget.brand.name,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(

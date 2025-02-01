@@ -22,22 +22,18 @@ class _VoiceSearchWidgetState extends State<VoiceSearchWidget>
     with SingleTickerProviderStateMixin {
   final stt.SpeechToText _speech = stt.SpeechToText();
   bool _isListening = false;
-
   // Animation controller for pulse effect
   late AnimationController _animationController;
   late Animation<double> _animation;
-
   @override
   void initState() {
     super.initState();
     _initializeSpeech();
-
     // Initialize animation controller
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
     );
-
     // Define the pulse animation
     _animation = Tween<double>(begin: 1.0, end: 1.2).animate(
       CurvedAnimation(
@@ -45,7 +41,6 @@ class _VoiceSearchWidgetState extends State<VoiceSearchWidget>
         curve: Curves.easeInOut,
       ),
     );
-
     // Start the animation when listening starts
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -141,13 +136,12 @@ class _VoiceSearchWidgetState extends State<VoiceSearchWidget>
       builder: (context, child) {
         return Transform.scale(
           scale: _animation.value,
-        child: FloatingActionButton(
+          child: FloatingActionButton(
             elevation: 15,
             onPressed: _listen,
             backgroundColor: isDarkMode ? Colors.grey[800] : Colors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25), 
-              
+              borderRadius: BorderRadius.circular(30),
             ),
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
@@ -160,7 +154,6 @@ class _VoiceSearchWidgetState extends State<VoiceSearchWidget>
               ),
             ),
           ),
-
         );
       },
     );
