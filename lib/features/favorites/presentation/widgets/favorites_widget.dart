@@ -23,10 +23,18 @@ class FavoritesWidget extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: isDarkMode
-              ? AppColors.cardColorDark.withOpacity(0.2)
+              ? Colors.grey[900]!.withOpacity(.7)
               : AppColors.cardColor.withOpacity(.7),
           borderRadius: BorderRadius.circular(15),
-          boxShadow: [
+          boxShadow:isDarkMode? [
+                  BoxShadow(
+                    color: AppColors.background.withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 1),
+                  ),
+                ]
+              : [
             BoxShadow(
               color: Colors.black.withOpacity(0.3),
               spreadRadius: 2,
@@ -163,11 +171,11 @@ class FavoritesWidget extends StatelessWidget {
                   ),
                   child: IconButton(
                     icon: Icon(
-                      Icons.delete_rounded,
+                      Icons.cancel_outlined,
                       size: 30,
                       color: isDarkMode
                           ? AppColors.backgroundDark.withOpacity(0.8)
-                          : AppColors.accentColor,
+                          : Colors.grey,
                     ),
                     onPressed: () {
                       context.read<FavoritesBloc>().add(

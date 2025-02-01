@@ -6,6 +6,7 @@ import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/widgets/cart_item_widget.dart';
 import 'package:chupachap/features/checkout/presentation/pages/checkout_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CartPage extends StatefulWidget {
@@ -152,7 +153,7 @@ class _CartPageState extends State<CartPage>
                     ),
                   ],
                 ),
-              ),
+              ).animate().fadeIn(duration: 1000.ms).slideY(begin: 0.1),
               Expanded(
                 child: AnimatedBuilder(
                   animation: _scaleAnimation,
@@ -186,7 +187,7 @@ class _CartPageState extends State<CartPage>
                     );
                   },
                 ),
-              ),
+              ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.1),
               // Total and Checkout Section
               Padding(
                 padding: const EdgeInsets.all(16.0),

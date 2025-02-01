@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:chupachap/features/product_search/presentation/pages/search_page.dart';
@@ -153,7 +154,7 @@ class _VoiceSearchWidgetState extends State<VoiceSearchWidget>
                 color: isDarkMode ? Colors.white : Colors.grey[800],
               ),
             ),
-          ),
+          ).animate().fadeIn(duration: 1000.ms).slideX(begin: 0.3),
         );
       },
     );

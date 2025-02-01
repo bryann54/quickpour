@@ -10,6 +10,7 @@ import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
 import 'package:chupachap/features/profile/presentation/widgets/logout_button_widget.dart';
 import 'package:chupachap/features/auth/data/models/user_model.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -183,11 +184,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 ),
                               ],
-                            ),
+                            ).animate().fadeIn(duration: 1000.ms).slideX(begin: 0.1),
                             Text(
                               user.email,
                               style: const TextStyle(color: Colors.white70),
-                            ),
+                            ).animate().fadeIn(duration: 1000.ms).slideX(begin: 0.1),
                             const SizedBox(height: 5),
                           ],
                         ),
@@ -207,13 +208,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           _buildSectionTitle(context, 'Your Activity'),
                           const SizedBox(height: 5),
-                          const ProfileStatisticsSection(),
+                          const ProfileStatisticsSection()
+                              .animate()
+                              .fadeIn(duration: 1000.ms)
+                              .slideX(begin: 0.1),
                           const SizedBox(height: 5),
                           _buildSectionTitle(context, 'Account'),
                           const SizedBox(height: 5),
-                          _buildProfileOptions(context, user),
+                          _buildProfileOptions(context, user)
+                              .animate()
+                              .fadeIn(duration: 1000.ms)
+                              .slideX(begin: 0.1),
                           const SizedBox(height: 10),
-                          const LogOutButton(),
+                          const LogOutButton()
+                              .animate()
+                              .fadeIn(duration: 1000.ms)
+                              .slideX(begin: 0.1),
                         ],
                       ),
                     ),

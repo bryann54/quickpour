@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:chupachap/features/user_data/presentation/bloc/user_data_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CustomGreeting extends StatelessWidget {
   const CustomGreeting({super.key});
@@ -30,15 +31,15 @@ class CustomGreeting extends StatelessWidget {
     return BlocBuilder<UserDataBloc, UserDataState>(
       builder: (context, state) {
         if (state is UserDataLoading) {
-          return Row(
-            children: [
-              const CircularProgressIndicator.adaptive(),
-              const SizedBox(width: 16),
-              Text(
-                'Fetching data...',
-                style: theme.textTheme.bodyMedium,
+          return Container(
+            child: Shimmer.fromColors(
+              baseColor: theme.colorScheme.onSurface.withOpacity(0.1),
+              highlightColor: theme.colorScheme.onSurface.withOpacity(0.2),
+              child: Text(
+                _getGreeting(),
+                style: theme.textTheme.titleSmall,
               ),
-            ],
+            ),
           );
         }
 

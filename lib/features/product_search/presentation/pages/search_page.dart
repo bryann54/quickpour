@@ -1,9 +1,13 @@
+import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
+import 'package:chupachap/features/drink_request/presentation/pages/requests_screen.dart';
+import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
+
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_event.dart';
@@ -13,8 +17,6 @@ import 'package:chupachap/features/product/presentation/widgets/product_shimmer_
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_state.dart';
-import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
-import 'package:chupachap/features/drink_request/presentation/pages/requests_screen.dart';
 
 class SearchPage extends StatefulWidget {
   final AuthRepository authRepository;
@@ -139,8 +141,8 @@ class _SearchPageState extends State<SearchPage> {
                   onPressed: _openFilterBottomSheet,
                 ),
               ),
-            ),
-          ),
+            )
+          ).animate().fadeIn(duration: 600.ms).slideX(begin: 0.1),
         ),
         body: BlocBuilder<ProductSearchBloc, ProductSearchState>(
           builder: (context, searchState) {
@@ -196,7 +198,7 @@ class _SearchPageState extends State<SearchPage> {
                           ),
                           child: Center(
                             child: Text(
-                              'Make Drink Request',
+                              'make drink request',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge

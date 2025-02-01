@@ -6,6 +6,7 @@ import 'package:chupachap/features/product_search/presentation/bloc/product_sear
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:chupachap/core/utils/colors.dart';
@@ -141,7 +142,7 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
                 onSearch: _onSearch,
                 onFilterTap: _onFilterTap,
               ),
-            ),
+            ).animate().fadeIn(duration: 500.ms).slideX(begin: 0.1)
           ),
           if (_searchQuery.isNotEmpty)
             SliverToBoxAdapter(

@@ -6,6 +6,7 @@ import 'package:chupachap/features/product_search/presentation/bloc/product_sear
 import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MerchantDetailsHeader extends StatefulWidget {
@@ -213,7 +214,7 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
                     controller: _searchController,
                     onSearch: _onSearch,
                     onFilterTap: _onFilterTap),
-              )
+              ).animate().fadeIn(duration: 500.ms).slideX(begin: 0.1)
             ],
           ),
         ),
