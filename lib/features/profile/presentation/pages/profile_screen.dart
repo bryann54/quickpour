@@ -347,19 +347,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     return ListTile(
-      leading:      Container(
-         
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-                 shape: BoxShape.circle,
-              color: isDarkMode ? Colors.grey[800] : Colors.grey[200],
-      ),
-
-            child: Icon(icon, size: 28, color: isDarkMode ? Colors.white : Colors.grey)),
-      title: Text(
-        title,
-        style: theme.textTheme.bodyMedium
-      ),
+      leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isDarkMode ? Colors.grey[800] : Colors.grey[200],
+          ),
+          child: Icon(icon,
+              size: 28, color: isDarkMode ? Colors.white : Colors.grey)),
+      title: Text(title, style: theme.textTheme.bodyMedium),
       trailing: Icon(Icons.arrow_forward_ios,
           size: 20, color: isDarkMode ? Colors.white : Colors.grey),
       onTap: onTap,
