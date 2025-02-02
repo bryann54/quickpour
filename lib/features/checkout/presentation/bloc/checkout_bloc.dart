@@ -44,7 +44,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     ));
   }
 
-  Future<void> _onPlaceOrder(
+Future<void> _onPlaceOrder(
       PlaceOrderEvent event, Emitter<CheckoutState> emit) async {
     try {
       emit(const CheckoutLoadingState());
@@ -70,8 +70,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         'userId': userId,
         'userEmail': userDetails.email,
         'userName': '${userDetails.firstName} ${userDetails.lastName}',
-        'address': state.address,
-        'phoneNumber': state.phoneNumber,
+        'address': event.address, // Use address from event
+        'phoneNumber': event.phoneNumber, // Use phone number from event
         'paymentMethod': event.paymentMethod,
         'deliveryTime': event.deliveryTime,
         'specialInstructions': event.specialInstructions,
@@ -103,8 +103,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         orderId: orderId,
         totalAmount: event.cart.totalPrice,
         cartItems: event.cart.items,
-        address: state.address,
-        phoneNumber: state.phoneNumber,
+        address: event.address, // Pass address to state
+        phoneNumber: event.phoneNumber, // Pass phone number to state
         paymentMethod: event.paymentMethod,
         deliveryTime: event.deliveryTime,
         specialInstructions: event.specialInstructions,

@@ -237,7 +237,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
     );
   }
 
-  void _handlePlaceOrder(BuildContext context) {
+void _handlePlaceOrder(BuildContext context) {
     if (_isLoading) return;
 
     setState(() {
@@ -248,23 +248,14 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
     final cartBloc = context.read<CartBloc>();
     final cart = cartBloc.state.cart;
 
-    // Update delivery info
-    checkoutBloc.add(UpdateDeliveryInfoEvent(
-      address: "${widget.deliveryAddress}\n${widget.deliveryDetails}",
-      phoneNumber: _phoneController.text,
-    ));
-
-    // Update payment method
-    checkoutBloc.add(UpdatePaymentMethodEvent(
-      paymentMethod: _selectedPaymentMethod.toString().split('.').last,
-    ));
-
-    // Place the order
+    // Dispatch PlaceOrderEvent with all required data
     checkoutBloc.add(PlaceOrderEvent(
       cart: cart,
       deliveryTime: widget.deliveryTime,
       specialInstructions: widget.specialInstructions,
       paymentMethod: _selectedPaymentMethod.toString().split('.').last,
+      address: widget.deliveryAddress, // Pass address
+      phoneNumber: _phoneController.text, // Pass phone number
     ));
   }
 }
