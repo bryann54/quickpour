@@ -83,11 +83,11 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                 opacity: _backgroundFadeAnimation.value,
                 child: Container(
                   decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
+                    
                       gradient: LinearGradient(
                         colors: [
-                          AppColors.primaryColor.withOpacity(.9),
-                          AppColors.primaryColor.withOpacity(.9),
+                          AppColors.primaryColor,
+                          AppColors.primaryColor,
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -126,13 +126,13 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                               width: 2, // Border width
                             ),
                             borderRadius: BorderRadius.circular(15),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: AppColors.shadowColor,
-                                blurRadius: 20,
-                                spreadRadius: 5,
-                              ),
-                            ],
+                            // boxShadow: const [
+                            //   BoxShadow(
+                            //     color: AppColors.shadowColor,
+                            //     blurRadius: 20,
+                            //     spreadRadius: 5,
+                            //   ),
+                            // ],
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),

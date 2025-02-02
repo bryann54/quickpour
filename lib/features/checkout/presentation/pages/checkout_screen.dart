@@ -50,11 +50,24 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       try {
         // Fetch address predictions using geocoding package
         List<Location> locations = await locationFromAddress(query);
+
+        // Convert coordinates to human-readable addresses
+        List<String> predictions = [];
+        for (var location in locations) {
+          List<Placemark> placemarks = await placemarkFromCoordinates(
+            location.latitude,
+            location.longitude,
+          );
+          if (placemarks.isNotEmpty) {
+            Placemark place = placemarks[0];
+            predictions.add(
+              '${place.street}, ${place.subLocality}, ${place.locality}',
+            );
+          }
+        }
+
         setState(() {
-          _addressPredictions = locations
-              .map((location) =>
-                  '${location.latitude}, ${location.longitude}') // You can map this to address or relevant details
-              .toList();
+          _addressPredictions = predictions;
         });
       } catch (e) {
         setState(() {
@@ -134,27 +147,23 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 10),
-                TextField(
-                  controller: _addressController,
-                  decoration: const InputDecoration(
-                    labelText: 'Delivery Address',
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                    prefixIcon: Icon(Icons.location_on),
-                  ),
-                  onChanged: (value) {
-                    // Fetch address predictions as the user types
-                    _getAddressPredictions(value);
-                  },
-                ),
-                // Show predictions
+
+                // Address Predictions List (Positioned at the Top)
                 if (_addressPredictions.isNotEmpty)
                   Container(
                     padding: const EdgeInsets.all(8.0),
+                    margin: const EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
                     height: 100,
                     child: ListView.builder(
                       itemCount: _addressPredictions.length,
@@ -172,7 +181,28 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       },
                     ),
                   ),
+
+                // Delivery Address TextField
+                TextField(
+                  controller: _addressController,
+                  decoration: const InputDecoration(
+                    labelText: 'Delivery Address',
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                    prefixIcon: Icon(Icons.location_on),
+                  ),
+                  onChanged: (value) {
+                    // Fetch address predictions as the user types
+                    _getAddressPredictions(value);
+                  },
+                ),
                 const SizedBox(height: 10),
+
+                // Phone Number TextField
                 TextField(
                   controller: _phoneController,
                   decoration: const InputDecoration(

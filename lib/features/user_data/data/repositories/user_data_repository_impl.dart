@@ -12,7 +12,7 @@ class UserDataRepositoryImpl implements UserDataRepository {
     required AuthRepository authRepository,
   }) : _authRepository = authRepository;
 
-  Future<String> _getCurrentLocation() async {
+Future<String> _getCurrentLocation() async {
     try {
       // Check location permissions
       LocationPermission permission = await Geolocator.checkPermission();
@@ -26,7 +26,7 @@ class UserDataRepositoryImpl implements UserDataRepository {
 
       // Get current position
       Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.medium,
+        desiredAccuracy: LocationAccuracy.high, // Use high accuracy
       );
 
       // Get readable address
@@ -38,9 +38,14 @@ class UserDataRepositoryImpl implements UserDataRepository {
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks[0];
 
+        // Extract locality and administrative area
+        String locality = place.locality ?? 'Unknown Locality';
+        String administrativeArea =
+            place.administrativeArea ?? 'Unknown County';
+
         // Check if in Kenya
         if (place.country?.toLowerCase() == 'kenya') {
-          return '${place.locality ?? place.subLocality ?? place.administrativeArea ?? 'Unknown Location'}, ${place.country}';
+          return '$locality, $administrativeArea';
         } else {
           return 'You are outside Kenya';
         }
@@ -52,7 +57,8 @@ class UserDataRepositoryImpl implements UserDataRepository {
     }
   }
 
-  @override
+
+@override
   Future<UserData> getUserData() async {
     final user = await _authRepository.getCurrentUserDetails();
 
@@ -65,7 +71,7 @@ class UserDataRepositoryImpl implements UserDataRepository {
 
     try {
       position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.medium,
+        desiredAccuracy: LocationAccuracy.high, // Use high accuracy
       );
     } catch (e) {
       print('Error getting position: $e');

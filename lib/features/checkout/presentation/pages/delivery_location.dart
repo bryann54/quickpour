@@ -3,8 +3,8 @@ import 'package:chupachap/features/checkout/presentation/pages/delivery_details_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart'; // Add this import
 
 class DeliveryLocationScreen extends StatefulWidget {
   final double totalAmount;
@@ -30,12 +30,64 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
   LatLng? _selectedLocation;
   String? _currentAddress;
   bool _isLoading = true;
+  List<String> _addressPredictions = [];
 
   @override
   void initState() {
     super.initState();
     _searchController.text = widget.address;
-    _convertAddressToLatLng(widget.address);
+    _getUserCurrentLocation(); // Fetch user's current location
+  }
+
+  // Fetch user's current location
+  Future<void> _getUserCurrentLocation() async {
+    try {
+      // Check if location services are enabled
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        // Handle case where location services are disabled
+        debugPrint('Location services are disabled.');
+        return;
+      }
+
+      // Check location permissions
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          // Handle case where permissions are denied
+          debugPrint('Location permissions are denied.');
+          return;
+        }
+      }
+
+      // Fetch current position
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      // Set the default location to the user's current location
+      setState(() {
+        _selectedLocation = LatLng(position.latitude, position.longitude);
+      });
+
+      // Convert coordinates to address
+      _getAddressFromLatLng(_selectedLocation!);
+
+      // Update the map camera to the user's current location
+      _mapController?.animateCamera(
+        CameraUpdate.newLatLng(_selectedLocation!),
+      );
+
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      debugPrint('Error fetching current location: $e');
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   Future<void> _convertAddressToLatLng(String address) async {
@@ -77,6 +129,32 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
     }
   }
 
+  Future<void> _getAddressPredictions(String query) async {
+    if (query.isNotEmpty) {
+      try {
+        List<Location> locations = await locationFromAddress(query);
+        List<Placemark> placemarks = await placemarkFromCoordinates(
+          locations.first.latitude,
+          locations.first.longitude,
+        );
+        setState(() {
+          _addressPredictions = placemarks
+              .map((placemark) =>
+                  '${placemark.street}, ${placemark.subLocality}, ${placemark.locality}')
+              .toList();
+        });
+      } catch (e) {
+        setState(() {
+          _addressPredictions = [];
+        });
+      }
+    } else {
+      setState(() {
+        _addressPredictions = [];
+      });
+    }
+  }
+
   void _searchLocation() {
     if (_searchController.text.isNotEmpty) {
       setState(() {
@@ -96,19 +174,55 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: _searchController,
-              onSubmitted: (_) => _searchLocation(),
-              decoration: InputDecoration(
-                hintText: 'Search location',
-                prefixIcon: IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: _searchLocation,
+            child: Column(
+              children: [
+                TextField(
+                  controller: _searchController,
+                  onChanged: (value) => _getAddressPredictions(value),
+                  onSubmitted: (_) => _searchLocation(),
+                  decoration: InputDecoration(
+                    hintText: 'Search location',
+                    prefixIcon: IconButton(
+                      icon: const Icon(Icons.search),
+                      onPressed: _searchLocation,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
                 ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
+                if (_addressPredictions.isNotEmpty)
+                  Container(
+                    height: 100,
+                    margin: const EdgeInsets.only(top: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: ListView.builder(
+                      itemCount: _addressPredictions.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(_addressPredictions[index]),
+                          onTap: () {
+                            _searchController.text = _addressPredictions[index];
+                            setState(() {
+                              _addressPredictions = [];
+                            });
+                            _searchLocation();
+                          },
+                        );
+                      },
+                    ),
+                  ),
+              ],
             ),
           ),
           Expanded(
@@ -148,7 +262,6 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                     ],
                   ),
           ),
-          // Address Details Form
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),

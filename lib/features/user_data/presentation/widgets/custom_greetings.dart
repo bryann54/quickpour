@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -79,12 +80,12 @@ class CustomGreeting extends StatelessWidget {
                   Expanded(
                     child: Text(
                       state.userData.location,
-                      style: theme.textTheme.bodyMedium?.copyWith(
+                      style: theme.textTheme.titleMedium?.copyWith(
                         color: theme.colorScheme.onSurface.withOpacity(0.7),
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                  ),
+                  ).animate().fadeIn(duration: 1000.ms).slideX(begin: 0.1),
                 ],
               ),
             ],
