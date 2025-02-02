@@ -1,20 +1,21 @@
+import 'package:chupachap/features/checkout/data/models/delivery_location.dart';
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:chupachap/features/checkout/presentation/pages/delivery_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart'; // Add this import
+import 'package:geolocator/geolocator.dart';
 
 class DeliveryLocationScreen extends StatefulWidget {
   final double totalAmount;
-  final String address;
+  final DeliveryLocation location;
   final String phoneNumber;
 
   const DeliveryLocationScreen({
     Key? key,
     required this.totalAmount,
-    required this.address,
+    required this.location,
     required this.phoneNumber,
   }) : super(key: key);
 
@@ -30,98 +31,74 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
   LatLng? _selectedLocation;
   String? _currentAddress;
   bool _isLoading = true;
-  List<String> _addressPredictions = [];
+  List<DeliveryLocation> _locationPredictions = [];
 
   @override
   void initState() {
     super.initState();
-    _searchController.text = widget.address;
-    _getUserCurrentLocation(); // Fetch user's current location
+    _initializeLocation();
   }
 
-  // Fetch user's current location
+  Future<void> _initializeLocation() async {
+    // Initialize with the location passed from checkout screen
+    setState(() {
+      _selectedLocation = LatLng(
+        widget.location.latitude,
+        widget.location.longitude,
+      );
+      _currentAddress = widget.location.address;
+      _searchController.text = widget.location.address;
+      _isLoading = false;
+    });
+  }
+
   Future<void> _getUserCurrentLocation() async {
     try {
-      // Check if location services are enabled
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        // Handle case where location services are disabled
         debugPrint('Location services are disabled.');
         return;
       }
 
-      // Check location permissions
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          // Handle case where permissions are denied
           debugPrint('Location permissions are denied.');
           return;
         }
       }
 
-      // Fetch current position
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
 
-      // Set the default location to the user's current location
       setState(() {
         _selectedLocation = LatLng(position.latitude, position.longitude);
       });
 
-      // Convert coordinates to address
       _getAddressFromLatLng(_selectedLocation!);
-
-      // Update the map camera to the user's current location
       _mapController?.animateCamera(
         CameraUpdate.newLatLng(_selectedLocation!),
       );
-
-      setState(() {
-        _isLoading = false;
-      });
     } catch (e) {
       debugPrint('Error fetching current location: $e');
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _convertAddressToLatLng(String address) async {
-    try {
-      List<Location> locations = await locationFromAddress(address);
-      if (locations.isNotEmpty) {
-        setState(() {
-          _selectedLocation =
-              LatLng(locations[0].latitude, locations[0].longitude);
-        });
-        _mapController?.animateCamera(
-          CameraUpdate.newLatLng(_selectedLocation!),
-        );
-        _getAddressFromLatLng(_selectedLocation!);
-      }
-    } catch (e) {
-      debugPrint('Error converting address to LatLng: $e');
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
   Future<void> _getAddressFromLatLng(LatLng position) async {
     try {
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks[0];
+        String address =
+            '${place.street}, ${place.subLocality}, ${place.locality}';
         setState(() {
-          _currentAddress =
-              '${place.street}, ${place.subLocality}, ${place.locality}';
-          _searchController.text = _currentAddress!;
+          _currentAddress = address;
+          _searchController.text = address;
         });
       }
     } catch (e) {
@@ -129,39 +106,59 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
     }
   }
 
-  Future<void> _getAddressPredictions(String query) async {
-    if (query.isNotEmpty) {
-      try {
-        List<Location> locations = await locationFromAddress(query);
+  Future<void> _getLocationPredictions(String query) async {
+    if (query.isEmpty) {
+      setState(() => _locationPredictions = []);
+      return;
+    }
+
+    try {
+      List<Location> locations = await locationFromAddress(query);
+      List<DeliveryLocation> predictions = [];
+
+      for (var location in locations) {
         List<Placemark> placemarks = await placemarkFromCoordinates(
-          locations.first.latitude,
-          locations.first.longitude,
+          location.latitude,
+          location.longitude,
         );
-        setState(() {
-          _addressPredictions = placemarks
-              .map((placemark) =>
-                  '${placemark.street}, ${placemark.subLocality}, ${placemark.locality}')
-              .toList();
-        });
-      } catch (e) {
-        setState(() {
-          _addressPredictions = [];
-        });
+
+        if (placemarks.isNotEmpty) {
+          Placemark place = placemarks[0];
+          String mainText = place.street ?? '';
+          String secondaryText = [
+            place.subLocality,
+            place.locality,
+            place.administrativeArea
+          ].where((e) => e != null && e.isNotEmpty).join(', ');
+
+          predictions.add(DeliveryLocation(
+            address: '$mainText, $secondaryText',
+            latitude: location.latitude,
+            longitude: location.longitude,
+            mainText: mainText,
+            secondaryText: secondaryText,
+          ));
+        }
       }
-    } else {
-      setState(() {
-        _addressPredictions = [];
-      });
+
+      setState(() => _locationPredictions = predictions);
+    } catch (e) {
+      debugPrint('Error fetching locations: $e');
+      setState(() => _locationPredictions = []);
     }
   }
 
-  void _searchLocation() {
-    if (_searchController.text.isNotEmpty) {
-      setState(() {
-        _isLoading = true;
-      });
-      _convertAddressToLatLng(_searchController.text);
-    }
+  void _selectLocation(DeliveryLocation location) {
+    setState(() {
+      _selectedLocation = LatLng(location.latitude, location.longitude);
+      _searchController.text = location.address;
+      _currentAddress = location.address;
+      _locationPredictions = [];
+    });
+
+    _mapController?.animateCamera(
+      CameraUpdate.newLatLng(_selectedLocation!),
+    );
   }
 
   @override
@@ -178,25 +175,25 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
               children: [
                 TextField(
                   controller: _searchController,
-                  onChanged: (value) => _getAddressPredictions(value),
-                  onSubmitted: (_) => _searchLocation(),
+                  onChanged: _getLocationPredictions,
                   decoration: InputDecoration(
                     hintText: 'Search location',
-                    prefixIcon: IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: _searchLocation,
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.my_location),
+                      onPressed: _getUserCurrentLocation,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                 ),
-                if (_addressPredictions.isNotEmpty)
+                if (_locationPredictions.isNotEmpty)
                   Container(
-                    height: 100,
+                    constraints: const BoxConstraints(maxHeight: 200),
                     margin: const EdgeInsets.only(top: 8),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
@@ -207,17 +204,18 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                       ],
                     ),
                     child: ListView.builder(
-                      itemCount: _addressPredictions.length,
+                      shrinkWrap: true,
+                      itemCount: _locationPredictions.length,
                       itemBuilder: (context, index) {
+                        final prediction = _locationPredictions[index];
                         return ListTile(
-                          title: Text(_addressPredictions[index]),
-                          onTap: () {
-                            _searchController.text = _addressPredictions[index];
-                            setState(() {
-                              _addressPredictions = [];
-                            });
-                            _searchLocation();
-                          },
+                          title: Text(prediction.mainText ?? ''),
+                          subtitle: Text(
+                            prediction.secondaryText ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          onTap: () => _selectLocation(prediction),
                         );
                       },
                     ),
@@ -233,16 +231,13 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                     children: [
                       GoogleMap(
                         initialCameraPosition: CameraPosition(
-                          target: _selectedLocation ??
-                              const LatLng(-1.2921, 36.8219),
+                          target: _selectedLocation!,
                           zoom: 15,
                         ),
                         onMapCreated: (controller) =>
                             _mapController = controller,
                         onCameraMove: (position) {
-                          setState(() {
-                            _selectedLocation = position.target;
-                          });
+                          _selectedLocation = position.target;
                         },
                         onCameraIdle: () {
                           if (_selectedLocation != null) {
@@ -287,14 +282,13 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if (_selectedLocation != null) {
-                        // Update the checkout bloc with address
-                        context
-                            .read<CheckoutBloc>()
-                            .add(UpdateDeliveryInfoEvent(
-                              address:
-                                  '${_currentAddress ?? ''}\n${_addressDetailsController.text}',
-                              phoneNumber: widget.phoneNumber,
-                            ));
+                        context.read<CheckoutBloc>().add(
+                              UpdateDeliveryInfoEvent(
+                                address:
+                                    '${_currentAddress ?? ''}\n${_addressDetailsController.text}',
+                                phoneNumber: widget.phoneNumber,
+                              ),
+                            );
 
                         Navigator.push(
                           context,

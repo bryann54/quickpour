@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/widgets/cart_item_widget.dart';
+import 'package:chupachap/features/checkout/data/models/delivery_location.dart';
 import 'package:chupachap/features/checkout/presentation/pages/delivery_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +23,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final TextEditingController _phoneController = TextEditingController();
   bool _isAddressEmpty = true;
   bool _isPhoneEmpty = true;
-  List<String> _addressPredictions = [];
+  List<DeliveryLocation> _locationPredictions = [];
+  DeliveryLocation? _selectedLocation;
+  Timer? _debounce;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -31,12 +37,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   void dispose() {
-    _addressController.removeListener(_validateForm);
-    _phoneController.removeListener(_validateForm);
+    _debounce?.cancel();
+    _addressController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
-  // Validate form fields
   void _validateForm() {
     setState(() {
       _isAddressEmpty = _addressController.text.isEmpty;
@@ -44,41 +50,165 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     });
   }
 
-  // Fetch address predictions based on the input
-  Future<void> _getAddressPredictions(String query) async {
-    if (query.isNotEmpty) {
-      try {
-        // Fetch address predictions using geocoding package
-        List<Location> locations = await locationFromAddress(query);
+  Future<void> _getLocationPredictions(String query) async {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
 
-        // Convert coordinates to human-readable addresses
-        List<String> predictions = [];
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      if (query.isEmpty) {
+        setState(() {
+          _locationPredictions = [];
+          _isLoading = false;
+        });
+        return;
+      }
+
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        List<Location> locations = await locationFromAddress(query);
+        List<DeliveryLocation> predictions = [];
+
         for (var location in locations) {
-          List<Placemark> placemarks = await placemarkFromCoordinates(
-            location.latitude,
-            location.longitude,
-          );
-          if (placemarks.isNotEmpty) {
-            Placemark place = placemarks[0];
-            predictions.add(
-              '${place.street}, ${place.subLocality}, ${place.locality}',
+          try {
+            List<Placemark> placemarks = await placemarkFromCoordinates(
+              location.latitude,
+              location.longitude,
             );
+
+            if (placemarks.isNotEmpty) {
+              Placemark place = placemarks[0];
+              String mainText = place.street ?? '';
+              String secondaryText = [
+                place.subLocality,
+                place.locality,
+                place.administrativeArea
+              ].where((e) => e != null && e.isNotEmpty).join(', ');
+
+              predictions.add(DeliveryLocation(
+                address: '$mainText, $secondaryText',
+                latitude: location.latitude,
+                longitude: location.longitude,
+                mainText: mainText,
+                secondaryText: secondaryText,
+              ));
+            }
+          } catch (e) {
+            debugPrint('Error getting place details: $e');
           }
         }
 
-        setState(() {
-          _addressPredictions = predictions;
-        });
+        if (mounted) {
+          setState(() {
+            _locationPredictions = predictions;
+            _isLoading = false;
+          });
+        }
       } catch (e) {
-        setState(() {
-          _addressPredictions = [];
-        });
+        debugPrint('Error fetching locations: $e');
+        if (mounted) {
+          setState(() {
+            _locationPredictions = [];
+            _isLoading = false;
+          });
+        }
       }
-    } else {
-      setState(() {
-        _addressPredictions = [];
-      });
-    }
+    });
+  }
+
+  Widget _buildPredictionsList() {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      height: _locationPredictions.isEmpty ? 0 : 200,
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: _locationPredictions.length,
+              itemBuilder: (context, index) {
+                final prediction = _locationPredictions[index];
+                return ListTile(
+                  title: Text(
+                    prediction.mainText ?? '',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    prediction.secondaryText ?? '',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  onTap: () {
+                    setState(() {
+                      _selectedLocation = prediction;
+                      _addressController.text = prediction.address;
+                      _locationPredictions = [];
+                    });
+                  },
+                );
+              },
+            ),
+    );
+  }
+
+  Widget _buildDeliveryForm() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Delivery Information',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(height: 10),
+        _buildPredictionsList(),
+        TextField(
+          controller: _addressController,
+          decoration: InputDecoration(
+            labelText: 'Delivery Address',
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            prefixIcon: const Icon(Icons.location_on),
+            suffixIcon: _addressController.text.isNotEmpty
+                ? IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {
+                      _addressController.clear();
+                      setState(() {
+                        _selectedLocation = null;
+                        _locationPredictions = [];
+                      });
+                    },
+                  )
+                : null,
+          ),
+          onChanged: _getLocationPredictions,
+        ),
+        const SizedBox(height: 10),
+        TextField(
+          controller: _phoneController,
+          keyboardType: TextInputType.phone,
+          decoration: const InputDecoration(
+            labelText: 'Phone Number',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            prefixIcon: Icon(Icons.phone),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -88,7 +218,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, cartState) {
           if (cartState.cart.items.isEmpty) {
-            return const Center(child: Text('You emptied your cart'));
+            return const Center(child: Text('Your cart is empty'));
           }
 
           final isDarkMode = Theme.of(context).brightness == Brightness.dark;
@@ -98,7 +228,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Cart Items
                 Text(
                   'Items in your cart',
                   style: Theme.of(context).textTheme.titleLarge,
@@ -113,16 +242,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     },
                   ),
                 ),
-
-                // Divider
                 Divider(
                   color: isDarkMode
                       ? Colors.grey[200]
                       : AppColors.accentColor.withOpacity(.3),
                   thickness: 3,
                 ),
-
-                // Total Price
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -140,101 +265,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ],
                 ),
                 const SizedBox(height: 16),
-
-                // Delivery Info Section
-                Text(
-                  'Delivery Information',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 10),
-
-                // Address Predictions List (Positioned at the Top)
-                if (_addressPredictions.isNotEmpty)
-                  Container(
-                    padding: const EdgeInsets.all(8.0),
-                    margin: const EdgeInsets.only(bottom: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    height: 100,
-                    child: ListView.builder(
-                      itemCount: _addressPredictions.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(_addressPredictions[index]),
-                          onTap: () {
-                            _addressController.text =
-                                _addressPredictions[index];
-                            setState(() {
-                              _addressPredictions = [];
-                            });
-                          },
-                        );
-                      },
-                    ),
-                  ),
-
-                // Delivery Address TextField
-                TextField(
-                  controller: _addressController,
-                  decoration: const InputDecoration(
-                    labelText: 'Delivery Address',
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                    prefixIcon: Icon(Icons.location_on),
-                  ),
-                  onChanged: (value) {
-                    // Fetch address predictions as the user types
-                    _getAddressPredictions(value);
-                  },
-                ),
-                const SizedBox(height: 10),
-
-                // Phone Number TextField
-                TextField(
-                  controller: _phoneController,
-                  decoration: const InputDecoration(
-                    labelText: 'Phone Number',
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                    prefixIcon: Icon(Icons.phone),
-                  ),
-                ),
+                _buildDeliveryForm(),
                 const SizedBox(height: 20),
-
-                // Proceed Button
                 ElevatedButton(
-                  onPressed: (_isAddressEmpty || _isPhoneEmpty)
+                  onPressed: (_isAddressEmpty ||
+                          _isPhoneEmpty ||
+                          _selectedLocation == null)
                       ? null
                       : () {
-                          final address = _addressController.text;
-                          final phoneNumber = _phoneController.text;
-
-                          final totalAmount = cartState.cart.totalPrice;
-
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (_) => DeliveryLocationScreen(
-                                totalAmount: totalAmount,
-                                address: address,
-                                phoneNumber: phoneNumber,
+                                totalAmount: cartState.cart.totalPrice,
+                                location: _selectedLocation!,
+                              
+                                phoneNumber: _phoneController.text,
                               ),
                             ),
                           );
