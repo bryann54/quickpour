@@ -237,7 +237,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
     );
   }
 
-void _handlePlaceOrder(BuildContext context) {
+  void _handlePlaceOrder(BuildContext context) {
     if (_isLoading) return;
 
     setState(() {

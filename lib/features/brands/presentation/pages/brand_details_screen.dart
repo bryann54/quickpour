@@ -134,16 +134,15 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
             ),
           ),
           SliverToBoxAdapter(
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 15.0),
-              child: CustomSearchBar(
-                controller: _searchController,
-                onSearch: _onSearch,
-                onFilterTap: _onFilterTap,
-              ),
-            ).animate().fadeIn(duration: 500.ms).slideX(begin: 0.1)
-          ),
+              child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 15.0),
+            child: CustomSearchBar(
+              controller: _searchController,
+              onSearch: _onSearch,
+              onFilterTap: _onFilterTap,
+            ),
+          ).animate().fadeIn(duration: 500.ms).slideX(begin: 0.1)),
           if (_searchQuery.isNotEmpty)
             SliverToBoxAdapter(
               child: Padding(

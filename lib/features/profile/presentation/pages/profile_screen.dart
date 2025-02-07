@@ -184,11 +184,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 ),
                               ],
-                            ).animate().fadeIn(duration: 1000.ms).slideX(begin: 0.1),
+                            )
+                                .animate()
+                                .fadeIn(duration: 1000.ms)
+                                .slideX(begin: 0.1),
                             Text(
                               user.email,
                               style: const TextStyle(color: Colors.white70),
-                            ).animate().fadeIn(duration: 1000.ms).slideX(begin: 0.1),
+                            )
+                                .animate()
+                                .fadeIn(duration: 1000.ms)
+                                .slideX(begin: 0.1),
                             const SizedBox(height: 5),
                           ],
                         ),

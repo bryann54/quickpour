@@ -96,8 +96,9 @@ class ProductCard extends StatelessWidget {
                     top: 0,
                     left: 0,
                     child: Container(
+                      height: 40,
                       decoration: BoxDecoration(
-                        color: AppColors.accentColor.withOpacity(0.8),
+                        color: Colors.grey.withOpacity(0.3),
                       ),
                       child: BlocBuilder<CartBloc, CartState>(
                         buildWhen: (previous, current) =>
@@ -119,8 +120,9 @@ class ProductCard extends StatelessWidget {
                                         Brightness.dark
                                     ? AppColors.background
                                     : null,
-                                border:
-                                    Border.all(color: AppColors.accentColor),
+                                border: Border.all(
+                                    color:
+                                        AppColors.accentColor.withOpacity(.3)),
                               ),
                               child: Row(
                                 mainAxisAlignment:
@@ -132,7 +134,7 @@ class ProductCard extends StatelessWidget {
                                     color: Theme.of(context).brightness ==
                                             Brightness.dark
                                         ? AppColors.backgroundDark
-                                        : AppColors.background,
+                                        : Colors.grey.shade500,
                                     onPressed: () {
                                       final newQuantity = cartItem.quantity > 1
                                           ? cartItem.quantity - 1
@@ -150,7 +152,8 @@ class ProductCard extends StatelessWidget {
                                     style: TextStyle(
                                       color: isDarkMode
                                           ? AppColors.accentColor
-                                          : AppColors.background,
+                                          : AppColors.backgroundDark
+                                              .withOpacity(.5),
                                       fontSize: 20,
                                     ),
                                   ),
@@ -159,7 +162,7 @@ class ProductCard extends StatelessWidget {
                                       FontAwesomeIcons.circlePlus,
                                       color: isDarkMode
                                           ? AppColors.accentColor
-                                          : AppColors.background,
+                                          : AppColors.brandPrimary,
                                     ),
                                     onPressed: () {
                                       context.read<CartBloc>().add(
@@ -183,7 +186,7 @@ class ProductCard extends StatelessWidget {
                               },
                               icon: const Icon(
                                 FontAwesomeIcons.cartShopping,
-                                color: Colors.white,
+                                color: Colors.black45,
                                 size: 18,
                               ),
                             );
@@ -207,13 +210,13 @@ class ProductCard extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: isFavorite
                                   ? AppColors.accentColor
-                                  : AppColors.accentColor.withOpacity(0.1),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  offset: const Offset(2, 2),
-                                ),
-                              ],
+                                  : AppColors.brandPrimary.withOpacity(0.1),
+                              // boxShadow: [
+                              //   BoxShadow(
+                              //     color: Colors.black.withOpacity(0.1),
+                              //     offset: const Offset(2, 2),
+                              //   ),
+                              // ],
                             ),
                             child: IconButton(
                               icon: Icon(
@@ -222,7 +225,7 @@ class ProductCard extends StatelessWidget {
                                     : FontAwesomeIcons.heart,
                                 color: isFavorite
                                     ? Colors.white
-                                    : AppColors.accentColor,
+                                    : AppColors.brandPrimary.withOpacity(.5),
                                 size: 18,
                               ),
                               onPressed: () {

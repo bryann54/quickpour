@@ -82,16 +82,15 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
               Opacity(
                 opacity: _backgroundFadeAnimation.value,
                 child: Container(
-                  decoration: BoxDecoration(
-                    
+                  decoration: const BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [
-                          AppColors.primaryColor,
-                          AppColors.primaryColor,
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      )),
+                    colors: [
+                      AppColors.primaryColor,
+                      AppColors.primaryColor,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )),
                 ),
               ),
               // Animated pattern overlayR

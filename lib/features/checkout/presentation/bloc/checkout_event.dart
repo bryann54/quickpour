@@ -37,7 +37,7 @@ class PlaceOrderEvent extends CheckoutEvent {
   final String deliveryTime;
   final String specialInstructions;
   final String paymentMethod;
-   final String address; // Add address
+  final String address; // Add address
   final String phoneNumber;
 
   const PlaceOrderEvent({
@@ -45,7 +45,7 @@ class PlaceOrderEvent extends CheckoutEvent {
     required this.deliveryTime,
     required this.specialInstructions,
     required this.paymentMethod,
-       required this.address, // Include in constructor
+    required this.address, // Include in constructor
     required this.phoneNumber,
   });
 }

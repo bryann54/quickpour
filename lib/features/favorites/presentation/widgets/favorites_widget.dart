@@ -26,22 +26,23 @@ class FavoritesWidget extends StatelessWidget {
               ? Colors.grey[900]!.withOpacity(.7)
               : AppColors.cardColor.withOpacity(.7),
           borderRadius: BorderRadius.circular(15),
-          boxShadow:isDarkMode? [
+          boxShadow: isDarkMode
+              ? [
                   BoxShadow(
                     color: AppColors.background.withOpacity(0.3),
                     spreadRadius: 2,
-                    blurRadius: 5,
+                    blurRadius: 2,
                     offset: const Offset(0, 1),
                   ),
                 ]
               : [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              spreadRadius: 2,
-              blurRadius: 8,
-              offset: const Offset(0, 3),
-            ),
-          ],
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    spreadRadius: 1,
+                    blurRadius: 2,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
         ),
         child: InkWell(
           onTap: () {
@@ -161,13 +162,13 @@ class FavoritesWidget extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.all(6.0),
+                 
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
                     color: isDarkMode
                         ? AppColors.surface.withOpacity(.4)
-                        : AppColors.backgroundDark.withOpacity(.2),
-                    borderRadius: BorderRadius.circular(12),
+                        : AppColors.backgroundDark.withOpacity(.1),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: IconButton(
                     icon: Icon(

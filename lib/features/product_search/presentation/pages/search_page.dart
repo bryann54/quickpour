@@ -120,29 +120,28 @@ class _SearchPageState extends State<SearchPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: isDarkMode
-                    ? AppColors.accentColor.withOpacity(.3)
-                    : Colors.grey.shade300,
-              ),
-              color: isDarkMode ? Colors.grey.shade600 : Colors.white,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: TextField(
-              controller: _searchController,
-              textAlign: TextAlign.center,
-              decoration: InputDecoration(
-                hintText: 'Search product',
-                hintStyle: Theme.of(context).textTheme.bodyMedium,
-                border: InputBorder.none,
-                suffixIcon: IconButton(
-                  icon: const FaIcon(Icons.tune),
-                  onPressed: _openFilterBottomSheet,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: isDarkMode
+                      ? AppColors.accentColor.withOpacity(.3)
+                      : Colors.grey.shade300,
                 ),
+                color: isDarkMode ? Colors.grey.shade600 : Colors.white,
+                borderRadius: BorderRadius.circular(12),
               ),
-            )
-          ).animate().fadeIn(duration: 600.ms).slideX(begin: 0.1),
+              child: TextField(
+                controller: _searchController,
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  hintText: 'Search product',
+                  hintStyle: Theme.of(context).textTheme.bodyMedium,
+                  border: InputBorder.none,
+                  suffixIcon: IconButton(
+                    icon: const FaIcon(Icons.tune),
+                    onPressed: _openFilterBottomSheet,
+                  ),
+                ),
+              )).animate().fadeIn(duration: 600.ms).slideX(begin: 0.1),
         ),
         body: BlocBuilder<ProductSearchBloc, ProductSearchState>(
           builder: (context, searchState) {

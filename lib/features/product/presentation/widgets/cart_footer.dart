@@ -88,16 +88,18 @@ class CartFooter extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Flexible(
-                flex: 2,
+                flex: 1,
                 child: _buildQuantitySelector(context, isDarkMode, quantity),
               ),
-              const SizedBox(width: 10),
               Flexible(
-                flex: 3,
+                flex: 2,
                 child: _buildTotalPrice(context, quantity),
               ),
             ],
           ),
+          const SizedBox(
+            height: 15,
+          )
         ],
       ),
     );
@@ -111,7 +113,7 @@ class CartFooter extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(5.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -157,8 +159,8 @@ class CartFooter extends StatelessWidget {
     bool isAddButton = false,
   }) {
     return Container(
-      width: 45,
-      height: 45,
+      width: 30,
+      height: 30,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: isAddButton && !isDarkMode
@@ -173,7 +175,7 @@ class CartFooter extends StatelessWidget {
       child: IconButton(
         icon: Icon(
           icon,
-          size: 25,
+          size: 15,
           color: isAddButton ? Colors.white : null,
         ),
         onPressed: onPressed,
@@ -192,22 +194,25 @@ class CartFooter extends StatelessWidget {
       child: FittedBox(
         fit: BoxFit.scaleDown,
         alignment: Alignment.centerLeft,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              'TOTAL',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(width: 10),
-            Text(
-              'KSh ${(price * quantity).toStringAsFixed(0)}',
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall
-                  ?.copyWith(color: AppColors.primaryColor),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'TOTAL',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(width: 10),
+              Text(
+                'KSh ${(price * quantity).toStringAsFixed(0)}',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(color: AppColors.primaryColor),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -279,7 +279,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               builder: (_) => DeliveryLocationScreen(
                                 totalAmount: cartState.cart.totalPrice,
                                 location: _selectedLocation!,
-                              
                                 phoneNumber: _phoneController.text,
                               ),
                             ),

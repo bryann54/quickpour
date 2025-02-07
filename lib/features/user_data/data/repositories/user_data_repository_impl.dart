@@ -12,7 +12,7 @@ class UserDataRepositoryImpl implements UserDataRepository {
     required AuthRepository authRepository,
   }) : _authRepository = authRepository;
 
-Future<String> _getCurrentLocation() async {
+  Future<String> _getCurrentLocation() async {
     try {
       // Check location permissions
       LocationPermission permission = await Geolocator.checkPermission();
@@ -57,8 +57,7 @@ Future<String> _getCurrentLocation() async {
     }
   }
 
-
-@override
+  @override
   Future<UserData> getUserData() async {
     final user = await _authRepository.getCurrentUserDetails();
 
