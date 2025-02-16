@@ -5,6 +5,7 @@ import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
+import 'package:chupachap/features/promotions/presentation/widgets/promo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +14,6 @@ import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/brands/data/models/brands_model.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
-import 'package:chupachap/features/product/presentation/widgets/product_card.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/search_bar.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -293,7 +293,7 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
               itemCount: brandProducts.length,
               itemBuilder: (context, index) {
                 final product = brandProducts[index];
-                return ProductCard(product: product);
+                return PromotionCard(product: product);
               },
             );
           }

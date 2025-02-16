@@ -116,9 +116,14 @@ class MerchantsDetailsSection extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(product.isMerchantOpen ? 'Open' : 'Closed',style: TextStyle(
-                         color: product.isMerchantOpen ? Colors.green : Colors.red,
-                      ),),
+                      child: Text(
+                        product.isMerchantOpen ? 'Open' : 'Closed',
+                        style: TextStyle(
+                          color: product.isMerchantOpen
+                              ? Colors.green
+                              : Colors.red,
+                        ),
+                      ),
                     )
                   ],
                 ),

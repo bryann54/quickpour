@@ -74,7 +74,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
             if (widget.product.discountPrice < widget.product.price)
               Positioned(
                 top: 0,
-                left: 0,
+                right: 0,
                 child: Hero(
                   tag: 'product-badge-${widget.product.id}',
                   child: Container(
@@ -173,7 +173,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
             // Favorite Icon
             Positioned(
               top: 0,
-              right: 0,
+              left: 0,
               child: BlocBuilder<FavoritesBloc, FavoritesState>(
                 builder: (context, state) {
                   final isFavorite = state.isFavorite(widget.product);

@@ -6,10 +6,10 @@ import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
 import 'package:chupachap/features/merchant/presentation/widgets/merchant_details_header.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
-import 'package:chupachap/features/product/presentation/widgets/product_card.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
+import 'package:chupachap/features/promotions/presentation/widgets/promo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:badges/badges.dart' as badges;
@@ -183,7 +183,7 @@ class _MerchantDetailsScreenState extends State<MerchantDetailsScreen> {
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         final product = merchantProducts[index];
-                        return ProductCard(product: product);
+                        return PromotionCard(product: product);
                       },
                       childCount: merchantProducts.length,
                     ),

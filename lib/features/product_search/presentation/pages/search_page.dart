@@ -2,6 +2,7 @@ import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/drink_request/presentation/pages/requests_screen.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
+import 'package:chupachap/features/promotions/presentation/widgets/promo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +13,6 @@ import 'package:chupachap/features/product/data/repositories/product_repository.
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_event.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
-import 'package:chupachap/features/product/presentation/widgets/product_card.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_shimmer_widget.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
@@ -159,7 +159,7 @@ class _SearchPageState extends State<SearchPage> {
                 itemCount: searchState.searchResults.length,
                 itemBuilder: (context, index) {
                   final product = searchState.searchResults[index];
-                  return ProductCard(product: product);
+                  return PromotionCard(product: product);
                 },
               );
             }
@@ -279,7 +279,7 @@ class _SearchPageState extends State<SearchPage> {
                     itemCount: state.products.length,
                     itemBuilder: (context, index) {
                       final product = state.products[index];
-                      return ProductCard(product: product);
+                      return PromotionCard(product: product);
                     },
                   );
                 }

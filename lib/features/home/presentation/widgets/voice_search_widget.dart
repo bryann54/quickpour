@@ -81,7 +81,7 @@ class _VoiceSearchWidgetState extends State<VoiceSearchWidget>
       );
     }
   }
- 
+
   Future<void> _listen() async {
     if (!_isListening) {
       bool available = await _speech.initialize();

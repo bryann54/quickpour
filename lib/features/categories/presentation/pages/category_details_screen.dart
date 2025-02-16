@@ -6,11 +6,11 @@ import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
 import 'package:chupachap/features/categories/domain/entities/category.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
-import 'package:chupachap/features/product/presentation/widgets/product_card.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/search_bar.dart';
+import 'package:chupachap/features/promotions/presentation/widgets/promo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -268,7 +268,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
               itemCount: categoryProducts.length,
               itemBuilder: (context, index) {
                 final product = categoryProducts[index];
-                return ProductCard(product: product);
+                return PromotionCard(product: product);
               },
             );
           }

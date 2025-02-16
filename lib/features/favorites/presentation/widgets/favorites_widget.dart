@@ -162,7 +162,6 @@ class FavoritesWidget extends StatelessWidget {
                   ),
                 ),
                 Container(
-                 
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
                     color: isDarkMode
