@@ -247,25 +247,7 @@ class CartItemWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
-              // Favorite Icon
-              // IconButton(
-              //   icon: Icon(
-              //     cartItem.product.isFavorite
-              //         ? FontAwesomeIcons.solidHeart
-              //         : FontAwesomeIcons.heart,
-              //     color: cartItem.product.isFavorite
-              //         ? Colors.red
-              //         : (isDarkMode ? Colors.white : Colors.grey),
-              //   ),
-              //   onPressed: () {
-              //     favoritesBloc.add(
-              //       cartItem.product.isFavorite
-              //           ? RemoveFromFavoritesEvent(product: cartItem.product)
-              //           : AddToFavoritesEvent(product: cartItem.product),
-              //     );
-              //   },
-              // ),
+     
             ],
           ),
         ),
