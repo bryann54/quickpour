@@ -50,7 +50,7 @@ class CartItemWidget extends StatelessWidget {
             children: [
               // Product Image
               Hero(
-                tag: 'product_image_${cartItem.product.id}',
+                tag: 'product-image-${cartItem.product.id}',
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Stack(children: [
