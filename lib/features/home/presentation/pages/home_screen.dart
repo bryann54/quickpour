@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Text('Verified  Stores',
                                 style: GoogleFonts.montaga(
-                                  textStyle: theme.textTheme.titleMedium
+                                  textStyle: theme.textTheme.bodyMedium
                                       ?.copyWith(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 17,
@@ -111,6 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 5,
                             ),
                             Icon(
+                              size: 17,
                               Icons.verified,
                               color: isDarkMode
                                   ? Colors.teal
@@ -131,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: GoogleFonts.montaga(
                                 textStyle: Theme.of(context)
                                     .textTheme
-                                    .bodyLarge
+                                    .bodyMedium
                                     ?.copyWith(
                                       color: isDarkMode
                                           ? Colors.teal

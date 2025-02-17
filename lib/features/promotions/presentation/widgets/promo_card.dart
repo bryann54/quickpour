@@ -65,14 +65,18 @@ class PromotionCard extends StatelessWidget {
                                 color: isDarkMode
                                     ? Colors.grey.shade800
                                     : Colors.grey.shade100,
-                                child: const Icon(Icons.error),
+                                child:  Icon(Icons.error,
+                                  color: isDarkMode
+                                      ? Colors.grey.shade500
+                                      : Colors.grey.shade700,
+                                ),
                               ),
                             ),
                           ),
                           if (product.discountPrice > 0 &&
                               product.discountPrice < product.price)
                             Positioned(
-                              top: 2,
+                              top: 0,
                               right: 2,
                               child: Hero(
                                 tag: 'product-badge-${product.id}',
@@ -125,16 +129,14 @@ class PromotionCard extends StatelessWidget {
                           children: [
                             Hero(
                               tag: 'product-name-${product.id}',
-                              child: Material(
-                                child: Text(
-                                  product.productName,
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                              child: Text(
+                                product.productName,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
                                 ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             const SizedBox(height: 4),
