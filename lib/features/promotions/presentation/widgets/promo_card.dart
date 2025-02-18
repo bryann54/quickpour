@@ -65,7 +65,8 @@ class PromotionCard extends StatelessWidget {
                                 color: isDarkMode
                                     ? Colors.grey.shade800
                                     : Colors.grey.shade100,
-                                child:  Icon(Icons.error,
+                                child: Icon(
+                                  Icons.error,
                                   color: isDarkMode
                                       ? Colors.grey.shade500
                                       : Colors.grey.shade700,

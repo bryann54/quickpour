@@ -1,10 +1,11 @@
+import 'package:chupachap/features/cart/data/models/cart_model.dart';
+import 'package:chupachap/features/cart/presentation/widgets/empty_cart_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_event.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
-import 'package:chupachap/features/cart/presentation/widgets/cart_empty_view.dart';
 import 'package:chupachap/features/cart/presentation/widgets/cart_header.dart';
 import 'package:chupachap/features/cart/presentation/widgets/cart_item_list.dart';
 import 'package:chupachap/features/cart/presentation/widgets/cart_total_section.dart';
@@ -19,16 +20,28 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
   late AnimationController _clearCartController;
+  late AnimationController _animationController;
   final List<AnimationController> _itemControllers = [];
+  final List<CartItem> cartList = [];
+  double subtotal = 0;
   bool _isClearing = false;
 
   @override
   void initState() {
     super.initState();
-    _clearCartController = AnimationController(
+    _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 1000),
     );
+    _animationController.forward();
+    if (context.read<CartBloc>().state is CartLoadedState) {
+      cartList.addAll(
+          (context.read<CartBloc>().state as CartLoadedState).cart.items);
+      subtotal =
+          (context.read<CartBloc>().state as CartLoadedState).cart.totalPrice;
+    } else {
+      context.read<CartBloc>().add(const LoadCartEvent());
+    }
   }
 
   void _initializeItemControllers(int itemCount) {
@@ -97,18 +110,14 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: CustomAppBar(showCart: false),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, cartState) {
           if (cartState.cart.items.isEmpty && !_isClearing) {
-            return CartEmptyView(
-              screenHeight: screenHeight,
-              screenWidth: screenWidth,
-              isDarkMode: isDarkMode,
+            return Center(
+              child: EmptyCartWidget(),
             );
           }
 

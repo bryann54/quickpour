@@ -75,14 +75,14 @@ class FavoritesWidget extends StatelessWidget {
                         fit: BoxFit.cover,
                         placeholder: (context, url) =>
                             const CircularProgressIndicator.adaptive(),
-                        errorWidget: (context, url, error) =>
-                            Container(
-                              decoration: BoxDecoration(
-                                color:isDarkMode?AppColors.backgroundDark.withOpacity(.5): AppColors.background,
-                                borderRadius: BorderRadius.circular(12),
-                                
-                              ),
-                              child: const Icon(Icons.error, size: 20)),
+                        errorWidget: (context, url, error) => Container(
+                            decoration: BoxDecoration(
+                              color: isDarkMode
+                                  ? AppColors.backgroundDark.withOpacity(.5)
+                                  : AppColors.background,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(Icons.error, size: 20)),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -183,12 +183,11 @@ class FavoritesWidget extends StatelessWidget {
                       color: isDarkMode
                           ? AppColors.backgroundDark.withOpacity(0.5)
                           : AppColors.backgroundDark.withOpacity(0.6),
-            
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.2),
                           blurRadius: 4,
-                          offset: Offset(2, 2),
+                          offset: const Offset(2, 2),
                         ),
                       ],
                     ),
@@ -198,7 +197,7 @@ class FavoritesWidget extends StatelessWidget {
                         Icons.cancel_outlined,
                         size: 20,
                         color: isDarkMode
-                            ?Colors.grey.shade300
+                            ? Colors.grey.shade300
                             : Colors.grey.shade300,
                       ),
                       onPressed: () {
@@ -210,8 +209,6 @@ class FavoritesWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-             
-             
                 Positioned(
                   bottom: 8,
                   right: 8,

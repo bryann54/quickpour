@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:chupachap/features/product_search/presentation/pages/search_page.dart';
 import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 
 class VoiceSearchWidget extends StatefulWidget {
-  final Function(String)? onVoiceResult;
+  final Function(String) onVoiceResult;
   final AuthRepository? authRepository;
 
   const VoiceSearchWidget({
     super.key,
-    this.onVoiceResult,
+    required this.onVoiceResult,
     this.authRepository,
   });
 
@@ -23,108 +22,110 @@ class _VoiceSearchWidgetState extends State<VoiceSearchWidget>
     with SingleTickerProviderStateMixin {
   final stt.SpeechToText _speech = stt.SpeechToText();
   bool _isListening = false;
-  // Animation controller for pulse effect
+  bool _isInitialized = false;
   late AnimationController _animationController;
   late Animation<double> _animation;
+
   @override
   void initState() {
     super.initState();
     _initializeSpeech();
-    // Initialize animation controller
+    _setupAnimation();
+  }
+
+  void _setupAnimation() {
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
     );
-    // Define the pulse animation
+
     _animation = Tween<double>(begin: 1.0, end: 1.2).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeInOut,
       ),
     );
-    // Start the animation when listening starts
+
     _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _animationController.reverse();
-      } else if (status == AnimationStatus.dismissed) {
-        _animationController.forward();
+      if (mounted) {
+        if (status == AnimationStatus.completed) {
+          _animationController.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          _animationController.forward();
+        }
       }
     });
   }
 
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
+  Future<void> _initializeSpeech() async {
+    try {
+      _isInitialized = await _speech.initialize(
+        onStatus: _handleSpeechStatus,
+        onError: _handleSpeechError,
+      );
+
+      if (!_isInitialized && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Speech recognition not available')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error initializing speech: $e')),
+        );
+      }
+    }
   }
 
-  Future<void> _initializeSpeech() async {
-    bool available = await _speech.initialize(
-      onStatus: (status) {
-        if (status == 'notListening') {
-          setState(() => _isListening = false);
-          _animationController.stop(); // Stop animation when not listening
-        }
-      },
-      onError: (error) {
-        setState(() => _isListening = false);
-        _animationController.stop(); // Stop animation on error
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${error.errorMsg}')),
-        );
-      },
-    );
+  void _handleSpeechStatus(String status) {
+    if (status == 'notListening' && mounted) {
+      setState(() => _isListening = false);
+      _animationController.stop();
+    }
+  }
 
-    if (!available) {
+  void _handleSpeechError(dynamic error) {
+    if (mounted) {
+      setState(() => _isListening = false);
+      _animationController.stop();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Speech recognition not available')),
+        SnackBar(content: Text('Error: ${error.errorMsg}')),
       );
     }
   }
 
   Future<void> _listen() async {
-    if (!_isListening) {
-      bool available = await _speech.initialize();
-      if (available) {
-        setState(() => _isListening = true);
-        _animationController.forward(); // Start pulse animation
-        _speech.listen(
-          onResult: (result) {
-            if (result.finalResult) {
-              final searchQuery = result.recognizedWords;
+    if (!_isInitialized) {
+      await _initializeSpeech();
+    }
 
-              // Call the callback if provided
-              if (widget.onVoiceResult != null) {
-                widget.onVoiceResult!(searchQuery);
-              }
+    if (!_isListening && _isInitialized) {
+      setState(() => _isListening = true);
+      _animationController.forward();
 
-              // Navigate to search page with the voice input
-              _navigateToSearch(searchQuery);
-
-              setState(() => _isListening = false);
-              _animationController.stop(); // Stop animation when done
-            }
-          },
-        );
-      }
-    } else {
+      await _speech.listen(
+        onResult: (result) {
+          if (result.finalResult && mounted) {
+            final searchQuery = result.recognizedWords;
+            setState(() => _isListening = false);
+            _animationController.stop();
+            widget.onVoiceResult(searchQuery);
+          }
+        },
+      );
+    } else if (_isListening) {
       setState(() => _isListening = false);
-      _animationController.stop(); // Stop animation when stopped manually
-      _speech.stop();
+      _animationController.stop();
+      await _speech.stop();
     }
   }
 
-  void _navigateToSearch(String query) {
-    final controller = TextEditingController(text: query);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SearchPage(
-          searchController: controller,
-          authRepository: widget.authRepository ?? AuthRepository(),
-        ),
-      ),
-    );
+  @override
+  void dispose() {
+    _speech.stop();
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override

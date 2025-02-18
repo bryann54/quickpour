@@ -28,7 +28,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(CartErrorState(
         cart: state.cart,
         errorMessage: 'Failed to load cart: ${e.toString()}',
-       
       ));
     }
   }
@@ -73,7 +72,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(CartErrorState(
         cart: previousState.cart,
         errorMessage: 'Failed to add item to cart',
-      
       ));
     }
   }
@@ -97,7 +95,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(CartErrorState(
         cart: previousState.cart,
         errorMessage: 'Failed to remove item from cart',
-      
       ));
     }
   }
@@ -139,7 +136,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(CartErrorState(
         cart: previousState.cart,
         errorMessage: 'Failed to update quantity',
-     
       ));
     }
   }
@@ -168,7 +164,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(CartErrorState(
         cart: previousState.cart,
         errorMessage: 'Failed to clear cart',
-    
       ));
     }
   }
