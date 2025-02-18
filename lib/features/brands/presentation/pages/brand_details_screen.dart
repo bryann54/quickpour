@@ -5,14 +5,15 @@ import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
+import 'package:chupachap/features/promotions/presentation/widgets/promo_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/brands/data/models/brands_model.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
-import 'package:chupachap/features/product/presentation/widgets/product_card.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/search_bar.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -99,9 +100,9 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
                         ),
                         showBadge: cartState.cart.totalQuantity > 0,
                         child: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: AppColors.accentColor,
-                            borderRadius: BorderRadius.circular(35),
+                            shape: BoxShape.circle,
                           ),
                           child: IconButton(
                             icon: FaIcon(
@@ -128,21 +129,20 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
-              background: _buildHeroSection(),
+              background: _buildSection(),
               collapseMode: CollapseMode.parallax,
             ),
           ),
           SliverToBoxAdapter(
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 15.0),
-              child: CustomSearchBar(
-                controller: _searchController,
-                onSearch: _onSearch,
-                onFilterTap: _onFilterTap,
-              ),
+              child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 15.0),
+            child: CustomSearchBar(
+              controller: _searchController,
+              onSearch: _onSearch,
+              onFilterTap: _onFilterTap,
             ),
-          ),
+          ).animate().fadeIn(duration: 500.ms).slideX(begin: 0.1)),
           if (_searchQuery.isNotEmpty)
             SliverToBoxAdapter(
               child: Padding(
@@ -159,11 +159,11 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
     );
   }
 
-  Widget _buildHeroSection() {
+  Widget _buildSection() {
     return Stack(
       children: [
         Hero(
-          tag: 'brand_image${widget.brand.id}',
+          tag: 'brand-image-${widget.brand.logoUrl}',
           child: Container(
             width: double.infinity,
             height: 200,
@@ -208,7 +208,7 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Hero(
-                  tag: 'brand_name${widget.brand.id}',
+                  tag: 'brand-name-${widget.brand.name}',
                   child: Text(
                     widget.brand.name,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -293,7 +293,7 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen> {
               itemCount: brandProducts.length,
               itemBuilder: (context, index) {
                 final product = brandProducts[index];
-                return ProductCard(product: product);
+                return PromotionCard(product: product);
               },
             );
           }

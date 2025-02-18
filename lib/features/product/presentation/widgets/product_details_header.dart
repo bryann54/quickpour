@@ -107,7 +107,8 @@ class ProductDetailsHeader extends StatelessWidget {
                       product.description,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         height: 1.6,
-                        color: isDarkMode ? Colors.white70 : Colors.black87,
+                        color:
+                            isDarkMode ? Colors.white70 : Colors.grey.shade600,
                       ),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,

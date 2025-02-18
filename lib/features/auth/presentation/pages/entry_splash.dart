@@ -82,16 +82,15 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
               Opacity(
                 opacity: _backgroundFadeAnimation.value,
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
+                  decoration: const BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [
-                          AppColors.primaryColor.withOpacity(.9),
-                          AppColors.primaryColor.withOpacity(.9),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      )),
+                    colors: [
+                      AppColors.primaryColor,
+                      AppColors.primaryColor,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )),
                 ),
               ),
               // Animated pattern overlayR
@@ -126,13 +125,13 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                               width: 2, // Border width
                             ),
                             borderRadius: BorderRadius.circular(15),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: AppColors.shadowColor,
-                                blurRadius: 20,
-                                spreadRadius: 5,
-                              ),
-                            ],
+                            // boxShadow: const [
+                            //   BoxShadow(
+                            //     color: AppColors.shadowColor,
+                            //     blurRadius: 20,
+                            //     spreadRadius: 5,
+                            //   ),
+                            // ],
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),

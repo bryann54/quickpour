@@ -11,6 +11,14 @@ class ProductModel {
   final String categoryName;
   final String description;
   final String sku;
+  final String merchantName;
+  final String merchantEmail;
+  final String merchantLocation;
+  final String merchantStoreName;
+  final String merchantImageUrl;
+  final double merchantRating;
+  final bool isMerchantVerified;
+  final bool isMerchantOpen;
   final int stockQuantity;
   final bool isAvailable;
   final List<String> tags;
@@ -25,6 +33,14 @@ class ProductModel {
     required this.discountPrice,
     required this.merchantId,
     required this.brandName,
+    required this.merchantName,
+    required this.merchantEmail,
+    required this.merchantLocation,
+    required this.merchantStoreName,
+    required this.merchantImageUrl,
+    required this.merchantRating,
+    required this.isMerchantVerified,
+    required this.isMerchantOpen,
     required this.categoryName,
     required this.description,
     required this.sku,
@@ -44,6 +60,14 @@ class ProductModel {
       price: (data['price'] ?? 0).toDouble(),
       discountPrice: (data['discountPrice'] ?? 0).toDouble(),
       merchantId: data['merchantId'] ?? '',
+      merchantName: data['merchantName'] ?? '',
+      merchantEmail: data['merchantEmail'] ?? '',
+      merchantLocation: data['merchantLocation'] ?? '',
+      merchantStoreName: data['merchantStoreName'] ?? '',
+      merchantImageUrl: data['merchantImageUrl'] ?? '',
+      merchantRating: (data['merchantRating'] ?? 0.0).toDouble(),
+      isMerchantVerified: data['isMerchantVerified'] ?? false,
+      isMerchantOpen: data['isMerchantOpen'] ?? false,
       brandName: data['brandName'] ?? '',
       categoryName: data['categoryName'] ?? '',
       description: data['description'] ?? '',

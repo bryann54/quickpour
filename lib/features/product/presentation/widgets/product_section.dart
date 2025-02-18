@@ -1,8 +1,8 @@
 import 'package:chupachap/features/product/data/models/product_model.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
-import 'package:chupachap/features/product/presentation/widgets/product_card.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_shimmer_widget.dart';
+import 'package:chupachap/features/promotions/presentation/widgets/promo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -39,8 +39,8 @@ class ProductSection extends StatelessWidget {
     const gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 2,
       childAspectRatio: 0.7,
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
+      crossAxisSpacing: 5,
+      mainAxisSpacing: 5,
     );
 
     if (state is ProductLoadingState) {
@@ -116,7 +116,7 @@ class ProductSection extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         gridDelegate: gridDelegate,
         itemCount: state.products.length,
-        itemBuilder: (context, index) => ProductCard(
+        itemBuilder: (context, index) => PromotionCard(
           product: state.products[index],
         ),
       );
@@ -149,7 +149,7 @@ class ProductSection extends StatelessWidget {
       itemCount: products.length,
       itemBuilder: (context, index) => Stack(
         children: [
-          ProductCard(product: products[index]),
+          PromotionCard(product: products[index]),
           Positioned.fill(
             child: Container(
               color: Colors.white.withOpacity(0.3),

@@ -11,13 +11,12 @@ class DrinkRequestRepository {
   Future<void> addDrinkRequest(DrinkRequest request) async {
     try {
       String? userId = _authRepository.getCurrentUserId();
-      if (userId == null) throw Exception('User not authenticated');
 
       // Create a new request with the current user's ID
       final requestWithUser = DrinkRequest(
         id: request.id,
         drinkName: request.drinkName,
-        userId: userId,
+        userId: userId.toString(),
         quantity: request.quantity,
         timestamp: request.timestamp,
         merchantId: request.merchantId,
@@ -34,7 +33,6 @@ class DrinkRequestRepository {
   Future<List<DrinkRequest>> getDrinkRequests() async {
     try {
       String? userId = _authRepository.getCurrentUserId();
-      if (userId == null) throw Exception('User not authenticated');
 
       final QuerySnapshot snapshot = await _firestore
           .collection('drinkRequests')
@@ -55,7 +53,6 @@ class DrinkRequestRepository {
 
   Stream<List<DrinkRequest>> streamDrinkRequests() {
     String? userId = _authRepository.getCurrentUserId();
-    if (userId == null) throw Exception('User not authenticated');
 
     return _firestore
         .collection('drinkRequests')
@@ -73,7 +70,6 @@ class DrinkRequestRepository {
   Future<void> deleteDrinkRequest(String id) async {
     try {
       String? userId = _authRepository.getCurrentUserId();
-      if (userId == null) throw Exception('User not authenticated');
 
       // Verify the request belongs to the current user before deleting
       final doc = await _firestore.collection('drinkRequests').doc(id).get();

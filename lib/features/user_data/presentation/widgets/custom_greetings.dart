@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:chupachap/features/user_data/presentation/bloc/user_data_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CustomGreeting extends StatelessWidget {
   const CustomGreeting({super.key});
@@ -30,15 +32,15 @@ class CustomGreeting extends StatelessWidget {
     return BlocBuilder<UserDataBloc, UserDataState>(
       builder: (context, state) {
         if (state is UserDataLoading) {
-          return Row(
-            children: [
-              const CircularProgressIndicator.adaptive(),
-              const SizedBox(width: 16),
-              Text(
-                'Fetching data...',
-                style: theme.textTheme.bodyMedium,
+          return Container(
+            child: Shimmer.fromColors(
+              baseColor: theme.colorScheme.onSurface.withOpacity(0.1),
+              highlightColor: theme.colorScheme.onSurface.withOpacity(0.2),
+              child: Text(
+                _getGreeting(),
+                style: theme.textTheme.titleSmall,
               ),
-            ],
+            ),
           );
         }
 
@@ -78,12 +80,12 @@ class CustomGreeting extends StatelessWidget {
                   Expanded(
                     child: Text(
                       state.userData.location,
-                      style: theme.textTheme.bodyMedium?.copyWith(
+                      style: theme.textTheme.titleMedium?.copyWith(
                         color: theme.colorScheme.onSurface.withOpacity(0.7),
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                  ),
+                  ).animate().fadeIn(duration: 1000.ms).slideX(begin: 0.1),
                 ],
               ),
             ],

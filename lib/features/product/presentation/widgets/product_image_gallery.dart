@@ -73,8 +73,8 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
             // Discount Tag
             if (widget.product.discountPrice < widget.product.price)
               Positioned(
-                top: 10,
-                left: 10,
+                top: 0,
+                right: 0,
                 child: Hero(
                   tag: 'product-badge-${widget.product.id}',
                   child: Container(
@@ -86,7 +86,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      borderRadius: BorderRadius.circular(8),
+                      // borderRadius: BorderRadius.circular(8),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.2),
@@ -172,30 +172,47 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
 
             // Favorite Icon
             Positioned(
-              top: 10,
-              right: 10,
+              top: 0,
+              left: 0,
               child: BlocBuilder<FavoritesBloc, FavoritesState>(
-                builder: (context, favoritesState) {
-                  final isFavorite = favoritesState.isFavorite(widget.product);
+                builder: (context, state) {
+                  final isFavorite = state.isFavorite(widget.product);
                   return Hero(
                     tag: 'product-favorite-${widget.product.id}',
-                    child: CircleAvatar(
-                      radius: 25,
-                      backgroundColor: Colors.white.withOpacity(0.8),
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        color: isFavorite
+                            ? AppColors.accentColor
+                            : AppColors.brandPrimary.withOpacity(0.1),
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: Colors.black.withOpacity(0.1),
+                        //     offset: const Offset(2, 2),
+                        //   ),
+                        // ],
+                      ),
                       child: IconButton(
                         icon: Icon(
-                          isFavorite ? Icons.favorite : Icons.favorite_outline,
-                          size: 35,
+                          isFavorite
+                              ? FontAwesomeIcons.solidHeart
+                              : FontAwesomeIcons.heart,
+                          color: isFavorite
+                              ? Colors.white
+                              : AppColors.brandPrimary.withOpacity(.5),
+                          size: 30,
                         ),
-                        color: AppColors.accentColor,
                         onPressed: () {
                           if (isFavorite) {
                             context.read<FavoritesBloc>().add(
-                                RemoveFromFavoritesEvent(
-                                    product: widget.product));
+                                  RemoveFromFavoritesEvent(
+                                      product: widget.product),
+                                );
                           } else {
                             context.read<FavoritesBloc>().add(
-                                AddToFavoritesEvent(product: widget.product));
+                                  AddToFavoritesEvent(product: widget.product),
+                                );
                           }
                         },
                       ),

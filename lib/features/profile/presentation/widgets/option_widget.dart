@@ -12,7 +12,7 @@ class ProfileStatisticsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      final theme = Theme.of(context);
+    final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     return Card(
       elevation: 4,
@@ -29,17 +29,17 @@ class ProfileStatisticsSection extends StatelessWidget {
               label: "Your Orders",
               blocBuilder: Row(
                 children: [
-                   SizedBox(width: 35),
+                  const SizedBox(width: 35),
                   BlocBuilder<OrdersBloc, OrdersState>(
                     builder: (context, state) {
                       int orderCount = 0;
-                  
+
                       if (state is OrdersLoaded) {
                         orderCount = state.orders.length;
                       } else if (state is OrdersEmpty) {
                         orderCount = 0;
                       }
-                  
+
                       return Text(orderCount.toString(),
                           style: TextStyle(
                             fontSize: 20,
@@ -64,11 +64,11 @@ class ProfileStatisticsSection extends StatelessWidget {
               label: "Your Favorites",
               blocBuilder: Row(
                 children: [
-                   SizedBox(width: 35),
+                  const SizedBox(width: 35),
                   BlocBuilder<FavoritesBloc, FavoritesState>(
                     builder: (context, state) {
                       return Text(state.favorites.items.length.toString(),
-                           style: TextStyle(
+                          style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: isDarkMode ? Colors.white : Colors.grey,
@@ -80,7 +80,8 @@ class ProfileStatisticsSection extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const FavoritesScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const FavoritesScreen()),
                 );
               },
             ),
@@ -91,19 +92,19 @@ class ProfileStatisticsSection extends StatelessWidget {
               label: "Your Requests",
               blocBuilder: Row(
                 children: [
-                  SizedBox(width: 35),
+                  const SizedBox(width: 35),
                   BlocBuilder<OrdersBloc, OrdersState>(
                     builder: (context, state) {
                       int orderCount = 0;
-                  
+
                       if (state is OrdersLoaded) {
                         orderCount = state.orders.length;
                       } else if (state is OrdersEmpty) {
                         orderCount = 0;
                       }
-                  
+
                       return Text(orderCount.toString(),
-                           style: TextStyle(
+                          style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: isDarkMode ? Colors.white : Colors.grey,
@@ -136,16 +137,14 @@ class ProfileStatisticsSection extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return ListTile(
-      leading:
-          Container(
-         
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-                 shape: BoxShape.circle,
-              color: isDarkMode ? Colors.grey[800] : Colors.grey[200],
-      ),
-
-            child: Icon(icon, size: 24, color: isDarkMode ? Colors.white : Colors.grey)),
+      leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isDarkMode ? Colors.grey[800] : Colors.grey[200],
+          ),
+          child: Icon(icon,
+              size: 24, color: isDarkMode ? Colors.white : Colors.grey)),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

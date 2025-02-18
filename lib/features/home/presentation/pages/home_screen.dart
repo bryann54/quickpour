@@ -1,6 +1,8 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
+import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/categories/presentation/widgets/shimmer_widget.dart';
+import 'package:chupachap/features/home/presentation/widgets/voice_search_widget.dart';
 import 'package:chupachap/features/merchant/presentation/pages/tab_view.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_section.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
@@ -11,6 +13,7 @@ import 'package:chupachap/features/product/data/repositories/product_repository.
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_event.dart';
 import 'package:chupachap/features/promotions/presentation/widgets/promotions_carousel.dart';
+import 'package:chupachap/features/product_search/presentation/pages/search_page.dart'; // Import the SearchPage
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -56,6 +59,19 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  void _onVoiceResult(String recognizedText) {
+    // Navigate to the SearchPage with the recognized query
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SearchPage(
+          authRepository: AuthRepository(), // Pass your AuthRepository here
+          searchController: TextEditingController(text: recognizedText),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -69,10 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
-          // HomeScreenSearch(
-          //   controller: _searchController,
-          // ),
-
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -88,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Text('Verified  Stores',
                                 style: GoogleFonts.montaga(
-                                  textStyle: theme.textTheme.titleMedium
+                                  textStyle: theme.textTheme.bodyMedium
                                       ?.copyWith(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 17,
@@ -99,6 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 5,
                             ),
                             Icon(
+                              size: 17,
                               Icons.verified,
                               color: isDarkMode
                                   ? Colors.teal
@@ -119,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: GoogleFonts.montaga(
                                 textStyle: Theme.of(context)
                                     .textTheme
-                                    .bodyLarge
+                                    .bodyMedium
                                     ?.copyWith(
                                       color: isDarkMode
                                           ? Colors.teal
@@ -163,6 +176,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: VoiceSearchWidget(
+        onVoiceResult: _onVoiceResult, // Pass the callback
       ),
     );
   }

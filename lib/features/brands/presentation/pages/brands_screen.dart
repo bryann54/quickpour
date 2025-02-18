@@ -34,7 +34,7 @@ class BrandsScreen extends StatelessWidget {
                 ),
               );
             }
-            return const Center(child: Text('Failed to load brands'));
+            return const Center(child: Text('Failed to load brands '));
           },
         ),
       ),

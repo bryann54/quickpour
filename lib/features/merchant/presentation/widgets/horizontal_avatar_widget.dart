@@ -164,10 +164,11 @@ class MerchantCardAvatar extends StatelessWidget {
       top: 0,
       left: 0,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
         decoration: BoxDecoration(
           color: merchant.isOpen ? Colors.green : Colors.red,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius:
+              const BorderRadius.only(bottomRight: Radius.circular(4)),
         ),
         child: Text(
           merchant.isOpen ? 'Open' : 'Closed',

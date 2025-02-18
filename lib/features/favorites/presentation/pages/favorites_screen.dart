@@ -4,6 +4,7 @@ import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.da
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_state.dart';
 import 'package:chupachap/features/favorites/presentation/widgets/favorites_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -69,7 +70,7 @@ class FavoritesScreen extends StatelessWidget {
                           );
                         },
                       ),
-                    ),
+                    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.1),
                   ],
                 ),
               );

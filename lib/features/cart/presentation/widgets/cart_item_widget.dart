@@ -50,7 +50,7 @@ class CartItemWidget extends StatelessWidget {
             children: [
               // Product Image
               Hero(
-                tag: 'product_image_${cartItem.product.id}',
+                tag: 'product-image-${cartItem.product.id}',
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Stack(children: [
@@ -247,25 +247,6 @@ class CartItemWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
-              // Favorite Icon
-              // IconButton(
-              //   icon: Icon(
-              //     cartItem.product.isFavorite
-              //         ? FontAwesomeIcons.solidHeart
-              //         : FontAwesomeIcons.heart,
-              //     color: cartItem.product.isFavorite
-              //         ? Colors.red
-              //         : (isDarkMode ? Colors.white : Colors.grey),
-              //   ),
-              //   onPressed: () {
-              //     favoritesBloc.add(
-              //       cartItem.product.isFavorite
-              //           ? RemoveFromFavoritesEvent(product: cartItem.product)
-              //           : AddToFavoritesEvent(product: cartItem.product),
-              //     );
-              //   },
-              // ),
             ],
           ),
         ),

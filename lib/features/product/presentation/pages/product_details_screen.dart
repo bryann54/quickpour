@@ -83,180 +83,180 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (widget.product.imageUrls.isNotEmpty)
-                        ProductImageGallery(product: widget.product)
-                      else
-                        Stack(children: [
-                          Hero(
-                            tag: 'product-image-${widget.product.id}',
-                            child: Container(
-                              height: 250,
-                              color: Colors.grey[300],
-                              child: const Center(
-                                child: Icon(Icons.error,
-                                    size: 50, color: Colors.grey),
-                              ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (widget.product.imageUrls.isNotEmpty)
+                      ProductImageGallery(product: widget.product)
+                    else
+                      Stack(children: [
+                        Hero(
+                          tag: 'product-image-${widget.product.id}',
+                          child: Container(
+                            height: 300,
+                            color: Colors.grey[300],
+                            child: const Center(
+                              child: Icon(Icons.error,
+                                  size: 50, color: Colors.grey),
                             ),
                           ),
+                        ),
 
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: BlocBuilder<FavoritesBloc, FavoritesState>(
+                            builder: (context, state) {
+                              final isFavorite =
+                                  state.isFavorite(widget.product);
+                              return Hero(
+                                tag: 'product-favorite-${widget.product.id}',
+                                child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                    color: isFavorite
+                                        ? AppColors.accentColor
+                                        : AppColors.brandPrimary
+                                            .withOpacity(0.1),
+                                    // boxShadow: [
+                                    //   BoxShadow(
+                                    //     color: Colors.black.withOpacity(0.1),
+                                    //     offset: const Offset(2, 2),
+                                    //   ),
+                                    // ],
+                                  ),
+                                  child: IconButton(
+                                    icon: Icon(
+                                      isFavorite
+                                          ? FontAwesomeIcons.solidHeart
+                                          : FontAwesomeIcons.heart,
+                                      color: isFavorite
+                                          ? Colors.white
+                                          : AppColors.brandPrimary
+                                              .withOpacity(.5),
+                                      size: 30,
+                                    ),
+                                    onPressed: () {
+                                      if (isFavorite) {
+                                        context.read<FavoritesBloc>().add(
+                                              RemoveFromFavoritesEvent(
+                                                  product: widget.product),
+                                            );
+                                      } else {
+                                        context.read<FavoritesBloc>().add(
+                                              AddToFavoritesEvent(
+                                                  product: widget.product),
+                                            );
+                                      }
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+
+                        if (widget.product.discountPrice > 0 &&
+                            widget.product.discountPrice < widget.product.price)
                           Positioned(
-                            top: 10,
-                            right: 10,
+                            top: 0,
+                            left: 0,
                             child: Hero(
-                              tag: 'product-favorite-${widget.product.id}',
+                              tag: 'product-badge-${widget.product.id}',
                               child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 4),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.8),
-                                  shape: BoxShape.circle,
+                                  gradient: const LinearGradient(
+                                    colors: [Colors.red, Colors.orange],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  // borderRadius: BorderRadius.circular(8),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
-                                      blurRadius: 5,
-                                      offset: const Offset(0, 2),
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 4,
+                                      offset: const Offset(2, 2),
                                     ),
                                   ],
                                 ),
-                                child:
-                                    BlocBuilder<FavoritesBloc, FavoritesState>(
-                                  builder: (context, state) {
-                                    final isFavorite =
-                                        state.isFavorite(widget.product);
-                                    return IconButton(
-                                      icon: Icon(
-                                        isFavorite
-                                            ? FontAwesomeIcons.solidHeart
-                                            : FontAwesomeIcons.heart,
-                                        color: isFavorite
-                                            ? AppColors.accentColor
-                                            : Colors.grey,
-                                        size: 22,
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      FontAwesomeIcons.tag,
+                                      color: Colors.white,
+                                      size: 12,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      '${_calculateDiscountPercentage(widget.product.price, widget.product.discountPrice)}% OFF',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      onPressed: () {
-                                        if (isFavorite) {
-                                          context.read<FavoritesBloc>().add(
-                                                RemoveFromFavoritesEvent(
-                                                    product: widget.product),
-                                              );
-                                        } else {
-                                          context.read<FavoritesBloc>().add(
-                                                AddToFavoritesEvent(
-                                                    product: widget.product),
-                                              );
-                                        }
-                                      },
-                                    );
-                                  },
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ),
-                          if (widget.product.discountPrice > 0 &&
-                              widget.product.discountPrice <
-                                  widget.product.price)
-                            Positioned(
-                              top: 10,
-                              left: 10,
-                              child: Hero(
-                                tag: 'product-badge-${widget.product.id}',
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      colors: [Colors.red, Colors.orange],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.2),
-                                        blurRadius: 4,
-                                        offset: const Offset(2, 2),
+                        // Price details
+                        Positioned(
+                          bottom: 10,
+                          left: 100,
+                          child: Hero(
+                            tag: 'product-price-${widget.product.id}',
+                            child: Row(
+                              children: [
+                                Text(
+                                  'KSH ${widget.product.discountPrice > 0 && widget.product.discountPrice < widget.product.price ? widget.product.discountPrice.toStringAsFixed(0) : widget.product.price.toStringAsFixed(0)}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(
+                                        color: widget.product.discountPrice >
+                                                    0 &&
+                                                widget.product.discountPrice <
+                                                    widget.product.price
+                                            ? AppColors.accentColor
+                                            : Theme.of(context)
+                                                .textTheme
+                                                .titleSmall
+                                                ?.color,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        FontAwesomeIcons.tag,
-                                        color: Colors.white,
-                                        size: 12,
-                                      ),
-                                      const SizedBox(width: 4),
-                                      Text(
-                                        '${_calculateDiscountPercentage(widget.product.price, widget.product.discountPrice)}% OFF',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                            ),
-                          // Price details
-                          Positioned(
-                            bottom: 10,
-                            left: 100,
-                            child: Hero(
-                              tag: 'product-price-${widget.product.id}',
-                              child: Row(
-                                children: [
+                                if (widget.product.discountPrice > 0 &&
+                                    widget.product.discountPrice <
+                                        widget.product.price) ...[
+                                  const SizedBox(width: 28),
                                   Text(
-                                    'KSH ${widget.product.discountPrice > 0 && widget.product.discountPrice < widget.product.price ? widget.product.discountPrice.toStringAsFixed(0) : widget.product.price.toStringAsFixed(0)}',
+                                    'KSH ${widget.product.price.toStringAsFixed(0)}',
                                     style: Theme.of(context)
                                         .textTheme
-                                        .titleSmall
+                                        .bodySmall
                                         ?.copyWith(
-                                          color: widget.product.discountPrice >
-                                                      0 &&
-                                                  widget.product.discountPrice <
-                                                      widget.product.price
-                                              ? AppColors.accentColor
-                                              : Theme.of(context)
-                                                  .textTheme
-                                                  .titleSmall
-                                                  ?.color,
-                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                          decoration:
+                                              TextDecoration.lineThrough,
                                         ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  if (widget.product.discountPrice > 0 &&
-                                      widget.product.discountPrice <
-                                          widget.product.price) ...[
-                                    const SizedBox(width: 28),
-                                    Text(
-                                      'KSH ${widget.product.price.toStringAsFixed(0)}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                            color: Colors.grey,
-                                            decoration:
-                                                TextDecoration.lineThrough,
-                                          ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
                                 ],
-                              ),
+                              ],
                             ),
                           ),
-                        ]),
-                      const SizedBox(height: 20),
-                      ProductDetailsHeader(product: widget.product),
-                      const SizedBox(height: 20),
-                      MerchantsDetailsSection(product: widget.product),
-                    ],
-                  ),
+                        ),
+                      ]),
+                    const SizedBox(height: 5),
+                    ProductDetailsHeader(product: widget.product),
+                    const SizedBox(height: 5),
+                    MerchantsDetailsSection(product: widget.product),
+                  ],
                 ),
               ),
             ),

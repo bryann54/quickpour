@@ -257,8 +257,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       max: 10000,
       divisions: 100,
       labels: RangeLabels(
-        '\$${_currentRangeValues.start.round()}',
-        '\$${_currentRangeValues.end.round()}',
+        'Ksh ${_currentRangeValues.start.round()}',
+        'Ksh ${_currentRangeValues.end.round()}',
       ),
       onChanged: (values) {
         setState(() {
