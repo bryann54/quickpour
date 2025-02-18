@@ -78,7 +78,7 @@ class PromotionCard extends StatelessWidget {
                               product.discountPrice < product.price)
                             Positioned(
                               top: 0,
-                              right: 2,
+                              left: 2,
                               child: Hero(
                                 tag: 'product-badge-${product.id}',
                                 child: Container(
@@ -204,7 +204,7 @@ class PromotionCard extends StatelessWidget {
                 ),
                 Positioned(
                   top: 2,
-                  left: 2,
+                  right: 2,
                   child: FavoriteFAB(
                     product: product,
                     isDarkMode: isDarkMode,

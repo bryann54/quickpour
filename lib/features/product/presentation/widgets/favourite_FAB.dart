@@ -32,10 +32,10 @@ class FavoriteFAB extends StatelessWidget {
               color: isFavorite
                   ? AppColors.accentColor
                   : (isDarkMode
-                      ? AppColors.background
-                      : AppColors.brandPrimary.withOpacity(0.5)),
+                      ? AppColors.brandPrimary.withOpacity(.5)
+                      : AppColors.background.withOpacity(0.9)),
               shape: const CircleBorder(),
-              elevation: 4,
+              elevation: 1,
               child: InkWell(
                 borderRadius: BorderRadius.circular(16),
                 onTap: () {
@@ -59,7 +59,7 @@ class FavoriteFAB extends StatelessWidget {
                         ? Colors.white
                         : (isDarkMode
                             ? AppColors.accentColor
-                            : AppColors.background),
+                            : AppColors.backgroundDark.withOpacity(.3)),
                   ),
                 ),
               ),
