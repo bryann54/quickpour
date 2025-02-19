@@ -17,10 +17,7 @@ class EmptyCartWidget extends StatelessWidget {
         Text(
           empty_cart,
           style: Theme.of(context).textTheme.titleLarge,
-        )
-            .animate()
-            .fadeIn(duration: 600.ms)
-            .scale(),
+        ).animate().fadeIn(duration: 600.ms).scale(),
         const SizedBox(height: 10),
         Text(
           looking_for_something,

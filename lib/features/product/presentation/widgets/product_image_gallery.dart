@@ -74,7 +74,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
             if (widget.product.discountPrice < widget.product.price)
               Positioned(
                 top: 0,
-                right: 0,
+                left: 0,
                 child: Hero(
                   tag: 'product-badge-${widget.product.id}',
                   child: Container(
@@ -172,49 +172,54 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
 
             // Favorite Icon
             Positioned(
-              top: 0,
-              left: 0,
+              top: 10,
+              right: 5,
               child: BlocBuilder<FavoritesBloc, FavoritesState>(
                 builder: (context, state) {
                   final isFavorite = state.isFavorite(widget.product);
                   return Hero(
                     tag: 'product-favorite-${widget.product.id}',
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: Material(
                         color: isFavorite
                             ? AppColors.accentColor
-                            : AppColors.brandPrimary.withOpacity(0.1),
-                        // boxShadow: [
-                        //   BoxShadow(
-                        //     color: Colors.black.withOpacity(0.1),
-                        //     offset: const Offset(2, 2),
-                        //   ),
-                        // ],
-                      ),
-                      child: IconButton(
-                        icon: Icon(
-                          isFavorite
-                              ? FontAwesomeIcons.solidHeart
-                              : FontAwesomeIcons.heart,
-                          color: isFavorite
-                              ? Colors.white
-                              : AppColors.brandPrimary.withOpacity(.5),
-                          size: 30,
+                            : (isDarkMode
+                                ? AppColors.brandPrimary.withOpacity(.5)
+                                : AppColors.background.withOpacity(0.9)),
+                        shape: const CircleBorder(),
+                        elevation: 1,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(16),
+                          onTap: () {
+                            if (isFavorite) {
+                              context.read<FavoritesBloc>().add(
+                                    RemoveFromFavoritesEvent(
+                                        product: widget.product),
+                                  );
+                            } else {
+                              context.read<FavoritesBloc>().add(
+                                    AddToFavoritesEvent(
+                                        product: widget.product),
+                                  );
+                            }
+                          },
+                          child: Center(
+                            child: FaIcon(
+                              isFavorite
+                                  ? FontAwesomeIcons.solidHeart
+                                  : FontAwesomeIcons.heart,
+                              size: 24,
+                              color: isFavorite
+                                  ? Colors.white
+                                  : (isDarkMode
+                                      ? AppColors.accentColor
+                                      : AppColors.backgroundDark
+                                          .withOpacity(.3)),
+                            ),
+                          ),
                         ),
-                        onPressed: () {
-                          if (isFavorite) {
-                            context.read<FavoritesBloc>().add(
-                                  RemoveFromFavoritesEvent(
-                                      product: widget.product),
-                                );
-                          } else {
-                            context.read<FavoritesBloc>().add(
-                                  AddToFavoritesEvent(product: widget.product),
-                                );
-                          }
-                        },
                       ),
                     ),
                   );

@@ -23,12 +23,15 @@ class MerchantsDetailsSection extends StatelessWidget {
       ),
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 16),
+            _buildAdditionalInfo(context, isDarkMode),
+            const SizedBox(height: 12),
             _buildHeader(theme, isDarkMode),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             _buildMerchantDetails(context, isDarkMode),
           ],
         ),
@@ -38,12 +41,10 @@ class MerchantsDetailsSection extends StatelessWidget {
 
   Widget _buildHeader(ThemeData theme, bool isDarkMode) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 8,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: isDarkMode ? AppColors.accentColor : AppColors.primaryColor,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: isDarkMode ? Colors.grey[800]! : Colors.grey[300]!,
           width: 1,
@@ -53,10 +54,10 @@ class MerchantsDetailsSection extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           const Icon(FontAwesomeIcons.store, size: 14, color: Colors.white),
-          const SizedBox(width: 6),
+          const SizedBox(width: 8),
           Text(
-            'Store Details',
-            style: theme.textTheme.titleSmall?.copyWith(
+            'Merchant Information',
+            style: theme.textTheme.bodySmall?.copyWith(
               fontWeight: FontWeight.w600,
               color: Colors.white,
             ),
@@ -70,6 +71,7 @@ class MerchantsDetailsSection extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: isDarkMode ? Colors.black54 : Colors.grey[100],
         borderRadius: BorderRadius.circular(14),
@@ -78,7 +80,7 @@ class MerchantsDetailsSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildMerchantsAvatar(product.merchantImageUrl),
-          const SizedBox(width: 14),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,45 +88,31 @@ class MerchantsDetailsSection extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Text(
-                        product.merchantStoreName,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primaryColor,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            product.merchantStoreName,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primaryColor,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          _buildContactInfo(theme, isDarkMode)
+                        ],
                       ),
                     ),
-                    _buildMerchantsRating(context),
-                  ],
-                ),
-                const SizedBox(height: 3),
-                Row(
-                  children: [
-                    const Icon(FontAwesomeIcons.locationDot,
-                        size: 14, color: Colors.grey),
-                    Expanded(
-                      child: Text(
-                        product.merchantLocation,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: Colors.black87,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        _buildMerchantsRating(context),
+                        const SizedBox(height: 4),
+                        _buildStoreStatus(),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        product.isMerchantOpen ? 'Open' : 'Closed',
-                        style: TextStyle(
-                          color: product.isMerchantOpen
-                              ? Colors.green
-                              : Colors.red,
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ],
@@ -132,6 +120,154 @@ class MerchantsDetailsSection extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildContactInfo(ThemeData theme, bool isDarkMode) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            const Icon(FontAwesomeIcons.locationDot,
+                size: 14, color: Colors.grey),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                product.merchantLocation,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: isDarkMode ? Colors.grey[300] : Colors.black87,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStoreStatus() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: product.isMerchantOpen ? Colors.green : Colors.red,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        product.isMerchantOpen ? 'Open' : 'Closed',
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAdditionalInfo(BuildContext context, bool isDarkMode) {
+    final theme = Theme.of(context);
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: isDarkMode ? Colors.black54 : Colors.grey[100],
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: isDarkMode ? Colors.grey[800]! : Colors.grey[300]!,
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: _buildInfoItem(
+                  icon: FontAwesomeIcons.tag,
+                  label: 'Brand',
+                  value: product.brandName,
+                  theme: theme,
+                  isDarkMode: isDarkMode,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: _buildInfoItem(
+                  icon: FontAwesomeIcons.boxOpen,
+                  label: 'Category',
+                  value: product.categoryName,
+                  theme: theme,
+                  isDarkMode: isDarkMode,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _buildInfoItem(
+                  icon: FontAwesomeIcons.barcode,
+                  label: 'SKU',
+                  value: product.sku,
+                  theme: theme,
+                  isDarkMode: isDarkMode,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: _buildInfoItem(
+                  icon: FontAwesomeIcons.cubes,
+                  label: 'Stock',
+                  value: '${product.stockQuantity} instock',
+                  theme: theme,
+                  isDarkMode: isDarkMode,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoItem({
+    required IconData icon,
+    required String label,
+    required String value,
+    required ThemeData theme,
+    required bool isDarkMode,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(icon, size: 14, color: Colors.grey),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: Colors.grey,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: isDarkMode ? Colors.grey[300] : Colors.black87,
+            fontWeight: FontWeight.w500,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
     );
   }
 

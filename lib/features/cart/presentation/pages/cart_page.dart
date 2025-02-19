@@ -116,7 +116,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, cartState) {
           if (cartState.cart.items.isEmpty && !_isClearing) {
-            return Center(
+            return const Center(
               child: EmptyCartWidget(),
             );
           }
