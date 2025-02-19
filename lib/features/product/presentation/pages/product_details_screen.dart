@@ -96,7 +96,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           tag: 'product-image-${widget.product.id}',
                           child: Container(
                             height: 300,
-                            color: Colors.grey[300],
+                            color: isDarkMode
+                                ? Colors.grey.shade800
+                                : Colors.grey.shade100,
                             child: const Center(
                               child: Icon(Icons.error,
                                   size: 50, color: Colors.grey),

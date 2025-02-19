@@ -48,24 +48,24 @@ class ProductDetailsHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Product Name with animated gradient
-              Row(
+ Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Hero(
                       tag: 'product-name-${product.id}',
                       child: ShaderMask(
-                        shaderCallback: (bounds) => const LinearGradient(
+                        shaderCallback: (bounds) =>  LinearGradient(
                           colors: [
-                            AppColors.brandAccent,
-                            AppColors.brandPrimary
+                            Colors.grey.shade700,
+                         Colors.grey.shade700,
                           ],
                         ).createShader(bounds),
                         blendMode:
                             BlendMode.srcIn, // Ensures proper gradient effect
                         child: Text(
                           product.productName,
-                          style: theme.textTheme.headlineSmall?.copyWith(
+                          style: theme.textTheme.displayLarge?.copyWith(
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.5,
                             height: 1.2,
@@ -76,21 +76,23 @@ class ProductDetailsHeader extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Hero(
+                  const SizedBox(width: 8), 
+                Hero(
                     tag: 'product-measure-${product.id}',
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 15, vertical:8),
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
+                        color: isDarkMode
+                            ? Colors.grey.shade800
+                            : Colors.grey.shade100,
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
                         product.measure,
                         style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade700,
+                          fontSize: 15,
+                          color:isDarkMode?Colors.grey: Colors.grey.shade700,
                           fontWeight: FontWeight.w500,
                           letterSpacing: 0.5,
                           height: 1.2,
@@ -101,15 +103,15 @@ class ProductDetailsHeader extends StatelessWidget {
                 ],
               ),
 
+
               const SizedBox(height: 16),
 
-              // Description Section with custom styling
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: isDarkMode
-                      ? AppColors.brandAccent.withOpacity(0.05)
+                      ? AppColors.brandPrimary.withOpacity(0.05)
                       : AppColors.brandPrimary.withOpacity(0.03),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(

@@ -130,16 +130,14 @@ class PromotionCard extends StatelessWidget {
                           children: [
                             Hero(
                               tag: 'product-name-${product.id}',
-                              child: Material(
-                                child: Text(
-                                  product.productName,
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                              child: Text(
+                                product.productName,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
                                 ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -159,25 +157,27 @@ class PromotionCard extends StatelessWidget {
                                     softWrap: false,
                                   ),
                                 ),
-                                Hero(
-                                  tag: 'product-measure-${product.id}',
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 6, vertical: 2),
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade200,
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    child: Text(
-                                      product.measure,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey.shade700,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                              Hero(
+                                tag: 'product-measure-${product.id}',
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: isDarkMode
+                                        ? Colors.grey.shade800
+                                        : Colors.grey.shade50,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(
+                                    product.measure,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey.shade700,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                 ),
+                              ),
                               ],
                             ),
 
