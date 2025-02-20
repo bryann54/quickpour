@@ -121,25 +121,25 @@ class FavoritesWidget extends StatelessWidget {
                               if (favoriteItem.product.discountPrice > 0 &&
                                   favoriteItem.product.discountPrice <
                                       favoriteItem.product.price)
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    'Ksh ${favoriteItem.product.discountPrice.toStringAsFixed(0)}',
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.accentColor,
-                                    ),
+                                Text(
+                                  'Ksh ${favoriteItem.product.discountPrice.toStringAsFixed(0)}',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.accentColor,
                                   ),
                                 ),
                               if (favoriteItem.product.discountPrice > 0 &&
                                   favoriteItem.product.discountPrice <
                                       favoriteItem.product.price)
-                                const Text(
-                                  'was ',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey,
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'was ',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                    ),
                                   ),
                                 ),
                               if (favoriteItem.product.discountPrice > 0 &&

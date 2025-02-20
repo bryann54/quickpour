@@ -26,7 +26,7 @@ class CartHeader extends StatelessWidget {
         children: [
           Text(
             'Your cart',
-            style: Theme.of(context).textTheme.displayLarge?.copyWith(
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   color: isDarkMode
                       ? AppColors.cardColor
                       : AppColors.accentColorDark,
@@ -36,7 +36,7 @@ class CartHeader extends StatelessWidget {
             onTap: isClearing ? null : onClearCart,
             child: Text(
               'Clear cart',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     color: isDarkMode ? AppColors.cardColor : Colors.black,
                     decoration: TextDecoration.underline,
                     fontWeight: FontWeight.w500,

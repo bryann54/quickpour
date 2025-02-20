@@ -163,92 +163,96 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, cartState) {
           if (cartState.cart.items.isEmpty && !_isClearing) {
-            return Expanded(
-              child: Center(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // Floating hearts background
-                    ...List.generate(20, (index) {
-                      final isSmall = index % 2 == 0;
-                      final xOffset = (index * 20 - 140).toDouble();
-                      final startY = index * 30 - 200.0;
-
-                      return Positioned(
-                        left: MediaQuery.of(context).size.width / 2 + xOffset,
-                        top: startY,
-                        child: Icon(
-                          FontAwesomeIcons.bagShopping,
-                          color: isDarkMode
-                              ? AppColors.accentColorDark
-                                  .withOpacity(0.5 + (index % 5) * 0.1)
-                              : AppColors.accentColor
-                                  .withOpacity(0.5 + (index % 5) * 0.1),
-                          size: isSmall ? 16.0 : 24.0,
-                        )
-                            .animate(
-                              onPlay: (controller) => controller.repeat(),
-                            )
-                            .moveY(
-                              begin: 0,
-                              end: 500,
-                              duration: Duration(
-                                  seconds:
-                                      isSmall ? 6 + index % 4 : 8 + index % 5),
-                              curve: Curves.easeInOut,
-                            )
-                            .fadeIn(duration: 600.ms)
-                            .then()
-                            .fadeOut(
-                              begin: 0.7,
-                              delay: Duration(
-                                  seconds:
-                                      isSmall ? 5 + index % 3 : 7 + index % 4),
-                            ),
-                      );
-                    }),
-
-                    // Main content
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
+            return Column(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Stack(
+                      alignment: Alignment.center,
                       children: [
-                        // Animated empty favorites image
-                        Image.asset(
-                          'assets/cart.png',
-                          width: 200,
-                          height: 200,
-                        ).animate().scale(
-                              begin: const Offset(0.8, 0.8),
-                              end: const Offset(1.0, 1.0),
-                              duration: 800.ms,
-                              curve: Curves.elasticOut,
-                            ),
-
-                        // Text message with typing animation
-                        Text(
-                          empty_cart,
-                          style: GoogleFonts.lato(
-                              textStyle:
-                                  Theme.of(context).textTheme.titleLarge),
-                        ).animate().fadeIn(duration: 600.ms).scale(
-                            begin: const Offset(0.8, 0.8),
-                            end: const Offset(1.0, 1.0),
-                            duration: 800.ms,
-                            curve: Curves.elasticOut),
-                        const SizedBox(height: 5),
-                        Text(
-                          looking_for_something,
-                          style: GoogleFonts.lato(
-                              textStyle: Theme.of(context).textTheme.bodyLarge),
-                        )
-                            .animate()
-                            .fadeIn(duration: 800.ms)
-                            .slideY(begin: 0.5, duration: 800.ms),
+                        // Floating hearts background
+                        ...List.generate(20, (index) {
+                          final isSmall = index % 2 == 0;
+                          final xOffset = (index * 20 - 140).toDouble();
+                          final startY = index * 30 - 200.0;
+                
+                          return Positioned(
+                            left: MediaQuery.of(context).size.width / 2 + xOffset,
+                            top: startY,
+                            child: Icon(
+                              FontAwesomeIcons.bagShopping,
+                              color: isDarkMode
+                                  ? AppColors.accentColorDark
+                                      .withOpacity(0.5 + (index % 5) * 0.1)
+                                  : AppColors.accentColor
+                                      .withOpacity(0.5 + (index % 5) * 0.1),
+                              size: isSmall ? 16.0 : 24.0,
+                            )
+                                .animate(
+                                  onPlay: (controller) => controller.repeat(),
+                                )
+                                .moveY(
+                                  begin: 0,
+                                  end: 500,
+                                  duration: Duration(
+                                      seconds:
+                                          isSmall ? 6 + index % 4 : 8 + index % 5),
+                                  curve: Curves.easeInOut,
+                                )
+                                .fadeIn(duration: 600.ms)
+                                .then()
+                                .fadeOut(
+                                  begin: 0.7,
+                                  delay: Duration(
+                                      seconds:
+                                          isSmall ? 5 + index % 3 : 7 + index % 4),
+                                ),
+                          );
+                        }),
+                
+                        // Main content
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Animated empty favorites image
+                            Image.asset(
+                              'assets/cart.png',
+                              width: 200,
+                              height: 200,
+                            ).animate().scale(
+                                  begin: const Offset(0.8, 0.8),
+                                  end: const Offset(1.0, 1.0),
+                                  duration: 800.ms,
+                                  curve: Curves.elasticOut,
+                                ),
+                
+                            // Text message with typing animation
+                            Text(
+                              empty_cart,
+                              style: GoogleFonts.lato(
+                                  textStyle:
+                                      Theme.of(context).textTheme.titleLarge),
+                            ).animate().fadeIn(duration: 600.ms).scale(
+                                begin: const Offset(0.8, 0.8),
+                                end: const Offset(1.0, 1.0),
+                                duration: 800.ms,
+                                curve: Curves.elasticOut),
+                            const SizedBox(height: 5),
+                            Text(
+                              looking_for_something,
+                              style: GoogleFonts.lato(
+                                  textStyle: Theme.of(context).textTheme.bodyLarge),
+                            )
+                                .animate()
+                                .fadeIn(duration: 800.ms)
+                                .slideY(begin: 0.5, duration: 800.ms),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             );
           }
 
@@ -259,6 +263,11 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
 
           return Column(
             children: [
+              CartHeader(
+                isDarkMode: isDarkMode,
+                isClearing: _isClearing,
+                onClearCart: _showClearCartDialog,
+              ),
               AddItemSection(
                 cart: cartState.cart,
                 onAddItemPressed: () {
@@ -269,14 +278,6 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                   .animate()
                   .fade(duration: const Duration(seconds: 1))
                   .slideX(curve: Curves.easeInOut),
-              CartHeader(
-                isDarkMode: isDarkMode,
-                isClearing: _isClearing,
-                onClearCart: _showClearCartDialog,
-              ),
-              const SizedBox(
-                height: 5,
-              ),
               Expanded(
                 child: CartItemList(
                   items: cartState.cart.items,
