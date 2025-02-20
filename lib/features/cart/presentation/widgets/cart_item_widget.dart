@@ -19,7 +19,7 @@ class CartItemWidget extends StatelessWidget {
   }
 
   void _showQuantitySelector(BuildContext context, CartBloc cartBloc) {
-    final theme = Theme.of(context); 
+    final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
 
     showModalBottomSheet(
@@ -178,7 +178,7 @@ class CartItemWidget extends StatelessWidget {
           ),
         );
       },
-   child: Container(
+      child: Container(
         decoration: BoxDecoration(
           color: isDarkMode ? AppColors.cardColorDark : AppColors.cardColor,
           borderRadius: const BorderRadius.only(
@@ -291,9 +291,9 @@ class CartItemWidget extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                 
-                 const SizedBox(height: 4),
-               
+
+                  const SizedBox(height: 4),
+
                   Row(
                     children: [
                       if (cartItem.product.discountPrice > 0 &&
@@ -352,7 +352,9 @@ class CartItemWidget extends StatelessWidget {
                     height: 40,
                     decoration: BoxDecoration(
                       border: Border.all(
-                          color:isDarkMode? AppColors.accentColor.withOpacity(0.3):Colors.grey),
+                          color: isDarkMode
+                              ? AppColors.accentColor.withOpacity(0.3)
+                              : Colors.grey),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
@@ -386,9 +388,7 @@ class CartItemWidget extends StatelessWidget {
                                 Icons.remove,
                                 size: 18,
                                 color: cartItem.quantity > 1
-                                    ? (isDarkMode
-                                        ? Colors.white
-                                        : Colors.black)
+                                    ? (isDarkMode ? Colors.white : Colors.black)
                                     : Colors.grey,
                               ),
                             ),
@@ -423,8 +423,7 @@ class CartItemWidget extends StatelessWidget {
                               child: Icon(
                                 Icons.add,
                                 size: 18,
-                                color:
-                                    isDarkMode ? Colors.white : Colors.black,
+                                color: isDarkMode ? Colors.white : Colors.black,
                               ),
                             ),
                           ),
@@ -462,14 +461,13 @@ class CartItemWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-                   const SizedBox(height: 8),
+                  const SizedBox(height: 8),
                 ],
               ),
             ),
           ],
         ),
       ),
-   
     );
   }
 }

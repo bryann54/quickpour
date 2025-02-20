@@ -22,51 +22,43 @@ class _AnimatedCartImageState extends State<AnimatedCartImage>
       duration: const Duration(milliseconds: 1500),
     )..repeat(reverse: true);
 
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(_controller);
-    _rotationAnimation =
-        Tween<double>(begin: -0.03, end: 0.03).animate(_controller);
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+    _rotationAnimation = Tween<double>(begin: -0.03, end: 0.03).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (_, child) {
-        return Transform.scale(
-          scale: _scaleAnimation.value,
-          child: Transform.rotate(
-            angle: _rotationAnimation.value,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Image.asset(
-                  'assets/cart.png',
-                  width: 180,
-                  height: 180,
-                  fit: BoxFit.cover,
+    return Transform.scale(
+      scale: _scaleAnimation.value,
+      child: Transform.rotate(
+        angle: _rotationAnimation.value,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Image.asset(
+              'assets/cart.png',
+              width: 180,
+              height: 180,
+              fit: BoxFit.cover,
+            )
+                .animate()
+                .scale(
+                  begin: const Offset(0.8, 0.8),
+                  end: const Offset(1.0, 1.0),
+                  duration: 800.ms,
+                  curve: Curves.elasticOut,
+                )
+                .shimmer(
+                  duration: 2000.ms,
+                  color: Theme.of(context).primaryColor.withOpacity(0.3),
                 ),
-                Positioned(
-                  top: 5,
-                  right: 5,
-                  child: const Badge(
-                    backgroundColor: Colors.red,
-                    child: Text(
-                      '0',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  )
-                      .animate()
-                      .fadeIn(duration: 700.ms)
-                      .slideX(begin: 1.0, duration: 500.ms),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 

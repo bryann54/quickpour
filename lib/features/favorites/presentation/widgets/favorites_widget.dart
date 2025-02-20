@@ -20,13 +20,12 @@ class FavoritesWidget extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
       child: Container(
         decoration: BoxDecoration(
           color: isDarkMode
               ? Colors.grey[900]!.withOpacity(.7)
               : AppColors.cardColor.withOpacity(.7),
-          borderRadius: BorderRadius.circular(15),
           boxShadow: isDarkMode
               ? [
                   BoxShadow(
@@ -40,7 +39,7 @@ class FavoritesWidget extends StatelessWidget {
                   BoxShadow(
                     color: Colors.black.withOpacity(0.3),
                     spreadRadius: 1,
-                    blurRadius: 2,
+                    blurRadius: .5,
                     offset: const Offset(0, 3),
                   ),
                 ],
@@ -90,15 +89,21 @@ class FavoritesWidget extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            favoriteItem.product.productName,
-                            style: theme.textTheme.bodyLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              color: isDarkMode
-                                  ? AppColors.surface.withOpacity(.8)
-                                  : Colors.black,
-                            ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  favoriteItem.product.productName,
+                                  style: theme.textTheme.bodyLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: isDarkMode
+                                        ? AppColors.surface.withOpacity(.8)
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 5),
                           Text(

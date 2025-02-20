@@ -22,11 +22,9 @@ class CartTotalSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0,
-      horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
       child: Column(
         children: [
-         
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -57,26 +55,48 @@ class CartTotalSection extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    const CheckoutScreen(),
+                                builder: (context) => const CheckoutScreen(),
                               ),
                             );
                           }
                         : null,
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
+                      backgroundColor: isDarkMode
+                          ? AppColors.background.withOpacity(.3)
+                          : AppColors.primaryColor,
+                      foregroundColor: Colors.white,
+                      disabledBackgroundColor: isDarkMode
+                          ? Colors.grey.shade800
+                          : Colors.grey.shade300,
+                      disabledForegroundColor: isDarkMode
+                          ? Colors.grey.shade600
+                          : Colors.grey.shade500,
+                      elevation: isDarkMode ? 2 : 4,
                     ),
-                    child: const Text('Checkout'),
+                    child: Text(
+                      'Checkout',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: cart.items.isNotEmpty && !isClearing
+                            ? Colors.white
+                            : (isDarkMode
+                                ? Colors.grey.shade400
+                                : Colors.grey.shade700),
+                      ),
+                    ),
                   ),
                 ),
               ),
             ],
           ),
-           const SizedBox(height: 15),
+          const SizedBox(height: 15),
         ],
-      )  .animate()
-                  .fade(duration: const Duration(seconds: 1))
-                  .slideX(curve: Curves.easeInOut),
+      )
+          .animate()
+          .fade(duration: const Duration(seconds: 1))
+          .slideX(curve: Curves.easeInOut),
     );
   }
 }
