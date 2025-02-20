@@ -48,17 +48,17 @@ class ProductDetailsHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Product Name with animated gradient
- Row(
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Hero(
                       tag: 'product-name-${product.id}',
                       child: ShaderMask(
-                        shaderCallback: (bounds) =>  LinearGradient(
+                        shaderCallback: (bounds) => LinearGradient(
                           colors: [
                             Colors.grey.shade700,
-                         Colors.grey.shade700,
+                            Colors.grey.shade700,
                           ],
                         ).createShader(bounds),
                         blendMode:
@@ -76,12 +76,12 @@ class ProductDetailsHeader extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8), 
-                Hero(
+                  const SizedBox(width: 8),
+                  Hero(
                     tag: 'product-measure-${product.id}',
                     child: Container(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 15, vertical:8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 8),
                       decoration: BoxDecoration(
                         color: isDarkMode
                             ? Colors.grey.shade800
@@ -92,7 +92,8 @@ class ProductDetailsHeader extends StatelessWidget {
                         product.measure,
                         style: TextStyle(
                           fontSize: 15,
-                          color:isDarkMode?Colors.grey: Colors.grey.shade700,
+                          color:
+                              isDarkMode ? Colors.grey : Colors.grey.shade700,
                           fontWeight: FontWeight.w500,
                           letterSpacing: 0.5,
                           height: 1.2,
@@ -102,7 +103,6 @@ class ProductDetailsHeader extends StatelessWidget {
                   ),
                 ],
               ),
-
 
               const SizedBox(height: 16),
 

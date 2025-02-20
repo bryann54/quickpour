@@ -12,6 +12,7 @@ class ProductSearchBloc extends Bloc<ProductSearchEvent, ProductSearchState> {
       : super(ProductSearchInitialState()) {
     on<SearchProductsEvent>(_onSearchProducts);
     on<FilterProductsEvent>(_onFilterProducts);
+    on<FetchRecommendedProductsEvent>(_onFetchRecommendedProducts);
   }
 
   void _onSearchProducts(
@@ -65,5 +66,21 @@ class ProductSearchBloc extends Bloc<ProductSearchEvent, ProductSearchState> {
     }).toList();
 
     emit(ProductSearchLoadedState(filteredProducts));
+  }
+
+  Future<void> _onFetchRecommendedProducts(
+    FetchRecommendedProductsEvent event,
+    Emitter<ProductSearchState> emit,
+  ) async {
+    emit(ProductSearchLoadingState());
+    try {
+      final products =
+          await productRepository.getRecommendedProducts(limit: event.limit);
+      emit(ProductSearchLoadedState(products));
+    } catch (e) {
+      emit(const ProductSearchErrorState(
+        'Failed to load recommended products',
+      ));
+    }
   }
 }

@@ -1,6 +1,11 @@
+import 'dart:async';
+
+import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
+import 'package:chupachap/features/cart/presentation/widgets/add_item_section.dart';
 import 'package:chupachap/features/cart/presentation/widgets/empty_cart_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
@@ -10,9 +15,12 @@ import 'package:chupachap/features/cart/presentation/widgets/cart_header.dart';
 import 'package:chupachap/features/cart/presentation/widgets/cart_item_list.dart';
 import 'package:chupachap/features/cart/presentation/widgets/cart_total_section.dart';
 import 'package:chupachap/features/cart/presentation/widgets/cart_clear_dialog.dart';
+import 'package:chupachap/features/cart/presentation/widgets/item_bottomsheet.dart';
 
 class CartPage extends StatefulWidget {
-  const CartPage({super.key});
+  const CartPage({
+    super.key,
+  });
 
   @override
   State<CartPage> createState() => _CartPageState();
@@ -22,18 +30,28 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
   late AnimationController _clearCartController;
   late AnimationController _animationController;
   final List<AnimationController> _itemControllers = [];
+  final cartStreamController = StreamController<Cart>.broadcast();
   final List<CartItem> cartList = [];
+  final AuthRepository authRepository = AuthRepository();
   double subtotal = 0;
   bool _isClearing = false;
 
   @override
   void initState() {
     super.initState();
+
+    _clearCartController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     );
+
     _animationController.forward();
+
     if (context.read<CartBloc>().state is CartLoadedState) {
       cartList.addAll(
           (context.read<CartBloc>().state as CartLoadedState).cart.items);
@@ -90,12 +108,38 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
     setState(() => _isClearing = false);
   }
 
+void onCartChanged(Cart updatedCart) {
+    cartStreamController.add(updatedCart);
+  }
   void _showClearCartDialog() {
     showDialog(
       context: context,
       builder: (context) => CartClearDialog(onClear: _clearCart),
     );
   }
+
+  double calculateInitialRemaining() {
+    // Implement your logic here
+    return 5000 - subtotal;
+  }
+
+  void _showItemBottomSheet(double remainingForFreeDelivery) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => ItemBottomsheet(
+        initialRemainingForFreeDelivery: calculateInitialRemaining(),
+        authRepository: authRepository,
+        cartStream: cartStreamController.stream,
+        freeDeliveryThreshold: 5000,
+        onProductSelected: (product) {
+          // Handle product selection
+        },
+      ),
+    );
+  }
+  
 
   @override
   void dispose() {
@@ -128,11 +172,22 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
 
           return Column(
             children: [
+              AddItemSection(
+                cart: cartState.cart,
+                onAddItemPressed: () {
+                  _showItemBottomSheet(5000 - cartState.cart.totalPrice);
+                },
+                authRepository: AuthRepository(),
+              )
+                  .animate()
+                  .fade(duration: const Duration(seconds: 1))
+                  .slideX(curve: Curves.easeInOut),
               CartHeader(
                 isDarkMode: isDarkMode,
                 isClearing: _isClearing,
                 onClearCart: _showClearCartDialog,
               ),
+              SizedBox(height: 5,),
               Expanded(
                 child: CartItemList(
                   items: cartState.cart.items,
