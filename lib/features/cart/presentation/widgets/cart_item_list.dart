@@ -19,52 +19,93 @@ class CartItemList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final cartItem = items[index];
-        return FadeTransition(
-          opacity: Tween<double>(begin: 1.0, end: 0.0).animate(
-            CurvedAnimation(
-              parent: itemControllers[index],
-              curve: Curves.easeOutCubic,
-            ),
-          ),
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: Offset.zero,
-              end: const Offset(-1, 0),
-            ).animate(
-              CurvedAnimation(
-                parent: itemControllers[index],
-                curve: Curves.easeOutCubic,
-              ),
-            ),
-            child: Dismissible(
-              key: Key(cartItem.product.id),
-              background: Container(
-                color: Colors.red,
-                alignment: Alignment.centerRight,
-                padding: const EdgeInsets.only(right: 20),
-                child: const Icon(Icons.delete, color: Colors.white),
-              ),
-              direction: DismissDirection.endToStart,
-              onDismissed: (_) {
-                context.read<CartBloc>().add(
-                      RemoveFromCartEvent(product: cartItem.product),
-                    );
-              },
-              child: CartItemWidget(cartItem: cartItem)
-                  .animate()
-                  .fadeIn(
-                    duration: 400.ms,
-                    delay: Duration(milliseconds: index * 50),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.swipe_left_alt,
+                    color: Colors.grey,
+                    size: 16,
+                  ),
+                  SizedBox(width: 4),
+                  Text(
+                    'Swipe left to remove drink',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              )
+                  .animate(
+                    onPlay: (controller) => controller.repeat(reverse: true),
                   )
-                  .slideX(begin: 0.2),
-            ),
+                  .fadeIn(duration: 800.ms)
+                  .then(delay: 5.seconds)
+                  .fadeOut(),
+            ],
           ),
-        );
-      },
+        ),
+        Expanded(
+          child: ListView.separated(
+            itemCount: items.length,
+            separatorBuilder: (context, index) => const SizedBox(height: 12),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+            itemBuilder: (context, index) {
+              final cartItem = items[index];
+              return FadeTransition(
+                opacity: Tween<double>(begin: 1.0, end: 0.0).animate(
+                  CurvedAnimation(
+                    parent: itemControllers[index],
+                    curve: Curves.easeOutCubic,
+                  ),
+                ),
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: Offset.zero,
+                    end: const Offset(-1, 0),
+                  ).animate(
+                    CurvedAnimation(
+                      parent: itemControllers[index],
+                      curve: Curves.easeOutCubic,
+                    ),
+                  ),
+                  child: Dismissible(
+                    key: Key(cartItem.product.id),
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(right: 20),
+                      child: const Icon(Icons.delete, color: Colors.white),
+                    ),
+                    direction: DismissDirection.endToStart,
+                    onDismissed: (_) {
+                      context.read<CartBloc>().add(
+                            RemoveFromCartEvent(product: cartItem.product),
+                          );
+                    },
+                    child: CartItemWidget(cartItem: cartItem)
+                        .animate()
+                        .fadeIn(
+                          duration: 400.ms,
+                          delay: Duration(milliseconds: index * 50),
+                        )
+                        .slideX(begin: 0.2),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

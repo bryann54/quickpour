@@ -48,39 +48,70 @@ class ProductDetailsHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Product Name with animated gradient
-              Hero(
-                tag: 'product-name-${product.id}',
-                child: Align(
-                  alignment: Alignment.center,
-                  child: ShaderMask(
-                    shaderCallback: (bounds) => LinearGradient(
-                      colors: isDarkMode
-                          ? [AppColors.brandAccent, AppColors.brandPrimary]
-                          : [AppColors.brandAccent, AppColors.brandPrimary],
-                    ).createShader(bounds),
-                    child: Text(
-                      product.productName,
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.5,
-                        height: 1.2,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Hero(
+                      tag: 'product-name-${product.id}',
+                      child: ShaderMask(
+                        shaderCallback: (bounds) => LinearGradient(
+                          colors: [
+                            Colors.grey.shade700,
+                            Colors.grey.shade700,
+                          ],
+                        ).createShader(bounds),
+                        blendMode:
+                            BlendMode.srcIn, // Ensures proper gradient effect
+                        child: Text(
+                          product.productName,
+                          style: theme.textTheme.displayLarge?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.5,
+                            height: 1.2,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ),
+                  const SizedBox(width: 8),
+                  Hero(
+                    tag: 'product-measure-${product.id}',
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: isDarkMode
+                            ? Colors.grey.shade800
+                            : Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        product.measure,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color:
+                              isDarkMode ? Colors.grey : Colors.grey.shade700,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.5,
+                          height: 1.2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
 
               const SizedBox(height: 16),
 
-              // Description Section with custom styling
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: isDarkMode
-                      ? AppColors.brandAccent.withOpacity(0.05)
+                      ? AppColors.brandPrimary.withOpacity(0.05)
                       : AppColors.brandPrimary.withOpacity(0.03),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
@@ -116,34 +147,6 @@ class ProductDetailsHeader extends StatelessWidget {
                   ],
                 ),
               ),
-
-              const SizedBox(height: 20),
-
-              // Category and Brand Section with enhanced styling
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: _buildInfoCard(
-                      context,
-                      'Category',
-                      product.categoryName,
-                      product.categoryName,
-                      isDarkMode,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _buildInfoCard(
-                      context,
-                      'Brand',
-                      product.brandName,
-                      product.brandName,
-                      isDarkMode,
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),
@@ -171,32 +174,6 @@ class ProductDetailsHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Container(
-          //   padding: const EdgeInsets.all(2),
-          //   decoration: BoxDecoration(
-          //     shape: BoxShape.circle,
-          //     gradient: LinearGradient(
-          //       colors: isDarkMode
-          //           ? [AppColors.brandAccent, AppColors.brandPrimary]
-          //           : [AppColors.primaryColor, AppColors.brandPrimary],
-          //     ),
-          //   ),
-          //   child: CircleAvatar(
-          //     radius: 16,
-          //     backgroundColor: Colors.white,
-          //     child: ClipOval(
-          //       child: CachedNetworkImage(
-          //         imageUrl: imageUrl,
-          //         width: 28,
-          //         height: 28,
-          //         fit: BoxFit.cover,
-          //         placeholder: (context, url) =>
-          //             const CircularProgressIndicator(),
-          //         errorWidget: (context, url, error) => const Icon(Icons.error),
-          //       ),
-          //     ),
-          //   ),
-          // ),
           const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

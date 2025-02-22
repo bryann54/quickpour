@@ -17,6 +17,15 @@ class SearchProductsEvent extends ProductSearchEvent {
   List<Object> get props => [query];
 }
 
+class FetchRecommendedProductsEvent extends ProductSearchEvent {
+  final int limit;
+
+  const FetchRecommendedProductsEvent({this.limit = 10});
+
+  @override
+  List<Object> get props => [limit];
+}
+
 class FilterProductsEvent extends ProductSearchEvent {
   final String? category;
   final String? store;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
 import 'package:chupachap/features/checkout/presentation/pages/checkout_screen.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class CartTotalSection extends StatelessWidget {
   final Cart cart;
@@ -20,40 +21,20 @@ class CartTotalSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: Tween<double>(begin: 1.0, end: 0.0).animate(
-        CurvedAnimation(
-          parent: clearCartController,
-          curve: Curves.easeOut,
-        ),
-      ),
-      child: SlideTransition(
-        position: Tween<Offset>(
-          begin: Offset.zero,
-          end: const Offset(0, 0.5),
-        ).animate(
-          CurvedAnimation(
-            parent: clearCartController,
-            curve: Curves.easeOut,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Divider(
-                color: isDarkMode
-                    ? Colors.grey[200]
-                    : AppColors.accentColor.withOpacity(.3),
-                thickness: 3,
-              ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'Total',
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
+                  const SizedBox(width: 10),
                   Text(
                     'KSh ${cart.totalPrice.toStringAsFixed(0)}',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -65,27 +46,57 @@ class CartTotalSection extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: cart.items.isNotEmpty && !isClearing
-                    ? () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CheckoutScreen(),
-                          ),
-                        );
-                      }
-                    : null,
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 50),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: ElevatedButton(
+                    onPressed: cart.items.isNotEmpty && !isClearing
+                        ? () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CheckoutScreen(),
+                              ),
+                            );
+                          }
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 50),
+                      backgroundColor: isDarkMode
+                          ? AppColors.background.withOpacity(.3)
+                          : AppColors.primaryColor,
+                      foregroundColor: Colors.white,
+                      disabledBackgroundColor: isDarkMode
+                          ? Colors.grey.shade800
+                          : Colors.grey.shade300,
+                      disabledForegroundColor: isDarkMode
+                          ? Colors.grey.shade600
+                          : Colors.grey.shade500,
+                      elevation: isDarkMode ? 2 : 4,
+                    ),
+                    child: Text(
+                      'Checkout',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: cart.items.isNotEmpty && !isClearing
+                            ? Colors.white
+                            : (isDarkMode
+                                ? Colors.grey.shade400
+                                : Colors.grey.shade700),
+                      ),
+                    ),
+                  ),
                 ),
-                child: const Text('Proceed to Checkout'),
               ),
             ],
           ),
-        ),
-      ),
+          const SizedBox(height: 15),
+        ],
+      )
+          .animate()
+          .fade(duration: const Duration(seconds: 1))
+          .slideX(curve: Curves.easeInOut),
     );
   }
 }

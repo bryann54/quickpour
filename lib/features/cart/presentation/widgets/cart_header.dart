@@ -18,13 +18,15 @@ class CartHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             'Your cart',
-            style: Theme.of(context).textTheme.displayLarge?.copyWith(
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   color: isDarkMode
                       ? AppColors.cardColor
                       : AppColors.accentColorDark,
@@ -34,7 +36,7 @@ class CartHeader extends StatelessWidget {
             onTap: isClearing ? null : onClearCart,
             child: Text(
               'Clear cart',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     color: isDarkMode ? AppColors.cardColor : Colors.black,
                     decoration: TextDecoration.underline,
                     fontWeight: FontWeight.w500,

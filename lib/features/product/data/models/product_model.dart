@@ -11,6 +11,7 @@ class ProductModel {
   final String categoryName;
   final String description;
   final String sku;
+  final String measure;
   final String merchantName;
   final String merchantEmail;
   final String merchantLocation;
@@ -30,6 +31,7 @@ class ProductModel {
     required this.productName,
     required this.imageUrls,
     required this.price,
+    required this.measure,
     required this.discountPrice,
     required this.merchantId,
     required this.brandName,
@@ -60,6 +62,7 @@ class ProductModel {
       price: (data['price'] ?? 0).toDouble(),
       discountPrice: (data['discountPrice'] ?? 0).toDouble(),
       merchantId: data['merchantId'] ?? '',
+      measure: data['measure'] ?? '',
       merchantName: data['merchantName'] ?? '',
       merchantEmail: data['merchantEmail'] ?? '',
       merchantLocation: data['merchantLocation'] ?? '',

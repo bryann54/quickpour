@@ -25,7 +25,6 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   final GlobalKey _bottomNavigationKey = GlobalKey();
   int _currentIndex = 2;
-
   // List of screens corresponding to navigation items
   final List<Widget> _screens = [
     SearchPage(
@@ -39,15 +38,21 @@ class _BottomNavState extends State<BottomNav> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     return Scaffold(
+    
       body: _screens[_currentIndex],
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
         index: _currentIndex,
         height: 60.0,
         items: [
-          const FaIcon(FontAwesomeIcons.magnifyingGlass,
-              size: 25, color: Colors.white),
+           FaIcon(FontAwesomeIcons.magnifyingGlass,
+              size: 25,
+              color: isDarkMode
+                  ? Colors.grey.shade400.withOpacity(.9)
+                  : Colors.white),
 
           // Favorites with badge
           BlocBuilder<FavoritesBloc, FavoritesState>(
@@ -58,13 +63,13 @@ class _BottomNavState extends State<BottomNav> {
                   style: const TextStyle(color: Colors.white),
                 ),
                 showBadge: favoritesState.favorites.items.isNotEmpty,
-                child: const FaIcon(FontAwesomeIcons.solidHeart,
-                    size: 25, color: Colors.white),
+                child:  FaIcon(FontAwesomeIcons.solidHeart,
+                    size: 25, color:isDarkMode?Colors.grey.shade400.withOpacity(.9): Colors.white),
               );
             },
           ),
-          const FaIcon(FontAwesomeIcons.houseChimney,
-              size: 25, color: Colors.white),
+           FaIcon(FontAwesomeIcons.houseChimney,
+              size: 25,   color:isDarkMode?Colors.grey.shade400.withOpacity(.9): Colors.white),
 
           // Cart with badge
           BlocBuilder<CartBloc, CartState>(
@@ -72,17 +77,17 @@ class _BottomNavState extends State<BottomNav> {
               return badges.Badge(
                 badgeContent: Text(
                   '${cartState.cart.totalQuantity}',
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle( color: Colors.white),
                 ),
                 showBadge: cartState.cart.totalQuantity > 0,
-                child: const FaIcon(FontAwesomeIcons.cartShopping,
-                    size: 25, color: Colors.white),
+                child:  FaIcon(FontAwesomeIcons.cartShopping,
+                    size: 25,  color:isDarkMode?Colors.grey.shade400.withOpacity(.9): Colors.white),
               );
             },
           ),
 
-          const FaIcon(FontAwesomeIcons.clipboardList,
-              size: 25, color: Colors.white),
+           FaIcon(FontAwesomeIcons.clipboardList,
+              size: 25,  color:isDarkMode?Colors.grey.shade400.withOpacity(.9): Colors.white),
         ],
         color: AppColors.primaryColor,
         buttonBackgroundColor: AppColors.primaryColor,

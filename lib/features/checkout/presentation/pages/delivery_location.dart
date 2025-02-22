@@ -209,9 +209,9 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                       itemBuilder: (context, index) {
                         final prediction = _locationPredictions[index];
                         return ListTile(
-                          title: Text(prediction.mainText ?? ''),
+                          title: Text(prediction.mainText),
                           subtitle: Text(
-                            prediction.secondaryText ?? '',
+                            prediction.secondaryText,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),

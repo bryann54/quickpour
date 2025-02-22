@@ -46,6 +46,7 @@ class CartRepository {
           try {
             return CartItem(
               product: ProductModel(
+                measure: data['measure'] ?? '',
                 id: data['productId'] ?? '',
                 productName: data['productName'] ?? 'Unknown Product',
                 price: (data['price'] ?? 0.0).toDouble(),

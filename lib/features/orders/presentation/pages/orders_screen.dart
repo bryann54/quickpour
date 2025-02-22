@@ -80,19 +80,90 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Widget _buildEmptyOrdersView(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Fix: Removed the Expanded widget that was causing the error
+    return Center(
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          FaIcon(
-            FontAwesomeIcons.boxOpen,
-            size: 50,
-            color: AppColors.brandAccent,
+          // Floating box animation background
+          ...List.generate(15, (index) {
+            final isSmall = index % 2 == 0;
+            final xOffset = (index * 25 - 120).toDouble();
+            final startY = index * 35 - 180.0;
+
+            return Positioned(
+              left: MediaQuery.of(context).size.width / 2 + xOffset,
+              top: startY,
+              child: Icon(
+                FontAwesomeIcons.boxOpen,
+                color: isDarkMode
+                    ? AppColors.brandAccent.withOpacity(0.5 + (index % 5) * 0.1)
+                    : AppColors.accentColor
+                        .withOpacity(0.5 + (index % 5) * 0.1),
+                size: isSmall ? 16.0 : 24.0,
+              )
+                  .animate(
+                    onPlay: (controller) => controller.repeat(),
+                  )
+                  .moveY(
+                    begin: 0,
+                    end: 500,
+                    duration: Duration(
+                        seconds: isSmall ? 6 + index % 4 : 8 + index % 5),
+                    curve: Curves.easeInOut,
+                  )
+                  .fadeIn(duration: 600.ms)
+                  .then()
+                  .fadeOut(
+                    begin: 0.7,
+                    delay: Duration(
+                        seconds: isSmall ? 5 + index % 3 : 7 + index % 4),
+                  ),
+            );
+          }),
+
+          // Main content
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/orders.png',
+                width: 150,
+                height: 150,
+              ).animate().scale(
+                    begin: const Offset(0.8, 0.8),
+                    end: const Offset(1.0, 1.0),
+                    duration: 800.ms,
+                    curve: Curves.elasticOut,
+                  ),
+
+              const SizedBox(height: 20),
+
+              // Text message with animations
+              Text(
+                'No orders yet!',
+                style: GoogleFonts.lato(
+                    textStyle: Theme.of(context).textTheme.titleLarge),
+              ).animate().fadeIn(duration: 600.ms).scale(
+                  begin: const Offset(0.8, 0.8),
+                  end: const Offset(1.0, 1.0),
+                  duration: 800.ms,
+                  curve: Curves.elasticOut),
+
+              const SizedBox(height: 10),
+
+              Text(
+                'Your order history will appear here',
+                style: GoogleFonts.lato(
+                    textStyle: Theme.of(context).textTheme.bodyLarge),
+              )
+                  .animate()
+                  .fadeIn(duration: 800.ms)
+                  .slideY(begin: 0.5, duration: 800.ms),
+            ],
           ),
-          SizedBox(height: 20),
-          Text('No orders yet',
-              style: TextStyle(fontSize: 18, color: Colors.grey)),
-          SizedBox(height: 150),
         ],
       ),
     );
@@ -126,7 +197,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
               itemCount: orders.length,
               itemBuilder: (context, index) {
                 final order = orders[index];
-                return OrderItemWidget(order: order);
+                return OrderItemWidget(order: order)
+                    .animate()
+                    .fadeIn(
+                      duration: 400.ms,
+                      delay: Duration(milliseconds: index * 50),
+                    )
+                    .slideY(begin: 0.1);
               },
             ),
           ),
