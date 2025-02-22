@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
@@ -8,6 +10,7 @@ import 'package:chupachap/features/checkout/presentation/pages/delivery_location
 import 'package:chupachap/features/checkout/presentation/pages/place_auto_complete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -31,27 +34,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     _phoneController.addListener(_validateForm);
     _loadRecentLocations();
   }
+Future<void> _loadRecentLocations() async {
+    final prefs = await SharedPreferences.getInstance();
+    final locationsJson = prefs.getStringList('recentLocations') ?? [];
 
-  Future<void> _loadRecentLocations() async {
-    // In a real app, this would load from local storage
-    _recentLocations = [
-      DeliveryLocation(
-        address: 'Home, Westlands, Nairobi',
-        latitude: -1.2640,
-        longitude: 36.8208,
-        mainText: 'Home',
-        secondaryText: 'Westlands, Nairobi',
-      ),
-      DeliveryLocation(
-        address: 'Office, CBD, Nairobi',
-        latitude: -1.2921,
-        longitude: 36.8219,
-        mainText: 'Office',
-        secondaryText: 'CBD, Nairobi',
-      ),
-    ];
+    setState(() {
+      _recentLocations = locationsJson
+          .map((json) => DeliveryLocation.fromJson(jsonDecode(json)))
+          .take(2)
+          .toList();
+    });
   }
 
+  Future<void> _saveRecentLocations() async {
+    final prefs = await SharedPreferences.getInstance();
+    final locationsJson = _recentLocations
+        .map((location) => jsonEncode(location.toJson()))
+        .toList();
+    await prefs.setStringList('recentLocations', locationsJson);
+  }
   @override
   void dispose() {
     _addressController.dispose();
@@ -66,7 +67,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     });
   }
 
-  Future<void> _navigateToPlaceAutocomplete() async {
+ Future<void> _navigateToPlaceAutocomplete() async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -89,7 +90,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       setState(() {
         _selectedLocation = location;
         _addressController.text = location.address;
+
+        // Add to recent locations
+        if (!_recentLocations.any((loc) => loc.address == location.address)) {
+          _recentLocations.insert(0, location);
+          if (_recentLocations.length > 5) {
+            _recentLocations.removeLast();
+          }
+        }
       });
+
+      // Save to local storage
+      await _saveRecentLocations();
     }
   }
 
@@ -100,7 +112,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     });
   }
 
-  Widget _buildRecentLocationsList() {
+Widget _buildRecentLocationsList() {
     if (_recentLocations.isEmpty) return const SizedBox.shrink();
 
     return Column(
@@ -156,62 +168,80 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               final location = _recentLocations[index];
               final isSelected = _selectedLocation?.address == location.address;
 
-              return GestureDetector(
-                onTap: () => _selectRecentLocation(location),
-                child: Container(
-                  width: 120,
-                  margin: const EdgeInsets.only(right: 10),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? AppColors.accentColor.withOpacity(0.1)
-                        : null,
-                    border: Border.all(
-                      color: isSelected
-                          ? AppColors.accentColor
-                          : Colors.grey.shade300,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+              return Stack(
+                children: [
+                  GestureDetector(
+                    onTap: () => _selectRecentLocation(location),
+                    child: Container(
+                      width: 120,
+                      margin: const EdgeInsets.only(right: 10),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? AppColors.accentColor.withOpacity(0.1)
+                            : null,
+                        border: Border.all(
+                          color: isSelected
+                              ? AppColors.accentColor
+                              : Colors.grey.shade300,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
-                              Icons.location_on,
-                              size: 16,
-                              color: isSelected
-                                  ? AppColors.accentColor
-                                  : Colors.grey,
-                            ),
-                            const SizedBox(width: 4),
-                            Expanded(
-                              child: Text(
-                                location.mainText ?? '',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,
-                                  color:
-                                                                     isSelected ? AppColors.accentColor : null,
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.location_on,
+                                  size: 16,
+                                  color: isSelected
+                                      ? AppColors.accentColor
+                                      : Colors.grey,
                                 ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  child: Text(
+                                    location.mainText,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                      color: isSelected
+                                          ? AppColors.accentColor
+                                          : null,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              location.secondaryText,
+                              style: const TextStyle(fontSize: 11),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          location.secondaryText ?? '',
-                          style: const TextStyle(fontSize: 11),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: IconButton(
+                      icon: const Icon(Icons.close, size: 16),
+                      onPressed: () async {
+                        setState(() {
+                          _recentLocations.removeAt(index);
+                        });
+                        await _saveRecentLocations();
+                      },
+                    ),
+                  ),
+                ],
               );
             },
           ),
@@ -296,43 +326,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Items in your cart',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 10),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: cartState.cart.items.length,
-                    itemBuilder: (context, index) {
-                      final cartItem = cartState.cart.items[index];
-                      return CartItemWidget(cartItem: cartItem);
-                    },
-                  ),
-                ),
-                Divider(
-                  color: isDarkMode
-                      ? Colors.grey[200]
-                      : AppColors.accentColor.withOpacity(.3),
-                  thickness: 3,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Total',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    Text(
-                      'KSh ${cartState.cart.totalPrice.toStringAsFixed(0)}',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: AppColors.accentColor.withOpacity(.8),
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
+                
                 _buildDeliveryForm(),
                 const SizedBox(height: 20),
                 ElevatedButton(

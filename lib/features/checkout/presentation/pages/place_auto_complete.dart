@@ -1,7 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:chupachap/core/utils/colors.dart';
 
 class PlaceAutocompletePage extends StatefulWidget {
@@ -19,6 +22,7 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
   bool _showRecentLocations = true;
   List<Map<String, dynamic>> _recentLocations = [];
   List<Map<String, dynamic>> _savedLocations = [];
+  Map<String, dynamic>? _currentLocation;
 
   @override
   void initState() {
@@ -26,60 +30,120 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
     _searchController.addListener(_onSearchChanged);
     _loadSavedLocations();
     _loadRecentLocations();
+    _fetchCurrentLocation();
+  }
+
+  Future<void> _fetchCurrentLocation() async {
+    try {
+      // Check location permissions
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        throw Exception('Location services are disabled.');
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          throw Exception('Location permissions are denied.');
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        throw Exception('Location permissions are permanently denied.');
+      }
+
+      // Fetch current position
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      // Convert coordinates to address
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks[0];
+        String mainText = place.street ?? 'Current Location';
+        String secondaryText = [
+          place.subLocality,
+          place.locality,
+          place.administrativeArea,
+          place.country
+        ].where((e) => e != null && e.isNotEmpty).join(', ');
+
+        setState(() {
+          _currentLocation = {
+            'description': '$mainText, $secondaryText',
+            'mainText': mainText,
+            'secondaryText': secondaryText,
+            'location': {
+              'lat': position.latitude,
+              'lng': position.longitude,
+            },
+            'city': place.locality ?? '',
+            'country': place.country ?? '',
+            'isSaved': false,
+          };
+        });
+      }
+    } catch (e) {
+      debugPrint('Error fetching current location: $e');
+    }
   }
 
   Future<void> _loadSavedLocations() async {
-    // This would typically come from local storage or your backend
-    // For demonstration, we'll use dummy data
+    final prefs = await SharedPreferences.getInstance();
+    final savedLocationsJson = prefs.getStringList('savedLocations') ?? [];
+
     setState(() {
-      _savedLocations = [
-        {
-          'description': 'Home, Westlands, Nairobi, Kenya',
-          'mainText': 'Home',
-          'secondaryText': 'Westlands, Nairobi, Kenya',
-          'location': {'lat': -1.2640, 'lng': 36.8208},
-          'city': 'Nairobi',
-          'country': 'Kenya',
-          'isSaved': true,
-        },
-        {
-          'description': 'Work, CBD, Nairobi, Kenya',
-          'mainText': 'Work',
-          'secondaryText': 'CBD, Nairobi, Kenya',
-          'location': {'lat': -1.2921, 'lng': 36.8219},
-          'city': 'Nairobi',
-          'country': 'Kenya',
-          'isSaved': true,
-        },
-      ];
+      _savedLocations = savedLocationsJson
+          .map((json) => jsonDecode(json) as Map<String, dynamic>)
+          .toList();
     });
   }
 
   Future<void> _loadRecentLocations() async {
-    // This would typically come from local storage
-    // For demonstration, we'll use dummy data
+    final prefs = await SharedPreferences.getInstance();
+    final recentLocationsJson = prefs.getStringList('recentLocations') ?? [];
+
     setState(() {
-      _recentLocations = [
-        {
-          'description': 'Junction Mall, Ngong Road, Nairobi, Kenya',
-          'mainText': 'Junction Mall',
-          'secondaryText': 'Ngong Road, Nairobi, Kenya',
-          'location': {'lat': -1.2988, 'lng': 36.7623},
-          'city': 'Nairobi',
-          'country': 'Kenya',
-          'isRecent': true,
-        },
-        {
-          'description': 'Garden City Mall, Thika Road, Nairobi, Kenya',
-          'mainText': 'Garden City Mall',
-          'secondaryText': 'Thika Road, Nairobi, Kenya',
-          'location': {'lat': -1.2302, 'lng': 36.8788},
-          'city': 'Nairobi',
-          'country': 'Kenya',
-          'isRecent': true,
-        },
-      ];
+      _recentLocations = recentLocationsJson
+          .map((json) => jsonDecode(json) as Map<String, dynamic>)
+          .toList();
     });
+  }
+
+  Future<void> _saveRecentLocations() async {
+    final prefs = await SharedPreferences.getInstance();
+    final recentLocationsJson =
+        _recentLocations.map((loc) => jsonEncode(loc)).toList();
+    await prefs.setStringList('recentLocations', recentLocationsJson);
+  }
+
+  Future<void> _saveLocation(Map<String, dynamic> location) async {
+    if (!_savedLocations.any((loc) =>
+        loc['mainText'] == location['mainText'] &&
+        loc['secondaryText'] == location['secondaryText'])) {
+      _savedLocations.add(location);
+      final prefs = await SharedPreferences.getInstance();
+      final savedLocationsJson =
+          _savedLocations.map((loc) => jsonEncode(loc)).toList();
+      await prefs.setStringList('savedLocations', savedLocationsJson);
+    }
+  }
+
+  Future<void> _removeLocation(Map<String, dynamic> location) async {
+    _savedLocations.removeWhere((loc) =>
+        loc['mainText'] == location['mainText'] &&
+        loc['secondaryText'] == location['secondaryText']);
+
+    final prefs = await SharedPreferences.getInstance();
+    final savedLocationsJson =
+        _savedLocations.map((loc) => jsonEncode(loc)).toList();
+    await prefs.setStringList('savedLocations', savedLocationsJson);
   }
 
   @override
@@ -134,7 +198,6 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
           if (placemarks.isNotEmpty) {
             Placemark place = placemarks[0];
             if (place.country == 'Kenya') {
-              // Filter results to Kenya
               String mainText = place.street ?? '';
               String secondaryText = [
                 place.subLocality,
@@ -161,20 +224,6 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
         }
       }
 
-      // Additionally, you might want to add predictions from a custom API
-      if (query.toLowerCase().contains('mall') ||
-          query.toLowerCase().contains('center')) {
-        predictions.add({
-          'description': 'Two Rivers Mall, Limuru Road, Nairobi, Kenya',
-          'mainText': 'Two Rivers Mall',
-          'secondaryText': 'Limuru Road, Nairobi, Kenya',
-          'location': {'lat': -1.2143, 'lng': 36.8053},
-          'city': 'Nairobi',
-          'country': 'Kenya',
-          'isAlternative': true,
-        });
-      }
-
       if (mounted) {
         setState(() {
           _predictions = predictions;
@@ -184,210 +233,141 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
     } catch (e) {
       debugPrint('Error fetching locations: $e');
 
-      // Fallback to nearby suggestions if geocoding fails
-      List<Map<String, dynamic>> fallbackPredictions = [
-        {
-          'description': 'Near ${_searchController.text}, Nairobi, Kenya',
-          'mainText': 'Near ${_searchController.text}',
-          'secondaryText': 'Possible nearby location',
-          'location': {'lat': -1.2864, 'lng': 36.8172},
-          'city': 'Nairobi',
-          'country': 'Kenya',
-          'isFallback': true,
-        },
-      ];
-
       if (mounted) {
         setState(() {
-          _predictions = fallbackPredictions;
+          _predictions = [];
           _isLoading = false;
         });
       }
     }
   }
 
-  Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-          color: Colors.grey,
+
+  Widget _buildSearchBar(bool isDarkMode) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDarkMode ? Colors.grey[900] : Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: TextField(
+        controller: _searchController,
+        decoration: InputDecoration(
+          hintText: 'Search delivery location',
+          prefixIcon: const Icon(Icons.search),
+          suffixIcon: _searchController.text.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    _searchController.clear();
+                    setState(() {
+                      _predictions = [];
+                      _showRecentLocations = true;
+                    });
+                  },
+                )
+              : null,
+          filled: true,
+          fillColor: isDarkMode ? Colors.grey[800] : Colors.grey[100],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildLocationList(
-      List<Map<String, dynamic>> locations, String emptyMessage) {
-    if (locations.isEmpty) {
-      return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Text(
-          emptyMessage,
-          style: const TextStyle(color: Colors.grey),
+  Widget _buildListSection(String title, List<Map<String, dynamic>> locations) {
+    if (locations.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Text(title,
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         ),
-      );
-    }
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: locations.length,
+          separatorBuilder: (context, index) => const Divider(height: 1),
+          itemBuilder: (context, index) {
+            final location = locations[index];
+            bool isSaved = _savedLocations.any((loc) =>
+                loc['mainText'] == location['mainText'] &&
+                loc['secondaryText'] == location['secondaryText']);
 
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: locations.length,
-      separatorBuilder: (context, index) => const Divider(height: 1),
-      itemBuilder: (context, index) {
-        final location = locations[index];
-        return ListTile(
-          leading: Icon(
-            location['isSaved'] == true
-                ? Icons.home
-                : location['isRecent'] == true
-                    ? Icons.history
-                    : location['isAlternative'] == true
-                        ? Icons.explore
-                        : location['isFallback'] == true
-                            ? Icons.near_me
-                            : Icons.location_on,
-            color: location['isSaved'] == true
-                ? Colors.green
-                : location['isRecent'] == true
-                    ? Colors.blue
-                    : AppColors.accentColor,
-          ),
-          title: Text(
-            location['mainText'] ?? '',
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          subtitle: Text(
-            location['secondaryText'] ?? '',
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: location['isSaved'] == true || location['isRecent'] == true
-              ? const Icon(Icons.arrow_forward_ios, size: 14)
-              : null,
-          onTap: () {
-            setState(() {
-              _recentLocations.insert(0, {
-                'description': location['description'],
-                'mainText': location['mainText'],
-                'secondaryText': location['secondaryText'],
-                'location': location['location'],
-                'city': location['city'],
-                'country': location['country'],
-                'isRecent': true,
-              });
-
-              if (_recentLocations.length > 5) {
-                _recentLocations.removeLast();
-              }
-            });
-
-            Navigator.pop(context, location);
+            return ListTile(
+              leading: Icon(Icons.location_on, color: AppColors.accentColor),
+              title: Text(location['mainText'] ?? '',
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: Text(
+                location['secondaryText'] ?? '',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              trailing: IconButton(
+                icon: Icon(
+                  isSaved ? Icons.favorite : Icons.favorite_border,
+                  color: isSaved ? AppColors.accentColor : Colors.grey,
+                ),
+                onPressed: () async {
+                  if (isSaved) {
+                    await _removeLocation(location);
+                  } else {
+                    await _saveLocation(location);
+                  }
+                  setState(() {});
+                },
+              ),
+              onTap: () {
+                _saveRecentLocations();
+                Navigator.pop(context, location);
+              },
+            );
           },
-        );
-      },
+        ),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search Location'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
+        title: const Text('Place Autocomplete'),
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: _searchController,
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: 'Search for a location',
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: _searchController.text.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          _searchController.clear();
-                          setState(() {
-                            _predictions = [];
-                            _showRecentLocations = true;
-                          });
-                        },
-                      )
-                    : null,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
+         _buildSearchBar(isDarkMode),
+          Expanded(
+            child: ListView(
+              children: [
+                if (_currentLocation != null)
+                  _buildListSection('Current Location', [_currentLocation!]),
+                if (_showRecentLocations)
+                  _buildListSection('Recent Locations', _recentLocations),
+                _buildListSection('Predictions', _predictions),
+              ],
             ),
           ),
-          if (_isLoading)
-            const Center(
-                child: Padding(
-              padding: EdgeInsets.all(20.0),
-              child: CircularProgressIndicator(),
-            ))
-          else
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (_predictions.isNotEmpty)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildSectionHeader('Search Results'),
-                          _buildLocationList(
-                              _predictions, 'No locations found'),
-                        ],
-                      ),
-                    if (_showRecentLocations) ...[
-                      if (_savedLocations.isNotEmpty) ...[
-                        _buildSectionHeader('Saved Locations'),
-                        _buildLocationList(
-                            _savedLocations, 'No saved locations'),
-                      ],
-                      if (_recentLocations.isNotEmpty) ...[
-                        _buildSectionHeader('Recent Locations'),
-                        _buildLocationList(
-                            _recentLocations, 'No recent locations'),
-                      ] else ...[
-                        _buildSectionHeader('Recent Locations'),
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            'No recents yet',
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ],
-                ),
-              ),
-            ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Center(child: Text('feature coming soon😎!!'))),
-          );
-        },
-        child: const Icon(Icons.map),
-        tooltip: 'Select on map',
       ),
     );
   }
