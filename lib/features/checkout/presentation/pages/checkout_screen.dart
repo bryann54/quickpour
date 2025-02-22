@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
@@ -7,9 +5,9 @@ import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/widgets/cart_item_widget.dart';
 import 'package:chupachap/features/checkout/data/models/delivery_location.dart';
 import 'package:chupachap/features/checkout/presentation/pages/delivery_location.dart';
+import 'package:chupachap/features/checkout/presentation/pages/place_auto_complete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geocoding/geocoding.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -23,21 +21,39 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final TextEditingController _phoneController = TextEditingController();
   bool _isAddressEmpty = true;
   bool _isPhoneEmpty = true;
-  List<DeliveryLocation> _locationPredictions = [];
   DeliveryLocation? _selectedLocation;
-  Timer? _debounce;
-  bool _isLoading = false;
+  List<DeliveryLocation> _recentLocations = [];
 
   @override
   void initState() {
     super.initState();
     _addressController.addListener(_validateForm);
     _phoneController.addListener(_validateForm);
+    _loadRecentLocations();
+  }
+
+  Future<void> _loadRecentLocations() async {
+    // In a real app, this would load from local storage
+    _recentLocations = [
+      DeliveryLocation(
+        address: 'Home, Westlands, Nairobi',
+        latitude: -1.2640,
+        longitude: 36.8208,
+        mainText: 'Home',
+        secondaryText: 'Westlands, Nairobi',
+      ),
+      DeliveryLocation(
+        address: 'Office, CBD, Nairobi',
+        latitude: -1.2921,
+        longitude: 36.8219,
+        mainText: 'Office',
+        secondaryText: 'CBD, Nairobi',
+      ),
+    ];
   }
 
   @override
   void dispose() {
-    _debounce?.cancel();
     _addressController.dispose();
     _phoneController.dispose();
     super.dispose();
@@ -50,115 +66,157 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     });
   }
 
-  Future<void> _getLocationPredictions(String query) async {
-    if (_debounce?.isActive ?? false) _debounce!.cancel();
+  Future<void> _navigateToPlaceAutocomplete() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PlaceAutocompletePage(),
+      ),
+    );
 
-    _debounce = Timer(const Duration(milliseconds: 500), () async {
-      if (query.isEmpty) {
-        setState(() {
-          _locationPredictions = [];
-          _isLoading = false;
-        });
-        return;
-      }
+    if (result != null && result is Map<String, dynamic>) {
+      final location = DeliveryLocation(
+        address: result['description'],
+        latitude: result['location']['lat'],
+        longitude: result['location']['lng'],
+        mainText: result['mainText'] ?? result['description'].split(',')[0],
+        secondaryText: result['secondaryText'] ??
+            result['description']
+                .substring(result['description'].indexOf(',') + 1)
+                .trim(),
+      );
 
       setState(() {
-        _isLoading = true;
+        _selectedLocation = location;
+        _addressController.text = location.address;
       });
+    }
+  }
 
-      try {
-        List<Location> locations = await locationFromAddress(query);
-        List<DeliveryLocation> predictions = [];
-
-        for (var location in locations) {
-          try {
-            List<Placemark> placemarks = await placemarkFromCoordinates(
-              location.latitude,
-              location.longitude,
-            );
-
-            if (placemarks.isNotEmpty) {
-              Placemark place = placemarks[0];
-              String mainText = place.street ?? '';
-              String secondaryText = [
-                place.subLocality,
-                place.locality,
-                place.administrativeArea
-              ].where((e) => e != null && e.isNotEmpty).join(', ');
-
-              predictions.add(DeliveryLocation(
-                address: '$mainText, $secondaryText',
-                latitude: location.latitude,
-                longitude: location.longitude,
-                mainText: mainText,
-                secondaryText: secondaryText,
-              ));
-            }
-          } catch (e) {
-            debugPrint('Error getting place details: $e');
-          }
-        }
-
-        if (mounted) {
-          setState(() {
-            _locationPredictions = predictions;
-            _isLoading = false;
-          });
-        }
-      } catch (e) {
-        debugPrint('Error fetching locations: $e');
-        if (mounted) {
-          setState(() {
-            _locationPredictions = [];
-            _isLoading = false;
-          });
-        }
-      }
+  void _selectRecentLocation(DeliveryLocation location) {
+    setState(() {
+      _selectedLocation = location;
+      _addressController.text = location.address;
     });
   }
 
-  Widget _buildPredictionsList() {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      height: _locationPredictions.isEmpty ? 0 : 200,
-      margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: _locationPredictions.length,
-              itemBuilder: (context, index) {
-                final prediction = _locationPredictions[index];
-                return ListTile(
-                  title: Text(
-                    prediction.mainText ?? '',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(
-                    prediction.secondaryText ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  onTap: () {
-                    setState(() {
-                      _selectedLocation = prediction;
-                      _addressController.text = prediction.address;
-                      _locationPredictions = [];
-                    });
-                  },
-                );
-              },
+  Widget _buildRecentLocationsList() {
+    if (_recentLocations.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(top: 12.0, bottom: 8.0),
+          child: Text(
+            'Recent Locations',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey,
             ),
+          ),
+        ),
+        SizedBox(
+          height: 110,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: _recentLocations.length + 1, // +1 for "add new" card
+            itemBuilder: (context, index) {
+              if (index == _recentLocations.length) {
+                // "Add new location" card
+                return GestureDetector(
+                  onTap: _navigateToPlaceAutocomplete,
+                  child: Container(
+                    width: 120,
+                    margin: const EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.add_location_alt,
+                            color: AppColors.accentColor),
+                        SizedBox(height: 8),
+                        Text(
+                          'Add New',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+
+              final location = _recentLocations[index];
+              final isSelected = _selectedLocation?.address == location.address;
+
+              return GestureDetector(
+                onTap: () => _selectRecentLocation(location),
+                child: Container(
+                  width: 120,
+                  margin: const EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? AppColors.accentColor.withOpacity(0.1)
+                        : null,
+                    border: Border.all(
+                      color: isSelected
+                          ? AppColors.accentColor
+                          : Colors.grey.shade300,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.location_on,
+                              size: 16,
+                              color: isSelected
+                                  ? AppColors.accentColor
+                                  : Colors.grey,
+                            ),
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: Text(
+                                location.mainText ?? '',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                  color:
+                                                                     isSelected ? AppColors.accentColor : null,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          location.secondaryText ?? '',
+                          style: const TextStyle(fontSize: 11),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -170,32 +228,42 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           'Delivery Information',
           style: Theme.of(context).textTheme.titleLarge,
         ),
-        const SizedBox(height: 10),
-        _buildPredictionsList(),
-        TextField(
-          controller: _addressController,
-          decoration: InputDecoration(
-            labelText: 'Delivery Address',
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+        const SizedBox(height: 16),
+        _buildRecentLocationsList(),
+        const SizedBox(height: 16),
+        GestureDetector(
+          onTap: _navigateToPlaceAutocomplete,
+          child: AbsorbPointer(
+            child: TextField(
+              controller: _addressController,
+              decoration: InputDecoration(
+                labelText: 'Delivery Address',
+                hintText: 'Search for a location',
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                prefixIcon: const Icon(Icons.location_on),
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (_addressController.text.isNotEmpty)
+                      IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _addressController.clear();
+                          setState(() {
+                            _selectedLocation = null;
+                          });
+                        },
+                      ),
+                    const Icon(Icons.arrow_drop_down),
+                  ],
+                ),
+              ),
             ),
-            prefixIcon: const Icon(Icons.location_on),
-            suffixIcon: _addressController.text.isNotEmpty
-                ? IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () {
-                      _addressController.clear();
-                      setState(() {
-                        _selectedLocation = null;
-                        _locationPredictions = [];
-                      });
-                    },
-                  )
-                : null,
           ),
-          onChanged: _getLocationPredictions,
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 16),
         TextField(
           controller: _phoneController,
           keyboardType: TextInputType.phone,
