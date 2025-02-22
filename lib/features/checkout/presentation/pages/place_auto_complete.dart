@@ -17,7 +17,6 @@ class PlaceAutocompletePage extends StatefulWidget {
 class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
   final TextEditingController _searchController = TextEditingController();
   Timer? _debounce;
-  bool _isLoading = false;
   List<Map<String, dynamic>> _predictions = [];
   bool _showRecentLocations = true;
   List<Map<String, dynamic>> _recentLocations = [];
@@ -174,15 +173,12 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
     if (query.isEmpty) {
       setState(() {
         _predictions = [];
-        _isLoading = false;
         _showRecentLocations = true;
       });
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() {});
 
     try {
       List<Location> locations = await locationFromAddress(query);
@@ -227,7 +223,6 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
       if (mounted) {
         setState(() {
           _predictions = predictions;
-          _isLoading = false;
         });
       }
     } catch (e) {
@@ -236,12 +231,10 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
       if (mounted) {
         setState(() {
           _predictions = [];
-          _isLoading = false;
         });
       }
     }
   }
-
 
   Widget _buildSearchBar(bool isDarkMode) {
     return Container(
@@ -312,7 +305,7 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
                 loc['secondaryText'] == location['secondaryText']);
 
             return ListTile(
-              leading: Icon(Icons.location_on, color: AppColors.accentColor),
+              leading: const Icon(Icons.location_on, color: AppColors.accentColor),
               title: Text(location['mainText'] ?? '',
                   style: const TextStyle(fontWeight: FontWeight.bold)),
               subtitle: Text(
@@ -355,7 +348,7 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
       ),
       body: Column(
         children: [
-         _buildSearchBar(isDarkMode),
+          _buildSearchBar(isDarkMode),
           Expanded(
             child: ListView(
               children: [

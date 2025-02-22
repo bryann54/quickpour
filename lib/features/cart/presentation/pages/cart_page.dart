@@ -175,9 +175,10 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                           final isSmall = index % 2 == 0;
                           final xOffset = (index * 20 - 140).toDouble();
                           final startY = index * 30 - 200.0;
-                
+
                           return Positioned(
-                            left: MediaQuery.of(context).size.width / 2 + xOffset,
+                            left:
+                                MediaQuery.of(context).size.width / 2 + xOffset,
                             top: startY,
                             child: Icon(
                               FontAwesomeIcons.bagShopping,
@@ -195,8 +196,9 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                                   begin: 0,
                                   end: 500,
                                   duration: Duration(
-                                      seconds:
-                                          isSmall ? 6 + index % 4 : 8 + index % 5),
+                                      seconds: isSmall
+                                          ? 6 + index % 4
+                                          : 8 + index % 5),
                                   curve: Curves.easeInOut,
                                 )
                                 .fadeIn(duration: 600.ms)
@@ -204,12 +206,13 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                                 .fadeOut(
                                   begin: 0.7,
                                   delay: Duration(
-                                      seconds:
-                                          isSmall ? 5 + index % 3 : 7 + index % 4),
+                                      seconds: isSmall
+                                          ? 5 + index % 3
+                                          : 7 + index % 4),
                                 ),
                           );
                         }),
-                
+
                         // Main content
                         Column(
                           mainAxisSize: MainAxisSize.min,
@@ -225,7 +228,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                                   duration: 800.ms,
                                   curve: Curves.elasticOut,
                                 ),
-                
+
                             // Text message with typing animation
                             Text(
                               empty_cart,
@@ -241,7 +244,8 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                             Text(
                               looking_for_something,
                               style: GoogleFonts.lato(
-                                  textStyle: Theme.of(context).textTheme.bodyLarge),
+                                  textStyle:
+                                      Theme.of(context).textTheme.bodyLarge),
                             )
                                 .animate()
                                 .fadeIn(duration: 800.ms)

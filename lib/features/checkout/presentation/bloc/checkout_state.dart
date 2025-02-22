@@ -6,6 +6,7 @@ abstract class CheckoutState {
   final String? paymentMethod;
   final String? deliveryTime;
   final String? specialInstructions;
+  final String? deliveryType; // Add delivery type
   final String? userEmail;
   final String? userName;
   final String? userId;
@@ -16,6 +17,7 @@ abstract class CheckoutState {
     this.paymentMethod,
     this.deliveryTime,
     this.specialInstructions,
+    this.deliveryType, // Add delivery type
     this.userEmail,
     this.userName,
     this.userId,
@@ -28,6 +30,7 @@ abstract class CheckoutState {
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
+    String? deliveryType, // Add delivery type
     String? userEmail,
     String? userName,
     String? userId,
@@ -44,6 +47,7 @@ class CheckoutInitialState extends CheckoutState {
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
+    String? deliveryType, // Add delivery type
     String? userEmail,
     String? userName,
     String? userId,
@@ -62,6 +66,7 @@ class CheckoutLoadingState extends CheckoutState {
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
+    String? deliveryType, // Add delivery type
     String? userEmail,
     String? userName,
     String? userId,
@@ -86,6 +91,7 @@ class CheckoutOrderPlacedState extends CheckoutState {
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
+    String? deliveryType, // Add delivery type
     String? userEmail,
     String? userName,
     String? userId,
@@ -95,6 +101,7 @@ class CheckoutOrderPlacedState extends CheckoutState {
           paymentMethod: paymentMethod,
           deliveryTime: deliveryTime,
           specialInstructions: specialInstructions,
+          deliveryType: deliveryType, // Pass delivery type
           userEmail: userEmail,
           userName: userName,
           userId: userId,
@@ -107,6 +114,7 @@ class CheckoutOrderPlacedState extends CheckoutState {
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
+    String? deliveryType, // Add delivery type
     String? userEmail,
     String? userName,
     String? userId,
@@ -122,6 +130,7 @@ class CheckoutOrderPlacedState extends CheckoutState {
       paymentMethod: paymentMethod ?? this.paymentMethod,
       deliveryTime: deliveryTime ?? this.deliveryTime,
       specialInstructions: specialInstructions ?? this.specialInstructions,
+      deliveryType: deliveryType ?? this.deliveryType, // Preserve delivery type
       userEmail: userEmail ?? this.userEmail,
       userName: userName ?? this.userName,
       userId: userId ?? this.userId,
@@ -139,6 +148,7 @@ class CheckoutErrorState extends CheckoutState {
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
+    String? deliveryType, // Add delivery type
     String? userEmail,
     String? userName,
     String? userId,
@@ -148,6 +158,7 @@ class CheckoutErrorState extends CheckoutState {
           paymentMethod: paymentMethod,
           deliveryTime: deliveryTime,
           specialInstructions: specialInstructions,
+          deliveryType: deliveryType, // Pass delivery type
           userEmail: userEmail,
           userName: userName,
           userId: userId,
@@ -160,6 +171,7 @@ class CheckoutErrorState extends CheckoutState {
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
+    String? deliveryType, // Add delivery type
     String? userEmail,
     String? userName,
     String? userId,
@@ -171,6 +183,7 @@ class CheckoutErrorState extends CheckoutState {
       paymentMethod: paymentMethod ?? this.paymentMethod,
       deliveryTime: deliveryTime ?? this.deliveryTime,
       specialInstructions: specialInstructions ?? this.specialInstructions,
+      deliveryType: deliveryType ?? this.deliveryType, // Preserve delivery type
       userEmail: userEmail ?? this.userEmail,
       userName: userName ?? this.userName,
       userId: userId ?? this.userId,

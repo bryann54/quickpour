@@ -10,7 +10,7 @@ class OrderConfirmationScreen extends StatelessWidget {
   final double totalAmount;
   final String deliveryAddress;
   final String deliveryTime;
-  final String selectedPaymentMethod; // New field
+  final String selectedPaymentMethod;
 
   const OrderConfirmationScreen({
     Key? key,

@@ -171,27 +171,33 @@ class OrderItemWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: isDark ? AppColors.dividerColorDark : AppColors.dividerColor,
+    return Column(
+      children: [
+        // Delivery Type Section
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: isDark
+                    ? AppColors.dividerColorDark
+                    : AppColors.dividerColor,
+              ),
+              bottom: BorderSide(
+                color: isDark
+                    ? AppColors.dividerColorDark
+                    : AppColors.dividerColor,
+              ),
+            ),
           ),
-          bottom: BorderSide(
-            color: isDark ? AppColors.dividerColorDark : AppColors.dividerColor,
-          ),
-        ),
-      ),
-      child: Hero(
-        tag: 'order-items-count-${order.id}',
-        child: Material(
-          color: Colors.transparent,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Icon based on delivery type
               Icon(
-                Icons.location_on_outlined,
+                order.deliveryType == 'express'
+                    ? Icons.rocket_launch_outlined
+                    : Icons.local_shipping_outlined,
                 size: 20,
                 color: isDark
                     ? AppColors.textSecondaryDark
@@ -203,7 +209,7 @@ class OrderItemWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Delivery Address',
+                      'Delivery Type',
                       style: TextStyle(
                         color: isDark
                             ? AppColors.textSecondaryDark
@@ -213,7 +219,9 @@ class OrderItemWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      order.address,
+                      order.deliveryType == 'express'
+                          ? 'Express Delivery' // Text for express delivery
+                          : 'Standard Delivery', // Text for standard delivery
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 15,
@@ -221,8 +229,6 @@ class OrderItemWidget extends StatelessWidget {
                             ? AppColors.textPrimaryDark
                             : AppColors.textPrimary,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
                     ),
                   ],
                 ),
@@ -230,7 +236,68 @@ class OrderItemWidget extends StatelessWidget {
             ],
           ),
         ),
-      ),
+        // Delivery Address Section
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: isDark
+                    ? AppColors.dividerColorDark
+                    : AppColors.dividerColor,
+              ),
+            ),
+          ),
+          child: Hero(
+            tag: 'order-items-count-${order.id}',
+            child: Material(
+              color: Colors.transparent,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.location_on_outlined,
+                    size: 20,
+                    color: isDark
+                        ? AppColors.textSecondaryDark
+                        : AppColors.textSecondary,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Delivery Address',
+                          style: TextStyle(
+                            color: isDark
+                                ? AppColors.textSecondaryDark
+                                : AppColors.textSecondary,
+                            fontSize: 13,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          order.address,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.textPrimary,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

@@ -4,11 +4,11 @@ import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
-import 'package:chupachap/features/cart/presentation/widgets/cart_item_widget.dart';
-import 'package:chupachap/features/checkout/data/models/delivery_location.dart';
+import 'package:chupachap/features/checkout/data/models/delivery_details_model.dart';
 import 'package:chupachap/features/checkout/presentation/pages/delivery_location.dart';
 import 'package:chupachap/features/checkout/presentation/pages/place_auto_complete.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,7 +16,7 @@ class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
 
   @override
-  _CheckoutScreenState createState() => _CheckoutScreenState();
+  State<CheckoutScreen> createState() => _CheckoutScreenState();
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
@@ -24,8 +24,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final TextEditingController _phoneController = TextEditingController();
   bool _isAddressEmpty = true;
   bool _isPhoneEmpty = true;
-  DeliveryLocation? _selectedLocation;
-  List<DeliveryLocation> _recentLocations = [];
+  DeliveryDetails? _selectedLocation;
+  List<DeliveryDetails> _recentLocations = [];
 
   @override
   void initState() {
@@ -34,13 +34,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     _phoneController.addListener(_validateForm);
     _loadRecentLocations();
   }
-Future<void> _loadRecentLocations() async {
+
+  Future<void> _loadRecentLocations() async {
     final prefs = await SharedPreferences.getInstance();
     final locationsJson = prefs.getStringList('recentLocations') ?? [];
 
     setState(() {
       _recentLocations = locationsJson
-          .map((json) => DeliveryLocation.fromJson(jsonDecode(json)))
+          .map((json) => DeliveryDetails.fromJson(jsonDecode(json)))
           .take(2)
           .toList();
     });
@@ -53,6 +54,7 @@ Future<void> _loadRecentLocations() async {
         .toList();
     await prefs.setStringList('recentLocations', locationsJson);
   }
+
   @override
   void dispose() {
     _addressController.dispose();
@@ -63,11 +65,11 @@ Future<void> _loadRecentLocations() async {
   void _validateForm() {
     setState(() {
       _isAddressEmpty = _addressController.text.isEmpty;
-      _isPhoneEmpty = _phoneController.text.isEmpty;
+      _isPhoneEmpty = _phoneController.text.length != 12;
     });
   }
 
- Future<void> _navigateToPlaceAutocomplete() async {
+  Future<void> _navigateToPlaceAutocomplete() async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -76,7 +78,7 @@ Future<void> _loadRecentLocations() async {
     );
 
     if (result != null && result is Map<String, dynamic>) {
-      final location = DeliveryLocation(
+      final location = DeliveryDetails(
         address: result['description'],
         latitude: result['location']['lat'],
         longitude: result['location']['lng'],
@@ -85,6 +87,7 @@ Future<void> _loadRecentLocations() async {
             result['description']
                 .substring(result['description'].indexOf(',') + 1)
                 .trim(),
+        phoneNumber: _phoneController.text,
       );
 
       setState(() {
@@ -105,14 +108,15 @@ Future<void> _loadRecentLocations() async {
     }
   }
 
-  void _selectRecentLocation(DeliveryLocation location) {
+  void _selectRecentLocation(DeliveryDetails location) {
     setState(() {
       _selectedLocation = location;
       _addressController.text = location.address;
+      _phoneController.text = location.phoneNumber;
     });
   }
 
-Widget _buildRecentLocationsList() {
+  Widget _buildRecentLocationsList() {
     if (_recentLocations.isEmpty) return const SizedBox.shrink();
 
     return Column(
@@ -146,9 +150,9 @@ Widget _buildRecentLocationsList() {
                       border: Border.all(color: Colors.grey.shade300),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Column(
+                    child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(Icons.add_location_alt,
                             color: AppColors.accentColor),
                         SizedBox(height: 8),
@@ -254,9 +258,15 @@ Widget _buildRecentLocationsList() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Delivery Information',
-          style: Theme.of(context).textTheme.titleLarge,
+        Align(
+          alignment: Alignment.center,
+          child: Text(
+            'Delivery Information',
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(fontWeight: FontWeight.bold),
+          ),
         ),
         const SizedBox(height: 16),
         _buildRecentLocationsList(),
@@ -299,11 +309,44 @@ Widget _buildRecentLocationsList() {
           keyboardType: TextInputType.phone,
           decoration: const InputDecoration(
             labelText: 'Phone Number',
+            hintText: 'Enter your phone number',
             border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
-            prefixIcon: Icon(Icons.phone),
+            prefixIcon: Icon(Icons.phone), // Keep only the icon
           ),
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly, // Allows only digits
+            LengthLimitingTextInputFormatter(
+                12), // Limits total length to 12 characters (including '254')
+          ],
+          onTap: () {
+            if (_phoneController.text.isEmpty) {
+              setState(() {
+                _phoneController.text = '254';
+                _phoneController.selection = TextSelection.fromPosition(
+                  TextPosition(offset: _phoneController.text.length),
+                );
+              });
+            }
+          },
+          onChanged: (value) {
+            if (!value.startsWith('254')) {
+              setState(() {
+                _phoneController.text = '254';
+                _phoneController.selection = TextSelection.fromPosition(
+                  TextPosition(offset: _phoneController.text.length),
+                );
+              });
+            } else if (value.length > 12) {
+              setState(() {
+                _phoneController.text = value.substring(0, 12);
+                _phoneController.selection = TextSelection.fromPosition(
+                  TextPosition(offset: _phoneController.text.length),
+                );
+              });
+            }
+          },
         ),
       ],
     );
@@ -319,14 +362,11 @@ Widget _buildRecentLocationsList() {
             return const Center(child: Text('Your cart is empty'));
           }
 
-          final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                
                 _buildDeliveryForm(),
                 const SizedBox(height: 20),
                 ElevatedButton(
@@ -341,7 +381,8 @@ Widget _buildRecentLocationsList() {
                               builder: (_) => DeliveryLocationScreen(
                                 totalAmount: cartState.cart.totalPrice,
                                 location: _selectedLocation!,
-                                phoneNumber: _phoneController.text,
+                                phoneNumber:
+                                    _phoneController.text, // Pass phone number
                               ),
                             ),
                           );

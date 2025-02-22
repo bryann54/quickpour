@@ -6,6 +6,7 @@ import 'package:chupachap/features/notifications/presentation/widgets/shimmer_no
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class NotificationsScreen extends StatefulWidget {
@@ -66,9 +67,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 }
 
                 if (state.notifications.isEmpty) {
-                  return const Center(
-                    child: Text('No notifications'),
-                  );
+                  return _buildEmptyOrdersView(context);
                 }
 
                 return RefreshIndicator(
@@ -102,4 +101,95 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       ),
     );
   }
+
+  Widget _buildEmptyOrdersView(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Fix: Removed the Expanded widget that was causing the error
+    return Center(
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Floating box animation background
+          ...List.generate(15, (index) {
+            final isSmall = index % 2 == 0;
+            final xOffset = (index * 25 - 120).toDouble();
+            final startY = index * 35 - 180.0;
+
+            return Positioned(
+              left: MediaQuery.of(context).size.width / 2 + xOffset,
+              top: startY,
+              child: Icon(
+                FontAwesomeIcons.solidBell,
+                color: isDarkMode
+                    ? Colors.cyan.withOpacity(0.5 + (index % 5) * 0.1)
+                    : Colors.cyan
+                        .withOpacity(0.5 + (index % 5) * 0.1),
+                size: isSmall ? 16.0 : 24.0,
+              )
+                  .animate(
+                    onPlay: (controller) => controller.repeat(),
+                  )
+                  .moveY(
+                    begin: 0,
+                    end: 500,
+                    duration: Duration(
+                        seconds: isSmall ? 6 + index % 4 : 8 + index % 5),
+                    curve: Curves.easeInOut,
+                  )
+                  .fadeIn(duration: 600.ms)
+                  .then()
+                  .fadeOut(
+                    begin: 0.7,
+                    delay: Duration(
+                        seconds: isSmall ? 5 + index % 3 : 7 + index % 4),
+                  ),
+            );
+          }),
+
+          // Main content
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/notifications.webp',
+                width: 150,
+                height: 150,
+              ).animate().scale(
+                    begin: const Offset(0.8, 0.8),
+                    end: const Offset(1.0, 1.0),
+                    duration: 800.ms,
+                    curve: Curves.elasticOut,
+                  ),
+
+              const SizedBox(height: 20),
+
+              // Text message with animations
+              Text(
+                'No orders yet!',
+                style: GoogleFonts.lato(
+                    textStyle: Theme.of(context).textTheme.titleLarge),
+              ).animate().fadeIn(duration: 600.ms).scale(
+                  begin: const Offset(0.8, 0.8),
+                  end: const Offset(1.0, 1.0),
+                  duration: 800.ms,
+                  curve: Curves.elasticOut),
+
+              const SizedBox(height: 10),
+
+              Text(
+                'Your order history will appear here',
+                style: GoogleFonts.lato(
+                    textStyle: Theme.of(context).textTheme.bodyLarge),
+              )
+                  .animate()
+                  .fadeIn(duration: 800.ms)
+                  .slideY(begin: 0.5, duration: 800.ms),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
 }

@@ -1,17 +1,26 @@
 part of 'checkout_bloc.dart';
 
-abstract class CheckoutEvent {
+abstract class CheckoutEvent extends Equatable {
   const CheckoutEvent();
+
+  @override
+  List<Object?> get props => [];
 }
 
 class UpdateDeliveryInfoEvent extends CheckoutEvent {
   final String address;
   final String phoneNumber;
+  final String deliveryType;
+  
 
-  UpdateDeliveryInfoEvent({
+  const UpdateDeliveryInfoEvent({
     required this.address,
     required this.phoneNumber,
+    required this.deliveryType,
   });
+
+  @override
+  List<Object?> get props => [address, phoneNumber, deliveryType];
 }
 
 class UpdatePaymentMethodEvent extends CheckoutEvent {
@@ -20,6 +29,9 @@ class UpdatePaymentMethodEvent extends CheckoutEvent {
   const UpdatePaymentMethodEvent({
     required this.paymentMethod,
   });
+
+  @override
+  List<Object?> get props => [paymentMethod];
 }
 
 class UpdateDeliveryTimeEvent extends CheckoutEvent {
@@ -30,6 +42,9 @@ class UpdateDeliveryTimeEvent extends CheckoutEvent {
     required this.deliveryTime,
     required this.specialInstructions,
   });
+
+  @override
+  List<Object?> get props => [deliveryTime, specialInstructions];
 }
 
 class PlaceOrderEvent extends CheckoutEvent {
@@ -37,25 +52,41 @@ class PlaceOrderEvent extends CheckoutEvent {
   final String deliveryTime;
   final String specialInstructions;
   final String paymentMethod;
-  final String address; // Add address
+  final String address;
   final String phoneNumber;
+  final String deliveryType; // Add delivery type
 
   const PlaceOrderEvent({
     required this.cart,
     required this.deliveryTime,
     required this.specialInstructions,
     required this.paymentMethod,
-    required this.address, // Include in constructor
+    required this.address,
     required this.phoneNumber,
+    required this.deliveryType, // Add delivery type
   });
+
+  @override
+  List<Object?> get props => [
+        cart,
+        deliveryTime,
+        specialInstructions,
+        paymentMethod,
+        address,
+        phoneNumber,
+        deliveryType, // Include delivery type
+      ];
 }
 
 class OrderPlacedEvent extends CheckoutEvent {
   final String orderId;
   final double totalAmount;
 
-  OrderPlacedEvent({
+  const OrderPlacedEvent({
     required this.orderId,
     required this.totalAmount,
   });
+
+  @override
+  List<Object?> get props => [orderId, totalAmount];
 }
