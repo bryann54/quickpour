@@ -56,21 +56,23 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: const Text(
+        title: Text(
           'Payment Method',
           style: TextStyle(
-            color: Colors.black87,
+            color: theme.textTheme.titleLarge?.color,
             fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black87),
+          icon: Icon(Icons.arrow_back_ios, color: theme.iconTheme.color),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -119,10 +121,9 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
                       const SizedBox(height: 24),
                       Text(
                         'Select Payment Method',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black87,
-                            ),
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       const SizedBox(height: 16),
                       _buildPaymentMethods(),
@@ -139,14 +140,19 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
   }
 
   Widget _buildOrderSummary() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark
+            ? AppColors.background.withOpacity(.1)
+            : Colors.grey.shade100,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: theme.shadowColor.withOpacity(0.05),
             offset: const Offset(0, 2),
             blurRadius: 8,
           ),
@@ -157,14 +163,17 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
         children: [
           Text(
             'Order Summary',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
           ),
           const SizedBox(height: 12),
           _buildSummaryRow('Delivery Time', widget.deliveryTime),
           _buildSummaryRow('Delivery Type', widget.deliveryType),
-          const Divider(height: 24),
+          Divider(
+            height: 24,
+            color: theme.dividerColor,
+          ),
           _buildSummaryRow(
             'Total Amount',
             'KSh ${widget.totalAmount.toStringAsFixed(0)}',
@@ -176,6 +185,9 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
   }
 
   Widget _buildSummaryRow(String title, String value, {bool isTotal = false}) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -184,18 +196,112 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
           Text(
             title,
             style: TextStyle(
-              color: Colors.black87,
+              color: theme.textTheme.bodyLarge?.color,
               fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
             ),
           ),
           Text(
             value,
             style: TextStyle(
-              color: isTotal ? AppColors.primaryColor : Colors.black87,
+              color: isTotal
+                  ? (isDark
+                      ? theme.colorScheme.onSurface.withOpacity(.7)
+                      : AppColors.primaryColor)
+                  : theme.textTheme.bodyLarge?.color,
               fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildPaymentMethodTile(
+    PaymentMethod method,
+    String title,
+    String iconPath,
+    String subtitle,
+  ) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final isSelected = _selectedPaymentMethod == method;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      decoration: BoxDecoration(
+        color: isDark ? theme.cardColor : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isSelected
+              ? (isDark
+                  ? AppColors.error.withOpacity(.1)
+                  : AppColors.primaryColor)
+              : theme.dividerColor,
+          width: isSelected ? 2 : 1,
+        ),
+        boxShadow: isSelected
+            ? [
+                BoxShadow(
+                  color: AppColors.primaryColor.withOpacity(isDark ? 0.2 : 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ]
+            : null,
+      ),
+      child: Material(
+        color: isSelected
+            ? AppColors.background.withOpacity(.1)
+            : Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () => setState(() => _selectedPaymentMethod = method),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(
+                    iconPath,
+                    width: 60,
+                    height: 40,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontWeight:
+                              isSelected ? FontWeight.w600 : FontWeight.normal,
+                          color: theme.textTheme.bodyLarge?.color,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+                Radio<PaymentMethod>(
+                  value: method,
+                  groupValue: _selectedPaymentMethod,
+                  onChanged: (value) =>
+                      setState(() => _selectedPaymentMethod = value!),
+                  activeColor:
+                      isDark ? Colors.white : theme.colorScheme.primary,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -227,97 +333,16 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
     );
   }
 
-  Widget _buildPaymentMethodTile(
-    PaymentMethod method,
-    String title,
-    String iconPath,
-    String subtitle,
-  ) {
-    final isSelected = _selectedPaymentMethod == method;
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isSelected ? AppColors.primaryColor : Colors.grey[200]!,
-          width: isSelected ? 2 : 1,
-        ),
-        boxShadow: isSelected
-            ? [
-                BoxShadow(
-                  color: AppColors.primaryColor.withOpacity(0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ]
-            : null,
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: () => setState(() => _selectedPaymentMethod = method),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    iconPath,
-                    width: 60,
-                    height: 40,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontWeight:
-                              isSelected ? FontWeight.w600 : FontWeight.normal,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Radio<PaymentMethod>(
-                  value: method,
-                  groupValue: _selectedPaymentMethod,
-                  onChanged: (value) =>
-                      setState(() => _selectedPaymentMethod = value!),
-                  activeColor: AppColors.primaryColor,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildBottomBar() {
+    final theme = Theme.of(context);
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: theme.shadowColor.withOpacity(0.05),
             offset: const Offset(0, -4),
             blurRadius: 8,
           ),
@@ -328,6 +353,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
           onPressed: _isLoading ? null : () => _handlePlaceOrder(context),
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primaryColor,
+            foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),

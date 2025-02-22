@@ -123,8 +123,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 FontAwesomeIcons.solidBell,
                 color: isDarkMode
                     ? Colors.cyan.withOpacity(0.5 + (index % 5) * 0.1)
-                    : Colors.cyan
-                        .withOpacity(0.5 + (index % 5) * 0.1),
+                    : Colors.cyan.withOpacity(0.5 + (index % 5) * 0.1),
                 size: isSmall ? 16.0 : 24.0,
               )
                   .animate(
@@ -166,7 +165,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
               // Text message with animations
               Text(
-                'No orders yet!',
+                'No notification yet!',
                 style: GoogleFonts.lato(
                     textStyle: Theme.of(context).textTheme.titleLarge),
               ).animate().fadeIn(duration: 600.ms).scale(
@@ -178,7 +177,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               const SizedBox(height: 10),
 
               Text(
-                'Your order history will appear here',
+                'Your notifications here',
                 style: GoogleFonts.lato(
                     textStyle: Theme.of(context).textTheme.bodyLarge),
               )
@@ -191,5 +190,4 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       ),
     );
   }
-
 }

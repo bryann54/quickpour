@@ -1,3 +1,4 @@
+import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:chupachap/features/checkout/presentation/pages/payments_screen.dart';
 import 'package:flutter/material.dart';
@@ -111,15 +112,18 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
       duration: const Duration(milliseconds: 300),
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: isDark ? Colors.grey.withOpacity(.1) : Colors.white,
+        color: isDark
+            ? AppColors.background.withOpacity(.1)
+            : Colors.grey.shade100,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? Colors.black26 : Colors.grey.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: isDark ? Colors.black26 : Colors.grey.withOpacity(0.1),
+        //     blurRadius: 10,
+        //     offset: const Offset(0, 4),
+        //   ),
+        // ],
       ),
       child: Column(
         children: [
@@ -130,12 +134,12 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
-                  Icon(icon, size: 24, color: theme.colorScheme.secondary),
-                  const SizedBox(width: 12),
+                  Icon(icon, size: 20, color: theme.colorScheme.secondary),
+                  const SizedBox(width: 5),
                   Expanded(
                     child: Text(
                       title,
-                      style: theme.textTheme.titleLarge?.copyWith(
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -187,7 +191,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                     style: TextStyle(
                       color: isSelected
                           ? theme.colorScheme.onPrimary
-                          : theme.colorScheme.onSurface,
+                          : theme.colorScheme.onSurface.withOpacity(.5),
                     ),
                   ),
                   selected: isSelected,
@@ -211,7 +215,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
         if (_selectedDate != null)
           Wrap(
             spacing: 8,
-            runSpacing: 8,
+            runSpacing: 5,
             children: _timeSlots[_selectedDate]!.map((slot) {
               final isSelected = slot == _selectedTimeSlot;
               return FilterChip(
@@ -234,9 +238,9 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                     isDark ? theme.cardColor : theme.colorScheme.surface,
                 selectedColor: theme.colorScheme.secondary,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(12),
                 ),
               );
             }).toList(),
@@ -261,15 +265,17 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? theme.cardColor : Colors.white,
+        color: isDark
+            ? AppColors.background.withOpacity(.1)
+            : Colors.grey.shade100,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? Colors.black26 : Colors.grey.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: isDark ? Colors.black26 : Colors.grey.withOpacity(0.1),
+        //     blurRadius: 10,
+        //     offset: const Offset(0, 4),
+        //   ),
+        // ],
       ),
       child: Column(
         children: [
@@ -281,7 +287,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Divider(color: theme.dividerColor),
+            child: Divider(color: theme.dividerColor.withOpacity(.5)),
           ),
           _buildPriceRow(
             'Total',
@@ -305,7 +311,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
       children: [
         Text(label, style: textStyle),
         Text(
-          value is String ? value : '₦${value.toStringAsFixed(2)}',
+          value is String ? value : 'Ksh ${value.toStringAsFixed(0)}',
           style: textStyle,
         ),
       ],
@@ -416,15 +422,15 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? theme.cardColor : Colors.white,
+        color: isDark ? theme.cardColor : Colors.grey.shade100,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? Colors.black26 : Colors.grey.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: isDark ? Colors.black26 : Colors.grey.withOpacity(0.1),
+        //     blurRadius: 10,
+        //     offset: const Offset(0, 4),
+        //   ),
+        // ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -453,7 +459,21 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
               ),
-              contentPadding: const EdgeInsets.all(16),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                  color: theme.colorScheme.primary,
+                  width: 2.0, // More distinct border when focused
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                  color: theme.colorScheme.onSurface.withOpacity(0.3),
+                  width: 1.2,
+                ),
+              ),
+              contentPadding: const EdgeInsets.all(20),
             ),
           ),
         ],
@@ -465,7 +485,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(vertical: 22),
       child: ElevatedButton(
         onPressed: _selectedTimeSlot != null
             ? () {
@@ -504,13 +524,16 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
           ),
           elevation: _selectedTimeSlot != null ? 4 : 0,
         ),
-        child: Text(
-          'Continue to Payment',
-          style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: _selectedTimeSlot != null
-                  ? theme.colorScheme.onPrimary
-                  : theme.colorScheme.onSurface.withOpacity(.3)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 17),
+          child: Text(
+            'Continue to Payment',
+            style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: _selectedTimeSlot != null
+                    ? theme.colorScheme.onPrimary
+                    : theme.colorScheme.onSurface.withOpacity(.3)),
+          ),
         ),
       ),
     );

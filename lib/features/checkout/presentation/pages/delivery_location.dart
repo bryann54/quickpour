@@ -368,7 +368,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
             }
           },
           child: Padding(
-            padding: const EdgeInsets.only(top:18.0),
+            padding: const EdgeInsets.only(top: 18.0),
             child: TextField(
               controller: _addressDetailsController,
               maxLines: 3,

@@ -253,7 +253,13 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
         controller: _searchController,
         decoration: InputDecoration(
           hintText: 'Search delivery location',
-          prefixIcon: const Icon(Icons.search),
+          hintStyle: TextStyle(
+            color: isDarkMode ? Colors.grey[500] : Colors.grey[600],
+          ),
+          prefixIcon: Icon(
+            Icons.search,
+            color: isDarkMode ? Colors.grey[500] : Colors.grey[700],
+          ),
           suffixIcon: _searchController.text.isNotEmpty
               ? IconButton(
                   icon: const Icon(Icons.clear),
@@ -297,7 +303,12 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: locations.length,
-          separatorBuilder: (context, index) => const Divider(height: 1),
+          separatorBuilder: (context, index) => Divider(
+            height: 2,
+            color: Theme.of(
+              context,
+            ).dividerColor.withOpacity(.1),
+          ),
           itemBuilder: (context, index) {
             final location = locations[index];
             bool isSaved = _savedLocations.any((loc) =>
@@ -305,7 +316,8 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
                 loc['secondaryText'] == location['secondaryText']);
 
             return ListTile(
-              leading: const Icon(Icons.location_on, color: AppColors.accentColor),
+              leading:
+                  const Icon(Icons.location_on, color: AppColors.accentColor),
               title: Text(location['mainText'] ?? '',
                   style: const TextStyle(fontWeight: FontWeight.bold)),
               subtitle: Text(
@@ -345,6 +357,7 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Place Autocomplete'),
+        centerTitle: true,
       ),
       body: Column(
         children: [

@@ -46,7 +46,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     ));
   }
 
-Future<void> _onPlaceOrder(
+  Future<void> _onPlaceOrder(
       PlaceOrderEvent event, Emitter<CheckoutState> emit) async {
     try {
       emit(const CheckoutLoadingState());
@@ -129,7 +129,4 @@ Future<void> _onPlaceOrder(
       ));
     }
   }
-
 }
-
-
