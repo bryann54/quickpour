@@ -1,3 +1,4 @@
+import 'package:chupachap/core/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class InfoRow extends StatelessWidget {
@@ -14,11 +15,13 @@ class InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
         border: Border(
           bottom:
-              isLast ? BorderSide.none : BorderSide(color: Colors.grey[200]!),
+              isLast ? BorderSide.none : BorderSide(color:isDark?AppColors.dividerColorDark: AppColors.dividerColorDark),
         ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

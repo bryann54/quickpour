@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:chupachap/features/notifications/presentation/bloc/notifications_bloc.dart';
 import 'package:chupachap/features/notifications/data/models/notifications_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:chupachap/features/notifications/presentation/widgets/notification_icon.dart';
+import 'package:chupachap/features/notifications/presentation/widgets/notification_footer.dart';
 
 class NotificationTile extends StatelessWidget {
   final NotificationModel notification;
@@ -64,7 +65,7 @@ class NotificationTile extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildLeadingIcon(theme),
+                  NotificationIcon(notification: notification, theme: theme),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Column(
@@ -111,7 +112,8 @@ class NotificationTile extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 12),
-                        _buildFooter(theme),
+                        NotificationFooter(
+                            notification: notification, theme: theme),
                       ],
                     ),
                   ),
@@ -122,91 +124,5 @@ class NotificationTile extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget _buildLeadingIcon(ThemeData theme) {
-    final IconData icon;
-    final Color backgroundColor;
-
-    switch (notification.type) {
-      case NotificationType.order:
-        icon = Icons.shopping_cart_outlined;
-        backgroundColor = Colors.blue.shade50;
-        break;
-      case NotificationType.promotion:
-        icon = Icons.local_offer_outlined;
-        backgroundColor = Colors.purple.shade50;
-        break;
-      case NotificationType.delivery:
-        icon = Icons.local_shipping_outlined;
-        backgroundColor = Colors.green.shade50;
-        break;
-      case NotificationType.system:
-        icon = Icons.settings_outlined;
-        backgroundColor = Colors.grey.shade100;
-        break;
-    }
-
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        shape: BoxShape.circle,
-      ),
-      child: Icon(
-        icon,
-        size: 24,
-        color: theme.colorScheme.primary,
-      ),
-    );
-  }
-
-  Widget _buildFooter(ThemeData theme) {
-    return Row(
-      children: [
-        Icon(
-          _getTypeIcon(),
-          size: 14,
-          color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
-        ),
-        const SizedBox(width: 6),
-        Text(
-          _formatTimestamp(notification.timestamp),
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
-          ),
-        ),
-      ],
-    );
-  }
-
-  IconData _getTypeIcon() {
-    switch (notification.type) {
-      case NotificationType.order:
-        return Icons.shopping_cart;
-      case NotificationType.promotion:
-        return Icons.local_offer;
-      case NotificationType.delivery:
-        return Icons.local_shipping;
-      case NotificationType.system:
-        return Icons.settings;
-    }
-  }
-
-  String _formatTimestamp(DateTime timestamp) {
-    final now = DateTime.now();
-    final difference = now.difference(timestamp);
-
-    if (difference.inMinutes < 1) {
-      return 'Just now';
-    } else if (difference.inHours < 1) {
-      return '${difference.inMinutes}m ago';
-    } else if (difference.inHours < 24) {
-      return '${difference.inHours}h ago';
-    } else if (difference.inDays < 7) {
-      return '${difference.inDays}d ago';
-    } else {
-      return DateFormat('MMM d, HH:mm').format(timestamp);
-    }
   }
 }
