@@ -10,33 +10,58 @@ part 'notifications_state.dart';
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   final NotificationsRepository _repository;
 
-  NotificationsBloc(this._repository) : super(const NotificationsState()) {
+  NotificationsBloc({required NotificationsRepository repository})
+      : _repository = repository,
+        super(const NotificationsState()) {
     on<FetchNotifications>(_onFetchNotifications);
-    on<MarkNotificationAsRead>(_onMarkNotificationAsRead);
     on<FetchUnreadCount>(_onFetchUnreadCount);
     on<DismissNotification>(_onDismissNotification);
+    on<MarkNotificationAsRead>(_onMarkNotificationAsRead);
   }
 
   Future<void> _onFetchNotifications(
     FetchNotifications event,
     Emitter<NotificationsState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true));
     try {
+      emit(state.copyWith(isLoading: true));
       final notifications = await _repository.fetchNotifications();
-      final uniqueNotifications = notifications.toSet().toList(); // Deduplicate
-      final unreadCount = uniqueNotifications.where((n) => !n.isRead).length;
-
       emit(state.copyWith(
-        notifications: uniqueNotifications,
-        unreadCount: unreadCount,
+        notifications: notifications,
         isLoading: false,
       ));
     } catch (e) {
       emit(state.copyWith(
-        error: e.toString(),
+        error: 'Failed to fetch notifications: $e',
         isLoading: false,
       ));
+    }
+  }
+
+  Future<void> _onFetchUnreadCount(
+    FetchUnreadCount event,
+    Emitter<NotificationsState> emit,
+  ) async {
+    try {
+      final count = await _repository.getUnreadNotificationsCount();
+      emit(state.copyWith(unreadCount: count));
+    } catch (e) {
+      emit(state.copyWith(error: 'Failed to fetch unread count: $e'));
+    }
+  }
+
+  Future<void> _onDismissNotification(
+    DismissNotification event,
+    Emitter<NotificationsState> emit,
+  ) async {
+    try {
+      await _repository.deleteNotification(event.notificationId);
+      final updatedNotifications = state.notifications
+          .where((notification) => notification.id != event.notificationId)
+          .toList();
+      emit(state.copyWith(notifications: updatedNotifications));
+    } catch (e) {
+      emit(state.copyWith(error: 'Failed to delete notification: $e'));
     }
   }
 
@@ -46,62 +71,16 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   ) async {
     try {
       await _repository.markNotificationAsRead(event.notificationId);
-
-      // Update the local state to reflect the change
       final updatedNotifications = state.notifications.map((notification) {
         if (notification.id == event.notificationId) {
           return notification.copyWith(isRead: true);
         }
         return notification;
       }).toList();
-
-      final newUnreadCount =
-          updatedNotifications.where((n) => !n.isRead).length;
-
-      emit(state.copyWith(
-        notifications: updatedNotifications,
-        unreadCount: newUnreadCount,
-      ));
+      emit(state.copyWith(notifications: updatedNotifications));
+      add(FetchUnreadCount());
     } catch (e) {
-      emit(state.copyWith(error: e.toString()));
-    }
-  }
-
-  Future<void> _onFetchUnreadCount(
-    FetchUnreadCount event,
-    Emitter<NotificationsState> emit,
-  ) async {
-    try {
-      final notifications = await _repository.fetchNotifications();
-      final unreadCount = notifications.where((n) => !n.isRead).length;
-      emit(state.copyWith(unreadCount: unreadCount));
-    } catch (e) {
-      emit(state.copyWith(error: e.toString()));
-    }
-  }
-
-  Future<void> _onDismissNotification(
-    DismissNotification event,
-    Emitter<NotificationsState> emit,
-  ) async {
-    try {
-      // Remove the notification from Firestore
-      await _repository.deleteNotification(event.notificationId);
-
-      // Update the local state to remove the dismissed notification
-      final updatedNotifications = state.notifications
-          .where((notification) => notification.id != event.notificationId)
-          .toList();
-
-      final newUnreadCount =
-          updatedNotifications.where((n) => !n.isRead).length;
-
-      emit(state.copyWith(
-        notifications: updatedNotifications,
-        unreadCount: newUnreadCount,
-      ));
-    } catch (e) {
-      emit(state.copyWith(error: e.toString()));
+      emit(state.copyWith(error: 'Failed to mark notification as read: $e'));
     }
   }
 }
