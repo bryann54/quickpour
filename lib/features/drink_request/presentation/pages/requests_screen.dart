@@ -1,5 +1,6 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
+import 'package:chupachap/core/utils/strings.dart';
 import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/drink_request/presentation/bloc/drink_request_bloc.dart';
 import 'package:chupachap/features/drink_request/presentation/bloc/drink_request_event.dart';
@@ -10,6 +11,7 @@ import 'package:chupachap/features/drink_request/presentation/widgets/drink_requ
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RequestsScreen extends StatefulWidget {
@@ -112,24 +114,105 @@ class _RequestsScreenState extends State<RequestsScreen> {
                   return const Center(child: DrinkRequestListTileShimmer());
                 } else if (state is DrinkRequestSuccess) {
                   if (state.requests.isEmpty) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.local_drink_outlined,
-                            size: 48,
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'No requests yet',
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: Center(
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                // Floating hearts background
+                                ...List.generate(20, (index) {
+                                  final isSmall = index % 2 == 0;
+                                  final xOffset = (index * 20 - 140).toDouble();
+                                  final startY = index * 30 - 200.0;
+
+                                  return Positioned(
+                                    left:
+                                        MediaQuery.of(context).size.width / 2 +
+                                            xOffset,
+                                    top: startY,
+                                    child: Icon(
+                                      FontAwesomeIcons.beerMugEmpty,
+                                      color: isDarkMode
+                                          ? AppColors.accentColorDark
+                                              .withOpacity(
+                                                  0.5 + (index % 5) * 0.1)
+                                          : AppColors.accentColor.withOpacity(
+                                              0.5 + (index % 5) * 0.1),
+                                      size: isSmall ? 16.0 : 24.0,
+                                    )
+                                        .animate(
+                                          onPlay: (controller) =>
+                                              controller.repeat(),
+                                        )
+                                        .moveY(
+                                          begin: 0,
+                                          end: 500,
+                                          duration: Duration(
+                                              seconds: isSmall
+                                                  ? 6 + index % 4
+                                                  : 8 + index % 5),
+                                          curve: Curves.easeInOut,
+                                        )
+                                        .fadeIn(duration: 600.ms)
+                                        .then()
+                                        .fadeOut(
+                                          begin: 0.7,
+                                          delay: Duration(
+                                              seconds: isSmall
+                                                  ? 5 + index % 3
+                                                  : 7 + index % 4),
+                                        ),
+                                  );
+                                }),
+
+                                // Main content
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // Animated empty favorites image
+                                    Image.asset(
+                                      'assets/1212-removebg-preview.png',
+                                      width: 200,
+                                      height: 150,
+                                    ).animate().scale(
+                                          begin: const Offset(0.8, 0.8),
+                                          end: const Offset(1.0, 1.0),
+                                          duration: 800.ms,
+                                          curve: Curves.elasticOut,
+                                        ),
+
+                                    // Text message with typing animation
+                                    Text(
+                                      empty_requests,
+                                      style: GoogleFonts.lato(
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge),
+                                    ).animate().fadeIn(duration: 600.ms).scale(
+                                        begin: const Offset(0.8, 0.8),
+                                        end: const Offset(1.0, 1.0),
+                                        duration: 800.ms,
+                                        curve: Curves.elasticOut),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      request_text,
+                                      style: GoogleFonts.lato(
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge),
+                                    )
+                                        .animate()
+                                        .fadeIn(duration: 800.ms)
+                                        .slideY(begin: 0.5, duration: 800.ms),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     );
                   }
                   return ListView.builder(

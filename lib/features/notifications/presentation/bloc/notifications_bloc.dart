@@ -14,6 +14,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     on<FetchNotifications>(_onFetchNotifications);
     on<MarkNotificationAsRead>(_onMarkNotificationAsRead);
     on<FetchUnreadCount>(_onFetchUnreadCount);
+    on<DismissNotification>(_onDismissNotification);
   }
 
   Future<void> _onFetchNotifications(
@@ -24,7 +25,6 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     try {
       final notifications = await _repository.fetchNotifications();
       final uniqueNotifications = notifications.toSet().toList(); // Deduplicate
-
       final unreadCount = uniqueNotifications.where((n) => !n.isRead).length;
 
       emit(state.copyWith(
@@ -75,6 +75,31 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       final notifications = await _repository.fetchNotifications();
       final unreadCount = notifications.where((n) => !n.isRead).length;
       emit(state.copyWith(unreadCount: unreadCount));
+    } catch (e) {
+      emit(state.copyWith(error: e.toString()));
+    }
+  }
+
+  Future<void> _onDismissNotification(
+    DismissNotification event,
+    Emitter<NotificationsState> emit,
+  ) async {
+    try {
+      // Remove the notification from Firestore
+      await _repository.deleteNotification(event.notificationId);
+
+      // Update the local state to remove the dismissed notification
+      final updatedNotifications = state.notifications
+          .where((notification) => notification.id != event.notificationId)
+          .toList();
+
+      final newUnreadCount =
+          updatedNotifications.where((n) => !n.isRead).length;
+
+      emit(state.copyWith(
+        notifications: updatedNotifications,
+        unreadCount: newUnreadCount,
+      ));
     } catch (e) {
       emit(state.copyWith(error: e.toString()));
     }

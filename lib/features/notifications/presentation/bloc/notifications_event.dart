@@ -18,4 +18,13 @@ class MarkNotificationAsRead extends NotificationsEvent {
   List<Object> get props => [notificationId];
 }
 
+class DismissNotification extends NotificationsEvent {
+  final String notificationId;
+
+  const DismissNotification(this.notificationId);
+
+  @override
+  List<Object> get props => [notificationId];
+}
+
 class FetchUnreadCount extends NotificationsEvent {}

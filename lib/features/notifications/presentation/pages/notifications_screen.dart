@@ -47,7 +47,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         : AppColors.accentColorDark,
                   ),
                 ),
-              ).animate().fadeIn(duration: 500.ms).slideY(begin: 0.1),
+              ).animate().fadeIn(duration: 1000.ms).slideY(begin: 0.1),
             ),
           ),
           Expanded(
@@ -67,33 +67,39 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 }
 
                 if (state.notifications.isEmpty) {
-                  return _buildEmptyOrdersView(context);
+                  return _buildEmptyNotificationsView(context);
                 }
 
                 return RefreshIndicator(
-                    onRefresh: () async {
-                      context.read<NotificationsBloc>()
-                        ..add(FetchNotifications())
-                        ..add(FetchUnreadCount());
+                  onRefresh: () async {
+                    context.read<NotificationsBloc>()
+                      ..add(FetchNotifications())
+                      ..add(FetchUnreadCount());
+                  },
+                  child: ListView.builder(
+                    itemCount: state.notifications.length,
+                    itemBuilder: (context, index) {
+                      final notification = state.notifications[index];
+                      return NotificationTile(
+                        key: ValueKey(
+                            notification.id), // Unique key for each tile
+                        notification: notification,
+                        onTap: () {
+                          if (!notification.isRead) {
+                            context.read<NotificationsBloc>()
+                              ..add(MarkNotificationAsRead(notification.id))
+                              ..add(FetchUnreadCount());
+                          }
+                        },
+                        onDismissed: () {
+                          context
+                              .read<NotificationsBloc>()
+                              .add(DismissNotification(notification.id));
+                        },
+                      );
                     },
-                    child: ListView.builder(
-                      itemCount: state.notifications.length,
-                      itemBuilder: (context, index) {
-                        final notification = state.notifications[index];
-                        return NotificationTile(
-                          key: ValueKey(notification
-                              .id), // Ensure a unique key for each tile
-                          notification: notification,
-                          onTap: () {
-                            if (!notification.isRead) {
-                              context.read<NotificationsBloc>()
-                                ..add(MarkNotificationAsRead(notification.id))
-                                ..add(FetchUnreadCount());
-                            }
-                          },
-                        );
-                      },
-                    ));
+                  ),
+                );
               },
             ),
           ),
@@ -102,10 +108,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     );
   }
 
-  Widget _buildEmptyOrdersView(BuildContext context) {
+  Widget _buildEmptyNotificationsView(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    // Fix: Removed the Expanded widget that was causing the error
     return Center(
       child: Stack(
         alignment: Alignment.center,
@@ -165,7 +170,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
               // Text message with animations
               Text(
-                'No notification yet!',
+                'No notifications yet!',
                 style: GoogleFonts.lato(
                     textStyle: Theme.of(context).textTheme.titleLarge),
               ).animate().fadeIn(duration: 600.ms).scale(
@@ -177,7 +182,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               const SizedBox(height: 10),
 
               Text(
-                'Your notifications here',
+                'Your notifications will appear here',
                 style: GoogleFonts.lato(
                     textStyle: Theme.of(context).textTheme.bodyLarge),
               )
