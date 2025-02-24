@@ -231,7 +231,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
           ),
           child: Column(
             children: [
-         _buildDeliveryOption(
+              _buildDeliveryOption(
                 'express',
                 'Express Delivery',
                 'Priority delivery',
@@ -246,8 +246,8 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
               ),
               const SizedBox(height: 5),
               _buildDeliveryOption(
-                'pickup', 
-                'Pick Up', 
+                'pickup',
+                'Pick Up',
                 'Pick up order yourself',
                 Icons.store_outlined,
               ),
@@ -426,9 +426,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
         title: Text(
           'Delivery Type',
           style: theme.textTheme.titleLarge?.copyWith(
-            color: theme.colorScheme.onSurface,
-            fontWeight: FontWeight.w500
-          ),
+              color: theme.colorScheme.onSurface, fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
         elevation: 0,
@@ -507,7 +505,8 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                      child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             'Confirm delivery type',
@@ -516,11 +515,14 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
                               color: (_selectedLocation != null &&
                                       _deliveryType.isNotEmpty)
                                   ? theme.colorScheme.onPrimary
-                                  : theme.colorScheme.onSurface.withOpacity(0.4),
+                                  : theme.colorScheme.onSurface
+                                      .withOpacity(0.4),
                             ),
                           ),
-                          const SizedBox(width: 12,),
-                          Icon(
+                          const SizedBox(
+                            width: 12,
+                          ),
+                          const Icon(
                             Icons.arrow_forward,
                           )
                         ],

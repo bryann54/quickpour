@@ -195,7 +195,7 @@ class OrderItemWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Icon based on delivery type
-         Icon(
+              Icon(
                 getDeliveryIcon(order.deliveryType),
                 size: 20,
                 color: isDark
@@ -217,7 +217,7 @@ class OrderItemWidget extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                 Text(
+                    Text(
                       getDeliveryText(order.deliveryType),
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
@@ -324,7 +324,7 @@ class OrderItemWidget extends StatelessWidget {
                 ),
               ),
               Text(
-                'KSh ${order.total.toStringAsFixed(0)}',
+                'KSh ${formatMoney(order.total)}',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_event.dart';
@@ -305,7 +306,7 @@ class CartItemWidget extends StatelessWidget {
                               children: [
                                 TextSpan(
                                   text:
-                                      'Ksh ${cartItem.product.discountPrice.toStringAsFixed(0)}',
+                                      'Ksh ${formatMoney(cartItem.product.discountPrice)}',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
@@ -321,7 +322,7 @@ class CartItemWidget extends StatelessWidget {
                                 ),
                                 TextSpan(
                                   text:
-                                      'Ksh ${cartItem.product.price.toStringAsFixed(0)}',
+                                      'Ksh ${formatMoney(cartItem.product.price)}',
                                   style: const TextStyle(
                                     fontSize: 14,
                                     color: Colors.red,
@@ -336,7 +337,7 @@ class CartItemWidget extends StatelessWidget {
                           cartItem.product.price)
                         Expanded(
                           child: Text(
-                            'Ksh ${cartItem.product.price.toStringAsFixed(0)}',
+                            'Ksh ${formatMoney(cartItem.product.price)}',
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,

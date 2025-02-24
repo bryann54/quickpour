@@ -1,4 +1,5 @@
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:chupachap/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:chupachap/features/auth/presentation/bloc/auth_state.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
@@ -138,7 +139,8 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
       ),
     );
   }
-Widget _buildOrderSummary() {
+
+  Widget _buildOrderSummary() {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -201,7 +203,7 @@ Widget _buildOrderSummary() {
           ),
           _buildSummaryRow(
             'Total Amount',
-            'KSh ${widget.totalAmount.toStringAsFixed(0)}',
+            'KSh ${formatMoney(widget.totalAmount)}',
             theme: theme,
             isDark: isDark,
             isTotal: true,
@@ -252,7 +254,6 @@ Widget _buildOrderSummary() {
       ),
     );
   }
-
 
   Widget _buildPaymentMethodTile(
     PaymentMethod method,
@@ -411,7 +412,7 @@ Widget _buildOrderSummary() {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Pay KSh ${widget.totalAmount.toStringAsFixed(0)}',
+                      'Pay KSh ${formatMoney(widget.totalAmount)}',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_shimmer_widget.dart';
@@ -245,7 +246,7 @@ class _ItemBottomsheetState extends State<ItemBottomsheet> {
                                   const TextSpan(text: 'Add '),
                                   TextSpan(
                                     text:
-                                        'KSh ${_remainingForFreeDelivery.toStringAsFixed(0)}',
+                                        'KSh ${formatMoney(_remainingForFreeDelivery)}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: theme.primaryColor,

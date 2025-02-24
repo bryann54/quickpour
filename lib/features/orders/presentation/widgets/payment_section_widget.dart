@@ -20,8 +20,6 @@ class DeliveryPaymentSection extends StatelessWidget {
           InfoRow(label: 'Delivery Type', value: order.deliveryType),
           InfoRow(label: 'Delivery Address', value: order.address),
           InfoRow(label: 'Payment Method', value: order.paymentMethod),
-
-        
           InfoRow(
             label: 'Delivery Window',
             value: order.deliveryTime,

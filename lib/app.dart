@@ -86,10 +86,11 @@ class App extends StatelessWidget {
             ),
           ),
           // Move NotificationsBloc after auth bloc
-    BlocProvider(
-  create: (context) => NotificationsBloc(
-    repository: NotificationsRepository(),
-  ),),
+          BlocProvider(
+            create: (context) => NotificationsBloc(
+              repository: NotificationsRepository(),
+            ),
+          ),
           BlocProvider(
               create: (_) =>
                   PromotionsBloc(ProductRepository())..add(FetchPromotions())),

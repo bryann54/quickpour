@@ -117,8 +117,6 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
             ? AppColors.background.withOpacity(.1)
             : Colors.grey.shade100,
         borderRadius: BorderRadius.circular(16),
-
-    
       ),
       child: Column(
         children: [
@@ -150,7 +148,6 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
               ),
             ),
           ),
-          
           AnimatedCrossFade(
             firstChild: const SizedBox(height: 0),
             secondChild: Padding(
@@ -265,7 +262,6 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
             ? AppColors.background.withOpacity(.1)
             : Colors.grey.shade100,
         borderRadius: BorderRadius.circular(16),
-     
       ),
       child: Column(
         children: [
@@ -277,7 +273,10 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Divider(color:isDark?AppColors.dividerColorDark: AppColors.dividerColorDark.withOpacity(.3)),
+            child: Divider(
+                color: isDark
+                    ? AppColors.dividerColorDark
+                    : AppColors.dividerColorDark.withOpacity(.3)),
           ),
           _buildPriceRow(
             'Total',
@@ -301,7 +300,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
       children: [
         Text(label, style: textStyle),
         Text(
-          value is String ? value : 'Ksh ${value.toStringAsFixed(0)}',
+          value is String ? value : 'Ksh ${formatMoney(value)}',
           style: textStyle,
         ),
       ],
@@ -321,9 +320,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
         title: Text(
           'added information'.capitalize(),
           style: theme.textTheme.headlineSmall?.copyWith(
-            color: theme.colorScheme.onSurface,
-            fontWeight: FontWeight.w500
-          ),
+              color: theme.colorScheme.onSurface, fontWeight: FontWeight.w500),
         ),
         iconTheme: IconThemeData(
           color: theme.colorScheme.onSurface,
@@ -345,8 +342,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                         setState(() => _addressExpanded = !_addressExpanded),
                     content: _buildAddressContent(),
                   ),
-                if (widget.deliveryType.toLowerCase() !=
-                      'pickup') 
+                  if (widget.deliveryType.toLowerCase() != 'pickup')
                     _buildSectionCard(
                       title: 'Delivery Window',
                       icon: Icons.access_time,
@@ -417,7 +413,6 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
       decoration: BoxDecoration(
         color: isDark ? theme.cardColor : Colors.grey.shade100,
         borderRadius: BorderRadius.circular(16),
-     
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -467,7 +462,8 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
       ),
     );
   }
-Widget _buildContinueButton() {
+
+  Widget _buildContinueButton() {
     final theme = Theme.of(context);
     final isPickup = widget.deliveryType.toLowerCase() == 'pickup';
     final isEnabled = isPickup || _selectedTimeSlot != null;
@@ -529,6 +525,4 @@ Widget _buildContinueButton() {
       ),
     );
   }
-
 }
-

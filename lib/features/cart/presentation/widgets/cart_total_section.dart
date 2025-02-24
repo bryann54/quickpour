@@ -1,4 +1,5 @@
 // cart_total_section.dart
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
@@ -36,7 +37,7 @@ class CartTotalSection extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    'KSh ${cart.totalPrice.toStringAsFixed(0)}',
+                    'KSh ${formatMoney(cart.totalPrice)}',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           color: isDarkMode
                               ? AppColors.surface.withOpacity(.7)

@@ -1,4 +1,5 @@
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,7 @@ class AddItemSection extends StatelessWidget {
                   children: [
                     const TextSpan(text: 'Spend an extra '),
                     TextSpan(
-                      text: 'KSh ${remaining.toStringAsFixed(0)}',
+                      text: 'KSh ${formatMoney(remaining)}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: highlightColor,

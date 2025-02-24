@@ -1,4 +1,5 @@
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_event.dart';
@@ -205,7 +206,7 @@ class CartFooter extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Text(
-                'KSh ${(price * quantity).toStringAsFixed(0)}',
+                'KSh ${formatMoney(price * quantity)}',
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge

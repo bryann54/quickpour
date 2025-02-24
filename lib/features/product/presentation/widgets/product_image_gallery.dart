@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/product/data/models/product_model.dart';
@@ -130,7 +131,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                       child: Material(
                         color: Colors.transparent,
                         child: Text(
-                          'KSH ${widget.product.discountPrice.toStringAsFixed(0)}',
+                          'KSH ${formatMoney(widget.product.discountPrice)}',
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
                                     color: AppColors.accentColor,
@@ -143,7 +144,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                       widget.product.discountPrice < widget.product.price) ...[
                     const SizedBox(width: 8),
                     Text(
-                      'KSH ${widget.product.price.toStringAsFixed(0)}',
+                      'KSH ${formatMoney(widget.product.price)}',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             decoration: TextDecoration.lineThrough,
                             color: Colors.red,
@@ -157,7 +158,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                       child: Material(
                         color: Colors.transparent,
                         child: Text(
-                          'KSH ${widget.product.price.toStringAsFixed(0)}',
+                          'KSH ${formatMoney(widget.product.price)}',
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.bold,

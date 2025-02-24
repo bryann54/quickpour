@@ -8,8 +8,6 @@ import 'dart:convert';
 
 import 'package:chupachap/core/utils/colors.dart';
 
-
-
 class PlaceAutocompletePage extends StatefulWidget {
   const PlaceAutocompletePage({super.key});
 
@@ -359,10 +357,10 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title:  Text('delivery location'.capitalize(),style: TextStyle(
-
-          fontWeight: FontWeight.w500
-        ),),
+        title: Text(
+          'delivery location'.capitalize(),
+          style: const TextStyle(fontWeight: FontWeight.w500),
+        ),
         centerTitle: true,
       ),
       body: Column(

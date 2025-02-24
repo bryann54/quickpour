@@ -1,3 +1,4 @@
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/categories/data/repositories/category_repository.dart';
@@ -257,8 +258,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       max: 10000,
       divisions: 100,
       labels: RangeLabels(
-        'Ksh ${_currentRangeValues.start.round()}',
-        'Ksh ${_currentRangeValues.end.round()}',
+        'Ksh ${formatMoney(_currentRangeValues.start.round())}',
+        'Ksh ${formatMoney(_currentRangeValues.end.round())}',
       ),
       onChanged: (values) {
         setState(() {

@@ -35,7 +35,7 @@ IconData getDeliveryIcon(String deliveryType) {
     case 'pickup':
       return Icons.storefront_outlined;
     default:
-      return Icons.help_outline; 
+      return Icons.help_outline;
   }
 }
 
@@ -50,4 +50,9 @@ String getDeliveryText(String deliveryType) {
     default:
       return 'Standard Delivery'; // default text
   }
+}
+
+String formatMoney(num amount) {
+  final formatter = NumberFormat('#,##0', 'en_US');
+  return formatter.format(amount);
 }

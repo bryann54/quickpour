@@ -34,7 +34,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  CustomAppBar(showNotification: false, showCart: false),
+      appBar: CustomAppBar(showNotification: false, showCart: false),
       body: Column(
         children: [
           const NotificationsHeader(),
