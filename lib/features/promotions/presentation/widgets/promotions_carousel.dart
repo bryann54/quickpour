@@ -150,7 +150,7 @@ class PromotionsCarousel extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            '${_calculateDiscountPercentage(product.price, product.discountPrice)}% Off',
+                            '${calculateDiscountPercentage(product.price, product.discountPrice)}% Off',
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -220,10 +220,4 @@ class PromotionsCarousel extends StatelessWidget {
   }
 }
 
-int _calculateDiscountPercentage(double originalPrice, double discountPrice) {
-  if (originalPrice <= 0 || discountPrice <= 0) {
-    return 0; // Handle invalid values gracefully
-  }
-  final discount = ((originalPrice - discountPrice) / originalPrice) * 100;
-  return discount.round(); // Return rounded discount percentage
-}
+

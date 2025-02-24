@@ -106,7 +106,7 @@ class PromotionCard extends StatelessWidget {
                                     children: [
                                       const SizedBox(width: 4),
                                       Text(
-                                        '${_calculateDiscountPercentage(product.price, product.discountPrice)}% OFF',
+                                        '${calculateDiscountPercentage(product.price, product.discountPrice)}% OFF',
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 11,
@@ -260,8 +260,4 @@ class PromotionCard extends StatelessWidget {
     );
   }
 
-  int _calculateDiscountPercentage(double originalPrice, double discountPrice) {
-    if (originalPrice <= 0 || discountPrice <= 0) return 0;
-    return ((originalPrice - discountPrice) / originalPrice * 100).round();
-  }
 }

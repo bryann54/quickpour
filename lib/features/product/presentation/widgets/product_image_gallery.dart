@@ -22,13 +22,7 @@ class ProductImageGallery extends StatefulWidget {
 class _ProductImageGalleryState extends State<ProductImageGallery> {
   int _currentImageIndex = 0;
 
-  int _calculateDiscountPercentage(double originalPrice, double discountPrice) {
-    if (originalPrice <= 0 || discountPrice <= 0) {
-      return 0;
-    }
-    final discount = ((originalPrice - discountPrice) / originalPrice) * 100;
-    return discount.round();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +99,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          '${_calculateDiscountPercentage(widget.product.price, widget.product.discountPrice)}% OFF',
+                          '${calculateDiscountPercentage(widget.product.price, widget.product.discountPrice)}% OFF',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 11,

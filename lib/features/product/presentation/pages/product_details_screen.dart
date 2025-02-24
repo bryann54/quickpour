@@ -34,13 +34,7 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   late int quantity;
-  int _calculateDiscountPercentage(double originalPrice, double discountPrice) {
-    if (originalPrice <= 0 || discountPrice <= 0) {
-      return 0; // Handle invalid values gracefully
-    }
-    final discount = ((originalPrice - discountPrice) / originalPrice) * 100;
-    return discount.round(); // Return rounded discount percentage
-  }
+
 
   @override
   void initState() {
@@ -201,7 +195,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
-                                      '${_calculateDiscountPercentage(widget.product.price, widget.product.discountPrice)}% OFF',
+                                      '${calculateDiscountPercentage(widget.product.price, widget.product.discountPrice)}% OFF',
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 11,

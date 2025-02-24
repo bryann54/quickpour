@@ -56,3 +56,11 @@ String formatMoney(num amount) {
   final formatter = NumberFormat('#,##0', 'en_US');
   return formatter.format(amount);
 }
+
+int calculateDiscountPercentage(double originalPrice, double discountPrice) {
+  if (originalPrice <= 0 || discountPrice <= 0) {
+    return 0; // Handle invalid values gracefully
+  }
+  final discount = ((originalPrice - discountPrice) / originalPrice) * 100;
+  return discount.round(); // Return rounded discount percentage
+}
