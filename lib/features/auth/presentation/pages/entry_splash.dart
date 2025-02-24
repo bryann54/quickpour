@@ -1,9 +1,11 @@
-// Make sure to import your colors
-import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/core/wrapper/wrapper.dart';
+import 'package:chupachap/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:chupachap/features/auth/presentation/pages/Splash_screen.dart';
+import 'package:chupachap/features/home/presentation/widgets/bottom_nav.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/gradient_borders.dart';
+import 'package:chupachap/core/utils/colors.dart';
 
 class EntrySplashScreen extends StatefulWidget {
   const EntrySplashScreen({super.key});
@@ -18,17 +20,22 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
   late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
   late Animation<double> _backgroundFadeAnimation;
+  bool _authCheckComplete = false;
+  bool _animationComplete = false;
 
   @override
   void initState() {
     super.initState();
+    _setupAnimations();
+    _checkAuth();
+  }
 
+  void _setupAnimations() {
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 3),
     );
 
-    // Scale animation with bounce effect
     _scaleAnimation = Tween<double>(begin: 0.2, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
@@ -36,7 +43,6 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
       ),
     );
 
-    // Fade animation for logo
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
@@ -44,7 +50,6 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
       ),
     );
 
-    // Background fade animation
     _backgroundFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
@@ -52,16 +57,53 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
       ),
     );
 
-    // Start the animation
-    _animationController.forward();
-
-    // Navigate to home screen after animation completes
-    Future.delayed(const Duration(seconds: 4), () {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const Wrapper()),
-        (route) => false,
-      );
+    _animationController.forward().then((_) {
+      setState(() {
+        _animationComplete = true;
+      });
+      _navigateBasedOnAuth();
     });
+  }
+
+  Future<void> _checkAuth() async {
+    final authBloc = context.read<AuthBloc>();
+
+    try {
+      if (authBloc.authUseCases.isUserSignedIn()) {
+        setState(() {
+          _authCheckComplete = true;
+        });
+        _navigateBasedOnAuth();
+      } else {
+        setState(() {
+          _authCheckComplete = true;
+        });
+        _navigateBasedOnAuth();
+      }
+    } catch (e) {
+      setState(() {
+        _authCheckComplete = true;
+      });
+      _navigateBasedOnAuth();
+    }
+  }
+
+  void _navigateBasedOnAuth() {
+    if (_authCheckComplete && _animationComplete) {
+      final authBloc = context.read<AuthBloc>();
+
+      if (authBloc.authUseCases.isUserSignedIn()) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const BottomNav()),
+          (route) => false,
+        );
+      } else {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const SplashScreen()),
+          (route) => false,
+        );
+      }
+    }
   }
 
   @override
@@ -78,27 +120,25 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
         builder: (context, child) {
           return Stack(
             children: [
-              // Background gradient with fade animation
               Opacity(
                 opacity: _backgroundFadeAnimation.value,
                 child: Container(
                   decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                    colors: [
-                      AppColors.primaryColor,
-                      AppColors.primaryColor,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  )),
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.primaryColor,
+                        AppColors.primaryColor,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
                 ),
               ),
-              // Animated pattern overlayR
               Opacity(
                 opacity: _backgroundFadeAnimation.value * 0.1,
                 child: Container(),
               ),
-              // Center logo with scale and fade animations
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -122,16 +162,16 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
-                              width: 2, // Border width
+                              width: 2,
                             ),
                             borderRadius: BorderRadius.circular(15),
-                            // boxShadow: const [
-                            //   BoxShadow(
-                            //     color: AppColors.shadowColor,
-                            //     blurRadius: 20,
-                            //     spreadRadius: 5,
-                            //   ),
-                            // ],
+                            boxShadow: const [
+                              BoxShadow(
+                                color: AppColors.shadowColor,
+                                blurRadius: 20,
+                                spreadRadius: 5,
+                              ),
+                            ],
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
@@ -143,8 +183,6 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                         ),
                       ),
                     ),
-
-                    // // App name with fade animation
                     Opacity(
                       opacity: _fadeAnimation.value,
                       child: Text(
@@ -167,14 +205,16 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                       ),
                     ),
                     const SizedBox(height: 10),
-                    // Tagline with fade animation
                     Opacity(
                       opacity: _fadeAnimation.value,
-                      child: Text('Drink yako Pap!!',
-                          style: GoogleFonts.tangerine(
-                              color: AppColors.background,
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold)),
+                      child: Text(
+                        'Drink yako Pap!!',
+                        style: GoogleFonts.tangerine(
+                          color: AppColors.background,
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ],
                 ),
