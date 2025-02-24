@@ -259,5 +259,4 @@ class PromotionCard extends StatelessWidget {
       ),
     );
   }
-
 }

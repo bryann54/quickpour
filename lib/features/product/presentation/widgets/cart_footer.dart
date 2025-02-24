@@ -43,7 +43,7 @@ class CartFooter extends StatelessWidget {
 
   Widget _buildAddToCartButton(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         boxShadow: [
@@ -188,7 +188,10 @@ class CartFooter extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     // Use discounted price if available, else fall back to product price.
-    final price = product.discountPrice;
+    final price =
+        product.discountPrice > 0 && product.discountPrice < product.price
+            ? product.discountPrice
+            : product.price;
 
     return SizedBox(
       width: screenWidth * 0.5,

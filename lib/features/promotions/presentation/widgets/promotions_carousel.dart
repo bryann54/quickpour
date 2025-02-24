@@ -219,5 +219,3 @@ class PromotionsCarousel extends StatelessWidget {
     );
   }
 }
-
-

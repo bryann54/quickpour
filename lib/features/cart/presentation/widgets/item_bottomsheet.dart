@@ -108,7 +108,6 @@ class _ItemBottomsheetState extends State<ItemBottomsheet> {
 
   void _onSearchQuery(String query) {
     if (mounted && query.isNotEmpty) {
-      debugPrint('Searching for: $query');
       _productSearchBloc.add(SearchProductsEvent(query));
     }
   }

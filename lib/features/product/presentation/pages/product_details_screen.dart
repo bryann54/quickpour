@@ -35,7 +35,6 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   late int quantity;
 
-
   @override
   void initState() {
     super.initState();

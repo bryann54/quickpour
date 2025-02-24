@@ -22,8 +22,6 @@ class ProductImageGallery extends StatefulWidget {
 class _ProductImageGalleryState extends State<ProductImageGallery> {
   int _currentImageIndex = 0;
 
-
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

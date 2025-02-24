@@ -56,10 +56,9 @@ class SocialButton extends StatelessWidget {
                 child: Text(
                   text,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: textColor ?? Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15
-                      ),
+                      color: textColor ?? Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15),
                 ),
               ),
             ],

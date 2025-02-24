@@ -175,7 +175,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               )
                             : const Text('Login'),
                       ),
-                
                     ],
                   ),
                 ),
@@ -212,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ?.withOpacity(0.8),
                 ),
               ),
-               TextButton(
+              TextButton(
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -233,8 +232,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-
-
     );
   }
 }

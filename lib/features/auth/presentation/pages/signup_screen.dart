@@ -264,60 +264,62 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
             ),
           );
-          
         },
       ),
-bottomNavigationBar: Container(
-  padding: const EdgeInsets.symmetric(vertical: 16),
-  decoration: BoxDecoration(
-    color: Theme.of(context).scaffoldBackgroundColor,
-    boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.1),
-        spreadRadius: 1,
-        blurRadius: 20,
-        offset: const Offset(0, -5),
-      ),
-    ],
-  ),
-  child: SafeArea(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Already have an account? ',
-          style: TextStyle(
-            fontSize: 15,
-            color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.8),
-          ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 20,
+              offset: const Offset(0, -5),
+            ),
+          ],
         ),
-        TextButton(
-          onPressed: () {
-            // Navigate to sign in screen
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()));
-          },
-          style: TextButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            minimumSize: Size.zero,
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          ),
-           child: Text(
+        child: SafeArea(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Already have an account? ',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.color
+                      ?.withOpacity(0.8),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Navigate to sign in screen
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()));
+                },
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Text(
                   'Log in',
                   style: GoogleFonts.poppins(
                       color: Colors.blue,
                       fontWeight: FontWeight.bold,
                       fontSize: 17),
                 ),
+              ),
+            ],
+          ),
         ),
-      ],
-    ),
-  ),
-),
-
-
-);
+      ),
+    );
   }
 
   Widget _buildTextField({

@@ -14,9 +14,6 @@ class CartItemWidget extends StatelessWidget {
 
   const CartItemWidget({Key? key, required this.cartItem}) : super(key: key);
 
-
-  
-
   void _showQuantitySelector(BuildContext context, CartBloc cartBloc) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;

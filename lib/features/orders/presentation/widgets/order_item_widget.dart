@@ -325,11 +325,12 @@ class OrderItemWidget extends StatelessWidget {
               ),
               Text(
                 'KSh ${formatMoney(order.total)}',
-                style:  TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary
-                ),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: isDark
+                        ? AppColors.textPrimaryDark
+                        : AppColors.textPrimary),
               ),
             ],
           ),
