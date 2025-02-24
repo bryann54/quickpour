@@ -1,409 +1,353 @@
-import 'package:chupachap/features/checkout/data/models/delivery_details_model.dart';
-import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
-import 'package:chupachap/features/checkout/presentation/pages/delivery_details_screen.dart';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
+import 'dart:convert';
 
-class DeliveryLocationScreen extends StatefulWidget {
-  final double totalAmount;
-  final DeliveryDetails location;
-  final String phoneNumber;
+import 'package:chupachap/core/utils/colors.dart';
 
-  const DeliveryLocationScreen({
-    Key? key,
-    required this.totalAmount,
-    required this.location,
-    required this.phoneNumber,
-  }) : super(key: key);
+
+
+class PlaceAutocompletePage extends StatefulWidget {
+  const PlaceAutocompletePage({super.key});
 
   @override
-  State<DeliveryLocationScreen> createState() => _DeliveryLocationScreenState();
+  State<PlaceAutocompletePage> createState() => _PlaceAutocompletePageState();
 }
 
-class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
-    with SingleTickerProviderStateMixin {
-  final TextEditingController _addressDetailsController =
-      TextEditingController();
-  GoogleMapController? _mapController;
-  LatLng? _selectedLocation;
-  String? _currentAddress;
-  bool _isLoading = true;
-  String _deliveryType = 'free';
-
-  // Animation controllers
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
-  late Animation<Offset> _slideAnimation;
+class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
+  final TextEditingController _searchController = TextEditingController();
+  Timer? _debounce;
+  List<Map<String, dynamic>> _predictions = [];
+  bool _showRecentLocations = true;
+  List<Map<String, dynamic>> _recentLocations = [];
+  List<Map<String, dynamic>> _savedLocations = [];
+  Map<String, dynamic>? _currentLocation;
 
   @override
   void initState() {
     super.initState();
-    _initializeLocation();
-    _setupAnimations();
+    _searchController.addListener(_onSearchChanged);
+    _loadSavedLocations();
+    _loadRecentLocations();
+    _fetchCurrentLocation();
   }
 
-  void _setupAnimations() {
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 600),
-      vsync: this,
-    );
-
-    _fadeAnimation = CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    );
-
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.2),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-    ));
-
-    _animationController.forward();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    _addressDetailsController.dispose();
-    _mapController?.dispose();
-    super.dispose();
-  }
-
-  Future<void> _initializeLocation() async {
+  Future<void> _fetchCurrentLocation() async {
     try {
-      setState(() {
-        _selectedLocation = LatLng(
-          widget.location.latitude,
-          widget.location.longitude,
-        );
-        _currentAddress = widget.location.address;
-        _isLoading = false;
-      });
-    } catch (e) {
-      debugPrint('Error initializing location: $e');
-    }
-  }
-
-  Future<void> _getUserCurrentLocation() async {
-    try {
+      // Check location permissions
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        _showErrorSnackBar('Location services are disabled.');
-        return;
+        throw Exception('Location services are disabled.');
       }
 
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          _showErrorSnackBar('Location permissions are denied.');
-          return;
+          throw Exception('Location permissions are denied.');
         }
       }
 
-      setState(() => _isLoading = true);
+      if (permission == LocationPermission.deniedForever) {
+        throw Exception('Location permissions are permanently denied.');
+      }
 
+      // Fetch current position
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
 
-      setState(() {
-        _selectedLocation = LatLng(position.latitude, position.longitude);
-        _isLoading = false;
-      });
-
-      await _getAddressFromLatLng(_selectedLocation!);
-      await _animateToLocation(_selectedLocation!);
-    } catch (e) {
-      _showErrorSnackBar('Error fetching location');
-      setState(() => _isLoading = false);
-    }
-  }
-
-  Future<void> _getAddressFromLatLng(LatLng position) async {
-    try {
+      // Convert coordinates to address
       List<Placemark> placemarks = await placemarkFromCoordinates(
         position.latitude,
         position.longitude,
       );
+
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks[0];
+        String mainText = place.street ?? 'Current Location';
+        String secondaryText = [
+          place.subLocality,
+          place.locality,
+          place.administrativeArea,
+          place.country
+        ].where((e) => e != null && e.isNotEmpty).join(', ');
+
         setState(() {
-          _currentAddress =
-              '${place.street}, ${place.subLocality}, ${place.locality}';
+          _currentLocation = {
+            'description': '$mainText, $secondaryText',
+            'mainText': mainText,
+            'secondaryText': secondaryText,
+            'location': {
+              'lat': position.latitude,
+              'lng': position.longitude,
+            },
+            'city': place.locality ?? '',
+            'country': place.country ?? '',
+            'isSaved': false,
+          };
         });
       }
     } catch (e) {
-      debugPrint('Error getting address: $e');
+      debugPrint('Error fetching current location: $e');
     }
   }
 
-  Future<void> _animateToLocation(LatLng location) async {
-    _mapController?.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: location,
-          zoom: 15,
-        ),
-      ),
-    );
+  Future<void> _loadSavedLocations() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedLocationsJson = prefs.getStringList('savedLocations') ?? [];
+
+    setState(() {
+      _savedLocations = savedLocationsJson
+          .map((json) => jsonDecode(json) as Map<String, dynamic>)
+          .toList();
+    });
   }
 
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+  Future<void> _loadRecentLocations() async {
+    final prefs = await SharedPreferences.getInstance();
+    final recentLocationsJson = prefs.getStringList('recentLocations') ?? [];
+
+    setState(() {
+      _recentLocations = recentLocationsJson
+          .map((json) => jsonDecode(json) as Map<String, dynamic>)
+          .toList();
+    });
   }
 
-  Widget _buildMapSection() {
-    final theme = Theme.of(context);
-
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.15,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Stack(
-          children: [
-            GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: _selectedLocation ?? const LatLng(0, 0),
-                zoom: 14,
-              ),
-              onMapCreated: (controller) => _mapController = controller,
-              onCameraMove: (position) => _selectedLocation = position.target,
-              onCameraIdle: () {
-                if (_selectedLocation != null) {
-                  _getAddressFromLatLng(_selectedLocation!);
-                }
-              },
-              myLocationEnabled: true,
-              myLocationButtonEnabled: false,
-              mapToolbarEnabled: false,
-              zoomControlsEnabled: false,
-            ),
-            if (_isLoading)
-              Container(
-                color: theme.colorScheme.surface.withOpacity(0.8),
-                child: Center(
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      theme.colorScheme.primary,
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
+  Future<void> _saveRecentLocations() async {
+    final prefs = await SharedPreferences.getInstance();
+    final recentLocationsJson =
+        _recentLocations.map((loc) => jsonEncode(loc)).toList();
+    await prefs.setStringList('recentLocations', recentLocationsJson);
   }
 
-  Widget _buildDeliveryTypeSection() {
-    final theme = Theme.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Delivery Type',
-          style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 16),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: theme.colorScheme.surface,
-          ),
-          child: Column(
-            children: [
-              _buildDeliveryOption(
-                'standard',
-                'Standard Delivery',
-                '2-3 hours',
-                Icons.local_shipping_outlined,
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              _buildDeliveryOption(
-                'express',
-                'Express Delivery',
-                'Priority delivery',
-                Icons.rocket_launch_outlined,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+  Future<void> _saveLocation(Map<String, dynamic> location) async {
+    if (!_savedLocations.any((loc) =>
+        loc['mainText'] == location['mainText'] &&
+        loc['secondaryText'] == location['secondaryText'])) {
+      _savedLocations.add(location);
+      final prefs = await SharedPreferences.getInstance();
+      final savedLocationsJson =
+          _savedLocations.map((loc) => jsonEncode(loc)).toList();
+      await prefs.setStringList('savedLocations', savedLocationsJson);
+    }
   }
 
-  Widget _buildDeliveryOption(
-    String value,
-    String title,
-    String subtitle,
-    IconData icon,
-  ) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final isSelected = _deliveryType == value;
+  Future<void> _removeLocation(Map<String, dynamic> location) async {
+    _savedLocations.removeWhere((loc) =>
+        loc['mainText'] == location['mainText'] &&
+        loc['secondaryText'] == location['secondaryText']);
 
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: isSelected
-              ? theme.colorScheme.onSurface.withOpacity(0.5)
-              : theme.colorScheme.outline.withOpacity(.3),
-        ),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () => setState(() => _deliveryType = value),
-          borderRadius: BorderRadius.circular(12),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
-                  : Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: isSelected
-                    ? Theme.of(context).colorScheme.secondary.withOpacity(.7)
-                    : Colors.transparent,
-                width: 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  icon,
-                  color: isSelected
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.onSurface.withOpacity(0.6),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          fontWeight:
-                              isSelected ? FontWeight.bold : FontWeight.normal,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                      ),
-                      Text(
-                        subtitle,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.6),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Radio<String>(
-                  value: value,
-                  groupValue: _deliveryType,
-                  onChanged: (value) => setState(() => _deliveryType = value!),
-                  activeColor:
-                      isDark ? Colors.white : theme.colorScheme.primary,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+    final prefs = await SharedPreferences.getInstance();
+    final savedLocationsJson =
+        _savedLocations.map((loc) => jsonEncode(loc)).toList();
+    await prefs.setStringList('savedLocations', savedLocationsJson);
   }
 
-  Widget _buildAddressDetailsSection() {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _searchController.dispose();
+    super.dispose();
+  }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Address Details',
-          style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 8),
-        if (_currentAddress != null)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: Text(
-              _currentAddress!,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.6),
-              ),
-            ),
-          ),
-        Focus(
-          onFocusChange: (hasFocus) {
-            if (hasFocus) {
-              // Additional logic if needed when focused
+  void _onSearchChanged() {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      if (_searchController.text.length > 2) {
+        _getLocationPredictions(_searchController.text);
+        setState(() {
+          _showRecentLocations = false;
+        });
+      } else {
+        setState(() {
+          _predictions = [];
+          _showRecentLocations = true;
+        });
+      }
+    });
+  }
+
+  Future<void> _getLocationPredictions(String query) async {
+    if (query.isEmpty) {
+      setState(() {
+        _predictions = [];
+        _showRecentLocations = true;
+      });
+      return;
+    }
+
+    setState(() {});
+
+    try {
+      List<Location> locations = await locationFromAddress(query);
+      List<Map<String, dynamic>> predictions = [];
+
+      for (var location in locations) {
+        try {
+          List<Placemark> placemarks = await placemarkFromCoordinates(
+            location.latitude,
+            location.longitude,
+          );
+
+          if (placemarks.isNotEmpty) {
+            Placemark place = placemarks[0];
+            if (place.country == 'Kenya') {
+              String mainText = place.street ?? '';
+              String secondaryText = [
+                place.subLocality,
+                place.locality,
+                place.administrativeArea,
+                place.country
+              ].where((e) => e != null && e.isNotEmpty).join(', ');
+
+              predictions.add({
+                'description': '$mainText, $secondaryText',
+                'mainText': mainText,
+                'secondaryText': secondaryText,
+                'location': {
+                  'lat': location.latitude,
+                  'lng': location.longitude,
+                },
+                'city': place.locality ?? '',
+                'country': place.country ?? '',
+              });
             }
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(top: 18.0),
-            child: TextField(
-              controller: _addressDetailsController,
-              maxLines: 3,
-              style: theme.textTheme.bodyMedium,
-              decoration: InputDecoration(
-                hintText: 'Apartment, Floor, Landmark etc.',
-                hintStyle: TextStyle(
-                  color: theme.colorScheme.onSurface.withOpacity(0.5),
-                ),
-                filled: true,
-                fillColor: isDark
-                    ? theme.colorScheme.surface
-                    : theme.colorScheme.surface.withOpacity(0.3),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: theme.colorScheme.primary,
-                    width: 2.0, // More distinct border when focused
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: theme.colorScheme.onSurface.withOpacity(0.3),
-                    width: 1.2,
-                  ),
-                ),
-                contentPadding: const EdgeInsets.all(16),
-              ),
-            ),
+          }
+        } catch (e) {
+          debugPrint('Error getting place details: $e');
+        }
+      }
+
+      if (mounted) {
+        setState(() {
+          _predictions = predictions;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error fetching locations: $e');
+
+      if (mounted) {
+        setState(() {
+          _predictions = [];
+        });
+      }
+    }
+  }
+
+  Widget _buildSearchBar(bool isDarkMode) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDarkMode ? Colors.grey[900] : Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
           ),
+        ],
+      ),
+      child: TextField(
+        controller: _searchController,
+        decoration: InputDecoration(
+          hintText: 'Search road ,apartmernt...',
+          hintStyle: TextStyle(
+            color: isDarkMode ? Colors.grey[500] : Colors.grey[600],
+          ),
+          prefixIcon: Icon(
+            Icons.search,
+            color: isDarkMode ? Colors.grey[500] : Colors.grey[700],
+          ),
+          suffixIcon: _searchController.text.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    _searchController.clear();
+                    setState(() {
+                      _predictions = [];
+                      _showRecentLocations = true;
+                    });
+                  },
+                )
+              : null,
+          filled: true,
+          fillColor: isDarkMode ? Colors.grey[800] : Colors.grey[100],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildListSection(String title, List<Map<String, dynamic>> locations) {
+    if (locations.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Text(title,
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        ),
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: locations.length,
+          separatorBuilder: (context, index) => Divider(
+            height: 2,
+            color: Theme.of(
+              context,
+            ).dividerColor.withOpacity(.1),
+          ),
+          itemBuilder: (context, index) {
+            final location = locations[index];
+            bool isSaved = _savedLocations.any((loc) =>
+                loc['mainText'] == location['mainText'] &&
+                loc['secondaryText'] == location['secondaryText']);
+
+            return ListTile(
+              leading:
+                  const Icon(Icons.location_on, color: AppColors.accentColor),
+              title: Text(location['mainText'] ?? '',
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: Text(
+                location['secondaryText'] ?? '',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              trailing: IconButton(
+                icon: Icon(
+                  isSaved ? Icons.favorite : Icons.favorite_border,
+                  color: isSaved ? AppColors.accentColor : Colors.grey,
+                ),
+                onPressed: () async {
+                  if (isSaved) {
+                    await _removeLocation(location);
+                  } else {
+                    await _saveLocation(location);
+                  }
+                  setState(() {});
+                },
+              ),
+              onTap: () {
+                _saveRecentLocations();
+                Navigator.pop(context, location);
+              },
+            );
+          },
         ),
       ],
     );
@@ -411,113 +355,31 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor:
-          isDark ? theme.colorScheme.surface : theme.colorScheme.surface,
       appBar: AppBar(
-        title: Text(
-          'Delivery Location',
-          style: theme.textTheme.titleLarge?.copyWith(
-            color: theme.colorScheme.onSurface,
-          ),
-        ),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: theme.colorScheme.surface,
-        iconTheme: IconThemeData(
-          color: theme.colorScheme.onSurface,
-        ),
-      ),
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: SlideTransition(
-          position: _slideAnimation,
-          child: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildMapSection(),
-                        const SizedBox(height: 24),
-                        _buildDeliveryTypeSection(),
-                        const SizedBox(height: 24),
-                        _buildAddressDetailsSection(),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: ElevatedButton(
-                    onPressed:
-                        (_selectedLocation != null && _deliveryType.isNotEmpty)
-                            ? () {
-                                context.read<CheckoutBloc>().add(
-                                      UpdateDeliveryInfoEvent(
-                                        address:
-                                            '${_currentAddress ?? ''}\n${_addressDetailsController.text}',
-                                        phoneNumber: widget.phoneNumber,
-                                        deliveryType: _deliveryType,
-                                      ),
-                                    );
+        title:  Text('delivery location'.capitalize(),style: TextStyle(
 
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => DeliveryDetailsScreen(
-                                      address: _currentAddress ?? '',
-                                      addressDetails:
-                                          _addressDetailsController.text,
-                                      location: _selectedLocation!,
-                                      totalAmount: widget.totalAmount,
-                                      phoneNumber: widget.phoneNumber,
-                                      deliveryType: _deliveryType,
-                                    ),
-                                  ),
-                                );
-                              }
-                            : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: (_selectedLocation != null &&
-                              _deliveryType.isNotEmpty)
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.surface,
-                      foregroundColor: theme.colorScheme.onPrimary,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: (_selectedLocation != null &&
-                              _deliveryType.isNotEmpty)
-                          ? 4
-                          : 0,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                      child: Text(
-                        'Confirm Location',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: (_selectedLocation != null &&
-                                  _deliveryType.isNotEmpty)
-                              ? theme.colorScheme.onPrimary
-                              : theme.colorScheme.onSurface.withOpacity(0.4),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+          fontWeight: FontWeight.w500
+        ),),
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          _buildSearchBar(isDarkMode),
+          Expanded(
+            child: ListView(
+              children: [
+                if (_currentLocation != null)
+                  _buildListSection('Current Location', [_currentLocation!]),
+                if (_showRecentLocations)
+                  _buildListSection('Recent Locations', _recentLocations),
+                _buildListSection('Predictions', _predictions),
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }

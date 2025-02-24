@@ -138,45 +138,72 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
       ),
     );
   }
-
-  Widget _buildOrderSummary() {
+Widget _buildOrderSummary() {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark
-            ? AppColors.background.withOpacity(.1)
-            : Colors.grey.shade100,
+        color:
+            isDark ? AppColors.background.withOpacity(.1) : Colors.grey.shade50,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isDark ? Colors.white.withOpacity(0.1) : Colors.grey.shade200,
+        ),
         boxShadow: [
           BoxShadow(
             color: theme.shadowColor.withOpacity(0.05),
-            offset: const Offset(0, 2),
-            blurRadius: 8,
+            offset: const Offset(0, 4),
+            blurRadius: 12,
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Order Summary',
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
+          Row(
+            children: [
+              Icon(
+                Icons.receipt_outlined,
+                size: 20,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Order Summary',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.3,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 12),
-          _buildSummaryRow('Delivery Time', widget.deliveryTime),
-          _buildSummaryRow('Delivery Type', widget.deliveryType),
-          Divider(
-            height: 24,
-            color: theme.dividerColor,
+          const SizedBox(height: 16),
+          _buildSummaryRow(
+            'Delivery Time',
+            widget.deliveryTime,
+            theme: theme,
+            isDark: isDark,
+          ),
+          _buildSummaryRow(
+            'Delivery Type',
+            widget.deliveryType,
+            theme: theme,
+            isDark: isDark,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Divider(
+              color: theme.dividerColor.withOpacity(.2),
+            ),
           ),
           _buildSummaryRow(
             'Total Amount',
             'KSh ${widget.totalAmount.toStringAsFixed(0)}',
+            theme: theme,
+            isDark: isDark,
             isTotal: true,
           ),
         ],
@@ -184,37 +211,48 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
     );
   }
 
-  Widget _buildSummaryRow(String title, String value, {bool isTotal = false}) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
+  Widget _buildSummaryRow(
+    String title,
+    String value, {
+    required ThemeData theme,
+    required bool isDark,
+    bool isTotal = false,
+  }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: theme.textTheme.bodyLarge?.color,
-              fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
+          Expanded(
+            flex: 2,
+            child: Text(
+              title,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: isDark ? Colors.grey.shade300 : Colors.grey.shade700,
+                fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
+              ),
             ),
           ),
-          Text(
-            value,
-            style: TextStyle(
-              color: isTotal
-                  ? (isDark
-                      ? theme.colorScheme.onSurface.withOpacity(.7)
-                      : AppColors.primaryColor)
-                  : theme.textTheme.bodyLarge?.color,
-              fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
+          const SizedBox(width: 8),
+          Expanded(
+            flex: 3,
+            child: Text(
+              value,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: isTotal
+                    ? (isDark
+                        ? theme.colorScheme.primary
+                        : AppColors.primaryColor)
+                    : theme.textTheme.bodyLarge?.color,
+                fontWeight: isTotal ? FontWeight.w600 : FontWeight.w500,
+              ),
+              textAlign: TextAlign.right,
             ),
           ),
         ],
       ),
     );
   }
+
 
   Widget _buildPaymentMethodTile(
     PaymentMethod method,
@@ -251,7 +289,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
       ),
       child: Material(
         color: isSelected
-            ? AppColors.background.withOpacity(.1)
+            ? AppColors.backgroundDark.withOpacity(.1)
             : Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(16),

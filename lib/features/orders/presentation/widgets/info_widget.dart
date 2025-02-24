@@ -21,7 +21,7 @@ class InfoRow extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border(
           bottom:
-              isLast ? BorderSide.none : BorderSide(color:isDark?AppColors.dividerColorDark: AppColors.dividerColorDark),
+              isLast ? BorderSide.none : BorderSide(color:isDark?AppColors.dividerColorDark: AppColors.dividerColor),
         ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

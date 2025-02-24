@@ -1,4 +1,5 @@
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:chupachap/features/checkout/presentation/pages/payments_screen.dart';
 import 'package:flutter/material.dart';
@@ -117,13 +118,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
             : Colors.grey.shade100,
         borderRadius: BorderRadius.circular(16),
 
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: isDark ? Colors.black26 : Colors.grey.withOpacity(0.1),
-        //     blurRadius: 10,
-        //     offset: const Offset(0, 4),
-        //   ),
-        // ],
+    
       ),
       child: Column(
         children: [
@@ -155,6 +150,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
               ),
             ),
           ),
+          
           AnimatedCrossFade(
             firstChild: const SizedBox(height: 0),
             secondChild: Padding(
@@ -269,13 +265,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
             ? AppColors.background.withOpacity(.1)
             : Colors.grey.shade100,
         borderRadius: BorderRadius.circular(16),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: isDark ? Colors.black26 : Colors.grey.withOpacity(0.1),
-        //     blurRadius: 10,
-        //     offset: const Offset(0, 4),
-        //   ),
-        // ],
+     
       ),
       child: Column(
         children: [
@@ -287,7 +277,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Divider(color: theme.dividerColor.withOpacity(.5)),
+            child: Divider(color:isDark?AppColors.dividerColorDark: AppColors.dividerColorDark.withOpacity(.3)),
           ),
           _buildPriceRow(
             'Total',
@@ -329,9 +319,10 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
         elevation: 0,
         backgroundColor: theme.colorScheme.surface,
         title: Text(
-          'Delivery Details',
+          'added information'.capitalize(),
           style: theme.textTheme.headlineSmall?.copyWith(
             color: theme.colorScheme.onSurface,
+            fontWeight: FontWeight.w500
           ),
         ),
         iconTheme: IconThemeData(
@@ -354,14 +345,16 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                         setState(() => _addressExpanded = !_addressExpanded),
                     content: _buildAddressContent(),
                   ),
-                  _buildSectionCard(
-                    title: 'Delivery Window',
-                    icon: Icons.access_time,
-                    isExpanded: _timeSlotExpanded,
-                    onToggle: () =>
-                        setState(() => _timeSlotExpanded = !_timeSlotExpanded),
-                    content: _buildDeliveryTimeSelector(),
-                  ),
+                if (widget.deliveryType.toLowerCase() !=
+                      'pickup') 
+                    _buildSectionCard(
+                      title: 'Delivery Window',
+                      icon: Icons.access_time,
+                      isExpanded: _timeSlotExpanded,
+                      onToggle: () => setState(
+                          () => _timeSlotExpanded = !_timeSlotExpanded),
+                      content: _buildDeliveryTimeSelector(),
+                    ),
                   _buildInstructionsSection(),
                   const SizedBox(height: 24),
                   _buildPriceBreakdown(),
@@ -424,13 +417,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
       decoration: BoxDecoration(
         color: isDark ? theme.cardColor : Colors.grey.shade100,
         borderRadius: BorderRadius.circular(16),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: isDark ? Colors.black26 : Colors.grey.withOpacity(0.1),
-        //     blurRadius: 10,
-        //     offset: const Offset(0, 4),
-        //   ),
-        // ],
+     
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -480,18 +467,21 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
       ),
     );
   }
-
-  Widget _buildContinueButton() {
+Widget _buildContinueButton() {
     final theme = Theme.of(context);
+    final isPickup = widget.deliveryType.toLowerCase() == 'pickup';
+    final isEnabled = isPickup || _selectedTimeSlot != null;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 22),
       child: ElevatedButton(
-        onPressed: _selectedTimeSlot != null
+        onPressed: isEnabled
             ? () {
                 context.read<CheckoutBloc>().add(
                       UpdateDeliveryTimeEvent(
-                        deliveryTime: '$_selectedDate, $_selectedTimeSlot',
+                        deliveryTime: isPickup
+                            ? 'Pickup'
+                            : '$_selectedDate, $_selectedTimeSlot',
                         specialInstructions: _instructionsController.text,
                       ),
                     );
@@ -504,7 +494,9 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                           (widget.deliveryType == 'express' ? 250.0 : 150.0),
                       deliveryAddress: widget.address,
                       deliveryDetails: widget.addressDetails,
-                      deliveryTime: '$_selectedDate, $_selectedTimeSlot',
+                      deliveryTime: isPickup
+                          ? 'Pickup'
+                          : '$_selectedDate, $_selectedTimeSlot',
                       specialInstructions: _instructionsController.text,
                       phoneNumber: widget.phoneNumber,
                       deliveryType: widget.deliveryType,
@@ -514,15 +506,14 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
               }
             : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: _selectedTimeSlot != null
-              ? theme.colorScheme.primary
-              : theme.colorScheme.surface,
+          backgroundColor:
+              isEnabled ? theme.colorScheme.primary : theme.colorScheme.surface,
           foregroundColor: theme.colorScheme.onPrimary,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          elevation: _selectedTimeSlot != null ? 4 : 0,
+          elevation: isEnabled ? 4 : 0,
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 17),
@@ -530,7 +521,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
             'Continue to Payment',
             style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: _selectedTimeSlot != null
+                color: isEnabled
                     ? theme.colorScheme.onPrimary
                     : theme.colorScheme.onSurface.withOpacity(.3)),
           ),
@@ -538,11 +529,6 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
       ),
     );
   }
+
 }
 
-// Extension to capitalize first letter
-extension StringExtension on String {
-  String capitalize() {
-    return "${this[0].toUpperCase()}${substring(1)}";
-  }
-}

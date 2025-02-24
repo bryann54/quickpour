@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:chupachap/core/utils/colors.dart';
@@ -194,10 +195,8 @@ class OrderItemWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Icon based on delivery type
-              Icon(
-                order.deliveryType == 'express'
-                    ? Icons.rocket_launch_outlined
-                    : Icons.local_shipping_outlined,
+         Icon(
+                getDeliveryIcon(order.deliveryType),
                 size: 20,
                 color: isDark
                     ? AppColors.textSecondaryDark
@@ -218,10 +217,8 @@ class OrderItemWidget extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      order.deliveryType == 'express'
-                          ? 'Express Delivery' // Text for express delivery
-                          : 'Standard Delivery', // Text for standard delivery
+                 Text(
+                      getDeliveryText(order.deliveryType),
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 15,
