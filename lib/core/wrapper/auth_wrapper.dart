@@ -7,6 +7,7 @@ import '../../features/auth/presentation/pages/signup_screen.dart';
 import '../../features/home/presentation/widgets/bottom_nav.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_snackbar_widget.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});
@@ -15,8 +16,21 @@ class AuthWrapper extends StatefulWidget {
   State<AuthWrapper> createState() => _AuthWrapperState();
 }
 
-class _AuthWrapperState extends State<AuthWrapper> {
-  bool isLogin = true;
+class _AuthWrapperState extends State<AuthWrapper>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,38 +72,55 @@ class _AuthWrapperState extends State<AuthWrapper> {
         }
 
         return Scaffold(
-          body: isLogin ? const LoginScreen() : const SignupScreen(),
-          bottomNavigationBar: BottomAppBar(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    isLogin
-                        ? "Don't have an account?"
-                        : "Already have an account?",
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        isLogin = !isLogin;
-                      });
-                    },
-                    child: Text(
-                      isLogin ? "Sign Up" : "Login",
-                      style: const TextStyle(
-                        color: AppColors.errorDark,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+          backgroundColor: Colors.white,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(150),
+            child: Container(
+              color: Colors.white,
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    Text(
+                      'Welcome',
+                      style: GoogleFonts.acme(
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.brandPrimary,
+                              fontSize: 32,
+                            ),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 20),
+                    TabBar(
+                      controller: _tabController,
+                      labelColor: AppColors.brandPrimary,
+                      unselectedLabelColor: Colors.grey,
+                      indicatorColor: AppColors.brandPrimary,
+                      indicatorWeight: 3,
+                      labelStyle: GoogleFonts.acme(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      tabs: const [
+                        Tab(text: 'Login'),
+                        Tab(text: 'Sign Up'),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
+          ),
+          body: TabBarView(
+            controller: _tabController,
+            children: const [
+              LoginScreen(),
+              SignupScreen(),
+            ],
           ),
         );
       },
