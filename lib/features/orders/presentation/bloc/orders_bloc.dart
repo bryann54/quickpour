@@ -1,4 +1,5 @@
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
+import 'package:chupachap/features/checkout/presentation/bloc/checkout_state.dart';
 import 'package:chupachap/features/notifications/domain/repositories/notification_service.dart';
 import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
 import 'package:chupachap/features/orders/data/models/order_model.dart';
@@ -23,6 +24,21 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
     // Listen to checkout completion
     checkoutBloc.stream.listen((state) {
       if (state is CheckoutOrderPlacedState) {
+        // Get items from merchant orders since cartItems doesn't exist in CheckoutOrderPlacedState
+        final orderItems = <OrderItem>[];
+
+        for (var merchantOrder in state.merchantOrders) {
+          // Assuming merchantOrder has items that can be converted to OrderItem
+          // You'll need to adjust this based on your actual MerchantOrder structure
+          for (var item in merchantOrder.items) {
+            orderItems.add(OrderItem(
+              name: item.product.productName,
+              quantity: item.quantity,
+              price: item.product.price,
+            ));
+          }
+        }
+
         final newOrder = CompletedOrder(
           id: state.orderId,
           total: state.totalAmount,
@@ -30,13 +46,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
           address: state.address ?? 'No address provided',
           phoneNumber: state.phoneNumber ?? 'No phone number',
           paymentMethod: state.paymentMethod ?? 'Not specified',
-          items: state.cartItems
-              .map((cartItem) => OrderItem(
-                    name: cartItem.product.productName,
-                    quantity: cartItem.quantity,
-                    price: cartItem.product.price,
-                  ))
-              .toList(),
+          items: orderItems,
           userEmail: state.userEmail ?? 'No email provided',
           userName: state.userName ?? 'No name provided',
           userId: state.userId ?? 'No user ID provided',

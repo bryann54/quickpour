@@ -1,12 +1,13 @@
-part of 'checkout_bloc.dart';
+import 'package:chupachap/features/checkout/domain/entities/merchant_order.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class CheckoutState {
+abstract class CheckoutState extends Equatable {
   final String? address;
   final String? phoneNumber;
   final String? paymentMethod;
   final String? deliveryTime;
   final String? specialInstructions;
-  final String? deliveryType; // Add delivery type
+  final String? deliveryType;
   final String? userEmail;
   final String? userName;
   final String? userId;
@@ -17,37 +18,49 @@ abstract class CheckoutState {
     this.paymentMethod,
     this.deliveryTime,
     this.specialInstructions,
-    this.deliveryType, // Add delivery type
+    this.deliveryType,
     this.userEmail,
     this.userName,
     this.userId,
   });
 
-  // Define copyWith method in the abstract class
   CheckoutState copyWith({
     String? address,
     String? phoneNumber,
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
-    String? deliveryType, // Add delivery type
+    String? deliveryType,
     String? userEmail,
     String? userName,
     String? userId,
   });
+
+  @override
+  List<Object?> get props => [
+        address,
+        phoneNumber,
+        paymentMethod,
+        deliveryTime,
+        specialInstructions,
+        deliveryType,
+        userEmail,
+        userName,
+        userId,
+      ];
 }
 
 class CheckoutInitialState extends CheckoutState {
   const CheckoutInitialState();
 
   @override
-  CheckoutInitialState copyWith({
+  CheckoutState copyWith({
     String? address,
     String? phoneNumber,
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
-    String? deliveryType, // Add delivery type
+    String? deliveryType,
     String? userEmail,
     String? userName,
     String? userId,
@@ -57,41 +70,13 @@ class CheckoutInitialState extends CheckoutState {
 }
 
 class CheckoutLoadingState extends CheckoutState {
-  const CheckoutLoadingState();
-
-  @override
-  CheckoutLoadingState copyWith({
+  const CheckoutLoadingState({
     String? address,
     String? phoneNumber,
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
-    String? deliveryType, // Add delivery type
-    String? userEmail,
-    String? userName,
-    String? userId,
-  }) {
-    return CheckoutLoadingState();
-  }
-}
-
-class CheckoutOrderPlacedState extends CheckoutState {
-  final String orderId;
-  final double totalAmount;
-  final List<CartItem> cartItems;
-  final String status; // Added status field
-
-  const CheckoutOrderPlacedState({
-    required this.orderId,
-    required this.totalAmount,
-    required this.cartItems,
-    required this.status, // Make status required
-    String? address,
-    String? phoneNumber,
-    String? paymentMethod,
-    String? deliveryTime,
-    String? specialInstructions,
-    String? deliveryType, // Add delivery type
+    String? deliveryType,
     String? userEmail,
     String? userName,
     String? userId,
@@ -101,41 +86,108 @@ class CheckoutOrderPlacedState extends CheckoutState {
           paymentMethod: paymentMethod,
           deliveryTime: deliveryTime,
           specialInstructions: specialInstructions,
-          deliveryType: deliveryType, // Pass delivery type
+          deliveryType: deliveryType,
           userEmail: userEmail,
           userName: userName,
           userId: userId,
         );
 
   @override
-  CheckoutOrderPlacedState copyWith({
+  CheckoutState copyWith({
     String? address,
     String? phoneNumber,
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
-    String? deliveryType, // Add delivery type
+    String? deliveryType,
     String? userEmail,
     String? userName,
     String? userId,
-    String? status, // Add status to copyWith
   }) {
-    return CheckoutOrderPlacedState(
-      orderId: orderId,
-      totalAmount: totalAmount,
-      cartItems: cartItems,
-      status: status ?? this.status, // Preserve existing status if not provided
+    return CheckoutLoadingState(
       address: address ?? this.address,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       paymentMethod: paymentMethod ?? this.paymentMethod,
       deliveryTime: deliveryTime ?? this.deliveryTime,
       specialInstructions: specialInstructions ?? this.specialInstructions,
-      deliveryType: deliveryType ?? this.deliveryType, // Preserve delivery type
+      deliveryType: deliveryType ?? this.deliveryType,
       userEmail: userEmail ?? this.userEmail,
       userName: userName ?? this.userName,
       userId: userId ?? this.userId,
     );
   }
+}
+
+class CheckoutOrderPlacedState extends CheckoutState {
+  final String orderId;
+  final double totalAmount;
+  final List<MerchantOrder> merchantOrders;
+  final String status;
+
+  const CheckoutOrderPlacedState({
+    required this.orderId,
+    required this.totalAmount,
+    required this.merchantOrders,
+    required this.status,
+    String? address,
+    String? phoneNumber,
+    String? paymentMethod,
+    String? deliveryTime,
+    String? specialInstructions,
+    String? deliveryType,
+    String? userEmail,
+    String? userName,
+    String? userId,
+  }) : super(
+          address: address,
+          phoneNumber: phoneNumber,
+          paymentMethod: paymentMethod,
+          deliveryTime: deliveryTime,
+          specialInstructions: specialInstructions,
+          deliveryType: deliveryType,
+          userEmail: userEmail,
+          userName: userName,
+          userId: userId,
+        );
+
+  @override
+  CheckoutState copyWith({
+    String? address,
+    String? phoneNumber,
+    String? paymentMethod,
+    String? deliveryTime,
+    String? specialInstructions,
+    String? deliveryType,
+    String? userEmail,
+    String? userName,
+    String? userId,
+    String? status,
+  }) {
+    return CheckoutOrderPlacedState(
+      orderId: orderId,
+      totalAmount: totalAmount,
+      merchantOrders: merchantOrders,
+      status: status ?? this.status,
+      address: address ?? this.address,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      paymentMethod: paymentMethod ?? this.paymentMethod,
+      deliveryTime: deliveryTime ?? this.deliveryTime,
+      specialInstructions: specialInstructions ?? this.specialInstructions,
+      deliveryType: deliveryType ?? this.deliveryType,
+      userEmail: userEmail ?? this.userEmail,
+      userName: userName ?? this.userName,
+      userId: userId ?? this.userId,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+        ...super.props,
+        orderId,
+        totalAmount,
+        merchantOrders,
+        status,
+      ];
 }
 
 class CheckoutErrorState extends CheckoutState {
@@ -148,7 +200,7 @@ class CheckoutErrorState extends CheckoutState {
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
-    String? deliveryType, // Add delivery type
+    String? deliveryType,
     String? userEmail,
     String? userName,
     String? userId,
@@ -158,20 +210,20 @@ class CheckoutErrorState extends CheckoutState {
           paymentMethod: paymentMethod,
           deliveryTime: deliveryTime,
           specialInstructions: specialInstructions,
-          deliveryType: deliveryType, // Pass delivery type
+          deliveryType: deliveryType,
           userEmail: userEmail,
           userName: userName,
           userId: userId,
         );
 
   @override
-  CheckoutErrorState copyWith({
+  CheckoutState copyWith({
     String? address,
     String? phoneNumber,
     String? paymentMethod,
     String? deliveryTime,
     String? specialInstructions,
-    String? deliveryType, // Add delivery type
+    String? deliveryType,
     String? userEmail,
     String? userName,
     String? userId,
@@ -183,10 +235,16 @@ class CheckoutErrorState extends CheckoutState {
       paymentMethod: paymentMethod ?? this.paymentMethod,
       deliveryTime: deliveryTime ?? this.deliveryTime,
       specialInstructions: specialInstructions ?? this.specialInstructions,
-      deliveryType: deliveryType ?? this.deliveryType, // Preserve delivery type
+      deliveryType: deliveryType ?? this.deliveryType,
       userEmail: userEmail ?? this.userEmail,
       userName: userName ?? this.userName,
       userId: userId ?? this.userId,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        ...super.props,
+        errorMessage,
+      ];
 }

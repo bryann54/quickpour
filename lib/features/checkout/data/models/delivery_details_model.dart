@@ -1,4 +1,6 @@
-class DeliveryDetails {
+import 'package:equatable/equatable.dart';
+
+class DeliveryDetails extends Equatable {
   final String address;
   final double latitude;
   final double longitude;
@@ -6,7 +8,7 @@ class DeliveryDetails {
   final String secondaryText;
   final String phoneNumber;
 
-  DeliveryDetails({
+  const DeliveryDetails({
     required this.address,
     required this.latitude,
     required this.longitude,
@@ -33,4 +35,14 @@ class DeliveryDetails {
         secondaryText: json['secondaryText'],
         phoneNumber: json['phoneNumber'] ?? '',
       );
+
+  @override
+  List<Object?> get props => [
+        address,
+        latitude,
+        longitude,
+        mainText,
+        secondaryText,
+        phoneNumber,
+      ];
 }

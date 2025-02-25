@@ -1,19 +1,15 @@
-import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
-import 'package:chupachap/features/notifications/domain/repositories/notification_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
-import 'package:equatable/equatable.dart';
+import 'package:chupachap/features/checkout/domain/entities/merchant_order.dart';
+import 'package:chupachap/features/checkout/domain/usecases/place_order_usecase.dart';
+import 'package:chupachap/features/checkout/presentation/bloc/checkout_event.dart';
+import 'package:chupachap/features/checkout/presentation/bloc/checkout_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-part 'checkout_state.dart';
-part 'checkout_event.dart';
 
 class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
-  final FirebaseFirestore firestore;
-  final AuthUseCases authUseCases;
+  final PlaceOrderUseCase placeOrderUseCase;
 
   CheckoutBloc({
-    required this.firestore,
-    required this.authUseCases,
+    required this.placeOrderUseCase,
   }) : super(const CheckoutInitialState()) {
     on<UpdateDeliveryInfoEvent>(_onUpdateDeliveryInfo);
     on<UpdatePaymentMethodEvent>(_onUpdatePaymentMethod);
@@ -23,111 +19,137 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
 
   void _onUpdateDeliveryInfo(
       UpdateDeliveryInfoEvent event, Emitter<CheckoutState> emit) {
-    // Remove any notification triggers from here
     emit(state.copyWith(
       address: event.address,
       phoneNumber: event.phoneNumber,
-      deliveryType: event.deliveryType, // Include delivery type
+      deliveryType: event.deliveryType,
     ));
   }
 
   void _onUpdatePaymentMethod(
       UpdatePaymentMethodEvent event, Emitter<CheckoutState> emit) {
-    // Remove any notification triggers from here
     emit(state.copyWith(paymentMethod: event.paymentMethod));
   }
 
   void _onUpdateDeliveryTime(
       UpdateDeliveryTimeEvent event, Emitter<CheckoutState> emit) {
-    // Remove any notification triggers from here
     emit(state.copyWith(
       deliveryTime: event.deliveryTime,
       specialInstructions: event.specialInstructions,
     ));
   }
 
-  Future<void> _onPlaceOrder(
+Future<void> _onPlaceOrder(
       PlaceOrderEvent event, Emitter<CheckoutState> emit) async {
     try {
-      emit(const CheckoutLoadingState());
-
-      // Check user authentication
-      final userId = authUseCases.getCurrentUserId();
-      if (userId == null) {
-        throw Exception('User not authenticated');
+      // Check if cart has items before proceeding
+      if (event.cart.items.isEmpty) {
+        emit(CheckoutErrorState(
+          errorMessage: 'Failed to place order: Cart is empty',
+          address: state.address,
+          phoneNumber: state.phoneNumber,
+          paymentMethod: state.paymentMethod,
+          deliveryTime: state.deliveryTime,
+          specialInstructions: state.specialInstructions,
+          deliveryType: state.deliveryType,
+          userEmail: state.userEmail,
+          userName: state.userName,
+          userId: state.userId,
+        ));
+        return;
       }
 
-      // Get user details
-      final userDetails = await authUseCases.getCurrentUserDetails();
-      if (userDetails == null) {
-        throw Exception('User details not found');
+      emit(CheckoutLoadingState(
+        address: state.address,
+        phoneNumber: state.phoneNumber,
+        paymentMethod: state.paymentMethod,
+        deliveryTime: state.deliveryTime,
+        specialInstructions: state.specialInstructions,
+        deliveryType: state.deliveryType,
+        userEmail: state.userEmail,
+        userName: state.userName,
+        userId: state.userId,
+      ));
+
+      // Place the order
+      final order = await placeOrderUseCase.execute(
+        cart: event.cart,
+        deliveryTime: event.deliveryTime,
+        specialInstructions: event.specialInstructions,
+        paymentMethod: event.paymentMethod,
+        address: event.address,
+        phoneNumber: event.phoneNumber,
+        deliveryType: event.deliveryType,
+      );
+
+      // Group cart items by merchant
+      final merchantItemsMap = <String, List<CartItem>>{};
+      for (final item in event.cart.items) {
+        final merchantId = item.product.merchantId;
+        if (merchantId == null || merchantId.isEmpty) {
+          throw Exception('Invalid merchantId for product: ${item.product.id}');
+        }
+        merchantItemsMap.putIfAbsent(merchantId, () => []).add(item);
       }
 
-      // Generate orderId using actual document reference
-      final orderRef = firestore.collection('orders').doc();
-      final orderId = orderRef.id;
+      // Create merchant orders
+      final merchantOrders = <MerchantOrder>[];
+      for (final entry in merchantItemsMap.entries) {
+        final merchantId = entry.key;
+        final items = entry.value;
 
-      // Create complete order data
-      final orderData = {
-        'userId': userId,
-        'userEmail': userDetails.email,
-        'userName': '${userDetails.firstName} ${userDetails.lastName}',
-        'address': event.address,
-        'phoneNumber': event.phoneNumber,
-        'paymentMethod': event.paymentMethod,
-        'deliveryTime': event.deliveryTime,
-        'specialInstructions': event.specialInstructions,
-        'deliveryType': event.deliveryType,
-        'cartItems': event.cart.items
-            .map((item) => {
-                  'productName': item.product.productName,
-                  'quantity': item.quantity,
-                  'price': item.product.price,
-                  'image': item.product.imageUrls,
-                  'merchantId': item.product.merchantId,
-                  'merchantName': item.product.merchantName,
-                  'merchantEmail': item.product.merchantEmail,
-                  'merchantLocation': item.product.merchantLocation,
-                  'merchantStoreName': item.product.merchantStoreName,
-                  'merchantImageUrl': item.product.merchantImageUrl,
-                  'merchantRating': item.product.merchantRating,
-                  'isMerchantVerified': item.product.isMerchantVerified,
-                  'isMerchantOpen': item.product.isMerchantOpen,
-                })
-            .toList(),
-        'totalAmount': event.cart.totalPrice,
-        'orderId': orderId,
-        'date': DateTime.now().toIso8601String(),
-        'status': 'pending',
-      };
+        // Skip if there are no items for this merchant
+        if (items.isEmpty) {
+          continue;
+        }
 
-      // Save order to Firestore (Ensure successful Firestore write before sending notification)
-      await orderRef.set(orderData).then((_) async {
-        // Only trigger notification **after** Firestore successfully writes the order
-        await NotificationService.showOrderNotification(
-          title: 'Order Placed Successfully!',
-          body: 'Your order #$orderId has been placed.',
-          userId: userId,
-        );
-      });
+        final firstItem = items.first;
+
+        // Calculate subtotal for this merchant
+        final subtotal = items.fold<double>(
+            0, (sum, item) => sum + (item.quantity * item.product.price));
+
+        merchantOrders.add(MerchantOrder(
+          merchantId: merchantId,
+          merchantName: firstItem.product.merchantName,
+          merchantEmail: firstItem.product.merchantEmail,
+          merchantLocation: firstItem.product.merchantLocation,
+          merchantStoreName: firstItem.product.merchantStoreName,
+          merchantImageUrl: firstItem.product.merchantImageUrl,
+          merchantRating: firstItem.product.merchantRating,
+          isMerchantVerified: firstItem.product.isMerchantVerified,
+          isMerchantOpen: firstItem.product.isMerchantOpen,
+          items: items,
+          subtotal: subtotal,
+        ));
+      }
+
+      // Log merchant orders for debugging
+      print('Merchant Orders: $merchantOrders');
 
       // Emit success state
       emit(CheckoutOrderPlacedState(
-        orderId: orderId,
-        totalAmount: event.cart.totalPrice,
-        cartItems: event.cart.items,
-        address: event.address,
-        phoneNumber: event.phoneNumber,
-        paymentMethod: event.paymentMethod,
-        deliveryTime: event.deliveryTime,
-        specialInstructions: event.specialInstructions,
-        deliveryType: event.deliveryType,
-        userEmail: userDetails.email,
-        userName: '${userDetails.firstName} ${userDetails.lastName}',
-        userId: userId,
-        status: 'pending',
+        orderId: order.orderId,
+        totalAmount: order.totalAmount,
+        merchantOrders: merchantOrders,
+        status: order.status,
+        address: order.address,
+        phoneNumber: order.phoneNumber,
+        paymentMethod: order.paymentMethod,
+        deliveryTime: order.deliveryTime,
+        specialInstructions: order.specialInstructions,
+        deliveryType: order.deliveryType,
+        userEmail: order.userEmail,
+        userName: order.userName,
+        userId: order.userId,
       ));
-    } catch (e) {
+
+      // Clear the cart after successful order placement
+      // Assuming you have a CartBloc or similar to manage the cart state
+      // cartBloc.add(ClearCartEvent());
+    } catch (e, stackTrace) {
+      print('Failed to place order: ${e.toString()}');
+      print('Stack trace: $stackTrace');
       emit(CheckoutErrorState(
         errorMessage: 'Failed to place order: ${e.toString()}',
         address: state.address,
@@ -136,6 +158,9 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         deliveryTime: state.deliveryTime,
         specialInstructions: state.specialInstructions,
         deliveryType: state.deliveryType,
+        userEmail: state.userEmail,
+        userName: state.userName,
+        userId: state.userId,
       ));
     }
   }

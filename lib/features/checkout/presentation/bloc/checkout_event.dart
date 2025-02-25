@@ -1,4 +1,5 @@
-part of 'checkout_bloc.dart';
+import 'package:chupachap/features/cart/data/models/cart_model.dart';
+import 'package:equatable/equatable.dart';
 
 abstract class CheckoutEvent extends Equatable {
   const CheckoutEvent();
@@ -53,7 +54,7 @@ class PlaceOrderEvent extends CheckoutEvent {
   final String paymentMethod;
   final String address;
   final String phoneNumber;
-  final String deliveryType; // Add delivery type
+  final String deliveryType;
 
   const PlaceOrderEvent({
     required this.cart,
@@ -62,7 +63,7 @@ class PlaceOrderEvent extends CheckoutEvent {
     required this.paymentMethod,
     required this.address,
     required this.phoneNumber,
-    required this.deliveryType, // Add delivery type
+    required this.deliveryType,
   });
 
   @override
@@ -73,19 +74,6 @@ class PlaceOrderEvent extends CheckoutEvent {
         paymentMethod,
         address,
         phoneNumber,
-        deliveryType, // Include delivery type
+        deliveryType,
       ];
-}
-
-class OrderPlacedEvent extends CheckoutEvent {
-  final String orderId;
-  final double totalAmount;
-
-  const OrderPlacedEvent({
-    required this.orderId,
-    required this.totalAmount,
-  });
-
-  @override
-  List<Object?> get props => [orderId, totalAmount];
 }
