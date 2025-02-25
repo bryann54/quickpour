@@ -51,29 +51,45 @@ class CheckoutRepositoryImpl implements CheckoutRepository {
     }
 
     // Create merchant orders
-    final merchantOrders = merchantItemsMap.entries.map((entry) {
-      final merchantId = entry.key;
-      final items = entry.value;
-      final firstItem = items.first;
+  // Modify your method where you create merchant orders
+    final merchantOrders = merchantItemsMap.entries
+        .map((entry) {
+          final merchantId = entry.key;
+          final items = entry.value;
 
-      // Calculate subtotal for this merchant
-      final subtotal = items.fold<double>(
-          0, (sum, item) => sum + (item.quantity * item.product.price));
+          // Skip if there are no items for this merchant
+          if (items.isEmpty) {
+            return null;
+          }
 
-      return MerchantOrder(
-        merchantId: merchantId,
-        merchantName: firstItem.product.merchantName,
-        merchantEmail: firstItem.product.merchantEmail,
-        merchantLocation: firstItem.product.merchantLocation,
-        merchantStoreName: firstItem.product.merchantStoreName,
-        merchantImageUrl: firstItem.product.merchantImageUrl,
-        merchantRating: firstItem.product.merchantRating,
-        isMerchantVerified: firstItem.product.isMerchantVerified,
-        isMerchantOpen: firstItem.product.isMerchantOpen,
-        items: items,
-        subtotal: subtotal,
-      );
-    }).toList();
+          final firstItem = items.first;
+
+          // Ensure all required fields have at least default values
+          final merchantName = firstItem.product.merchantName.isNotEmpty
+              ? firstItem.product.merchantName
+              : "Unknown Merchant";
+
+          // Calculate subtotal for this merchant
+          final subtotal = items.fold<double>(
+              0, (sum, item) => sum + (item.quantity * item.product.price));
+
+          return MerchantOrder(
+            merchantId: merchantId,
+            merchantName: merchantName,
+            merchantEmail: firstItem.product.merchantEmail,
+            merchantLocation: firstItem.product.merchantLocation,
+            merchantStoreName: firstItem.product.merchantStoreName,
+            merchantImageUrl: firstItem.product.merchantImageUrl,
+            merchantRating: firstItem.product.merchantRating,
+            isMerchantVerified: firstItem.product.isMerchantVerified,
+            isMerchantOpen: firstItem.product.isMerchantOpen,
+            items: items,
+            subtotal: subtotal,
+          );
+        })
+        .where((order) => order != null)
+        .cast<MerchantOrder>()
+        .toList();
 
     // Create order with sub-orders for each merchant
     final order = app_order.Order(
@@ -105,17 +121,22 @@ class CheckoutRepositoryImpl implements CheckoutRepository {
           .doc(merchantOrder.merchantId)
           .collection('orders')
           .doc(orderId);
+           final merchantName = merchantOrder.merchantName.isNotEmpty
+          ? merchantOrder.merchantName
+          : "Unknown Merchant";
 
       batch.set(merchantOrderRef, {
         'orderId': orderId,
         'merchantId': merchantOrder.merchantId,
-        'merchantName': merchantOrder.merchantName,
+        'merchantName': merchantName,
         'items': merchantOrder.items
             .map((item) => {
                   'productName': item.product.productName,
                   'quantity': item.quantity,
                   'price': item.product.price,
-                  'image': item.product.imageUrls.first,
+                  'image': item.product.imageUrls.isNotEmpty
+                      ? item.product.imageUrls.first
+                      : "",
                   'productId': item.product.id,
                 })
             .toList(),

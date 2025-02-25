@@ -86,7 +86,7 @@ Future<void> _onPlaceOrder(
       final merchantItemsMap = <String, List<CartItem>>{};
       for (final item in event.cart.items) {
         final merchantId = item.product.merchantId;
-        if (merchantId == null || merchantId.isEmpty) {
+        if (merchantId.isEmpty) {
           throw Exception('Invalid merchantId for product: ${item.product.id}');
         }
         merchantItemsMap.putIfAbsent(merchantId, () => []).add(item);
