@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_event.dart';
@@ -12,11 +13,6 @@ class CartItemWidget extends StatelessWidget {
   final CartItem cartItem;
 
   const CartItemWidget({Key? key, required this.cartItem}) : super(key: key);
-
-  int _calculateDiscountPercentage(double originalPrice, double discountPrice) {
-    if (originalPrice <= 0 || discountPrice <= 0) return 0;
-    return ((originalPrice - discountPrice) / originalPrice * 100).round();
-  }
 
   void _showQuantitySelector(BuildContext context, CartBloc cartBloc) {
     final theme = Theme.of(context);
@@ -261,7 +257,7 @@ class CartItemWidget extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            '${_calculateDiscountPercentage(cartItem.product.price, cartItem.product.discountPrice)}% Off',
+                            '${calculateDiscountPercentage(cartItem.product.price, cartItem.product.discountPrice)}% Off',
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -305,7 +301,7 @@ class CartItemWidget extends StatelessWidget {
                               children: [
                                 TextSpan(
                                   text:
-                                      'Ksh ${cartItem.product.discountPrice.toStringAsFixed(0)}',
+                                      'Ksh ${formatMoney(cartItem.product.discountPrice)}',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
@@ -321,7 +317,7 @@ class CartItemWidget extends StatelessWidget {
                                 ),
                                 TextSpan(
                                   text:
-                                      'Ksh ${cartItem.product.price.toStringAsFixed(0)}',
+                                      'Ksh ${formatMoney(cartItem.product.price)}',
                                   style: const TextStyle(
                                     fontSize: 14,
                                     color: Colors.red,
@@ -336,7 +332,7 @@ class CartItemWidget extends StatelessWidget {
                           cartItem.product.price)
                         Expanded(
                           child: Text(
-                            'Ksh ${cartItem.product.price.toStringAsFixed(0)}',
+                            'Ksh ${formatMoney(cartItem.product.price)}',
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,

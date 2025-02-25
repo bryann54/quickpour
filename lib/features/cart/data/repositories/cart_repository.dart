@@ -10,6 +10,7 @@ class CartRepository {
   Future<void> addToCart(String userId, CartItem cartItem) async {
     final cartRef =
         firestore.collection('users').doc(userId).collection('cart');
+
     await cartRef.doc(cartItem.product.id).set({
       'productId': cartItem.product.id,
       'quantity': cartItem.quantity,
@@ -18,6 +19,16 @@ class CartRepository {
       'discountPrice': cartItem.product.discountPrice,
       'imageUrls': cartItem.product.imageUrls,
       'createdAt': FieldValue.serverTimestamp(),
+      // Merchant Details
+      'merchantId': cartItem.product.merchantId,
+      'merchantName': cartItem.product.merchantName,
+      'merchantEmail': cartItem.product.merchantEmail,
+      'merchantLocation': cartItem.product.merchantLocation,
+      'merchantStoreName': cartItem.product.merchantStoreName,
+      'merchantImageUrl': cartItem.product.merchantImageUrl,
+      'merchantRating': cartItem.product.merchantRating,
+      'isMerchantVerified': cartItem.product.isMerchantVerified,
+      'isMerchantOpen': cartItem.product.isMerchantOpen,
     });
   }
 
@@ -39,43 +50,42 @@ class CartRepository {
         firestore.collection('users').doc(userId).collection('cart');
     final snapshot = await cartRef.get();
 
-    // Filter out any potentially problematic entries
     return snapshot.docs
         .map((doc) {
           final data = doc.data();
           try {
             return CartItem(
               product: ProductModel(
-                measure: data['measure'] ?? '',
                 id: data['productId'] ?? '',
                 productName: data['productName'] ?? 'Unknown Product',
                 price: (data['price'] ?? 0.0).toDouble(),
-                imageUrls: data['imageUrls'] != null
-                    ? List<String>.from(data['imageUrls'])
-                    : [],
                 discountPrice: data['discountPrice'] != null &&
                         data['discountPrice'] > 0 &&
                         data['discountPrice'] < data['price']
                     ? data['discountPrice'].toDouble()
                     : data['price'].toDouble(),
-                merchantId: '',
-                brandName: '',
-                categoryName: '',
-                description: '',
-                sku: '',
+                imageUrls: data['imageUrls'] != null
+                    ? List<String>.from(data['imageUrls'])
+                    : [],
+                measure: data['measure'] ?? '',
+                merchantId: data['merchantId'] ?? '',
+                merchantName: data['merchantName'] ?? '',
+                merchantEmail: data['merchantEmail'] ?? '',
+                merchantLocation: data['merchantLocation'] ?? '',
+                merchantStoreName: data['merchantStoreName'] ?? '',
+                merchantImageUrl: data['merchantImageUrl'] ?? '',
+                merchantRating: (data['merchantRating'] ?? 0.0).toDouble(),
+                isMerchantVerified: data['isMerchantVerified'] ?? false,
+                isMerchantOpen: data['isMerchantOpen'] ?? false,
+                brandName: data['brandName'] ?? '',
+                categoryName: data['categoryName'] ?? '',
+                description: data['description'] ?? '',
+                sku: data['sku'] ?? '',
                 stockQuantity: 0,
                 isAvailable: true,
                 tags: [],
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now(),
-                merchantName: '',
-                merchantEmail: '',
-                merchantLocation: '',
-                merchantStoreName: '',
-                merchantImageUrl: '',
-                merchantRating: 0.0,
-                isMerchantVerified: false,
-                isMerchantOpen: false,
               ),
               quantity: (data['quantity'] ?? 0),
             );

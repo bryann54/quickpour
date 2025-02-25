@@ -12,6 +12,14 @@ class NotificationsRepository {
   })  : _firestore = firestore ?? FirebaseFirestore.instance,
         _auth = auth ?? FirebaseAuth.instance;
 
+  Future<void> deleteNotification(String notificationId) async {
+    try {
+      await _firestore.collection('notifications').doc(notificationId).delete();
+    } catch (e) {
+      throw Exception('Failed to delete notification: $e');
+    }
+  }
+
   Future<List<NotificationModel>> fetchNotifications() async {
     try {
       final userId = _auth.currentUser?.uid;

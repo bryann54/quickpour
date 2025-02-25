@@ -1,7 +1,9 @@
-// Make sure to import your colors
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/core/wrapper/wrapper.dart';
+import 'package:chupachap/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:chupachap/features/auth/presentation/pages/Splash_screen.dart';
+import 'package:chupachap/features/home/presentation/widgets/bottom_nav.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 
@@ -18,33 +20,44 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
   late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
   late Animation<double> _backgroundFadeAnimation;
+  late Animation<double> _slideAnimation;
+  bool _authCheckComplete = false;
+  bool _animationComplete = false;
 
   @override
   void initState() {
     super.initState();
+    _setupAnimations();
+    _checkAuth();
+  }
 
+  void _setupAnimations() {
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(milliseconds: 2500),
     );
 
-    // Scale animation with bounce effect
-    _scaleAnimation = Tween<double>(begin: 0.2, end: 1.0).animate(
+    _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: Curves.elasticOut,
+        curve: const Interval(0.2, 0.7, curve: Curves.elasticOut),
       ),
     );
 
-    // Fade animation for logo
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
+        curve: const Interval(0.5, 0.8, curve: Curves.easeIn),
       ),
     );
 
-    // Background fade animation
+    _slideAnimation = Tween<double>(begin: 50.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.5, 0.8, curve: Curves.easeOut),
+      ),
+    );
+
     _backgroundFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
@@ -52,16 +65,53 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
       ),
     );
 
-    // Start the animation
-    _animationController.forward();
-
-    // Navigate to home screen after animation completes
-    Future.delayed(const Duration(seconds: 4), () {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const Wrapper()),
-        (route) => false,
-      );
+    _animationController.forward().then((_) {
+      setState(() {
+        _animationComplete = true;
+      });
+      _navigateBasedOnAuth();
     });
+  }
+
+  Future<void> _checkAuth() async {
+    final authBloc = context.read<AuthBloc>();
+
+    try {
+      if (authBloc.authUseCases.isUserSignedIn()) {
+        setState(() {
+          _authCheckComplete = true;
+        });
+        _navigateBasedOnAuth();
+      } else {
+        setState(() {
+          _authCheckComplete = true;
+        });
+        _navigateBasedOnAuth();
+      }
+    } catch (e) {
+      setState(() {
+        _authCheckComplete = true;
+      });
+      _navigateBasedOnAuth();
+    }
+  }
+
+  void _navigateBasedOnAuth() {
+    if (_authCheckComplete && _animationComplete) {
+      final authBloc = context.read<AuthBloc>();
+
+      if (authBloc.authUseCases.isUserSignedIn()) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const BottomNav()),
+          (route) => false,
+        );
+      } else {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const SplashScreen()),
+          (route) => false,
+        );
+      }
+    }
   }
 
   @override
@@ -78,107 +128,160 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
         builder: (context, child) {
           return Stack(
             children: [
-              // Background gradient with fade animation
+              // Animated Background
               Opacity(
                 opacity: _backgroundFadeAnimation.value,
                 child: Container(
-                  decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                    colors: [
-                      AppColors.primaryColor,
-                      AppColors.primaryColor,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  )),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.primaryColor.withOpacity(0.9),
+                        AppColors.brandPrimary.withOpacity(0.95),
+                        AppColors.primaryColorDark,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
                 ),
               ),
-              // Animated pattern overlayR
+
+              // Background Pattern
               Opacity(
-                opacity: _backgroundFadeAnimation.value * 0.1,
-                child: Container(),
+                opacity: _backgroundFadeAnimation.value * 0.15,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent,
+                    backgroundBlendMode: BlendMode.overlay,
+                    image: DecorationImage(
+                      image: AssetImage('assets/pattern.png'),
+                      repeat: ImageRepeat.repeat,
+                      opacity: 0.1,
+                    ),
+                  ),
+                ),
               ),
-              // Center logo with scale and fade animations
+
+              // Main Content
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Transform.scale(
                       scale: _scaleAnimation.value,
-                      child: Opacity(
-                        opacity: _fadeAnimation.value,
-                        child: Container(
-                          width: 200,
-                          height: 150,
-                          decoration: BoxDecoration(
-                            border: const GradientBoxBorder(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Colors.blue,
-                                  Colors.purple,
-                                  Colors.red,
-                                  Colors.orange,
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              width: 2, // Border width
+                      child: Container(
+                        width: 220,
+                        height: 170,
+                        decoration: BoxDecoration(
+                          border: const GradientBoxBorder(
+                            gradient: LinearGradient(
+                              colors: [
+                                Color(0xFF6DD5ED),
+                                Color(0xFF2193B0),
+                                Color(0xFFE74C3C),
+                                Color(0xFFF39C12),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
                             ),
-                            borderRadius: BorderRadius.circular(15),
-                            // boxShadow: const [
-                            //   BoxShadow(
-                            //     color: AppColors.shadowColor,
-                            //     blurRadius: 20,
-                            //     spreadRadius: 5,
-                            //   ),
-                            // ],
+                            width: 3,
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Image.asset(
-                              'assets/11.png',
-                              fit: BoxFit.contain,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.shadowColor.withOpacity(0.3),
+                              blurRadius: 25,
+                              spreadRadius: 5,
+                              offset: const Offset(0, 10),
                             ),
-                          ),
+                          ],
                         ),
-                      ),
-                    ),
-
-                    // // App name with fade animation
-                    Opacity(
-                      opacity: _fadeAnimation.value,
-                      child: Text(
-                        'Alko Hut',
-                        style: GoogleFonts.chewy(
-                          textStyle: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 4,
-                            shadows: [
-                              Shadow(
-                                color: AppColors.shadowColor,
-                                blurRadius: 10,
-                                offset: Offset(0, 2),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Stack(
+                            children: [
+                              Image.asset(
+                                'assets/11.png',
+                                fit: BoxFit.cover,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Colors.transparent,
+                                      AppColors.primaryColorDark
+                                          .withOpacity(0.3),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ],
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    // Tagline with fade animation
-                    Opacity(
-                      opacity: _fadeAnimation.value,
-                      child: Text('Drink yako Pap!!',
-                          style: GoogleFonts.tangerine(
-                              color: AppColors.background,
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold)),
+                    Transform.translate(
+                      offset: Offset(0, _slideAnimation.value),
+                      child: Opacity(
+                        opacity: _fadeAnimation.value,
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 30),
+                            ShaderMask(
+                              shaderCallback: (bounds) => const LinearGradient(
+                                colors: [Colors.white, Color(0xFFF39C12)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ).createShader(bounds),
+                              child: Text(
+                                'Alko Hut',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 2,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              'Premium Drinks Delivered',
+                              style: GoogleFonts.lato(
+                                color: Colors.white70,
+                                fontSize: 18,
+                                letterSpacing: 3,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
+
+              // Loading Indicator
+              if (!_authCheckComplete)
+                Positioned(
+                  bottom: 50,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.brandAccent.withOpacity(0.7),
+                        ),
+                        strokeWidth: 2,
+                      ),
+                    ),
+                  ),
+                ),
             ],
           );
         },

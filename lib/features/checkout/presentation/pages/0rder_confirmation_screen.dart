@@ -10,7 +10,7 @@ class OrderConfirmationScreen extends StatelessWidget {
   final double totalAmount;
   final String deliveryAddress;
   final String deliveryTime;
-  final String selectedPaymentMethod; // New field
+  final String selectedPaymentMethod;
 
   const OrderConfirmationScreen({
     Key? key,
@@ -23,6 +23,8 @@ class OrderConfirmationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return BlocListener<CheckoutBloc, CheckoutState>(
       listener: (context, state) {
         if (state is CheckoutOrderPlacedState) {
@@ -125,7 +127,12 @@ class OrderConfirmationScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text('Return to Home'),
+                  child: Text(
+                    'Return to Home',
+                    style: TextStyle(
+                      color: isDark ? Colors.white : Colors.black,
+                    ),
+                  ),
                 ),
               ],
             ),

@@ -1,4 +1,5 @@
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:chupachap/features/product/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ class ProductPriceSection extends StatelessWidget {
               ?.copyWith(fontWeight: FontWeight.bold),
         ),
         Text(
-          'KSh ${(product.price).toStringAsFixed(2)}',
+          'KSh ${(formatMoney(product.price))}',
           style: Theme.of(context)
               .textTheme
               .headlineSmall

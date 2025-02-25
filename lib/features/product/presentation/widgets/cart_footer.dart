@@ -1,4 +1,5 @@
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_event.dart';
@@ -42,7 +43,7 @@ class CartFooter extends StatelessWidget {
 
   Widget _buildAddToCartButton(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         boxShadow: [
@@ -187,7 +188,10 @@ class CartFooter extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     // Use discounted price if available, else fall back to product price.
-    final price = product.discountPrice;
+    final price =
+        product.discountPrice > 0 && product.discountPrice < product.price
+            ? product.discountPrice
+            : product.price;
 
     return SizedBox(
       width: screenWidth * 0.5,
@@ -205,7 +209,7 @@ class CartFooter extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Text(
-                'KSh ${(price * quantity).toStringAsFixed(0)}',
+                'KSh ${formatMoney(price * quantity)}',
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge

@@ -17,6 +17,7 @@ class DeliveryPaymentSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SectionTitle(title: 'Delivery & Payment'),
+          InfoRow(label: 'Delivery Type', value: order.deliveryType),
           InfoRow(label: 'Delivery Address', value: order.address),
           InfoRow(label: 'Payment Method', value: order.paymentMethod),
           InfoRow(

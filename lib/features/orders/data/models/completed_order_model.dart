@@ -13,6 +13,7 @@ class CompletedOrder {
   final String userName;
   final String userId;
   final String status;
+  final String deliveryType;
 
   CompletedOrder({
     required this.status,
@@ -27,6 +28,7 @@ class CompletedOrder {
     required this.userEmail,
     required this.userName,
     required this.userId,
+    this.deliveryType = 'No delivery type specified',
   });
 
   // factory constructor to create from Firebase data
@@ -63,6 +65,8 @@ class CompletedOrder {
       userName: data['userName'] as String? ?? 'No name provided',
       userId: data['userId'] as String? ?? 'No user ID provided',
       status: data['status'] as String? ?? 'Not specified',
+      deliveryType:
+          data['deliveryType'] as String? ?? 'No delivery type specified',
     );
   }
 }

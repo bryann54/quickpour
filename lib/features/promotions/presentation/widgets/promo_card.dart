@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:chupachap/features/product/data/models/product_model.dart';
 import 'package:chupachap/features/product/presentation/pages/product_details_screen.dart';
 import 'package:chupachap/features/product/presentation/widgets/favourite_FAB.dart';
@@ -105,7 +106,7 @@ class PromotionCard extends StatelessWidget {
                                     children: [
                                       const SizedBox(width: 4),
                                       Text(
-                                        '${_calculateDiscountPercentage(product.price, product.discountPrice)}% OFF',
+                                        '${calculateDiscountPercentage(product.price, product.discountPrice)}% OFF',
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 11,
@@ -193,7 +194,7 @@ class PromotionCard extends StatelessWidget {
                                       product.discountPrice <
                                           product.price) ...[
                                     Text(
-                                      'Ksh ${product.discountPrice.toStringAsFixed(0)}',
+                                      'Ksh ${formatMoney(product.discountPrice)}',
                                       style: const TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w600,
@@ -209,7 +210,7 @@ class PromotionCard extends StatelessWidget {
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
-                                      'Ksh ${product.price.toStringAsFixed(0)}',
+                                      'Ksh ${formatMoney(product.price)}',
                                       style: const TextStyle(
                                         fontSize: 11,
                                         color: Colors.red,
@@ -218,7 +219,7 @@ class PromotionCard extends StatelessWidget {
                                     ),
                                   ] else
                                     Text(
-                                      'Ksh ${product.price.toStringAsFixed(0)}',
+                                      'Ksh ${formatMoney(product.price)}',
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
@@ -257,10 +258,5 @@ class PromotionCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  int _calculateDiscountPercentage(double originalPrice, double discountPrice) {
-    if (originalPrice <= 0 || discountPrice <= 0) return 0;
-    return ((originalPrice - discountPrice) / originalPrice * 100).round();
   }
 }

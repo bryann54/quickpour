@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:chupachap/features/favorites/data/models/favorites_model.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_event.dart';
@@ -122,7 +123,7 @@ class FavoritesWidget extends StatelessWidget {
                                   favoriteItem.product.discountPrice <
                                       favoriteItem.product.price)
                                 Text(
-                                  'Ksh ${favoriteItem.product.discountPrice.toStringAsFixed(0)}',
+                                  'Ksh ${formatMoney(favoriteItem.product.discountPrice)}',
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,
@@ -148,7 +149,7 @@ class FavoritesWidget extends StatelessWidget {
                                 Expanded(
                                   flex: 1,
                                   child: Text(
-                                    'Ksh ${favoriteItem.product.price.toStringAsFixed(0)}',
+                                    'Ksh ${formatMoney(favoriteItem.product.price)}',
                                     style: const TextStyle(
                                       fontSize: 16,
                                       color: Colors.red,
@@ -162,7 +163,7 @@ class FavoritesWidget extends StatelessWidget {
                                 Expanded(
                                   flex: 1,
                                   child: Text(
-                                    'Ksh ${favoriteItem.product.price.toStringAsFixed(0)}',
+                                    'Ksh ${formatMoney(favoriteItem.product.price)}',
                                     style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,

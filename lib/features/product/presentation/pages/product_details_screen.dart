@@ -1,5 +1,6 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
@@ -33,13 +34,6 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   late int quantity;
-  int _calculateDiscountPercentage(double originalPrice, double discountPrice) {
-    if (originalPrice <= 0 || discountPrice <= 0) {
-      return 0; // Handle invalid values gracefully
-    }
-    final discount = ((originalPrice - discountPrice) / originalPrice) * 100;
-    return discount.round(); // Return rounded discount percentage
-  }
 
   @override
   void initState() {
@@ -200,7 +194,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
-                                      '${_calculateDiscountPercentage(widget.product.price, widget.product.discountPrice)}% OFF',
+                                      '${calculateDiscountPercentage(widget.product.price, widget.product.discountPrice)}% OFF',
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 11,
@@ -221,7 +215,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             child: Row(
                               children: [
                                 Text(
-                                  'KSH ${widget.product.discountPrice > 0 && widget.product.discountPrice < widget.product.price ? widget.product.discountPrice.toStringAsFixed(0) : widget.product.price.toStringAsFixed(0)}',
+                                  'KSH ${formatMoney((widget.product.discountPrice > 0 && widget.product.discountPrice < widget.product.price) ? widget.product.discountPrice : widget.product.price)}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleSmall
@@ -244,7 +238,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         widget.product.price) ...[
                                   const SizedBox(width: 28),
                                   Text(
-                                    'KSH ${widget.product.price.toStringAsFixed(0)}',
+                                    'KSH ${formatMoney(widget.product.price)}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall

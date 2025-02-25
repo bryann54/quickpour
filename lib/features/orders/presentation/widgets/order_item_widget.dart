@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:chupachap/core/utils/colors.dart';
@@ -171,27 +172,31 @@ class OrderItemWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: isDark ? AppColors.dividerColorDark : AppColors.dividerColor,
+    return Column(
+      children: [
+        // Delivery Type Section
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: isDark
+                    ? AppColors.dividerColorDark
+                    : AppColors.dividerColor,
+              ),
+              bottom: BorderSide(
+                color: isDark
+                    ? AppColors.dividerColorDark
+                    : AppColors.dividerColor,
+              ),
+            ),
           ),
-          bottom: BorderSide(
-            color: isDark ? AppColors.dividerColorDark : AppColors.dividerColor,
-          ),
-        ),
-      ),
-      child: Hero(
-        tag: 'order-items-count-${order.id}',
-        child: Material(
-          color: Colors.transparent,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Icon based on delivery type
               Icon(
-                Icons.location_on_outlined,
+                getDeliveryIcon(order.deliveryType),
                 size: 20,
                 color: isDark
                     ? AppColors.textSecondaryDark
@@ -203,7 +208,7 @@ class OrderItemWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Delivery Address',
+                      'Delivery Type',
                       style: TextStyle(
                         color: isDark
                             ? AppColors.textSecondaryDark
@@ -213,7 +218,7 @@ class OrderItemWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      order.address,
+                      getDeliveryText(order.deliveryType),
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 15,
@@ -221,8 +226,6 @@ class OrderItemWidget extends StatelessWidget {
                             ? AppColors.textPrimaryDark
                             : AppColors.textPrimary,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
                     ),
                   ],
                 ),
@@ -230,7 +233,68 @@ class OrderItemWidget extends StatelessWidget {
             ],
           ),
         ),
-      ),
+        // Delivery Address Section
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: isDark
+                    ? AppColors.dividerColorDark
+                    : AppColors.dividerColor,
+              ),
+            ),
+          ),
+          child: Hero(
+            tag: 'order-items-count-${order.id}',
+            child: Material(
+              color: Colors.transparent,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.location_on_outlined,
+                    size: 20,
+                    color: isDark
+                        ? AppColors.textSecondaryDark
+                        : AppColors.textSecondary,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Delivery Address',
+                          style: TextStyle(
+                            color: isDark
+                                ? AppColors.textSecondaryDark
+                                : AppColors.textSecondary,
+                            fontSize: 13,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          order.address,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.textPrimary,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -260,12 +324,13 @@ class OrderItemWidget extends StatelessWidget {
                 ),
               ),
               Text(
-                'KSh ${order.total.toStringAsFixed(0)}',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.tealAccent,
-                ),
+                'KSh ${formatMoney(order.total)}',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: isDark
+                        ? AppColors.textPrimaryDark
+                        : AppColors.textPrimary),
               ),
             ],
           ),

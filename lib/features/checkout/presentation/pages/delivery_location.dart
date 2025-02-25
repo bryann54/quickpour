@@ -1,312 +1,380 @@
-import 'package:chupachap/features/checkout/data/models/delivery_location.dart';
-import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
-import 'package:chupachap/features/checkout/presentation/pages/delivery_details_screen.dart';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
+import 'dart:convert';
 
-class DeliveryLocationScreen extends StatefulWidget {
-  final double totalAmount;
-  final DeliveryLocation location;
-  final String phoneNumber;
+import 'package:chupachap/core/utils/colors.dart';
 
-  const DeliveryLocationScreen({
-    Key? key,
-    required this.totalAmount,
-    required this.location,
-    required this.phoneNumber,
-  }) : super(key: key);
+class PlaceAutocompletePage extends StatefulWidget {
+  const PlaceAutocompletePage({super.key});
 
   @override
-  State<DeliveryLocationScreen> createState() => _DeliveryLocationScreenState();
+  State<PlaceAutocompletePage> createState() => _PlaceAutocompletePageState();
 }
 
-class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
+class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
   final TextEditingController _searchController = TextEditingController();
-  final TextEditingController _addressDetailsController =
-      TextEditingController();
-  GoogleMapController? _mapController;
-  LatLng? _selectedLocation;
-  String? _currentAddress;
-  bool _isLoading = true;
-  List<DeliveryLocation> _locationPredictions = [];
+  Timer? _debounce;
+  List<Map<String, dynamic>> _predictions = [];
+  bool _showRecentLocations = true;
+  List<Map<String, dynamic>> _recentLocations = [];
+  List<Map<String, dynamic>> _savedLocations = [];
+  Map<String, dynamic>? _currentLocation;
 
   @override
   void initState() {
     super.initState();
-    _initializeLocation();
+    _searchController.addListener(_onSearchChanged);
+    _loadSavedLocations();
+    _loadRecentLocations();
+    _fetchCurrentLocation();
   }
 
-  Future<void> _initializeLocation() async {
-    // Initialize with the location passed from checkout screen
-    setState(() {
-      _selectedLocation = LatLng(
-        widget.location.latitude,
-        widget.location.longitude,
-      );
-      _currentAddress = widget.location.address;
-      _searchController.text = widget.location.address;
-      _isLoading = false;
-    });
-  }
-
-  Future<void> _getUserCurrentLocation() async {
+  Future<void> _fetchCurrentLocation() async {
     try {
+      // Check location permissions
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        debugPrint('Location services are disabled.');
-        return;
+        throw Exception('Location services are disabled.');
       }
 
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          debugPrint('Location permissions are denied.');
-          return;
+          throw Exception('Location permissions are denied.');
         }
       }
 
+      if (permission == LocationPermission.deniedForever) {
+        throw Exception('Location permissions are permanently denied.');
+      }
+
+      // Fetch current position
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
 
-      setState(() {
-        _selectedLocation = LatLng(position.latitude, position.longitude);
-      });
-
-      _getAddressFromLatLng(_selectedLocation!);
-      _mapController?.animateCamera(
-        CameraUpdate.newLatLng(_selectedLocation!),
+      // Convert coordinates to address
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
       );
+
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks[0];
+        String mainText = place.street ?? 'Current Location';
+        String secondaryText = [
+          place.subLocality,
+          place.locality,
+          place.administrativeArea,
+          place.country
+        ].where((e) => e != null && e.isNotEmpty).join(', ');
+
+        setState(() {
+          _currentLocation = {
+            'description': '$mainText, $secondaryText',
+            'mainText': mainText,
+            'secondaryText': secondaryText,
+            'location': {
+              'lat': position.latitude,
+              'lng': position.longitude,
+            },
+            'city': place.locality ?? '',
+            'country': place.country ?? '',
+            'isSaved': false,
+          };
+        });
+      }
     } catch (e) {
       debugPrint('Error fetching current location: $e');
     }
   }
 
-  Future<void> _getAddressFromLatLng(LatLng position) async {
-    try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-        position.latitude,
-        position.longitude,
-      );
-      if (placemarks.isNotEmpty) {
-        Placemark place = placemarks[0];
-        String address =
-            '${place.street}, ${place.subLocality}, ${place.locality}';
+  Future<void> _loadSavedLocations() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedLocationsJson = prefs.getStringList('savedLocations') ?? [];
+
+    setState(() {
+      _savedLocations = savedLocationsJson
+          .map((json) => jsonDecode(json) as Map<String, dynamic>)
+          .toList();
+    });
+  }
+
+  Future<void> _loadRecentLocations() async {
+    final prefs = await SharedPreferences.getInstance();
+    final recentLocationsJson = prefs.getStringList('recentLocations') ?? [];
+
+    setState(() {
+      _recentLocations = recentLocationsJson
+          .map((json) => jsonDecode(json) as Map<String, dynamic>)
+          .toList();
+    });
+  }
+
+  Future<void> _saveRecentLocations() async {
+    final prefs = await SharedPreferences.getInstance();
+    final recentLocationsJson =
+        _recentLocations.map((loc) => jsonEncode(loc)).toList();
+    await prefs.setStringList('recentLocations', recentLocationsJson);
+  }
+
+  Future<void> _saveLocation(Map<String, dynamic> location) async {
+    if (!_savedLocations.any((loc) =>
+        loc['mainText'] == location['mainText'] &&
+        loc['secondaryText'] == location['secondaryText'])) {
+      _savedLocations.add(location);
+      final prefs = await SharedPreferences.getInstance();
+      final savedLocationsJson =
+          _savedLocations.map((loc) => jsonEncode(loc)).toList();
+      await prefs.setStringList('savedLocations', savedLocationsJson);
+    }
+  }
+
+  Future<void> _removeLocation(Map<String, dynamic> location) async {
+    _savedLocations.removeWhere((loc) =>
+        loc['mainText'] == location['mainText'] &&
+        loc['secondaryText'] == location['secondaryText']);
+
+    final prefs = await SharedPreferences.getInstance();
+    final savedLocationsJson =
+        _savedLocations.map((loc) => jsonEncode(loc)).toList();
+    await prefs.setStringList('savedLocations', savedLocationsJson);
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      if (_searchController.text.length > 2) {
+        _getLocationPredictions(_searchController.text);
         setState(() {
-          _currentAddress = address;
-          _searchController.text = address;
+          _showRecentLocations = false;
+        });
+      } else {
+        setState(() {
+          _predictions = [];
+          _showRecentLocations = true;
         });
       }
-    } catch (e) {
-      debugPrint('Error getting address from LatLng: $e');
-    }
+    });
   }
 
   Future<void> _getLocationPredictions(String query) async {
     if (query.isEmpty) {
-      setState(() => _locationPredictions = []);
+      setState(() {
+        _predictions = [];
+        _showRecentLocations = true;
+      });
       return;
     }
 
+    setState(() {});
+
     try {
       List<Location> locations = await locationFromAddress(query);
-      List<DeliveryLocation> predictions = [];
+      List<Map<String, dynamic>> predictions = [];
 
       for (var location in locations) {
-        List<Placemark> placemarks = await placemarkFromCoordinates(
-          location.latitude,
-          location.longitude,
-        );
+        try {
+          List<Placemark> placemarks = await placemarkFromCoordinates(
+            location.latitude,
+            location.longitude,
+          );
 
-        if (placemarks.isNotEmpty) {
-          Placemark place = placemarks[0];
-          String mainText = place.street ?? '';
-          String secondaryText = [
-            place.subLocality,
-            place.locality,
-            place.administrativeArea
-          ].where((e) => e != null && e.isNotEmpty).join(', ');
+          if (placemarks.isNotEmpty) {
+            Placemark place = placemarks[0];
+            if (place.country == 'Kenya') {
+              String mainText = place.street ?? '';
+              String secondaryText = [
+                place.subLocality,
+                place.locality,
+                place.administrativeArea,
+                place.country
+              ].where((e) => e != null && e.isNotEmpty).join(', ');
 
-          predictions.add(DeliveryLocation(
-            address: '$mainText, $secondaryText',
-            latitude: location.latitude,
-            longitude: location.longitude,
-            mainText: mainText,
-            secondaryText: secondaryText,
-          ));
+              predictions.add({
+                'description': '$mainText, $secondaryText',
+                'mainText': mainText,
+                'secondaryText': secondaryText,
+                'location': {
+                  'lat': location.latitude,
+                  'lng': location.longitude,
+                },
+                'city': place.locality ?? '',
+                'country': place.country ?? '',
+              });
+            }
+          }
+        } catch (e) {
+          debugPrint('Error getting place details: $e');
         }
       }
 
-      setState(() => _locationPredictions = predictions);
+      if (mounted) {
+        setState(() {
+          _predictions = predictions;
+        });
+      }
     } catch (e) {
       debugPrint('Error fetching locations: $e');
-      setState(() => _locationPredictions = []);
+
+      if (mounted) {
+        setState(() {
+          _predictions = [];
+        });
+      }
     }
   }
 
-  void _selectLocation(DeliveryLocation location) {
-    setState(() {
-      _selectedLocation = LatLng(location.latitude, location.longitude);
-      _searchController.text = location.address;
-      _currentAddress = location.address;
-      _locationPredictions = [];
-    });
+  Widget _buildSearchBar(bool isDarkMode) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDarkMode ? Colors.grey[900] : Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: TextField(
+        controller: _searchController,
+        decoration: InputDecoration(
+          hintText: 'Search road ,apartmernt...',
+          hintStyle: TextStyle(
+            color: isDarkMode ? Colors.grey[500] : Colors.grey[600],
+          ),
+          prefixIcon: Icon(
+            Icons.search,
+            color: isDarkMode ? Colors.grey[500] : Colors.grey[700],
+          ),
+          suffixIcon: _searchController.text.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    _searchController.clear();
+                    setState(() {
+                      _predictions = [];
+                      _showRecentLocations = true;
+                    });
+                  },
+                )
+              : null,
+          filled: true,
+          fillColor: isDarkMode ? Colors.grey[800] : Colors.grey[100],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
+        ),
+      ),
+    );
+  }
 
-    _mapController?.animateCamera(
-      CameraUpdate.newLatLng(_selectedLocation!),
+  Widget _buildListSection(String title, List<Map<String, dynamic>> locations) {
+    if (locations.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Text(title,
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        ),
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: locations.length,
+          separatorBuilder: (context, index) => Divider(
+            height: 2,
+            color: Theme.of(
+              context,
+            ).dividerColor.withOpacity(.1),
+          ),
+          itemBuilder: (context, index) {
+            final location = locations[index];
+            bool isSaved = _savedLocations.any((loc) =>
+                loc['mainText'] == location['mainText'] &&
+                loc['secondaryText'] == location['secondaryText']);
+
+            return ListTile(
+              leading:
+                  const Icon(Icons.location_on, color: AppColors.accentColor),
+              title: Text(location['mainText'] ?? '',
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: Text(
+                location['secondaryText'] ?? '',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              trailing: IconButton(
+                icon: Icon(
+                  isSaved ? Icons.favorite : Icons.favorite_border,
+                  color: isSaved ? AppColors.accentColor : Colors.grey,
+                ),
+                onPressed: () async {
+                  if (isSaved) {
+                    await _removeLocation(location);
+                  } else {
+                    await _saveLocation(location);
+                  }
+                  setState(() {});
+                },
+              ),
+              onTap: () {
+                _saveRecentLocations();
+                Navigator.pop(context, location);
+              },
+            );
+          },
+        ),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Delivery Location'),
+        title: Text(
+          'delivery location'.capitalize(),
+          style: const TextStyle(fontWeight: FontWeight.w500),
+        ),
+        centerTitle: true,
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
+          _buildSearchBar(isDarkMode),
+          Expanded(
+            child: ListView(
               children: [
-                TextField(
-                  controller: _searchController,
-                  onChanged: _getLocationPredictions,
-                  decoration: InputDecoration(
-                    hintText: 'Search location',
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.my_location),
-                      onPressed: _getUserCurrentLocation,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-                if (_locationPredictions.isNotEmpty)
-                  Container(
-                    constraints: const BoxConstraints(maxHeight: 200),
-                    margin: const EdgeInsets.only(top: 8),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _locationPredictions.length,
-                      itemBuilder: (context, index) {
-                        final prediction = _locationPredictions[index];
-                        return ListTile(
-                          title: Text(prediction.mainText),
-                          subtitle: Text(
-                            prediction.secondaryText,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          onTap: () => _selectLocation(prediction),
-                        );
-                      },
-                    ),
-                  ),
+                if (_currentLocation != null)
+                  _buildListSection('Current Location', [_currentLocation!]),
+                if (_showRecentLocations)
+                  _buildListSection('Recent Locations', _recentLocations),
+                _buildListSection('Predictions', _predictions),
               ],
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : Stack(
-                    children: [
-                      GoogleMap(
-                        initialCameraPosition: CameraPosition(
-                          target: _selectedLocation!,
-                          zoom: 15,
-                        ),
-                        onMapCreated: (controller) =>
-                            _mapController = controller,
-                        onCameraMove: (position) {
-                          _selectedLocation = position.target;
-                        },
-                        onCameraIdle: () {
-                          if (_selectedLocation != null) {
-                            _getAddressFromLatLng(_selectedLocation!);
-                          }
-                        },
-                        myLocationEnabled: true,
-                        myLocationButtonEnabled: true,
-                      ),
-                      Center(
-                        child: Icon(
-                          Icons.location_pin,
-                          color: Theme.of(context).primaryColor,
-                          size: 40,
-                        ),
-                      ),
-                    ],
-                  ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'Delivery Address Details',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _addressDetailsController,
-                    maxLines: 2,
-                    decoration: InputDecoration(
-                      hintText: 'Apartment, Floor, Landmark etc.',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_selectedLocation != null) {
-                        context.read<CheckoutBloc>().add(
-                              UpdateDeliveryInfoEvent(
-                                address:
-                                    '${_currentAddress ?? ''}\n${_addressDetailsController.text}',
-                                phoneNumber: widget.phoneNumber,
-                              ),
-                            );
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => DeliveryDetailsScreen(
-                              address: _currentAddress ?? '',
-                              addressDetails: _addressDetailsController.text,
-                              location: _selectedLocation!,
-                              totalAmount: widget.totalAmount,
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text('Confirm Location'),
-                  ),
-                ],
-              ),
             ),
           ),
         ],

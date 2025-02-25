@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:chupachap/features/promotions/presentation/bloc/promotions_bloc.dart';
 import 'package:chupachap/features/promotions/presentation/bloc/promotions_state.dart';
 import 'package:chupachap/features/promotions/presentation/pages/promotion_screen.dart';
@@ -149,7 +150,7 @@ class PromotionsCarousel extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            '${_calculateDiscountPercentage(product.price, product.discountPrice)}% Off',
+                            '${calculateDiscountPercentage(product.price, product.discountPrice)}% Off',
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -181,7 +182,7 @@ class PromotionsCarousel extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              'Ksh ${product.discountPrice.toStringAsFixed(0)}',
+                              'Ksh ${formatMoney(product.discountPrice)}',
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -190,7 +191,7 @@ class PromotionsCarousel extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              'Ksh ${product.price.toStringAsFixed(0)}',
+                              'Ksh ${formatMoney(product.price)}',
                               style: const TextStyle(
                                 fontSize: 11,
                                 color: Colors.red,
@@ -217,12 +218,4 @@ class PromotionsCarousel extends StatelessWidget {
       ),
     );
   }
-}
-
-int _calculateDiscountPercentage(double originalPrice, double discountPrice) {
-  if (originalPrice <= 0 || discountPrice <= 0) {
-    return 0; // Handle invalid values gracefully
-  }
-  final discount = ((originalPrice - discountPrice) / originalPrice) * 100;
-  return discount.round(); // Return rounded discount percentage
 }

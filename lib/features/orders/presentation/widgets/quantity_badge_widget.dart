@@ -1,5 +1,6 @@
 // widgets/quantity_badge.dart
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +41,7 @@ class ItemPrice extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Text(
-      'KSh ${price.toStringAsFixed(0)}',
+      'KSh ${formatMoney(price)}',
       style: TextStyle(
         fontWeight: FontWeight.bold,
         color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
@@ -87,7 +88,7 @@ class OrderTotalRow extends StatelessWidget {
             child: Material(
               color: Colors.transparent,
               child: Text(
-                'KSh ${order.total.toStringAsFixed(0)}',
+                'KSh ${formatMoney(order.total)}',
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

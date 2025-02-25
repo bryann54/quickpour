@@ -8,3 +8,6 @@ const empty_cart = 'Your cart is empty!';
 const looking_for_something = 'Tap the plus button to add drinks to your cart.';
 const empty_favs = 'no favorites yet!';
 const add_favs = 'tap the heart icon on products you love..';
+const empty_requests = 'No requests yet..';
+const request_text = 'Tap the make request button to request a drink';
+const empty_orders = 'No orders yet..';

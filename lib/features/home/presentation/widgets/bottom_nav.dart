@@ -41,14 +41,13 @@ class _BottomNavState extends State<BottomNav> {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     return Scaffold(
-    
       body: _screens[_currentIndex],
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
         index: _currentIndex,
         height: 60.0,
         items: [
-           FaIcon(FontAwesomeIcons.magnifyingGlass,
+          FaIcon(FontAwesomeIcons.magnifyingGlass,
               size: 25,
               color: isDarkMode
                   ? Colors.grey.shade400.withOpacity(.9)
@@ -63,13 +62,19 @@ class _BottomNavState extends State<BottomNav> {
                   style: const TextStyle(color: Colors.white),
                 ),
                 showBadge: favoritesState.favorites.items.isNotEmpty,
-                child:  FaIcon(FontAwesomeIcons.solidHeart,
-                    size: 25, color:isDarkMode?Colors.grey.shade400.withOpacity(.9): Colors.white),
+                child: FaIcon(FontAwesomeIcons.solidHeart,
+                    size: 25,
+                    color: isDarkMode
+                        ? Colors.grey.shade400.withOpacity(.9)
+                        : Colors.white),
               );
             },
           ),
-           FaIcon(FontAwesomeIcons.houseChimney,
-              size: 25,   color:isDarkMode?Colors.grey.shade400.withOpacity(.9): Colors.white),
+          FaIcon(FontAwesomeIcons.houseChimney,
+              size: 25,
+              color: isDarkMode
+                  ? Colors.grey.shade400.withOpacity(.9)
+                  : Colors.white),
 
           // Cart with badge
           BlocBuilder<CartBloc, CartState>(
@@ -77,17 +82,23 @@ class _BottomNavState extends State<BottomNav> {
               return badges.Badge(
                 badgeContent: Text(
                   '${cartState.cart.totalQuantity}',
-                  style: const TextStyle( color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 ),
                 showBadge: cartState.cart.totalQuantity > 0,
-                child:  FaIcon(FontAwesomeIcons.cartShopping,
-                    size: 25,  color:isDarkMode?Colors.grey.shade400.withOpacity(.9): Colors.white),
+                child: FaIcon(FontAwesomeIcons.cartShopping,
+                    size: 25,
+                    color: isDarkMode
+                        ? Colors.grey.shade400.withOpacity(.9)
+                        : Colors.white),
               );
             },
           ),
 
-           FaIcon(FontAwesomeIcons.clipboardList,
-              size: 25,  color:isDarkMode?Colors.grey.shade400.withOpacity(.9): Colors.white),
+          FaIcon(FontAwesomeIcons.clipboardList,
+              size: 25,
+              color: isDarkMode
+                  ? Colors.grey.shade400.withOpacity(.9)
+                  : Colors.white),
         ],
         color: AppColors.primaryColor,
         buttonBackgroundColor: AppColors.primaryColor,

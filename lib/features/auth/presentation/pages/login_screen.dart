@@ -1,5 +1,6 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_snackbar_widget.dart';
+import 'package:chupachap/features/auth/presentation/pages/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -174,39 +175,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               )
                             : const Text('Login'),
                       ),
-                      const SizedBox(height: 16),
-
-                      // const  SizedBox(height: 350,),
-                      //             Row(
-                      //               mainAxisAlignment: MainAxisAlignment.center,
-                      //               children: [
-                      //                 Text(
-                      //                   'Don\'t have an account? ',
-                      //                   style: GoogleFonts
-                      //                       .poppins(),
-                      //                 ),
-                      //                 TextButton(
-                      //                   onPressed: () {
-                      //                     Navigator.push(
-                      //                       context,
-                      //                       MaterialPageRoute(
-                      //                         builder: (context) =>
-                      //                           const  SignupScreen(),
-                      //                       ),
-                      //                     );
-                      //                   },
-                      //                   child: Text(
-                      //                     'SignUp',
-                      //                     style: GoogleFonts.poppins(
-                      //                       color:
-                      //                           Colors.blue,
-                      //                       fontWeight: FontWeight.bold,
-                      //                       fontSize: 17
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //               ],
-                      //             )
                     ],
                   ),
                 ),
@@ -214,6 +182,55 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           );
         },
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 20,
+              offset: const Offset(0, -5),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Don\'t have an account? ',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.color
+                      ?.withOpacity(0.8),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SignupScreen(),
+                    ),
+                  );
+                },
+                child: Text(
+                  'SignUp',
+                  style: GoogleFonts.poppins(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
