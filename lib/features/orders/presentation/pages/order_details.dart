@@ -20,7 +20,17 @@ class OrderDetails extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: isDark ? AppColors.backgroundDark : AppColors.background,
-      appBar: CustomAppBar(showCart: false),
+      // appBar: CustomAppBar(showCart: false),
+      appBar: AppBar(
+        title:    Text(
+          'Order Details',
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
+          ),
+        ),
+
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,3 +49,5 @@ class OrderDetails extends StatelessWidget {
     );
   }
 }
+
+

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:chupachap/features/orders/data/models/order_model.dart';
@@ -23,17 +24,18 @@ class OrderItemRow extends StatelessWidget {
           if (item.images.isNotEmpty)
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(
+              child: CachedNetworkImage(
+                imageUrl: 
                 item.images.first,
                 width: 50,
                 height: 50,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
+                fit: BoxFit.contain,
+                errorWidget: (context, error, stackTrace) => Container(
                   width: 50,
                   height: 50,
-                  color: Colors.grey[300],
+                  color:isDark?Colors.grey: Colors.grey[300],
                   child:
-                      const Icon(Icons.image_not_supported, color: Colors.grey),
+                      const Icon(Icons.error, color: Colors.grey),
                 ),
               ),
             )
@@ -42,10 +44,11 @@ class OrderItemRow extends StatelessWidget {
               width: 50,
               height: 50,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: isDark ? Colors.grey.shade800 : Colors.grey[100],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(Icons.image_not_supported, color: Colors.grey),
+              child:  Icon(Icons.error,
+                color: isDark ? Colors.grey.shade600 : Colors.grey[400], ),
             ),
           const SizedBox(width: 12),
           // Product details

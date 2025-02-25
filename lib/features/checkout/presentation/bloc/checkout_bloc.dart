@@ -124,8 +124,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         ));
       }
 
-      // Log merchant orders for debugging
-      print('Merchant Orders: $merchantOrders');
+     
 
       // Emit success state
       emit(CheckoutOrderPlacedState(
@@ -147,9 +146,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       // Clear the cart after successful order placement
       // Assuming you have a CartBloc or similar to manage the cart state
       // cartBloc.add(ClearCartEvent());
-    } catch (e, stackTrace) {
-      print('Failed to place order: ${e.toString()}');
-      print('Stack trace: $stackTrace');
+    } catch (e) {
+    
       emit(CheckoutErrorState(
         errorMessage: 'Failed to place order: ${e.toString()}',
         address: state.address,
