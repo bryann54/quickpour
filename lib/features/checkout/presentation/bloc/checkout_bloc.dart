@@ -39,7 +39,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     ));
   }
 
-Future<void> _onPlaceOrder(
+  Future<void> _onPlaceOrder(
       PlaceOrderEvent event, Emitter<CheckoutState> emit) async {
     try {
       // Check if cart has items before proceeding

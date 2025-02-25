@@ -51,7 +51,7 @@ class CheckoutRepositoryImpl implements CheckoutRepository {
     }
 
     // Create merchant orders
-  // Modify your method where you create merchant orders
+    // Modify your method where you create merchant orders
     final merchantOrders = merchantItemsMap.entries
         .map((entry) {
           final merchantId = entry.key;
@@ -121,7 +121,7 @@ class CheckoutRepositoryImpl implements CheckoutRepository {
           .doc(merchantOrder.merchantId)
           .collection('orders')
           .doc(orderId);
-           final merchantName = merchantOrder.merchantName.isNotEmpty
+      final merchantName = merchantOrder.merchantName.isNotEmpty
           ? merchantOrder.merchantName
           : "Unknown Merchant";
 

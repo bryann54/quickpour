@@ -2,6 +2,7 @@ import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_state.dart';
 import 'package:chupachap/features/notifications/domain/repositories/notification_service.dart';
 import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
+import 'package:chupachap/features/orders/data/models/merchant_order_item_model.dart';
 import 'package:chupachap/features/orders/data/models/order_model.dart';
 import 'package:chupachap/features/orders/data/repositories/orders_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -24,20 +25,37 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
     // Listen to checkout completion
     checkoutBloc.stream.listen((state) {
       if (state is CheckoutOrderPlacedState) {
-        // Get items from merchant orders since cartItems doesn't exist in CheckoutOrderPlacedState
-        final orderItems = <OrderItem>[];
+        // Convert merchant orders to our internal structure
+        final merchantOrderItems = state.merchantOrders.map((merchantOrder) {
+          // Convert cart items to order items
+          final orderItems = merchantOrder.items
+              .map((item) => OrderItem(
+                    productName: item.product.productName,
+                    measure: item.product.measure,
+                    quantity: item.quantity,
+                    price: item.product.price,
+                    sku: item.product.sku,
+                    images: item.product.imageUrls.isNotEmpty
+                        ? [item.product.imageUrls.first]
+                        : [],
+                    productId: item.product.id,
+                  ))
+              .toList();
 
-        for (var merchantOrder in state.merchantOrders) {
-          // Assuming merchantOrder has items that can be converted to OrderItem
-          // You'll need to adjust this based on your actual MerchantOrder structure
-          for (var item in merchantOrder.items) {
-            orderItems.add(OrderItem(
-              name: item.product.productName,
-              quantity: item.quantity,
-              price: item.product.price,
-            ));
-          }
-        }
+          return MerchantOrderItem(
+            merchantEmail: merchantOrder.merchantEmail,
+            merchantLocation: merchantOrder.merchantLocation,
+            merchantStoreName: merchantOrder.merchantStoreName,
+            merchantRating: merchantOrder.merchantRating,
+            isMerchantOpen: merchantOrder.isMerchantOpen,
+            isMerchantVerified: merchantOrder.isMerchantOpen,
+            merchantId: merchantOrder.merchantId,
+            merchantName: merchantOrder.merchantName,
+            merchantImageUrl: merchantOrder.merchantImageUrl,
+            items: orderItems,
+            subtotal: merchantOrder.subtotal,
+          );
+        }).toList();
 
         final newOrder = CompletedOrder(
           id: state.orderId,
@@ -46,7 +64,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
           address: state.address ?? 'No address provided',
           phoneNumber: state.phoneNumber ?? 'No phone number',
           paymentMethod: state.paymentMethod ?? 'Not specified',
-          items: orderItems,
+          merchantOrders: merchantOrderItems,
           userEmail: state.userEmail ?? 'No email provided',
           userName: state.userName ?? 'No name provided',
           userId: state.userId ?? 'No user ID provided',
@@ -57,7 +75,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
         NotificationService.showOrderNotification(
           title: 'Order Placed Successfully',
           body: 'Your order #${state.orderId} has been confirmed',
-          userId: state.userId ?? 'No user ID provided', // Add userId here
+          userId: state.userId ?? 'No user ID provided',
           payload: state.orderId,
         );
 

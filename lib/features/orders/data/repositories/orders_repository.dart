@@ -20,9 +20,21 @@ class OrdersRepository {
           .orderBy('date', descending: true)
           .get();
 
-      return querySnapshot.docs
-          .map((doc) => CompletedOrder.fromFirebase(doc.data(), doc.id))
-          .toList();
+      List<CompletedOrder> orders = [];
+
+      for (var doc in querySnapshot.docs) {
+        try {
+          final order = CompletedOrder.fromFirebase(doc.data(), doc.id);
+          orders.add(order);
+        } catch (e) {
+          print('Error parsing order ${doc.id}: $e');
+          print('Order data: ${doc.data()}');
+          // Continue processing other orders
+          continue;
+        }
+      }
+
+      return orders;
     } catch (e) {
       print('Error fetching orders: $e');
       throw Exception('Failed to fetch orders: $e');

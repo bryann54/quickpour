@@ -1,9 +1,8 @@
-// widgets/order_items_section.dart
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
-import 'package:chupachap/features/orders/presentation/widgets/order_item_row.dart';
-import 'package:chupachap/features/orders/presentation/widgets/quantity_badge_widget.dart';
+import 'package:chupachap/features/orders/presentation/widgets/merchant_order_section.dart';
 import 'package:chupachap/features/orders/presentation/widgets/section_widget.dart';
+import 'package:chupachap/features/orders/presentation/widgets/widgets/order_total_row.dart';
 import 'package:flutter/material.dart';
 
 class OrderItemsSection extends StatelessWidget {
@@ -32,11 +31,12 @@ class OrderItemsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (order.items.isNotEmpty) ...[
-            const SectionTitle(title: 'Items'),
-            ...order.items.map((item) => OrderItemRow(item: item)),
-            OrderTotalRow(order: order),
+          const SectionTitle(title: 'Items'),
+          if (order.merchantOrders.isNotEmpty) ...[
+            ...order.merchantOrders.map((merchantOrder) =>
+                MerchantOrderSection(merchantOrder: merchantOrder)),
           ],
+          OrderTotalRow(order: order),
         ],
       ),
     );

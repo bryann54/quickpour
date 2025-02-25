@@ -111,7 +111,7 @@ class App extends StatelessWidget {
               userId: FirebaseAuth.instance.currentUser!.uid,
             ),
           ),
-        BlocProvider(
+          BlocProvider(
             create: (context) {
               final checkoutRepository = CheckoutRepositoryImpl(
                 firestore: context.read<FirebaseFirestore>(),
