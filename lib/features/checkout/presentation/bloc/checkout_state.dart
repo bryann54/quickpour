@@ -65,7 +65,7 @@ class CheckoutInitialState extends CheckoutState {
     String? userName,
     String? userId,
   }) {
-    return CheckoutInitialState();
+    return const CheckoutInitialState();
   }
 }
 

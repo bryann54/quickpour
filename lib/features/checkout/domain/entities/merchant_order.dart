@@ -47,7 +47,7 @@ Map<String, dynamic> toJson() => {
                   // Check if imageUrls is not empty before accessing first
                   'image': item.product.imageUrls.isNotEmpty
                       ? item.product.imageUrls
-                      : [], // Provide empty array if no images
+                      : [], 
                   'productId': item.product.id,
                   'sku': item.product.sku,
                   'measure': item.product.measure ,
