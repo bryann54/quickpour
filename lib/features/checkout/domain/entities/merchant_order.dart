@@ -28,10 +28,9 @@ class MerchantOrder extends Equatable {
     required this.subtotal,
   });
 
-Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         'merchantId': merchantId,
-        'merchantName':
-            merchantName.isNotEmpty ? merchantName : "Unknown Merchant",
+        'merchantName': merchantName,
         'merchantEmail': merchantEmail,
         'merchantLocation': merchantLocation,
         'merchantStoreName': merchantStoreName,
@@ -44,17 +43,15 @@ Map<String, dynamic> toJson() => {
                   'productName': item.product.productName,
                   'quantity': item.quantity,
                   'price': item.product.price,
-                  // Check if imageUrls is not empty before accessing first
-                  'image': item.product.imageUrls.isNotEmpty
-                      ? item.product.imageUrls
-                      : [], 
+                  'image': item.product.imageUrls,
                   'productId': item.product.id,
                   'sku': item.product.sku,
-                  'measure': item.product.measure ,
+                  'measure': item.product.measure,
                 })
             .toList(),
         'subtotal': subtotal,
       };
+
   @override
   List<Object?> get props => [
         merchantId,
