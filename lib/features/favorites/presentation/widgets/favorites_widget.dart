@@ -5,7 +5,7 @@ import 'package:chupachap/features/favorites/data/models/favorites_model.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_event.dart';
 import 'package:chupachap/features/product/presentation/pages/product_details_screen.dart';
-import 'package:chupachap/features/promotions/presentation/widgets/cart_quantityFAB.dart';
+import 'package:chupachap/features/product/presentation/widgets/cart_quantityFAB.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -4,7 +4,7 @@ import 'package:chupachap/core/utils/date_formatter.dart';
 import 'package:chupachap/features/product/data/models/product_model.dart';
 import 'package:chupachap/features/product/presentation/pages/product_details_screen.dart';
 import 'package:chupachap/features/product/presentation/widgets/favourite_FAB.dart';
-import 'package:chupachap/features/promotions/presentation/widgets/cart_quantityFAB.dart';
+import 'package:chupachap/features/product/presentation/widgets/cart_quantityFAB.dart';
 import 'package:flutter/material.dart';
 
 class PromotionCard extends StatelessWidget {
