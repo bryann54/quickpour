@@ -12,6 +12,8 @@ import 'package:chupachap/features/categories/data/repositories/category_reposit
 import 'package:chupachap/features/categories/domain/usecases/fetch_categories.dart';
 import 'package:chupachap/features/categories/presentation/bloc/categories_bloc.dart';
 import 'package:chupachap/features/categories/presentation/bloc/categories_event.dart';
+import 'package:chupachap/features/checkout/domain/repositories/checkout_repository_impl.dart';
+import 'package:chupachap/features/checkout/domain/usecases/place_order_usecase.dart';
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:chupachap/features/drink_request/data/repositories/drink_request_repository.dart';
 import 'package:chupachap/features/drink_request/presentation/bloc/drink_request_bloc.dart';
@@ -111,12 +113,15 @@ class App extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) {
-              final checkoutBloc = CheckoutBloc(
+              final checkoutRepository = CheckoutRepositoryImpl(
                 firestore: context.read<FirebaseFirestore>(),
                 authUseCases: context.read<AuthBloc>().authUseCases,
               );
+              final placeOrderUseCase = PlaceOrderUseCase(checkoutRepository);
 
-              return checkoutBloc;
+              return CheckoutBloc(
+                placeOrderUseCase: placeOrderUseCase,
+              );
             },
           ),
           BlocProvider(

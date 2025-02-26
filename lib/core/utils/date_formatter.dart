@@ -24,7 +24,6 @@ extension StringExtension on String {
     return "${this[0].toUpperCase()}${substring(1)}";
   }
 }
-
 // Helper function to get the appropriate delivery typeicon
 IconData getDeliveryIcon(String deliveryType) {
   switch (deliveryType) {
@@ -48,7 +47,7 @@ String getDeliveryText(String deliveryType) {
     case 'pickup':
       return 'Store Pickup';
     default:
-      return 'Standard Delivery'; // default text
+      return 'Standard Delivery';
   }
 }
 

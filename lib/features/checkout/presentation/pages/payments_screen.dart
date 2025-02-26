@@ -5,6 +5,8 @@ import 'package:chupachap/features/auth/presentation/bloc/auth_state.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_event.dart';
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
+import 'package:chupachap/features/checkout/presentation/bloc/checkout_event.dart';
+import 'package:chupachap/features/checkout/presentation/bloc/checkout_state.dart';
 import 'package:chupachap/features/checkout/presentation/pages/0rder_confirmation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
