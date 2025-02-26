@@ -59,30 +59,15 @@ class PromotionsRepository {
   Future<List<PromotionModel>> fetchFeaturedPromotions() async {
     try {
       final now = DateTime.now();
-      print('Fetching featured promotions at ${now.toIso8601String()}');
-
-      // Simplified query without date filters initially
       final querySnapshot = await _promotionsCollection
           .where('isActive', isEqualTo: true)
           .where('status', isEqualTo: PromotionStatus.active.toString())
           .where('isFeatured', isEqualTo: true)
+          .where('startDate', isLessThanOrEqualTo: now.toIso8601String())
+          .where('endDate', isGreaterThanOrEqualTo: now.toIso8601String())
           .get();
 
-      print(
-          'Found ${querySnapshot.docs.length} featured promotions in initial query');
-
-      // Manual filtering for dates
-      final filteredDocs = querySnapshot.docs.where((doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        final startDate = DateTime.parse(data['startDate'] as String);
-        final endDate = DateTime.parse(data['endDate'] as String);
-        return startDate.isBefore(now) && endDate.isAfter(now);
-      }).toList();
-
-      print(
-          'After date filtering: ${filteredDocs.length} featured promotions remain');
-
-      return filteredDocs
+      return querySnapshot.docs
           .map((doc) => PromotionModel.fromJson({
                 ...doc.data() as Map<String, dynamic>,
                 'id': doc.id,
@@ -93,7 +78,6 @@ class PromotionsRepository {
       throw Exception('Failed to fetch featured promotions: $e');
     }
   }
-
 
   // For consumer app: Fetch all active promotions for a specific merchant
   Future<List<PromotionModel>> fetchActiveMerchantPromotions(

@@ -3,10 +3,10 @@ import 'package:chupachap/features/promotions/data/models/promotion_model.dart';
 import 'package:chupachap/features/promotions/presentation/pages/promo_details_screen.dart';
 import 'package:flutter/material.dart';
 
-class PromotionScreenCard extends StatelessWidget {
+class PromoCard extends StatelessWidget {
   final PromotionModel promotion;
 
-  const PromotionScreenCard({super.key, required this.promotion});
+  const PromoCard({super.key, required this.promotion});
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,9 @@ class PromotionScreenCard extends StatelessWidget {
         height: 160,
         width: double.infinity,
         color: Colors.grey.shade300,
-        child: const Icon(Icons.error_outline_outlined,
-            size: 40, color: Colors.grey),
+        child:
+            const Icon(Icons.error_outline_outlined, size: 40, color: Colors.grey),
       );
 }
+
+
