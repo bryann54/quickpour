@@ -1,3 +1,10 @@
-abstract class PromotionsEvent {}
+import 'package:equatable/equatable.dart';
 
-class FetchPromotions extends PromotionsEvent {}
+abstract class PromotionsEvent extends Equatable {
+  const PromotionsEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class FetchActivePromotions extends PromotionsEvent {}

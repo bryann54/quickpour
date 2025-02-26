@@ -63,3 +63,7 @@ int calculateDiscountPercentage(double originalPrice, double discountPrice) {
   final discount = ((originalPrice - discountPrice) / originalPrice) * 100;
   return discount.round(); // Return rounded discount percentage
 }
+
+String formatDate(DateTime date) {
+  return '${date.hour}:${date.minute.toString().padLeft(2, '0')} ${date.hour >= 12 ? 'PM' : 'AM'}';
+}

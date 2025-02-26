@@ -12,7 +12,7 @@ import 'package:chupachap/features/merchant/presentation/widgets/merchant_horizo
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_event.dart';
-import 'package:chupachap/features/product/presentation/widgets/promotions_carousel.dart';
+import 'package:chupachap/features/promotions/presentation/widgets/promotions_carousel.dart';
 import 'package:chupachap/features/product_search/presentation/pages/search_page.dart'; // Import the SearchPage
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
