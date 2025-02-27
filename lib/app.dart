@@ -28,7 +28,7 @@ import 'package:chupachap/features/orders/data/repositories/orders_repository.da
 import 'package:chupachap/features/orders/presentation/bloc/orders_bloc.dart';
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
-import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
+import 'package:chupachap/features/promotions/data/repositories/promotions_repository.dart';
 import 'package:chupachap/features/promotions/presentation/bloc/promotions_bloc.dart';
 import 'package:chupachap/features/promotions/presentation/bloc/promotions_event.dart';
 import 'package:chupachap/features/user_data/data/repositories/user_data_repository_impl.dart';
@@ -45,7 +45,6 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final merchantRepository = MerchantsRepository();
-
     final firestore = FirebaseFirestore.instance;
     final auth = FirebaseAuth.instance;
 
@@ -93,14 +92,11 @@ class App extends StatelessWidget {
               repository: NotificationsRepository(),
             ),
           ),
-          BlocProvider(
-              create: (_) =>
-                  PromotionsBloc(ProductRepository())..add(FetchPromotions())),
-          BlocProvider<ProductSearchBloc>(
-            create: (context) => ProductSearchBloc(
-              productRepository: ProductRepository(),
-            ),
-          ),
+           BlocProvider(
+  create: (context) => PromotionsBloc(promotionsRepository: PromotionsRepository())
+    ..add(FetchActivePromotions()),
+           ),
+         
           BlocProvider(
             create: (_) =>
                 MerchantBloc(merchantRepository)..add(FetchMerchantEvent()),

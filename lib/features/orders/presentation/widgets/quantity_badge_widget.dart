@@ -1,6 +1,6 @@
 // widgets/quantity_badge.dart
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/core/utils/date_formatter.dart';
+import 'package:chupachap/core/utils/functions.dart';
 import 'package:flutter/material.dart';
 
 class QuantityBadge extends StatelessWidget {

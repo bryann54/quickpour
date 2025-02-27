@@ -12,6 +12,9 @@ import 'package:chupachap/features/merchant/presentation/widgets/merchant_horizo
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_event.dart';
+import 'package:chupachap/features/promotions/presentation/bloc/promotions_bloc.dart';
+import 'package:chupachap/features/promotions/presentation/bloc/promotions_state.dart';
+import 'package:chupachap/features/promotions/presentation/pages/promotions_screen.dart';
 import 'package:chupachap/features/promotions/presentation/widgets/promotions_carousel.dart';
 import 'package:chupachap/features/product_search/presentation/pages/search_page.dart'; // Import the SearchPage
 import 'package:flutter/material.dart';
@@ -158,19 +161,68 @@ class _HomeScreenState extends State<HomeScreen> {
                       return const SizedBox.shrink();
                     },
                   ),
-                  Text(
-                    'Promotions',
-                    style: GoogleFonts.montaga(
-                        fontSize: 20,
-                        textStyle: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        )),
+               BlocBuilder<PromotionsBloc, PromotionsState>(
+                    builder: (context, state) {
+                      if (state is PromotionsLoaded &&
+                          state.promotions.isNotEmpty) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Promotions',
+                                  style: GoogleFonts.montaga(
+                                    fontSize: 20,
+                                    textStyle:
+                                        theme.textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                     GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const PromotionsScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right:8.0),
+                                    child: Text('See All',
+                                        style: GoogleFonts.montaga(
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                color: isDarkMode
+                                                    ? Colors.teal
+                                                    : AppColors.accentColor,
+                                              ),
+                                        )),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8.0),
+                              child: PromotionsCarousel(),
+                            ),
+                          ],
+                        );
+                      }
+                      return const SizedBox
+                          .shrink(); 
+                    },
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                    child: PromotionsCarousel(),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: const ProductSection(),
                   ),
-                  const ProductSection(),
                 ],
               ),
             ),

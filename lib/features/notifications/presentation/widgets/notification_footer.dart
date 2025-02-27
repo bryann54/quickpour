@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:chupachap/core/utils/date_formatter.dart';
+import 'package:chupachap/core/utils/functions.dart';
 import 'package:chupachap/features/notifications/data/models/notifications_model.dart';
 
 class NotificationFooter extends StatelessWidget {

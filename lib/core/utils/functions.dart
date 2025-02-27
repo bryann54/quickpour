@@ -1,3 +1,5 @@
+import 'package:chupachap/features/orders/presentation/widgets/order_item_widget.dart';
+import 'package:chupachap/features/promotions/data/models/promotion_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -16,6 +18,23 @@ String formatTimestamp(DateTime timestamp) {
     return '${difference.inDays}d ago';
   } else {
     return DateFormat('MMM d, HH:mm').format(timestamp);
+  }
+}
+
+OrderStatus getOrderStatus(String status) {
+  switch (status.toLowerCase()) {
+    case 'received':
+      return OrderStatus.received;
+    case 'processing':
+      return OrderStatus.processing;
+    case 'dispatched':
+      return OrderStatus.dispatched;
+    case 'delivering':
+      return OrderStatus.delivered;
+    case 'completed':
+      return OrderStatus.completed;
+    default:
+      return OrderStatus.received;
   }
 }
 
@@ -63,3 +82,24 @@ int calculateDiscountPercentage(double originalPrice, double discountPrice) {
   final discount = ((originalPrice - discountPrice) / originalPrice) * 100;
   return discount.round(); // Return rounded discount percentage
 }
+
+String formatDate(DateTime date) {
+  return '${date.hour}:${date.minute.toString().padLeft(2, '0')} ${date.hour >= 12 ? 'PM' : 'AM'}';
+}
+
+
+String getPromotionTypeDisplay(PromotionTarget target) {
+  switch (target) {
+    case PromotionTarget.products:
+      return 'Specific Products';
+    case PromotionTarget.categories:
+      return 'Product Categories';
+    case PromotionTarget.brands:
+      return 'Product Brands';
+    default:
+      return 'Unknown';
+  }
+}
+  String getValidityPeriod(PromotionModel promotion) {
+    return 'Valid until ${formatDate(promotion.endDate)}';
+  }

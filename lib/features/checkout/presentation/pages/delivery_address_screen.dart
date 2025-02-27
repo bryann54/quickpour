@@ -1,5 +1,5 @@
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/core/utils/date_formatter.dart';
+import 'package:chupachap/core/utils/functions.dart';
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_event.dart';
 import 'package:chupachap/features/checkout/presentation/pages/payments_screen.dart';

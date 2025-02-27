@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:chupachap/core/utils/date_formatter.dart';
+import 'package:chupachap/core/utils/functions.dart';
 import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_shimmer_widget.dart';
@@ -8,7 +8,7 @@ import 'package:chupachap/features/product_search/presentation/bloc/product_sear
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_state.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
-import 'package:chupachap/features/promotions/presentation/widgets/promo_card.dart';
+import 'package:chupachap/features/product/presentation/widgets/promo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

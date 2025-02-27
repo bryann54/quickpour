@@ -3,7 +3,7 @@ import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/drink_request/presentation/pages/requests_screen.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
-import 'package:chupachap/features/promotions/presentation/widgets/promo_card.dart';
+import 'package:chupachap/features/product/presentation/widgets/promo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

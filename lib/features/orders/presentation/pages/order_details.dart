@@ -5,7 +5,6 @@ import 'package:chupachap/features/orders/presentation/widgets/order_item_sectio
 import 'package:chupachap/features/orders/presentation/widgets/payment_section_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/core/utils/custom_appbar.dart';
 import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
 
 class OrderDetails extends StatelessWidget {

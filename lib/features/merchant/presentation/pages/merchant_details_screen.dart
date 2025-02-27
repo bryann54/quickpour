@@ -9,7 +9,7 @@ import 'package:chupachap/features/product/presentation/bloc/product_state.dart'
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
-import 'package:chupachap/features/promotions/presentation/widgets/promo_card.dart';
+import 'package:chupachap/features/product/presentation/widgets/promo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:badges/badges.dart' as badges;

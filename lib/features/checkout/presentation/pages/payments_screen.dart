@@ -1,5 +1,5 @@
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/core/utils/date_formatter.dart';
+import 'package:chupachap/core/utils/functions.dart';
 import 'package:chupachap/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:chupachap/features/auth/presentation/bloc/auth_state.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';

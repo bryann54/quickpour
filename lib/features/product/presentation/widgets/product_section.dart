@@ -2,7 +2,7 @@ import 'package:chupachap/features/product/data/models/product_model.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_shimmer_widget.dart';
-import 'package:chupachap/features/promotions/presentation/widgets/promo_card.dart';
+import 'package:chupachap/features/product/presentation/widgets/promo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
