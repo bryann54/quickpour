@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:chupachap/features/promotions/data/models/promotion_model.dart';
 import 'package:chupachap/features/product/data/models/product_model.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class PromoDetailsScreen extends StatefulWidget {
   final PromotionModel promotion;
@@ -106,16 +107,41 @@ class _PromoDetailsScreenState extends State<PromoDetailsScreen> {
                   children: [
                     PromoBadge(
                         discountPercentage:
-                            widget.promotion.discountPercentage),
+                            widget.promotion.discountPercentage)
+                        .animate()
+                        .fadeIn(duration: 600.ms)
+                        .scale(
+                            begin: const Offset(0.8, 0.8),
+                            end: const Offset(1.0, 1.0),
+                            duration: 800.ms,
+                            curve: Curves.elasticOut),
                     const SizedBox(height: 16),
                     PromoDetails(
                       campaignTitle: widget.promotion.campaignTitle,
                       description: widget.promotion.description,
-                    ),
+                    ).animate().fadeIn(duration: 600.ms).scale(
+                        begin: const Offset(0.8, 0.8),
+                        end: const Offset(1.0, 1.0),
+                        duration: 800.ms,
+                        curve: Curves.elasticOut),
                     const SizedBox(height: 24),
-                    PromoValidityInfo(promotion: widget.promotion),
+                    PromoValidityInfo(promotion: widget.promotion)
+                        .animate()
+                        .fadeIn(duration: 600.ms)
+                        .scale(
+                            begin: const Offset(0.8, 0.8),
+                            end: const Offset(1.0, 1.0),
+                            duration: 800.ms,
+                            curve: Curves.elasticOut),
                     const SizedBox(height: 24),
-                    PromoProductsGrid(products: _products),
+                    PromoProductsGrid(products: _products)
+                        .animate()
+                        .fadeIn(duration: 600.ms)
+                        .scale(
+                            begin: const Offset(0.8, 0.8),
+                            end: const Offset(1.0, 1.0),
+                            duration: 1800.ms,
+                            curve: Curves.elasticOut),
                   ],
                 ),
               ),

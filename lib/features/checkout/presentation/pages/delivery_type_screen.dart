@@ -32,7 +32,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
   LatLng? _selectedLocation;
   String? _currentAddress;
   bool _isLoading = true;
-  String _deliveryType = 'free';
+  String _deliveryType = '';
 
   // Animation controllers
   late AnimationController _animationController;
@@ -531,6 +531,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
                     ),
                   ),
                 ),
+             
               ],
             ),
           ),

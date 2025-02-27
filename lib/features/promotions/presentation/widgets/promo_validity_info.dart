@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/core/utils/date_formatter.dart';
+import 'package:chupachap/core/utils/functions.dart';
 import 'package:chupachap/features/promotions/data/models/promotion_model.dart';
+import 'package:intl/intl.dart'; // Add this import
 
 class PromoValidityInfo extends StatelessWidget {
   final PromotionModel promotion;
 
   const PromoValidityInfo({super.key, required this.promotion});
+
+  // Custom date formatter that only shows the date
+  String formatDateOnly(DateTime dateTime) {
+    final formatter = DateFormat('MMM dd, yyyy'); // e.g. Jan 01, 2025
+    return formatter.format(dateTime);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,19 +69,19 @@ class PromoValidityInfo extends StatelessWidget {
             context,
             Icons.calendar_today,
             'Valid From',
-            formatDate(promotion.startDate),
+            formatDateOnly(promotion.startDate), // Use your new date-only formatter
           ),
           _buildDetailRow(
             context,
             Icons.calendar_today,
             'Valid Until',
-            formatDate(promotion.endDate),
+            formatDateOnly(promotion.endDate), // Use your new date-only formatter
           ),
           _buildDetailRow(
             context,
             Icons.category,
             'Promotion Type',
-            _getPromotionTypeDisplay(promotion.promotionTarget),
+            getPromotionTypeDisplay(promotion.promotionTarget),
           ),
           if (promotion.usageLimit != null)
             _buildDetailRow(
@@ -135,18 +142,5 @@ class PromoValidityInfo extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String _getPromotionTypeDisplay(PromotionTarget target) {
-    switch (target) {
-      case PromotionTarget.products:
-        return 'Specific Products';
-      case PromotionTarget.categories:
-        return 'Product Categories';
-      case PromotionTarget.brands:
-        return 'Product Brands';
-      default:
-        return 'Unknown';
-    }
   }
 }

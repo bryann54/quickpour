@@ -2,7 +2,7 @@ import 'package:chupachap/features/product/presentation/widgets/cart_quantityFAB
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/features/product/data/models/product_model.dart';
-import 'package:chupachap/core/utils/date_formatter.dart';
+import 'package:chupachap/core/utils/functions.dart';
 
 class PromoProductCard extends StatelessWidget {
   final ProductModel product;

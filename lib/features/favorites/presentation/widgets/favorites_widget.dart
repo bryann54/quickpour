@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/core/utils/date_formatter.dart';
+import 'package:chupachap/core/utils/functions.dart';
 import 'package:chupachap/features/favorites/data/models/favorites_model.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:chupachap/features/favorites/presentation/bloc/favorites_event.dart';

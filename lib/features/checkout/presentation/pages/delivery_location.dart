@@ -1,4 +1,4 @@
-import 'package:chupachap/core/utils/date_formatter.dart';
+import 'package:chupachap/core/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';

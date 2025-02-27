@@ -3,7 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:chupachap/core/utils/date_formatter.dart';
+import 'package:chupachap/core/utils/functions.dart';
 import 'package:chupachap/features/promotions/data/models/promotion_model.dart';
 import 'package:chupachap/features/promotions/presentation/bloc/promotions_bloc.dart';
 import 'package:chupachap/features/promotions/presentation/bloc/promotions_state.dart';
@@ -221,7 +221,7 @@ class PromotionsCarousel extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          _getValidityPeriod(promotion),
+                          getValidityPeriod(promotion),
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.white70,
@@ -263,7 +263,5 @@ class PromotionsCarousel extends StatelessWidget {
     }
   }
 
-  String _getValidityPeriod(PromotionModel promotion) {
-    return 'Valid until ${formatDate(promotion.endDate)}';
-  }
+ 
 }

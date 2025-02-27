@@ -1,6 +1,6 @@
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/custom_appbar.dart';
-import 'package:chupachap/core/utils/date_formatter.dart';
+import 'package:chupachap/core/utils/functions.dart';
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';

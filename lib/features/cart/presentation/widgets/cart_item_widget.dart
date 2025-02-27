@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/core/utils/date_formatter.dart';
+import 'package:chupachap/core/utils/functions.dart';
 import 'package:chupachap/features/cart/data/models/cart_model.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_event.dart';
@@ -100,58 +100,95 @@ class CartItemWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildCustomQuantityInput(BuildContext context, CartBloc cartBloc) {
+Widget _buildCustomQuantityInput(BuildContext context, CartBloc cartBloc) {
     final theme = Theme.of(context);
     final customQuantityController = TextEditingController();
 
-    return Row(
-      children: [
-        Expanded(
-          child: TextField(
-            controller: customQuantityController,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: 'Custom Quantity',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: customQuantityController,
+                  keyboardType: TextInputType.number,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    labelText: 'Custom Quantity',
+                    hintText: 'Enter a number',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                    errorText: null,
+                  ),
+                  onSubmitted: (value) => _applyCustomQuantity(
+                    context,
+                    cartBloc,
+                    customQuantityController,
+                  ),
+                ),
               ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-            ),
+              const SizedBox(width: 12),
+              ElevatedButton(
+                onPressed: () => _applyCustomQuantity(
+                  context,
+                  cartBloc,
+                  customQuantityController,
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.accentColor,
+                  foregroundColor: Colors.white,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Text(
+                  'Apply',
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
-        const SizedBox(width: 12),
-        ElevatedButton(
-          onPressed: () {
-            final input = customQuantityController.text;
-            if (input.isNotEmpty) {
-              final quantity = int.tryParse(input);
-              if (quantity != null && quantity > 0) {
-                cartBloc.add(UpdateCartQuantityEvent(
-                  product: cartItem.product,
-                  quantity: quantity,
-                ));
-                Navigator.pop(context);
-              }
-            }
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.accentColor,
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-          child: Text(
-            'Apply',
-            style: theme.textTheme.titleSmall?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
+  }
+
+  void _applyCustomQuantity(
+    BuildContext context,
+    CartBloc cartBloc,
+    TextEditingController controller,
+  ) {
+    final input = controller.text;
+    if (input.isNotEmpty) {
+      final quantity = int.tryParse(input);
+      if (quantity != null && quantity > 0) {
+        cartBloc.add(UpdateCartQuantityEvent(
+          product: cartItem.product,
+          quantity: quantity,
+        ));
+        Navigator.pop(context);
+      } else {
+        // Show error for invalid input
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please enter a valid quantity greater than 0'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    }
   }
 
   @override

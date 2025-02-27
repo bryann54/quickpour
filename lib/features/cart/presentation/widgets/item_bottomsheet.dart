@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:chupachap/core/utils/date_formatter.dart';
+import 'package:chupachap/core/utils/functions.dart';
 import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/widgets/product_shimmer_widget.dart';
