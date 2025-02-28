@@ -67,9 +67,7 @@ class PromoCard extends StatelessWidget {
         height: 160,
         width: double.infinity,
         color: Colors.grey.shade300,
-        child:
-            const Icon(Icons.error_outline_outlined, size: 40, color: Colors.grey),
+        child: const Icon(Icons.error_outline_outlined,
+            size: 40, color: Colors.grey),
       );
 }
-
-

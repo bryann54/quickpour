@@ -50,12 +50,11 @@ class OrderHeader extends StatelessWidget {
                 Text(
                   'Order status:',
                   style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: isDark
-                        ? AppColors.textPrimaryDark
-                        : AppColors.textPrimary,
-                        fontSize: 20
-                  ),
+                      fontWeight: FontWeight.w500,
+                      color: isDark
+                          ? AppColors.textPrimaryDark
+                          : AppColors.textPrimary,
+                      fontSize: 20),
                 ),
                 // AnimatedOrderStatusBadge(status: order.status),
               ],

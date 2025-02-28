@@ -69,13 +69,15 @@ class PromoValidityInfo extends StatelessWidget {
             context,
             Icons.calendar_today,
             'Valid From',
-            formatDateOnly(promotion.startDate), // Use your new date-only formatter
+            formatDateOnly(
+                promotion.startDate), // Use your new date-only formatter
           ),
           _buildDetailRow(
             context,
             Icons.calendar_today,
             'Valid Until',
-            formatDateOnly(promotion.endDate), // Use your new date-only formatter
+            formatDateOnly(
+                promotion.endDate), // Use your new date-only formatter
           ),
           _buildDetailRow(
             context,

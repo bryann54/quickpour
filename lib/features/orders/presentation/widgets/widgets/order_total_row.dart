@@ -36,7 +36,7 @@ class OrderTotalRow extends StatelessWidget {
             ),
           ),
           Text(
-            'Ksh ${formatMoney( order.total)}',
+            'Ksh ${formatMoney(order.total)}',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,

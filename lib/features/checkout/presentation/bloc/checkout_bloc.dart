@@ -124,8 +124,6 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         ));
       }
 
-     
-
       // Emit success state
       emit(CheckoutOrderPlacedState(
         orderId: order.orderId,
@@ -147,7 +145,6 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       // Assuming you have a CartBloc or similar to manage the cart state
       // cartBloc.add(ClearCartEvent());
     } catch (e) {
-    
       emit(CheckoutErrorState(
         errorMessage: 'Failed to place order: ${e.toString()}',
         address: state.address,

@@ -87,7 +87,6 @@ class _PromoDetailsScreenState extends State<PromoDetailsScreen> {
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           SliverAppBar(
             expandedHeight: 250.0,
-            
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(widget.promotion.campaignTitle),
@@ -106,8 +105,8 @@ class _PromoDetailsScreenState extends State<PromoDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     PromoBadge(
-                        discountPercentage:
-                            widget.promotion.discountPercentage)
+                            discountPercentage:
+                                widget.promotion.discountPercentage)
                         .animate()
                         .fadeIn(duration: 600.ms)
                         .scale(

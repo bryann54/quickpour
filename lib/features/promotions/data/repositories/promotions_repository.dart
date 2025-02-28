@@ -54,7 +54,6 @@ class PromotionsRepository {
     }
   }
 
-
   // For consumer app: Fetch featured promotions
   Future<List<PromotionModel>> fetchFeaturedPromotions() async {
     try {
@@ -104,13 +103,15 @@ class PromotionsRepository {
     }
   }
 
-  // Improved implementation for fetching promotions by products 
+  // Improved implementation for fetching promotions by products
   // that checks all three promotion targets: products, categories, and brands
   Future<List<PromotionModel>> fetchPromotionsForProducts(
-      List<String> productIds, List<String> categoryIds, List<String> brandIds) async {
+      List<String> productIds,
+      List<String> categoryIds,
+      List<String> brandIds) async {
     try {
       final now = DateTime.now();
-      
+
       // Get all active promotions first
       final querySnapshot = await _promotionsCollection
           .where('isActive', isEqualTo: true)
@@ -133,15 +134,18 @@ class PromotionsRepository {
         switch (promotion.promotionTarget) {
           case PromotionTarget.products:
             // Check if any product ID matches
-            isApplicable = promotion.productIds.any((id) => productIds.contains(id));
+            isApplicable =
+                promotion.productIds.any((id) => productIds.contains(id));
             break;
           case PromotionTarget.categories:
             // Check if any category ID matches
-            isApplicable = promotion.categoryIds.any((id) => categoryIds.contains(id));
+            isApplicable =
+                promotion.categoryIds.any((id) => categoryIds.contains(id));
             break;
           case PromotionTarget.brands:
             // Check if any brand ID matches
-            isApplicable = promotion.brandIds.any((id) => brandIds.contains(id));
+            isApplicable =
+                promotion.brandIds.any((id) => brandIds.contains(id));
             break;
         }
 
