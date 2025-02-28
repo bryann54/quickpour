@@ -50,10 +50,10 @@ class WalletBloc extends Bloc<events.WalletEvent, states.WalletState> {
 
       if (success) {
         final wallet = await _walletRepository.getWallet();
-       emit(states.OrderPaymentSuccess(
+        emit(states.OrderPaymentSuccess(
             wallet, event.amount, event.paymentMethod));
       } else {
-      emit(const states.OrderPaymentFailure('Payment processing failed'));
+        emit(const states.OrderPaymentFailure('Payment processing failed'));
       }
     } catch (e) {
       emit(WalletError('Order payment failed: ${e.toString()}'));

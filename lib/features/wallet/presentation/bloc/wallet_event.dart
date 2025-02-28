@@ -47,6 +47,7 @@ class ProcessOrderPaymentEvent extends WalletEvent {
   List<Object?> get props =>
       [amount, description, paymentMethod, useWalletBalance];
 }
+
 class SetDefaultPaymentMethodEvent extends WalletEvent {
   final String paymentMethodId;
 

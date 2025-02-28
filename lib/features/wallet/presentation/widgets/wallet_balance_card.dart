@@ -168,4 +168,3 @@ class WalletBalanceCard extends StatelessWidget {
     );
   }
 }
-

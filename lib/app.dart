@@ -120,6 +120,7 @@ class App extends StatelessWidget {
 
               return CheckoutBloc(
                 placeOrderUseCase: placeOrderUseCase,
+                walletRepository: WalletRepository(),
               );
             },
           ),

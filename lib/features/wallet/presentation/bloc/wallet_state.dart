@@ -30,6 +30,7 @@ class WalletError extends WalletState {
   @override
   List<Object?> get props => [message];
 }
+
 // Add these to your wallet_state.dart file
 class OrderPaymentSuccess extends WalletState {
   final Wallet wallet;

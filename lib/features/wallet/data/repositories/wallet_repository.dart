@@ -18,6 +18,11 @@ class WalletRepository {
     return Wallet.initial();
   }
 
+  Future<void> deductFromWallet(double amount) async {
+    // Deduct the amount from the wallet balance
+    // Update the wallet in the backend or local storage
+  }
+
   Future<void> saveWallet(Wallet wallet) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_walletKey, jsonEncode(wallet.toJson()));

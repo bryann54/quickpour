@@ -105,7 +105,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
         _walletBalance < widget.totalAmount) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Insufficient wallet balance."),
+          content: const Text("Insufficient wallet balance."),
           backgroundColor: Colors.red[400],
         ),
       );
@@ -136,10 +136,10 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text("Payment Method"),
+        title: const Text("Payment Method"),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -147,6 +147,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
         listener: (context, state) {
           if (state is CheckoutOrderPlacedState) {
             context.read<CartBloc>().add(ClearCartEvent());
+            _fetchWalletBalance(); // Fetch updated wallet balance
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -174,7 +175,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -183,7 +184,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
                         deliveryType: widget.deliveryType,
                         totalAmount: widget.totalAmount,
                       ),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       PaymentMethodSelector(
                         selectedMethod:
                             _selectedPaymentMethod.toCheckoutPaymentMethod(),
