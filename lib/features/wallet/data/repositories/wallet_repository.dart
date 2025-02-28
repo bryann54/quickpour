@@ -121,4 +121,49 @@ class WalletRepository {
     await saveWallet(updatedWallet);
     return true;
   }
+
+  // Create a new method in your WalletRepository class
+  Future<bool> processOrderPayment({
+    required double amount,
+    required String description,
+    required PaymentMethod paymentMethod,
+    bool useWalletBalance = false,
+  }) async {
+    // Case 1: Using wallet balance
+    if (useWalletBalance) {
+      return await makePayment(amount, description);
+    }
+
+    // Case 2: Using payment card
+    if (paymentMethod.type == PaymentMethodType.values) {
+      try {
+        // Process card payment logic here
+        // This would typically involve an API call to a payment processor
+
+        // For now, we'll simulate a successful card payment
+        final transaction = Transaction.create(
+          amount: amount,
+          type: TransactionType.payment,
+          description: description,
+          paymentMethodId: paymentMethod.id,
+        );
+
+        // Record the transaction in the wallet
+        final wallet = await getWallet();
+        final updatedTransactions = List<Transaction>.from(wallet.transactions)
+          ..add(transaction);
+
+        final updatedWallet = wallet.copyWith(
+          transactions: updatedTransactions,
+        );
+
+        await saveWallet(updatedWallet);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    return false;
+  }
 }

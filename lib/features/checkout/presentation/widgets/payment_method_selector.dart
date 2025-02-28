@@ -1,56 +1,84 @@
-// lib/features/checkout/presentation/widgets/payment_method_selector.dart
-
 import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/features/checkout/presentation/pages/payments_screen.dart';
+import 'package:chupachap/core/utils/functions.dart';
 import 'package:flutter/material.dart';
 
+enum CheckoutPaymentMethod {
+  wallet,
+  mpesa,
+  cashOnDelivery,
+  creditCard,
+}
+
 class PaymentMethodSelector extends StatelessWidget {
-  final PaymentMethod selectedMethod;
-  final Function(PaymentMethod) onMethodChanged;
+  final CheckoutPaymentMethod selectedMethod;
+  final Function(CheckoutPaymentMethod) onMethodChanged;
+  final double walletBalance;
+  final double orderTotal;
 
   const PaymentMethodSelector({
     Key? key,
     required this.selectedMethod,
     required this.onMethodChanged,
+    required this.walletBalance,
+    required this.orderTotal,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // Wallet option (if balance is sufficient)
+        if (walletBalance >= orderTotal)
+          PaymentMethodTile(
+            method: CheckoutPaymentMethod.wallet,
+            title: 'Wallet Balance',
+            iconPath: 'assets/111.png',
+            subtitle:
+                'Pay using your ChupaPay balance: Ksh ${formatMoney(walletBalance)}',
+            isSelected: selectedMethod == CheckoutPaymentMethod.wallet,
+            onTap: () => onMethodChanged(CheckoutPaymentMethod.wallet),
+          ),
+
+        if (walletBalance >= orderTotal) const SizedBox(height: 12),
+
+        // M-Pesa option
         PaymentMethodTile(
-          method: PaymentMethod.mpesa,
+          method: CheckoutPaymentMethod.mpesa,
           title: 'M-Pesa',
           iconPath: 'assets/M-PESA.png',
           subtitle: 'Pay securely with M-Pesa',
-          isSelected: selectedMethod == PaymentMethod.mpesa,
-          onTap: () => onMethodChanged(PaymentMethod.mpesa),
+          isSelected: selectedMethod == CheckoutPaymentMethod.mpesa,
+          onTap: () => onMethodChanged(CheckoutPaymentMethod.mpesa),
         ),
         const SizedBox(height: 12),
+
+        // Cash on Delivery option
         PaymentMethodTile(
-          method: PaymentMethod.cashOnDelivery,
+          method: CheckoutPaymentMethod.cashOnDelivery,
           title: 'Cash on Delivery',
           iconPath: 'assets/cod.png',
           subtitle: 'Pay when you receive your order',
-          isSelected: selectedMethod == PaymentMethod.cashOnDelivery,
-          onTap: () => onMethodChanged(PaymentMethod.cashOnDelivery),
+          isSelected: selectedMethod == CheckoutPaymentMethod.cashOnDelivery,
+          onTap: () => onMethodChanged(CheckoutPaymentMethod.cashOnDelivery),
         ),
         const SizedBox(height: 12),
-        PaymentMethodTile(
-          method: PaymentMethod.creditCard,
-          title: 'Credit Card',
-          iconPath: 'assets/card.png',
-          subtitle: 'Pay with Visa or Mastercard',
-          isSelected: selectedMethod == PaymentMethod.creditCard,
-          onTap: () => onMethodChanged(PaymentMethod.creditCard),
-        ),
+
+        // Credit Card option (commented out)
+        // PaymentMethodTile(
+        //   method: CheckoutPaymentMethod.creditCard,
+        //   title: 'Credit Card',
+        //   iconPath: 'assets/card.png',
+        //   subtitle: 'Pay with Visa or Mastercard',
+        //   isSelected: selectedMethod == CheckoutPaymentMethod.creditCard,
+        //   onTap: () => onMethodChanged(CheckoutPaymentMethod.creditCard),
+        // ),
       ],
     );
   }
 }
 
 class PaymentMethodTile extends StatelessWidget {
-  final PaymentMethod method;
+  final CheckoutPaymentMethod method;
   final String title;
   final String iconPath;
   final String subtitle;
@@ -106,6 +134,7 @@ class PaymentMethodTile extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
+                // Payment method icon
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image.asset(
@@ -116,10 +145,13 @@ class PaymentMethodTile extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 16),
+
+                // Payment method details
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Title
                       Text(
                         title,
                         style: TextStyle(
@@ -129,6 +161,8 @@ class PaymentMethodTile extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 4),
+
+                      // Subtitle
                       Text(
                         subtitle,
                         style: theme.textTheme.bodySmall,
@@ -136,7 +170,9 @@ class PaymentMethodTile extends StatelessWidget {
                     ],
                   ),
                 ),
-                Radio<PaymentMethod>(
+
+                // Radio button for selection
+                Radio<CheckoutPaymentMethod>(
                   value: method,
                   groupValue: isSelected ? method : null,
                   onChanged: (_) => onTap(),

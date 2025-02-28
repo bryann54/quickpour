@@ -1,3 +1,4 @@
+import 'package:chupachap/features/wallet/data/models/payment_method.dart';
 import 'package:chupachap/features/wallet/data/models/wallet.dart';
 import 'package:equatable/equatable.dart';
 
@@ -25,6 +26,26 @@ class WalletError extends WalletState {
   final String message;
 
   const WalletError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+// Add these to your wallet_state.dart file
+class OrderPaymentSuccess extends WalletState {
+  final Wallet wallet;
+  final double amount;
+  final PaymentMethod paymentMethod;
+
+  const OrderPaymentSuccess(this.wallet, this.amount, this.paymentMethod);
+
+  @override
+  List<Object?> get props => [wallet, amount, paymentMethod];
+}
+
+class OrderPaymentFailure extends WalletState {
+  final String message;
+
+  const OrderPaymentFailure(this.message);
 
   @override
   List<Object?> get props => [message];

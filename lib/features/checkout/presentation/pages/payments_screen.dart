@@ -1,5 +1,3 @@
-// lib/features/checkout/presentation/pages/payments_screen.dart
-
 import 'package:chupachap/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:chupachap/features/auth/presentation/bloc/auth_state.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
@@ -11,10 +9,41 @@ import 'package:chupachap/features/checkout/presentation/pages/0rder_confirmatio
 import 'package:chupachap/features/checkout/presentation/widgets/order_summary_card.dart';
 import 'package:chupachap/features/checkout/presentation/widgets/payment_bottom_bar.dart';
 import 'package:chupachap/features/checkout/presentation/widgets/payment_method_selector.dart';
+import 'package:chupachap/features/wallet/data/repositories/wallet_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-enum PaymentMethod { mpesa, cashOnDelivery, creditCard }
+enum PaymentMethod { mpesa, cashOnDelivery, creditCard, wallet }
+
+extension PaymentMethodMapper on PaymentMethod {
+  CheckoutPaymentMethod toCheckoutPaymentMethod() {
+    switch (this) {
+      case PaymentMethod.mpesa:
+        return CheckoutPaymentMethod.mpesa;
+      case PaymentMethod.cashOnDelivery:
+        return CheckoutPaymentMethod.cashOnDelivery;
+      case PaymentMethod.creditCard:
+        return CheckoutPaymentMethod.creditCard;
+      case PaymentMethod.wallet:
+        return CheckoutPaymentMethod.wallet;
+    }
+  }
+}
+
+extension CheckoutPaymentMethodMapper on CheckoutPaymentMethod {
+  PaymentMethod toPaymentMethod() {
+    switch (this) {
+      case CheckoutPaymentMethod.mpesa:
+        return PaymentMethod.mpesa;
+      case CheckoutPaymentMethod.cashOnDelivery:
+        return PaymentMethod.cashOnDelivery;
+      case CheckoutPaymentMethod.creditCard:
+        return PaymentMethod.creditCard;
+      case CheckoutPaymentMethod.wallet:
+        return PaymentMethod.wallet;
+    }
+  }
+}
 
 class PaymentsScreen extends StatefulWidget {
   final double totalAmount;
@@ -44,12 +73,22 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
   late final AuthBloc _authBloc;
   PaymentMethod _selectedPaymentMethod = PaymentMethod.mpesa;
   bool _isLoading = false;
+  double _walletBalance = 0.0;
 
   @override
   void initState() {
     super.initState();
     _authBloc = BlocProvider.of<AuthBloc>(context);
     _checkAuthentication();
+    _fetchWalletBalance();
+  }
+
+  Future<void> _fetchWalletBalance() async {
+    final walletRepository = WalletRepository();
+    final wallet = await walletRepository.getWallet();
+    setState(() {
+      _walletBalance = wallet.balance;
+    });
   }
 
   void _checkAuthentication() {
@@ -62,7 +101,16 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
 
   void _handlePlaceOrder() {
     if (_isLoading) return;
-
+    if (_selectedPaymentMethod == PaymentMethod.wallet &&
+        _walletBalance < widget.totalAmount) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Insufficient wallet balance."),
+          backgroundColor: Colors.red[400],
+        ),
+      );
+      return;
+    }
     setState(() => _isLoading = true);
 
     final cartBloc = context.read<CartBloc>();
@@ -81,10 +129,6 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
         );
   }
 
-  void _onPaymentMethodChanged(PaymentMethod method) {
-    setState(() => _selectedPaymentMethod = method);
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -92,18 +136,10 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        title: Text(
-          'Payment Method',
-          style: TextStyle(
-            color: theme.textTheme.titleLarge?.color,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        title: Text("Payment Method"),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: theme.iconTheme.color),
+          icon: Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -127,14 +163,8 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
           } else if (state is CheckoutErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.errorMessage),
-                backgroundColor: Colors.red[400],
-                behavior: SnackBarBehavior.floating,
-                margin: const EdgeInsets.all(16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
+                  content: Text(state.errorMessage),
+                  backgroundColor: Colors.red[400]),
             );
             setState(() => _isLoading = false);
           }
@@ -144,7 +174,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -153,17 +183,14 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
                         deliveryType: widget.deliveryType,
                         totalAmount: widget.totalAmount,
                       ),
-                      const SizedBox(height: 24),
-                      Text(
-                        'Select Payment Method',
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 24),
                       PaymentMethodSelector(
-                        selectedMethod: _selectedPaymentMethod,
-                        onMethodChanged: _onPaymentMethodChanged,
+                        selectedMethod:
+                            _selectedPaymentMethod.toCheckoutPaymentMethod(),
+                        onMethodChanged: (method) => setState(() =>
+                            _selectedPaymentMethod = method.toPaymentMethod()),
+                        walletBalance: _walletBalance,
+                        orderTotal: widget.totalAmount,
                       ),
                     ],
                   ),

@@ -30,6 +30,23 @@ class RemovePaymentMethodEvent extends WalletEvent {
   List<Object?> get props => [paymentMethodId];
 }
 
+class ProcessOrderPaymentEvent extends WalletEvent {
+  final double amount;
+  final String description;
+  final PaymentMethod paymentMethod;
+  final bool useWalletBalance;
+
+  const ProcessOrderPaymentEvent({
+    required this.amount,
+    required this.description,
+    required this.paymentMethod,
+    this.useWalletBalance = false,
+  });
+
+  @override
+  List<Object?> get props =>
+      [amount, description, paymentMethod, useWalletBalance];
+}
 class SetDefaultPaymentMethodEvent extends WalletEvent {
   final String paymentMethodId;
 
