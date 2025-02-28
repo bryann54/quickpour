@@ -16,16 +16,14 @@ class PromotionsRepository {
     try {
       final now = DateTime.now();
 
-      // Debug prints
-      print('Fetching active promotions at ${now.toIso8601String()}');
-
+  
       // Simplified query with fewer conditions
       final querySnapshot = await _promotionsCollection
           .where('isActive', isEqualTo: true)
           .where('status', isEqualTo: PromotionStatus.active.toString())
           .get();
 
-      print('Found ${querySnapshot.docs.length} promotions in initial query');
+
 
       // Manual filtering for dates to debug date issues
       final filteredDocs = querySnapshot.docs.where((doc) {
@@ -34,13 +32,11 @@ class PromotionsRepository {
         final endDate = DateTime.parse(data['endDate'] as String);
         final isInDateRange = startDate.isBefore(now) && endDate.isAfter(now);
 
-        print(
-            'Promotion ${doc.id}: startDate=${data['startDate']}, endDate=${data['endDate']}, isInDateRange=$isInDateRange');
+ 
 
         return isInDateRange;
       }).toList();
 
-      print('After date filtering: ${filteredDocs.length} promotions remain');
 
       return filteredDocs
           .map((doc) => PromotionModel.fromJson({
@@ -49,7 +45,6 @@ class PromotionsRepository {
               }))
           .toList();
     } catch (e) {
-      print('Error fetching active promotions: ${e.toString()}');
       throw Exception('Failed to fetch active promotions: $e');
     }
   }
@@ -73,7 +68,6 @@ class PromotionsRepository {
               }))
           .toList();
     } catch (e) {
-      print('Error fetching featured promotions: ${e.toString()}');
       throw Exception('Failed to fetch featured promotions: $e');
     }
   }
@@ -98,7 +92,6 @@ class PromotionsRepository {
               }))
           .toList();
     } catch (e) {
-      print('Error fetching merchant promotions: ${e.toString()}');
       throw Exception('Failed to fetch merchant promotions: $e');
     }
   }
@@ -156,7 +149,6 @@ class PromotionsRepository {
 
       return applicablePromotions;
     } catch (e) {
-      print('Error fetching promotions for products: ${e.toString()}');
       throw Exception('Failed to fetch promotions for products: $e');
     }
   }
