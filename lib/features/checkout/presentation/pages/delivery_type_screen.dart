@@ -303,7 +303,9 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
                 Icon(
                   icon,
                   color: isSelected
-                      ?isDark? Colors.amber:theme.colorScheme.onSurface.withOpacity(0.6)
+                      ? isDark
+                          ? Colors.amber
+                          : theme.colorScheme.onSurface.withOpacity(0.6)
                       : theme.colorScheme.onSurface.withOpacity(0.6),
                 ),
                 const SizedBox(width: 16),
@@ -316,7 +318,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
                         style: theme.textTheme.bodyLarge?.copyWith(
                           fontWeight:
                               isSelected ? FontWeight.bold : FontWeight.normal,
-                          color:isSelected
+                          color: isSelected
                               ? isDark
                                   ? Colors.amber
                                   : theme.colorScheme.onSurface.withOpacity(0.6)
@@ -326,7 +328,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
                       Text(
                         subtitle,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color:isSelected
+                          color: isSelected
                               ? isDark
                                   ? Colors.amber
                                   : theme.colorScheme.onSurface.withOpacity(0.6)

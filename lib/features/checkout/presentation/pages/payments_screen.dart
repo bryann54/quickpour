@@ -1,5 +1,5 @@
-import 'package:chupachap/core/utils/colors.dart';
-import 'package:chupachap/core/utils/functions.dart';
+// lib/features/checkout/presentation/pages/payments_screen.dart
+
 import 'package:chupachap/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:chupachap/features/auth/presentation/bloc/auth_state.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
@@ -8,6 +8,9 @@ import 'package:chupachap/features/checkout/presentation/bloc/checkout_bloc.dart
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_event.dart';
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_state.dart';
 import 'package:chupachap/features/checkout/presentation/pages/0rder_confirmation_screen.dart';
+import 'package:chupachap/features/checkout/presentation/widgets/order_summary_card.dart';
+import 'package:chupachap/features/checkout/presentation/widgets/payment_bottom_bar.dart';
+import 'package:chupachap/features/checkout/presentation/widgets/payment_method_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -55,6 +58,31 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
         Navigator.of(context).pushReplacementNamed('/login');
       });
     }
+  }
+
+  void _handlePlaceOrder() {
+    if (_isLoading) return;
+
+    setState(() => _isLoading = true);
+
+    final cartBloc = context.read<CartBloc>();
+    final cart = cartBloc.state.cart;
+
+    context.read<CheckoutBloc>().add(
+          PlaceOrderEvent(
+            cart: cart,
+            deliveryTime: widget.deliveryTime,
+            specialInstructions: widget.specialInstructions,
+            paymentMethod: _selectedPaymentMethod.toString().split('.').last,
+            address: widget.deliveryAddress,
+            phoneNumber: widget.phoneNumber,
+            deliveryType: widget.deliveryType,
+          ),
+        );
+  }
+
+  void _onPaymentMethodChanged(PaymentMethod method) {
+    setState(() => _selectedPaymentMethod = method);
   }
 
   @override
@@ -120,7 +148,11 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildOrderSummary(),
+                      OrderSummaryCard(
+                        deliveryTime: widget.deliveryTime,
+                        deliveryType: widget.deliveryType,
+                        totalAmount: widget.totalAmount,
+                      ),
                       const SizedBox(height: 24),
                       Text(
                         'Select Payment Method',
@@ -129,324 +161,23 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      _buildPaymentMethods(),
+                      PaymentMethodSelector(
+                        selectedMethod: _selectedPaymentMethod,
+                        onMethodChanged: _onPaymentMethodChanged,
+                      ),
                     ],
                   ),
                 ),
               ),
-              _buildBottomBar(),
+              PaymentBottomBar(
+                totalAmount: widget.totalAmount,
+                isLoading: _isLoading,
+                onPayPressed: _handlePlaceOrder,
+              ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  Widget _buildOrderSummary() {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color:
-            isDark ? AppColors.background.withOpacity(.1) : Colors.grey.shade50,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isDark ? Colors.white.withOpacity(0.1) : Colors.grey.shade200,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withOpacity(0.05),
-            offset: const Offset(0, 4),
-            blurRadius: 12,
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.receipt_outlined,
-                size: 20,
-                color: theme.colorScheme.primary,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                'Order Summary',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.3,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          _buildSummaryRow(
-            'Delivery Time',
-            widget.deliveryTime,
-            theme: theme,
-            isDark: isDark,
-          ),
-          _buildSummaryRow(
-            'Delivery Type',
-            widget.deliveryType,
-            theme: theme,
-            isDark: isDark,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Divider(
-              color: theme.dividerColor.withOpacity(.2),
-            ),
-          ),
-          _buildSummaryRow(
-            'Total Amount',
-            'KSh ${formatMoney(widget.totalAmount)}',
-            theme: theme,
-            isDark: isDark,
-            isTotal: true,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSummaryRow(
-    String title,
-    String value, {
-    required ThemeData theme,
-    required bool isDark,
-    bool isTotal = false,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Text(
-              title,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: isDark ? Colors.grey.shade300 : Colors.grey.shade700,
-                fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            flex: 3,
-            child: Text(
-              value,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: isTotal
-                    ? (isDark
-                        ? theme.colorScheme.primary
-                        : AppColors.primaryColor)
-                    : theme.textTheme.bodyLarge?.color,
-                fontWeight: isTotal ? FontWeight.w600 : FontWeight.w500,
-              ),
-              textAlign: TextAlign.right,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPaymentMethodTile(
-    PaymentMethod method,
-    String title,
-    String iconPath,
-    String subtitle,
-  ) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final isSelected = _selectedPaymentMethod == method;
-
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      decoration: BoxDecoration(
-        color: isDark ? theme.cardColor : Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isSelected
-              ? (isDark
-                  ? AppColors.error.withOpacity(.1)
-                  : AppColors.primaryColor)
-              : theme.dividerColor,
-          width: isSelected ? 2 : 1,
-        ),
-        boxShadow: isSelected
-            ? [
-                BoxShadow(
-                  color: AppColors.primaryColor.withOpacity(isDark ? 0.2 : 0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ]
-            : null,
-      ),
-      child: Material(
-        color: isSelected
-            ? AppColors.backgroundDark.withOpacity(.1)
-            : Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: () => setState(() => _selectedPaymentMethod = method),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    iconPath,
-                    width: 60,
-                    height: 40,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontWeight:
-                              isSelected ? FontWeight.w600 : FontWeight.normal,
-                          color: theme.textTheme.bodyLarge?.color,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        subtitle,
-                        style: theme.textTheme.bodySmall,
-                      ),
-                    ],
-                  ),
-                ),
-                Radio<PaymentMethod>(
-                  value: method,
-                  groupValue: _selectedPaymentMethod,
-                  onChanged: (value) =>
-                      setState(() => _selectedPaymentMethod = value!),
-                  activeColor:
-                      isDark ? Colors.white : theme.colorScheme.primary,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPaymentMethods() {
-    return Column(
-      children: [
-        _buildPaymentMethodTile(
-          PaymentMethod.mpesa,
-          'M-Pesa',
-          'assets/M-PESA.png',
-          'Pay securely with M-Pesa',
-        ),
-        const SizedBox(height: 12),
-        _buildPaymentMethodTile(
-          PaymentMethod.cashOnDelivery,
-          'Cash on Delivery',
-          'assets/cod.png',
-          'Pay when you receive your order',
-        ),
-        const SizedBox(height: 12),
-        _buildPaymentMethodTile(
-          PaymentMethod.creditCard,
-          'Credit Card',
-          'assets/card.png',
-          'Pay with Visa or Mastercard',
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBottomBar() {
-    final theme = Theme.of(context);
-
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withOpacity(0.05),
-            offset: const Offset(0, -4),
-            blurRadius: 8,
-          ),
-        ],
-      ),
-      child: SafeArea(
-        child: ElevatedButton(
-          onPressed: _isLoading ? null : () => _handlePlaceOrder(context),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primaryColor,
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            elevation: 0,
-          ),
-          child: _isLoading
-              ? const SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    strokeWidth: 2,
-                  ),
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Pay KSh ${formatMoney(widget.totalAmount)}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    const Icon(Icons.arrow_forward_rounded, size: 20),
-                  ],
-                ),
-        ),
-      ),
-    );
-  }
-
-  void _handlePlaceOrder(BuildContext context) {
-    if (_isLoading) return;
-
-    setState(() => _isLoading = true);
-
-    final cartBloc = context.read<CartBloc>();
-    final cart = cartBloc.state.cart;
-
-    context.read<CheckoutBloc>().add(
-          PlaceOrderEvent(
-            cart: cart,
-            deliveryTime: widget.deliveryTime,
-            specialInstructions: widget.specialInstructions,
-            paymentMethod: _selectedPaymentMethod.toString().split('.').last,
-            address: widget.deliveryAddress,
-            phoneNumber: widget.phoneNumber,
-            deliveryType: widget.deliveryType,
-          ),
-        );
   }
 }

@@ -104,10 +104,9 @@ class PromotionsCarousel extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
               child: Stack(
                 children: [
-               // Background Image
+                  // Background Image
                   ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(8), 
+                    borderRadius: BorderRadius.circular(8),
                     child: promotion.imageUrl != null &&
                             promotion.imageUrl!.isNotEmpty
                         ? CachedNetworkImage(
@@ -130,7 +129,6 @@ class PromotionsCarousel extends StatelessWidget {
                             ),
                           ),
                   ),
-
 
                   // Gradient Overlay
                   Positioned.fill(

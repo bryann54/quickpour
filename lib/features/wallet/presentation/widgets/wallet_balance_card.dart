@@ -37,7 +37,7 @@ class WalletBalanceCard extends StatelessWidget {
               ),
             ),
             Positioned.fill(
-            child: Container(
+              child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: isDarkMode
@@ -56,7 +56,6 @@ class WalletBalanceCard extends StatelessWidget {
                   ),
                 ),
               ),
-
             ),
             // Pattern overlay (optional)
             Positioned.fill(
