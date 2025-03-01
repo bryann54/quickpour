@@ -1,13 +1,5 @@
+import 'package:chupachap/core/utils/functions.dart';
 import 'package:flutter/material.dart';
-
-enum OrderStatus {
-  received,
-  processing,
-  dispatched,
-  delivered,
-  completed,
-  canceled
-}
 
 class AnimatedOrderProgress extends StatefulWidget {
   final OrderStatus currentStatus;
@@ -29,23 +21,6 @@ class _AnimatedOrderProgressState extends State<AnimatedOrderProgress>
   late Animation<double> _lineAnimation;
   late AnimationController _canceledController;
   late Animation<double> _canceledAnimation;
-
-  final List<String> _statusLabels = [
-    'Received',
-    'Processing',
-    'Dispatched',
-    'Delivery',
-    'Completed'
-  ];
-
-  final Map<OrderStatus, Color> _statusColors = {
-    OrderStatus.received: const Color(0xFFF39C12), // Orange
-    OrderStatus.processing: const Color(0xFF3498DB), // Blue
-    OrderStatus.dispatched: const Color(0xFF9B59B6), // Purple
-    OrderStatus.delivered: const Color(0xFF1ABC9C), // Teal
-    OrderStatus.completed: const Color(0xFF2ECC71), // Green
-    OrderStatus.canceled: const Color(0xFFE74C3C), // Red
-  };
 
   @override
   void initState() {
@@ -114,7 +89,7 @@ class _AnimatedOrderProgressState extends State<AnimatedOrderProgress>
             children: List.generate(5, (index) {
               final isActive = index <= currentIndex;
               final statusColor =
-                  _statusColors[OrderStatus.values[index]] ?? Colors.grey;
+                  OrderStatusUtils.getStatusColor(OrderStatus.values[index]);
 
               return Expanded(
                 child: Row(
@@ -132,7 +107,8 @@ class _AnimatedOrderProgressState extends State<AnimatedOrderProgress>
                         ),
                         child: isActive
                             ? Icon(
-                                _getStatusIcon(OrderStatus.values[index]),
+                                OrderStatusUtils.getStatusIcon(
+                                    OrderStatus.values[index]),
                                 size: 12,
                                 color: Colors.white,
                               )
@@ -185,17 +161,18 @@ class _AnimatedOrderProgressState extends State<AnimatedOrderProgress>
             children: List.generate(5, (index) {
               final isActive = index == currentIndex;
               final statusColor =
-                  _statusColors[OrderStatus.values[index]] ?? Colors.grey;
+                  OrderStatusUtils.getStatusColor(OrderStatus.values[index]);
 
               return GestureDetector(
                 onTap: () {
                   // Add interaction logic here (e.g., show details for the status)
-                  print('Tapped on: ${_statusLabels[index]}');
+                  print(
+                      'Tapped on: ${OrderStatusUtils.getStatusLabel(OrderStatus.values[index])}');
                 },
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
                   child: Text(
-                    _statusLabels[index],
+                    OrderStatusUtils.getStatusLabel(OrderStatus.values[index]),
                     key: ValueKey(isActive),
                     style: TextStyle(
                       fontSize: 12,
@@ -226,23 +203,27 @@ class _AnimatedOrderProgressState extends State<AnimatedOrderProgress>
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: _statusColors[OrderStatus.canceled]
-                            ?.withOpacity(0.1),
+                        color: OrderStatusUtils.getStatusColor(
+                                OrderStatus.canceled)
+                            .withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            Icons.cancel,
-                            color: _statusColors[OrderStatus.canceled],
+                            OrderStatusUtils.getStatusIcon(
+                                OrderStatus.canceled),
+                            color: OrderStatusUtils.getStatusColor(
+                                OrderStatus.canceled),
                             size: 16,
                           ),
                           const SizedBox(width: 8),
                           Text(
                             'Canceled',
                             style: TextStyle(
-                              color: _statusColors[OrderStatus.canceled],
+                              color: OrderStatusUtils.getStatusColor(
+                                  OrderStatus.canceled),
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),
@@ -257,24 +238,5 @@ class _AnimatedOrderProgressState extends State<AnimatedOrderProgress>
           ),
       ],
     );
-  }
-
-  IconData _getStatusIcon(OrderStatus status) {
-    switch (status) {
-      case OrderStatus.received:
-        return Icons.assignment;
-      case OrderStatus.processing:
-        return Icons.build;
-      case OrderStatus.dispatched:
-        return Icons.local_shipping;
-      case OrderStatus.delivered:
-        return Icons.delivery_dining;
-      case OrderStatus.completed:
-        return Icons.check_circle;
-      case OrderStatus.canceled:
-        return Icons.cancel;
-      default:
-        return Icons.circle;
-    }
   }
 }

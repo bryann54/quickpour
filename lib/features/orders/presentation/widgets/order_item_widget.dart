@@ -6,34 +6,19 @@ import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
 import 'package:chupachap/features/orders/presentation/pages/order_details.dart';
 
-enum OrderStatus { canceled, received, processing, dispatched, delivered, completed }
-
 class OrderItemWidget extends StatelessWidget {
   final CompletedOrder order;
   const OrderItemWidget({super.key, required this.order});
 
-  Color _getStatusColor(OrderStatus status) {
-    switch (status) {
-       case OrderStatus.canceled:
-        return const Color.fromARGB(255, 15, 5, 68);
-      case OrderStatus.received:
-        return const Color(0xFFF39C12);
-      case OrderStatus.processing:
-        return const Color(0xFF3498DB);
-      case OrderStatus.dispatched:
-        return const Color(0xFF9B59B6);
-      case OrderStatus.delivered:
-        return const Color(0xFF1ABC9C);
-      case OrderStatus.completed:
-        return const Color(0xFF2ECC71);
-      default:
-        return Colors.grey;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final status = OrderStatus.values.firstWhere(
+      (s) => s.toString().split('.').last == order.status.toLowerCase(),
+      orElse: () => OrderStatus.received,
+    );
+    final statusColor = OrderStatusUtils.getStatusColor(status);
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -44,57 +29,52 @@ class OrderItemWidget extends StatelessWidget {
         );
       },
       child: Stack(
-        children:[ 
-       
+        children: [
           Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: theme.brightness == Brightness.light
-                ? AppColors.surface
-                : AppColors.cardColorDark,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: theme.brightness == Brightness.light
-                    ? AppColors.shadowColor
-                    : AppColors.shadowColorDark,
-                blurRadius: 10,
-                offset: const Offset(0, 2),
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: theme.brightness == Brightness.light
+                  ? AppColors.surface
+                  : AppColors.cardColorDark,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: theme.brightness == Brightness.light
+                      ? AppColors.shadowColor
+                      : AppColors.shadowColorDark,
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(context, status, statusColor),
+                _buildDeliveryInfo(context),
+                _buildTotal(context),
+              ],
+            ),
+          ),
+          if (order.status == 'canceled')
+            Positioned(
+              top: 100,
+              right: 115,
+              child: Image.asset(
+                'assets/ca1.webp',
+                fit: BoxFit.cover,
+                width: 190,
+                height: 150,
               ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(context),
-              _buildDeliveryInfo(context),
-              _buildTotal(context),
-            ],
-          ),
-        ),
-        if(order.status == 'canceled')
-        Positioned(
-          top: 100,
-          right: 115,
-          child: Image.asset(
-            'assets/ca1.webp',
-            fit: BoxFit.cover,
-             width: 190, 
-            height: 150,
-          ),
-        ),
-        ]
+            ),
+        ],
       ),
     );
   }
 
-Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(
+      BuildContext context, OrderStatus status, Color statusColor) {
     final theme = Theme.of(context);
-    final status = OrderStatus.values.firstWhere(
-        (s) => s.toString().split('.').last == order.status.toLowerCase(),
-        orElse: () => OrderStatus.received);
-    final statusColor = _getStatusColor(status);
-
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -111,14 +91,13 @@ Widget _buildHeader(BuildContext context) {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: statusColor.withOpacity(0.1), // Use statusColor here
+                    color: statusColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
                     '#${order.id.substring(0, min(8, order.id.length))}',
                     style: TextStyle(
-                      color:
-                          statusColor, // Use statusColor for text color as well
+                      color: statusColor,
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
                     ),
@@ -170,7 +149,7 @@ Widget _buildHeader(BuildContext context) {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      status.toString().split('.').last,
+                      OrderStatusUtils.getStatusLabel(status),
                       style: TextStyle(
                         color: statusColor,
                         fontSize: 12,
@@ -186,7 +165,6 @@ Widget _buildHeader(BuildContext context) {
       ),
     );
   }
-
 
 
   Widget _buildDeliveryInfo(BuildContext context) {
