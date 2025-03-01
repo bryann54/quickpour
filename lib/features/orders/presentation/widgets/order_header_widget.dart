@@ -1,5 +1,6 @@
 // widgets/order_header.dart
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/functions.dart';
 import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
 import 'package:chupachap/features/orders/presentation/widgets/animated_order_progress.dart';
 import 'package:chupachap/features/orders/presentation/widgets/date_widget.dart';
@@ -11,27 +12,18 @@ class OrderHeader extends StatelessWidget {
   const OrderHeader({super.key, required this.order});
 
   OrderStatus _getOrderStatus(String status) {
-    switch (status.toLowerCase()) {
-      case 'received':
-        return OrderStatus.received;
-      case 'processing':
-        return OrderStatus.processing;
-      case 'dispatched':
-        return OrderStatus.dispatched;
-      case 'delivering':
-        return OrderStatus.delivered;
-      case 'completed':
-        return OrderStatus.completed;
-      default:
-        return OrderStatus.received;
-    }
+    return OrderStatus.values.firstWhere(
+      (s) => s.toString().split('.').last == status.toLowerCase(),
+      orElse: () => OrderStatus.received,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-
+    final status = _getOrderStatus(order.status);
+   
     return Padding(
       padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
       child: Container(
@@ -50,18 +42,18 @@ class OrderHeader extends StatelessWidget {
                 Text(
                   'Order status:',
                   style: theme.textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: isDark
-                          ? AppColors.textPrimaryDark
-                          : AppColors.textPrimary,
-                      fontSize: 20),
+                    fontWeight: FontWeight.w500,
+                    color: isDark
+                        ? AppColors.textPrimaryDark
+                        : AppColors.textPrimary,
+                    fontSize: 20,
+                  ),
                 ),
-                // AnimatedOrderStatusBadge(status: order.status),
               ],
             ),
             const SizedBox(height: 20),
             AnimatedOrderProgress(
-              currentStatus: _getOrderStatus(order.status),
+              currentStatus: status,
             ),
             const SizedBox(height: 16),
             Hero(
