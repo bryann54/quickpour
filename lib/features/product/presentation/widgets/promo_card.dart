@@ -173,7 +173,9 @@ class PromotionCard extends StatelessWidget {
                                       product.measure,
                                       style: TextStyle(
                                         fontSize: 12,
-                                        color:isDarkMode?Colors.white54: Colors.grey.shade700,
+                                        color: isDarkMode
+                                            ? Colors.white54
+                                            : Colors.grey.shade700,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),

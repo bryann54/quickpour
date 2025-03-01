@@ -71,7 +71,7 @@ class UserDataRepositoryImpl implements UserDataRepository {
 
     try {
       position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high, 
+        desiredAccuracy: LocationAccuracy.high,
       );
     } catch (e) {
       debugPrint('Error getting position: $e');

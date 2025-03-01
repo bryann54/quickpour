@@ -63,8 +63,8 @@ class OrderItemWidget extends StatelessWidget {
               child: Image.asset(
                 'assets/ca1.webp',
                 fit: BoxFit.cover,
-                width: 190,
-                height: 150,
+                width: 180,
+                height: 180,
               ),
             ),
         ],
@@ -165,7 +165,6 @@ class OrderItemWidget extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _buildDeliveryInfo(BuildContext context) {
     final theme = Theme.of(context);

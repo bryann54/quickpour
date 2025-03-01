@@ -16,14 +16,11 @@ class PromotionsRepository {
     try {
       final now = DateTime.now();
 
-  
       // Simplified query with fewer conditions
       final querySnapshot = await _promotionsCollection
           .where('isActive', isEqualTo: true)
           .where('status', isEqualTo: PromotionStatus.active.toString())
           .get();
-
-
 
       // Manual filtering for dates to debug date issues
       final filteredDocs = querySnapshot.docs.where((doc) {
@@ -32,11 +29,8 @@ class PromotionsRepository {
         final endDate = DateTime.parse(data['endDate'] as String);
         final isInDateRange = startDate.isBefore(now) && endDate.isAfter(now);
 
- 
-
         return isInDateRange;
       }).toList();
-
 
       return filteredDocs
           .map((doc) => PromotionModel.fromJson({
