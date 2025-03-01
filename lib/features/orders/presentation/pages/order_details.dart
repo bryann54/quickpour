@@ -9,7 +9,6 @@ import 'package:chupachap/features/orders/data/models/completed_order_model.dart
 
 class OrderDetails extends StatelessWidget {
   final CompletedOrder order;
-  
 
   const OrderDetails({super.key, required this.order});
 
@@ -22,14 +21,13 @@ class OrderDetails extends StatelessWidget {
       backgroundColor: isDark ? AppColors.backgroundDark : AppColors.background,
       // appBar: CustomAppBar(showCart: false),
       appBar: AppBar(
-        title:    Text(
+        title: Text(
           'Order Details',
           style: theme.textTheme.headlineSmall?.copyWith(
             fontWeight: FontWeight.bold,
             color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
           ),
         ),
-
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -49,5 +47,3 @@ class OrderDetails extends StatelessWidget {
     );
   }
 }
-
-

@@ -16,14 +16,11 @@ class PromotionsRepository {
     try {
       final now = DateTime.now();
 
-  
       // Simplified query with fewer conditions
       final querySnapshot = await _promotionsCollection
           .where('isActive', isEqualTo: true)
           .where('status', isEqualTo: PromotionStatus.active.toString())
           .get();
-
-
 
       // Manual filtering for dates to debug date issues
       final filteredDocs = querySnapshot.docs.where((doc) {
@@ -32,11 +29,8 @@ class PromotionsRepository {
         final endDate = DateTime.parse(data['endDate'] as String);
         final isInDateRange = startDate.isBefore(now) && endDate.isAfter(now);
 
- 
-
         return isInDateRange;
       }).toList();
-
 
       return filteredDocs
           .map((doc) => PromotionModel.fromJson({
@@ -48,7 +42,6 @@ class PromotionsRepository {
       throw Exception('Failed to fetch active promotions: $e');
     }
   }
-
 
   // For consumer app: Fetch featured promotions
   Future<List<PromotionModel>> fetchFeaturedPromotions() async {
@@ -97,13 +90,15 @@ class PromotionsRepository {
     }
   }
 
-  // Improved implementation for fetching promotions by products 
+  // Improved implementation for fetching promotions by products
   // that checks all three promotion targets: products, categories, and brands
   Future<List<PromotionModel>> fetchPromotionsForProducts(
-      List<String> productIds, List<String> categoryIds, List<String> brandIds) async {
+      List<String> productIds,
+      List<String> categoryIds,
+      List<String> brandIds) async {
     try {
       final now = DateTime.now();
-      
+
       // Get all active promotions first
       final querySnapshot = await _promotionsCollection
           .where('isActive', isEqualTo: true)
@@ -126,15 +121,18 @@ class PromotionsRepository {
         switch (promotion.promotionTarget) {
           case PromotionTarget.products:
             // Check if any product ID matches
-            isApplicable = promotion.productIds.any((id) => productIds.contains(id));
+            isApplicable =
+                promotion.productIds.any((id) => productIds.contains(id));
             break;
           case PromotionTarget.categories:
             // Check if any category ID matches
-            isApplicable = promotion.categoryIds.any((id) => categoryIds.contains(id));
+            isApplicable =
+                promotion.categoryIds.any((id) => categoryIds.contains(id));
             break;
           case PromotionTarget.brands:
             // Check if any brand ID matches
-            isApplicable = promotion.brandIds.any((id) => brandIds.contains(id));
+            isApplicable =
+                promotion.brandIds.any((id) => brandIds.contains(id));
             break;
         }
 

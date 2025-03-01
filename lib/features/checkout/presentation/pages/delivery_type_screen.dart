@@ -531,7 +531,6 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
                     ),
                   ),
                 ),
-             
               ],
             ),
           ),

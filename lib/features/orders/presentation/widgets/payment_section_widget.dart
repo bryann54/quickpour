@@ -20,12 +20,12 @@ class DeliveryPaymentSection extends StatelessWidget {
           InfoRow(label: 'Delivery Type', value: order.deliveryType),
           InfoRow(label: 'Delivery Address', value: order.address),
           InfoRow(label: 'Payment Method', value: order.paymentMethod),
-          if(order.deliveryTime!='Pickup')
-          InfoRow(
-            label: 'Delivery Window',
-            value: order.deliveryTime,
-            isLast: true,
-          ),
+          if (order.deliveryTime != 'Pickup')
+            InfoRow(
+              label: 'Delivery Window',
+              value: order.deliveryTime,
+              isLast: true,
+            ),
         ],
       ),
     );

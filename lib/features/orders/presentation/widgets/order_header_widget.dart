@@ -23,7 +23,7 @@ class OrderHeader extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final status = _getOrderStatus(order.status);
-   
+
     return Padding(
       padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
       child: Container(

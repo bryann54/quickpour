@@ -25,17 +25,15 @@ class OrderItemRow extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: CachedNetworkImage(
-                imageUrl: 
-                item.images.first,
+                imageUrl: item.images.first,
                 width: 50,
                 height: 50,
                 fit: BoxFit.contain,
                 errorWidget: (context, error, stackTrace) => Container(
                   width: 50,
                   height: 50,
-                  color:isDark?Colors.grey: Colors.grey[300],
-                  child:
-                      const Icon(Icons.error, color: Colors.grey),
+                  color: isDark ? Colors.grey : Colors.grey[300],
+                  child: const Icon(Icons.error, color: Colors.grey),
                 ),
               ),
             )
@@ -47,8 +45,10 @@ class OrderItemRow extends StatelessWidget {
                 color: isDark ? Colors.grey.shade800 : Colors.grey[100],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child:  Icon(Icons.error,
-                color: isDark ? Colors.grey.shade600 : Colors.grey[400], ),
+              child: Icon(
+                Icons.error,
+                color: isDark ? Colors.grey.shade600 : Colors.grey[400],
+              ),
             ),
           const SizedBox(width: 12),
           // Product details

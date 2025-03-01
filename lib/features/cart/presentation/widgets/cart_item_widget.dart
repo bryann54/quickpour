@@ -100,7 +100,7 @@ class CartItemWidget extends StatelessWidget {
     );
   }
 
-Widget _buildCustomQuantityInput(BuildContext context, CartBloc cartBloc) {
+  Widget _buildCustomQuantityInput(BuildContext context, CartBloc cartBloc) {
     final theme = Theme.of(context);
     final customQuantityController = TextEditingController();
 

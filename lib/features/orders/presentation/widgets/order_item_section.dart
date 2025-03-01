@@ -34,7 +34,7 @@ class OrderItemsSection extends StatelessWidget {
           const SectionTitle(title: 'Items'),
           if (order.merchantOrders.isNotEmpty) ...[
             ...order.merchantOrders.map((merchantOrder) =>
-                MerchantOrderSection(merchantOrder: merchantOrder)),
+                MerchantOrderSection(merchantOrder: merchantOrder, order: order,)),
           ],
           OrderTotalRow(order: order),
         ],
@@ -42,5 +42,3 @@ class OrderItemsSection extends StatelessWidget {
     );
   }
 }
-
-

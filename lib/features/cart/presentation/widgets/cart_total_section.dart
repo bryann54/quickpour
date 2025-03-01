@@ -37,7 +37,7 @@ class CartTotalSection extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    'KSh ${formatMoney( cart.totalPrice)}',
+                    'KSh ${formatMoney(cart.totalPrice)}',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           color: isDarkMode
                               ? AppColors.surface.withOpacity(.7)

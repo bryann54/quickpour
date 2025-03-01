@@ -92,11 +92,12 @@ class App extends StatelessWidget {
               repository: NotificationsRepository(),
             ),
           ),
-           BlocProvider(
-  create: (context) => PromotionsBloc(promotionsRepository: PromotionsRepository())
-    ..add(FetchActivePromotions()),
-           ),
-         
+          BlocProvider(
+            create: (context) =>
+                PromotionsBloc(promotionsRepository: PromotionsRepository())
+                  ..add(FetchActivePromotions()),
+          ),
+
           BlocProvider(
             create: (_) =>
                 MerchantBloc(merchantRepository)..add(FetchMerchantEvent()),

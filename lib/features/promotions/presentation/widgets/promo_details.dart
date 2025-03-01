@@ -13,14 +13,12 @@ class PromoDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      final theme = Theme.of(context);
+    final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     return Container(
-      
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
       decoration: BoxDecoration(
-        color:isDarkMode?AppColors.backgroundDark
-        : AppColors.background,
+        color: isDarkMode ? AppColors.backgroundDark : AppColors.background,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(

@@ -3,14 +3,16 @@ import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/core/utils/functions.dart';
 import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
 import 'package:chupachap/features/merchant/presentation/pages/merchant_details_screen.dart';
+import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
 import 'package:chupachap/features/orders/data/models/merchant_order_item_model.dart';
 import 'package:chupachap/features/orders/presentation/widgets/order_item_row.dart';
 import 'package:flutter/material.dart';
 
 class MerchantOrderSection extends StatelessWidget {
   final MerchantOrderItem merchantOrder;
+  final CompletedOrder order;
 
-  const MerchantOrderSection({super.key, required this.merchantOrder});
+  const MerchantOrderSection({super.key, required this.merchantOrder, required this.order});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,7 @@ class MerchantOrderSection extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => MerchantDetailsScreen(
                         merchant: Merchants(
-                          id: merchantOrder.merchantId,
+                            id: merchantOrder.merchantId,
                             location: merchantOrder.merchantLocation,
                             imageUrl: merchantOrder.merchantImageUrl,
                             isVerified: merchantOrder.isMerchantVerified,
@@ -53,9 +55,7 @@ class MerchantOrderSection extends StatelessWidget {
                                 .toList(),
                             rating: merchantOrder.merchantRating,
                             isOpen: merchantOrder.isMerchantOpen,
-                            experience: 0
-                  
-                        ),
+                            experience: 0),
                       ),
                     ),
                   );
@@ -156,14 +156,15 @@ class MerchantOrderSection extends StatelessWidget {
             ],
           ),
         ),
+          if (order.status == 'canceled')
         Positioned(
-          top: 50,
-          right: 70,
+          top: 10,
+          right: 20,
           child: Image.asset(
             'assets/ca1.webp',
             fit: BoxFit.cover,
-            width: 200,
-            height: 200,
+            width: 90,
+            height: 90,
           ),
         ),
       ],
@@ -178,21 +179,21 @@ class MerchantOrderSection extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => MerchantDetailsScreen(
               merchant: Merchants(
-                id: merchantOrder.merchantId,
-              
-                location: merchantOrder.merchantLocation,
-                imageUrl: merchantOrder.merchantImageUrl,
-                isVerified: merchantOrder.isMerchantVerified, name: merchantOrder.merchantName,
-                products: merchantOrder.items.map((e) => e.productName).toList(
-                  ),
-                rating: merchantOrder.merchantRating, isOpen: merchantOrder.isMerchantOpen, experience: 0
-                  
-              ),
+                  id: merchantOrder.merchantId,
+                  location: merchantOrder.merchantLocation,
+                  imageUrl: merchantOrder.merchantImageUrl,
+                  isVerified: merchantOrder.isMerchantVerified,
+                  name: merchantOrder.merchantName,
+                  products:
+                      merchantOrder.items.map((e) => e.productName).toList(),
+                  rating: merchantOrder.merchantRating,
+                  isOpen: merchantOrder.isMerchantOpen,
+                  experience: 0),
             ),
           ),
         );
       },
-      child:  Hero(
+      child: Hero(
         tag: 'merchant_image_${merchantOrder.merchantId}',
         child: Container(
           width: 48,

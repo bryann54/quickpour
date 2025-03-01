@@ -1,4 +1,3 @@
-
 import 'package:chupachap/features/promotions/data/models/promotion_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +19,7 @@ String formatTimestamp(DateTime timestamp) {
     return DateFormat('MMM d, HH:mm').format(timestamp);
   }
 }
+
 // common/enums/order_status.dart
 enum OrderStatus {
   canceled,
@@ -52,6 +52,7 @@ extension StringExtension on String {
     return "${this[0].toUpperCase()}${substring(1)}";
   }
 }
+
 // Helper function to get the appropriate delivery typeicon
 IconData getDeliveryIcon(String deliveryType) {
   switch (deliveryType) {
@@ -96,7 +97,6 @@ String formatDate(DateTime date) {
   return '${date.hour}:${date.minute.toString().padLeft(2, '0')} ${date.hour >= 12 ? 'PM' : 'AM'}';
 }
 
-
 String getPromotionTypeDisplay(PromotionTarget target) {
   switch (target) {
     case PromotionTarget.products:
@@ -109,10 +109,10 @@ String getPromotionTypeDisplay(PromotionTarget target) {
       return 'Unknown';
   }
 }
-  String getValidityPeriod(PromotionModel promotion) {
-    return 'Valid until ${formatDate(promotion.endDate)}';
-  }
 
+String getValidityPeriod(PromotionModel promotion) {
+  return 'Valid until ${formatDate(promotion.endDate)}';
+}
 
 class OrderStatusUtils {
   static Color getStatusColor(OrderStatus status) {
