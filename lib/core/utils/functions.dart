@@ -1,4 +1,4 @@
-import 'package:chupachap/features/orders/presentation/widgets/order_item_widget.dart';
+
 import 'package:chupachap/features/promotions/data/models/promotion_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +19,15 @@ String formatTimestamp(DateTime timestamp) {
   } else {
     return DateFormat('MMM d, HH:mm').format(timestamp);
   }
+}
+// common/enums/order_status.dart
+enum OrderStatus {
+  canceled,
+  received,
+  processing,
+  dispatched,
+  delivered,
+  completed,
 }
 
 OrderStatus getOrderStatus(String status) {
@@ -103,3 +112,63 @@ String getPromotionTypeDisplay(PromotionTarget target) {
   String getValidityPeriod(PromotionModel promotion) {
     return 'Valid until ${formatDate(promotion.endDate)}';
   }
+
+
+class OrderStatusUtils {
+  static Color getStatusColor(OrderStatus status) {
+    switch (status) {
+      case OrderStatus.canceled:
+        return const Color.fromARGB(255, 15, 5, 68);
+      case OrderStatus.received:
+        return const Color(0xFFF39C12);
+      case OrderStatus.processing:
+        return const Color(0xFF3498DB);
+      case OrderStatus.dispatched:
+        return const Color(0xFF9B59B6);
+      case OrderStatus.delivered:
+        return const Color(0xFF1ABC9C);
+      case OrderStatus.completed:
+        return const Color(0xFF2ECC71);
+      default:
+        return Colors.grey;
+    }
+  }
+
+  static IconData getStatusIcon(OrderStatus status) {
+    switch (status) {
+      case OrderStatus.received:
+        return Icons.assignment;
+      case OrderStatus.processing:
+        return Icons.build;
+      case OrderStatus.dispatched:
+        return Icons.local_shipping;
+      case OrderStatus.delivered:
+        return Icons.delivery_dining;
+      case OrderStatus.completed:
+        return Icons.check_circle;
+      case OrderStatus.canceled:
+        return Icons.cancel;
+      default:
+        return Icons.circle;
+    }
+  }
+
+  static String getStatusLabel(OrderStatus status) {
+    switch (status) {
+      case OrderStatus.received:
+        return 'Received';
+      case OrderStatus.processing:
+        return 'Processing';
+      case OrderStatus.dispatched:
+        return 'Dispatched';
+      case OrderStatus.delivered:
+        return 'Delivered';
+      case OrderStatus.completed:
+        return 'Completed';
+      case OrderStatus.canceled:
+        return 'Canceled';
+      default:
+        return 'Unknown';
+    }
+  }
+}
