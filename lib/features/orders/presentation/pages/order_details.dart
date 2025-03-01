@@ -9,6 +9,7 @@ import 'package:chupachap/features/orders/data/models/completed_order_model.dart
 
 class OrderDetails extends StatelessWidget {
   final CompletedOrder order;
+  
 
   const OrderDetails({super.key, required this.order});
 
