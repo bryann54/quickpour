@@ -31,6 +31,7 @@ class OrderDetails extends StatelessWidget {
                 color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
               ),
             ),
+            if(order.status != 'canceled')
             ShareButton(order: order,),
        
           ],
