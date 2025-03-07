@@ -12,6 +12,7 @@ import 'package:chupachap/features/wallet/presentation/widgets/transaction_histo
 import 'package:chupachap/features/wallet/presentation/widgets/wallet_balance_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class WalletScreen extends StatelessWidget {
   const WalletScreen({Key? key}) : super(key: key);
@@ -80,7 +81,22 @@ class WalletScreen extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Wallet'),
+            title: ShaderMask(
+              shaderCallback: (bounds) => const LinearGradient(
+                colors: [
+                  Color(0xFFE74C3C),
+                  Color(0xFFF39C12),
+                ],
+              ).createShader(bounds),
+              child: Text(
+                'Your wallet',
+                style: GoogleFonts.acme(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                ),
+              ),
+            ),
             elevation: 0,
           ),
           body: RefreshIndicator(
@@ -108,7 +124,7 @@ class WalletScreen extends StatelessWidget {
                         ),
                         TextButton.icon(
                           icon: const Icon(Icons.add),
-                          label: const Text('Add New'),
+                          label: const Text('Add New',),
                           onPressed: () {
                             Navigator.push(
                               context,

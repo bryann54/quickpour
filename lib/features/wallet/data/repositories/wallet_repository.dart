@@ -18,14 +18,19 @@ class WalletRepository {
     return Wallet.initial();
   }
 
-  Future<void> deductFromWallet(double amount) async {
-    // Deduct the amount from the wallet balance
-    // Update the wallet in the backend or local storage
-  }
-
   Future<void> saveWallet(Wallet wallet) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_walletKey, jsonEncode(wallet.toJson()));
+  }
+
+Future<void> deductFromWallet(double amount) async {
+    final wallet = await getWallet();
+    if (wallet.balance >= amount) {
+      final updatedWallet = wallet.copyWith(balance: wallet.balance - amount);
+      await saveWallet(updatedWallet);
+    } else {
+      throw Exception('Insufficient funds');
+    }
   }
 
   Future<void> addPaymentMethod(PaymentMethod paymentMethod) async {
@@ -127,7 +132,6 @@ class WalletRepository {
     return true;
   }
 
-  // Create a new method in your WalletRepository class
   Future<bool> processOrderPayment({
     required double amount,
     required String description,

@@ -42,7 +42,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     ));
   }
 
-  Future<void> _onPlaceOrder(
+Future<void> _onPlaceOrder(
       PlaceOrderEvent event, Emitter<CheckoutState> emit) async {
     try {
       // Check if cart has items before proceeding
@@ -73,6 +73,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         userName: state.userName,
         userId: state.userId,
       ));
+
       if (event.paymentMethod == 'wallet') {
         final wallet = await walletRepository.getWallet();
         if (wallet.balance < event.cart.totalPrice) {
@@ -183,3 +184,5 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     }
   }
 }
+
+
