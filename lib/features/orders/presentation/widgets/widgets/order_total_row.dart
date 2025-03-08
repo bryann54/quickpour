@@ -28,7 +28,7 @@ class OrderTotalRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Total',
+            'Total'.toUpperCase(),
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,

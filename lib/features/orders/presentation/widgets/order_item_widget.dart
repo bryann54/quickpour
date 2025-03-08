@@ -184,7 +184,7 @@ Widget _buildDeliveryInfo(BuildContext context) {
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: isDark
-                        ? AppColors.primaryColorDark.withOpacity(0.1)
+                        ? AppColors.background.withOpacity(0.1)
                         : AppColors.primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -192,7 +192,7 @@ Widget _buildDeliveryInfo(BuildContext context) {
                     getDeliveryIcon(order.deliveryType),
                     size: 15,
                     color: isDark
-                        ? AppColors.primaryColorDark
+                        ? AppColors.background
                         : AppColors.primaryColor,
                   ),
                 ),
@@ -254,7 +254,7 @@ Widget _buildDeliveryInfo(BuildContext context) {
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: isDark
-                          ? AppColors.primaryColorDark.withOpacity(0.1)
+                          ? AppColors.background.withOpacity(0.1)
                           : AppColors.primaryColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -262,7 +262,7 @@ Widget _buildDeliveryInfo(BuildContext context) {
                       Icons.location_on_outlined,
                       size:   15,
                       color: isDark
-                          ? AppColors.primaryColorDark
+                          ? AppColors.background
                           : AppColors.primaryColor,
                     ),
                   ),
@@ -345,7 +345,7 @@ Widget _buildDeliveryInfo(BuildContext context) {
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: isDark
-                        ? AppColors.primaryColorDark.withOpacity(0.1)
+                        ? AppColors.textSecondary.withOpacity(0.6)
                         : AppColors.primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -355,7 +355,7 @@ Widget _buildDeliveryInfo(BuildContext context) {
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: isDark
-                          ? AppColors.primaryColorDark
+                          ? AppColors.background.withOpacity(.5)
                           : AppColors.primaryColor,
                     ),
                   ),
