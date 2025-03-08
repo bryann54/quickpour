@@ -34,7 +34,7 @@ class PromotionCard extends StatelessWidget {
       },
       child: Card(
         clipBehavior: Clip.antiAlias,
-        elevation: 5,
+        elevation: 1,
         shadowColor: isDarkMode ? Colors.grey.shade800 : Colors.grey.shade100,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -236,7 +236,7 @@ class PromotionCard extends StatelessWidget {
                   ],
                 ),
                 Positioned(
-                  top: 2,
+                  top: 0,
                   right: 2,
                   child: FavoriteFAB(
                     product: product,
@@ -245,8 +245,8 @@ class PromotionCard extends StatelessWidget {
                 ),
                 // Cart FAB
                 Positioned(
-                  bottom: 8,
-                  right: 8,
+                  bottom: 5,
+                  right: 5,
                   child: CartQuantityFAB(
                     product: product,
                     isDarkMode: isDarkMode,

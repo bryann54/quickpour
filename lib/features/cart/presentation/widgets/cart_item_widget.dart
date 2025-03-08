@@ -77,13 +77,13 @@ class CartItemWidget extends StatelessWidget {
               ? AppColors.accentColor
               : (isDarkMode ? Colors.grey[800] : Colors.grey[200]),
           borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.black.withOpacity(0.1),
+          //     blurRadius: 4,
+          //     offset: const Offset(0, 2),
+          //   ),
+          // ],
         ),
         child: Center(
           child: Text(
@@ -124,7 +124,7 @@ class CartItemWidget extends StatelessWidget {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 6),
                     errorText: null,
                   ),
                   onSubmitted: (value) => _applyCustomQuantity(
@@ -145,7 +145,7 @@ class CartItemWidget extends StatelessWidget {
                   backgroundColor: AppColors.accentColor,
                   foregroundColor: Colors.white,
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -221,13 +221,13 @@ class CartItemWidget extends StatelessWidget {
           border: Border.all(
             color: isDarkMode ? Colors.grey.shade700 : Colors.grey.shade300,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 4,
-              offset: const Offset(2, 2),
-            ),
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.black.withOpacity(0.1),
+          //     blurRadius: 4,
+          //     offset: const Offset(2, 2),
+          //   ),
+          // ],
         ),
         child: Row(
           children: [
@@ -268,7 +268,7 @@ class CartItemWidget extends StatelessWidget {
                     Positioned(
                         child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                          horizontal: 3, vertical: 1),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [Colors.red, Colors.orangeAccent],
@@ -278,7 +278,7 @@ class CartItemWidget extends StatelessWidget {
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.2),
-                            blurRadius: 4,
+                            blurRadius: 2,
                             offset: const Offset(2, 2),
                           ),
                         ],
@@ -287,17 +287,17 @@ class CartItemWidget extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(
-                            Icons.local_offer_rounded,
-                            color: Colors.white,
-                            size: 14,
-                          ),
-                          const SizedBox(width: 4),
+                          // const Icon(
+                          //   Icons.local_offer_rounded,
+                          //   color: Colors.white,
+                          //   size: 14,
+                          // ),
+                          // const SizedBox(width: 4),
                           Text(
                             '${calculateDiscountPercentage(cartItem.product.price, cartItem.product.discountPrice)}% Off',
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ],
@@ -317,8 +317,8 @@ class CartItemWidget extends StatelessWidget {
                     tag: 'product_name_${cartItem.product.id}',
                     child: Text(
                       cartItem.product.productName,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w500,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -340,7 +340,7 @@ class CartItemWidget extends StatelessWidget {
                                   text:
                                       'Ksh ${formatMoney(cartItem.product.discountPrice)}',
                                   style: const TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                     color: AppColors.accentColor,
                                   ),
@@ -371,7 +371,7 @@ class CartItemWidget extends StatelessWidget {
                           child: Text(
                             'Ksh ${formatMoney(cartItem.product.price)}',
                             style: const TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: AppColors.accentColor,
                             ),
@@ -379,10 +379,10 @@ class CartItemWidget extends StatelessWidget {
                         ),
                     ],
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 15),
                   // New Quantity Control in Row Layout
                   Container(
-                    height: 40,
+                    height: 35,
                     decoration: BoxDecoration(
                       border: Border.all(
                           color: isDarkMode
@@ -494,7 +494,7 @@ class CartItemWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 8),
+                 
                 ],
               ),
             ),

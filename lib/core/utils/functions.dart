@@ -101,6 +101,24 @@ String getPromotionTypeDisplay(PromotionTarget target) {
   }
 }
 
+
+Color getStatusColor(OrderStatus status) {
+  switch (status) {
+    case OrderStatus.received:
+      return const Color(0xFFF39C12);
+    case OrderStatus.processing:
+      return const Color(0xFF3498DB);
+    case OrderStatus.dispatched:
+      return const Color(0xFF9B59B6);
+    case OrderStatus.delivered:
+      return const Color(0xFF1ABC9C);
+    case OrderStatus.completed:
+      return const Color(0xFF2ECC71);
+    default:
+      return Colors.grey;
+  }
+}
+
 String getValidityPeriod(PromotionModel promotion) {
   return 'Valid until ${formatDate(promotion.endDate)}';
 }

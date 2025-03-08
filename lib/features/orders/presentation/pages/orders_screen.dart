@@ -179,7 +179,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(2.0),
             child: Center(
               child: Text('Orders',
                   style: GoogleFonts.montaga(
@@ -193,7 +193,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           ),
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(6),
+              // padding: const EdgeInsets.symmetric(horizontal: 2),
               itemCount: orders.length,
               itemBuilder: (context, index) {
                 final order = orders[index];
