@@ -161,14 +161,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       return const SizedBox.shrink();
                     },
                   ),
-               BlocBuilder<PromotionsBloc, PromotionsState>(
+                  BlocBuilder<PromotionsBloc, PromotionsState>(
                     builder: (context, state) {
                       if (state is PromotionsLoaded &&
                           state.promotions.isNotEmpty) {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   'Promotions',
@@ -180,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                 ),
-                                     GestureDetector(
+                                GestureDetector(
                                   onTap: () {
                                     Navigator.push(
                                       context,
@@ -191,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     );
                                   },
                                   child: Padding(
-                                    padding: const EdgeInsets.only(right:8.0),
+                                    padding: const EdgeInsets.only(right: 8.0),
                                     child: Text('See All',
                                         style: GoogleFonts.montaga(
                                           textStyle: Theme.of(context)
@@ -214,14 +215,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         );
                       }
-                      return const SizedBox
-                          .shrink(); 
+                      return const SizedBox.shrink();
                     },
                   ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: const ProductSection(),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: ProductSection(),
                   ),
                 ],
               ),

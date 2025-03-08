@@ -42,5 +42,3 @@ class OrderItemsSection extends StatelessWidget {
     );
   }
 }
-
-

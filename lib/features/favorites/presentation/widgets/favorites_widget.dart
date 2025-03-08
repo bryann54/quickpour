@@ -21,29 +21,35 @@ class FavoritesWidget extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+      padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 5.0),
       child: Container(
         decoration: BoxDecoration(
           color: isDarkMode
               ? Colors.grey[900]!.withOpacity(.7)
               : AppColors.cardColor.withOpacity(.7),
-          boxShadow: isDarkMode
-              ? [
-                  BoxShadow(
-                    color: AppColors.background.withOpacity(0.3),
-                    spreadRadius: 2,
-                    blurRadius: 2,
-                    offset: const Offset(0, 1),
-                  ),
-                ]
-              : [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    spreadRadius: 1,
-                    blurRadius: .5,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isDarkMode
+               ? Colors.grey[900]!.withOpacity(.7)
+                  : AppColors.backgroundDark.withOpacity(.15),
+          )
+          // boxShadow: isDarkMode
+          //     ? [
+          //         BoxShadow(
+          //           color: AppColors.background.withOpacity(0.3),
+          //           spreadRadius: 2,
+          //           blurRadius: 2,
+          //           offset: const Offset(0, 1),
+          //         ),
+          //       ]
+          //     : [
+          //         BoxShadow(
+          //           color: Colors.black.withOpacity(0.3),
+          //           spreadRadius: 1,
+          //           blurRadius: .5,
+          //           offset: const Offset(0, 3),
+          //         ),
+          //       ],
         ),
         child: InkWell(
           onTap: () {
@@ -64,25 +70,29 @@ class FavoritesWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: CachedNetworkImage(
-                        imageUrl: favoriteItem.product.imageUrls.isNotEmpty
-                            ? favoriteItem.product.imageUrls.first
-                            : '',
-                        width: 90,
-                        height: 90,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator.adaptive(),
-                        errorWidget: (context, url, error) => Container(
-                            decoration: BoxDecoration(
-                              color: isDarkMode
-                                  ? AppColors.backgroundDark.withOpacity(.5)
-                                  : AppColors.background,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: const Icon(Icons.error, size: 20)),
+                      Hero(
+                      tag: 'product-image-${favoriteItem.product.id}',
+                      
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: CachedNetworkImage(
+                          imageUrl: favoriteItem.product.imageUrls.isNotEmpty
+                              ? favoriteItem.product.imageUrls.first
+                              : '',
+                          width: 90,
+                          height: 90,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator.adaptive(),
+                          errorWidget: (context, url, error) => Container(
+                              decoration: BoxDecoration(
+                                color: isDarkMode
+                                    ? AppColors.backgroundDark.withOpacity(.5)
+                                    : AppColors.background,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(Icons.error, size: 20)),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -93,14 +103,18 @@ class FavoritesWidget extends StatelessWidget {
                           Row(
                             children: [
                               Expanded(
-                                child: Text(
-                                  favoriteItem.product.productName,
-                                  style: theme.textTheme.bodyLarge?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: isDarkMode
-                                        ? AppColors.surface.withOpacity(.8)
-                                        : Colors.black,
+                                child:   Hero(
+                                  tag:
+                                      'product-name-${favoriteItem.product.id}',
+                                  child: Text(
+                                    favoriteItem.product.productName,
+                                    style: theme.textTheme.bodyLarge?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: isDarkMode
+                                          ? AppColors.surface.withOpacity(.8)
+                                          : Colors.black,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -125,7 +139,7 @@ class FavoritesWidget extends StatelessWidget {
                                 Text(
                                   'Ksh ${formatMoney(favoriteItem.product.discountPrice)}',
                                   style: const TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                     color: AppColors.accentColor,
                                   ),
@@ -151,7 +165,7 @@ class FavoritesWidget extends StatelessWidget {
                                   child: Text(
                                     'Ksh ${formatMoney(favoriteItem.product.price)}',
                                     style: const TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       color: Colors.red,
                                       decoration: TextDecoration.lineThrough,
                                     ),
@@ -165,7 +179,7 @@ class FavoritesWidget extends StatelessWidget {
                                   child: Text(
                                     'Ksh ${formatMoney(favoriteItem.product.price)}',
                                     style: const TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.w600,
                                       color: AppColors.accentColor,
                                     ),
@@ -188,14 +202,8 @@ class FavoritesWidget extends StatelessWidget {
                       shape: BoxShape.circle,
                       color: isDarkMode
                           ? AppColors.backgroundDark.withOpacity(0.5)
-                          : AppColors.backgroundDark.withOpacity(0.6),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 4,
-                          offset: const Offset(2, 2),
-                        ),
-                      ],
+                          : AppColors.backgroundDark.withOpacity(0.4),
+                  
                     ),
                     child: IconButton(
                       padding: EdgeInsets.zero,

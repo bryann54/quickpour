@@ -11,15 +11,15 @@ class PromoProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      final theme = Theme.of(context);
+    final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     final discountedPrice =
         product.price * (1 - 0.2); // Replace with actual discount logic
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: Stack(
-        children:[ Column(
+      child: Stack(children: [
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
@@ -28,16 +28,16 @@ class PromoProductCard extends StatelessWidget {
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(10)),
                 child: CachedNetworkImage(
-                  imageUrl:
-                      product.imageUrls.isNotEmpty ? product.imageUrls.first : '',
+                  imageUrl: product.imageUrls.isNotEmpty
+                      ? product.imageUrls.first
+                      : '',
                   fit: BoxFit.cover,
                   width: double.infinity,
                   placeholder: (context, url) =>
                       Container(color: Colors.grey[200]),
                   errorWidget: (context, url, error) => Container(
                     color: Colors.grey[200],
-                    child:
-                        Icon(Icons.error, color: Colors.grey[400]),
+                    child: Icon(Icons.error, color: Colors.grey[400]),
                   ),
                 ),
               ),
@@ -60,9 +60,7 @@ class PromoProductCard extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          product.measure
-                        ),
+                        Text(product.measure),
                         Text(
                           'Ksh ${formatMoney(discountedPrice)}',
                           style: const TextStyle(
@@ -95,15 +93,15 @@ class PromoProductCard extends StatelessWidget {
         //     isDarkMode: isDarkMode,
         //   ),
         // ),
-            Positioned(
-                  bottom: 8,
-                  right: 8,
-                  child: CartQuantityFAB(
-                    product: product,
-                    isDarkMode: isDarkMode,
-                  ),
-                ),]
-      ),
+        Positioned(
+          bottom: 8,
+          right: 8,
+          child: CartQuantityFAB(
+            product: product,
+            isDarkMode: isDarkMode,
+          ),
+        ),
+      ]),
     );
   }
 }

@@ -12,22 +12,6 @@ class OrderItemWidget extends StatelessWidget {
   final CompletedOrder order;
   const OrderItemWidget({super.key, required this.order});
 
-  Color _getStatusColor(OrderStatus status) {
-    switch (status) {
-      case OrderStatus.received:
-        return const Color(0xFFF39C12);
-      case OrderStatus.processing:
-        return const Color(0xFF3498DB);
-      case OrderStatus.dispatched:
-        return const Color(0xFF9B59B6);
-      case OrderStatus.delivered:
-        return const Color(0xFF1ABC9C);
-      case OrderStatus.completed:
-        return const Color(0xFF2ECC71);
-      default:
-        return Colors.grey;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +26,17 @@ class OrderItemWidget extends StatelessWidget {
         );
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
           color: theme.brightness == Brightness.light
               ? AppColors.surface
               : AppColors.cardColorDark,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
+          // border: Border.all(
+          //   color: theme.brightness == Brightness.light
+          //       ? AppColors.dividerColor
+          //       : AppColors.backgroundDark,
+          // )
           boxShadow: [
             BoxShadow(
               color: theme.brightness == Brightness.light
@@ -75,10 +64,10 @@ class OrderItemWidget extends StatelessWidget {
     final status = OrderStatus.values.firstWhere(
         (s) => s.toString().split('.').last == order.status.toLowerCase(),
         orElse: () => OrderStatus.received);
-    final statusColor = _getStatusColor(status);
+    final statusColor = getStatusColor(status);
 
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -168,101 +157,119 @@ class OrderItemWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDeliveryInfo(BuildContext context) {
+Widget _buildDeliveryInfo(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    return Column(
-      children: [
-        // Delivery Type Section
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: isDark
-                    ? AppColors.dividerColorDark
-                    : AppColors.dividerColor,
-              ),
-              bottom: BorderSide(
-                color: isDark
-                    ? AppColors.dividerColorDark
-                    : AppColors.dividerColor,
-              ),
-            ),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Icon based on delivery type
-              Icon(
-                getDeliveryIcon(order.deliveryType),
-                size: 20,
-                color: isDark
-                    ? AppColors.textSecondaryDark
-                    : AppColors.textSecondary,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Delivery Type',
-                      style: TextStyle(
-                        color: isDark
-                            ? AppColors.textSecondaryDark
-                            : AppColors.textSecondary,
-                        fontSize: 13,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      getDeliveryText(order.deliveryType),
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                        color: isDark
-                            ? AppColors.textPrimaryDark
-                            : AppColors.textPrimary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+    return Card(
+      elevation: 1,
+      margin: const EdgeInsets.symmetric(horizontal: 2, ),
+      color: isDark ? Colors.grey[850] : Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: isDark ? AppColors.dividerColorDark : AppColors.dividerColor,
+          width: 0.5,
         ),
-        // Delivery Address Section
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: isDark
-                    ? AppColors.dividerColorDark
-                    : AppColors.dividerColor,
-              ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Delivery Type Section
+          Padding(
+           padding: const EdgeInsets.fromLTRB(6, 6, 6, 6),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? AppColors.background.withOpacity(0.1)
+                        : AppColors.primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    getDeliveryIcon(order.deliveryType),
+                    size: 15,
+                    color: isDark
+                        ? AppColors.background
+                        : AppColors.primaryColor,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Delivery Type',
+                        style: TextStyle(
+                          color: isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondary,
+                          fontSize: 13,
+                        ),
+                      ),
+                    
+                      Text(
+                        getDeliveryText(order.deliveryType),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13,
+                          color: isDark
+                              ? AppColors.textPrimaryDark
+                              : AppColors.textPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-          child: Hero(
-            tag: 'order-items-count-${order.id}',
-            child: Material(
-              color: Colors.transparent,
+
+          // Divider
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+            child: Divider(
+              height: 1,
+              thickness: 0.5,
+              color:
+                  isDark ? AppColors.dividerColorDark : AppColors.dividerColor,
+            ),
+          ),
+
+          // Delivery Address Section
+          InkWell(
+            onTap: () {
+              // Optional: Show full address or open maps
+            },
+            borderRadius: BorderRadius.circular(12),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(6, 6, 6, 6),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(
-                    Icons.location_on_outlined,
-                    size: 20,
-                    color: isDark
-                        ? AppColors.textSecondaryDark
-                        : AppColors.textSecondary,
+                Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? AppColors.background.withOpacity(0.1)
+                          : AppColors.primaryColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      Icons.location_on_outlined,
+                      size:   15,
+                      color: isDark
+                          ? AppColors.background
+                          : AppColors.primaryColor,
+                    ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 6),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Delivery Address',
@@ -278,13 +285,13 @@ class OrderItemWidget extends StatelessWidget {
                           order.address,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
-                            fontSize: 15,
+                            fontSize: 13,
                             color: isDark
                                 ? AppColors.textPrimaryDark
                                 : AppColors.textPrimary,
                           ),
                           overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
+                          maxLines: 1,
                         ),
                       ],
                     ),
@@ -293,8 +300,8 @@ class OrderItemWidget extends StatelessWidget {
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -302,37 +309,59 @@ class OrderItemWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Hero(
-        tag: 'order-total-${order.id}',
-        child: Material(
-          color: Colors.transparent,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  'Order Total',
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.symmetric(horizontal: 22, vertical: 8),
+      color: isDark ? Colors.grey[850] : Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: isDark ? AppColors.dividerColorDark : AppColors.dividerColor,
+          width: 0.5,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Hero(
+          tag: 'order-total-${order.id}',
+          child: Material(
+            color: Colors.transparent,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'ORDER TOTAL',
                   style: TextStyle(
                     fontSize: 15,
                     color: isDark
                         ? AppColors.textSecondaryDark
                         : AppColors.textSecondary,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.5,
                   ),
                 ),
-              ),
-              Text(
-                'KSh ${formatMoney(order.total)}',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
                     color: isDark
-                        ? AppColors.textPrimaryDark
-                        : AppColors.textPrimary),
-              ),
-            ],
+                        ? AppColors.textSecondary.withOpacity(0.6)
+                        : AppColors.primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    'KSh ${formatMoney(order.total)}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: isDark
+                          ? AppColors.background.withOpacity(.5)
+                          : AppColors.primaryColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

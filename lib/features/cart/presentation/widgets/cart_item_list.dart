@@ -57,8 +57,8 @@ class CartItemList extends StatelessWidget {
         Expanded(
           child: ListView.separated(
             itemCount: items.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 12),
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+            separatorBuilder: (context, index) => const SizedBox(height: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 4),
             itemBuilder: (context, index) {
               final cartItem = items[index];
               return FadeTransition(
@@ -83,7 +83,7 @@ class CartItemList extends StatelessWidget {
                     background: Container(
                       color: Colors.red,
                       alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.only(right: 20),
+                      padding: const EdgeInsets.only(right: 10),
                       child: const Icon(Icons.delete, color: Colors.white),
                     ),
                     direction: DismissDirection.endToStart,

@@ -91,8 +91,8 @@ class _FavoriteFABState extends State<FavoriteFAB>
                   child: Transform.scale(
                     scale: _scaleAnimation.value,
                     child: Container(
-                      width: 40,
-                      height: 40,
+                      width: 35,
+                      height: 35,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.transparent,
@@ -113,16 +113,16 @@ class _FavoriteFABState extends State<FavoriteFAB>
             Hero(
               tag: 'product-favorite-${widget.product.id}',
               child: SizedBox(
-                width: 32,
-                height: 32,
+                width: 35,
+                height: 35,
                 child: Material(
                   color: isFavorite
                       ? AppColors.accentColor
                       : (widget.isDarkMode
-                          ? AppColors.brandPrimary.withOpacity(.5)
+                          ? AppColors.brandPrimary.withOpacity(.4)
                           : AppColors.background.withOpacity(0.9)),
                   shape: const CircleBorder(),
-                  elevation: 1,
+                  elevation: 0,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(16),
                     onTap: () {
@@ -149,7 +149,7 @@ class _FavoriteFABState extends State<FavoriteFAB>
                               isFavorite
                                   ? FontAwesomeIcons.solidHeart
                                   : FontAwesomeIcons.heart,
-                              size: 14,
+                              size: 17,
                               color: isFavorite
                                   ? Colors.white
                                   : (widget.isDarkMode

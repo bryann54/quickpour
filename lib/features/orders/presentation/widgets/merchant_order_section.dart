@@ -139,8 +139,8 @@ class MerchantOrderSection extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
         child: merchantOrder.merchantImageUrl.isNotEmpty
-            ? CachedNetworkImage(imageUrl: 
-                merchantOrder.merchantImageUrl,
+            ? CachedNetworkImage(
+                imageUrl: merchantOrder.merchantImageUrl,
                 fit: BoxFit.cover,
                 errorWidget: (context, url, error) =>
                     const Icon(Icons.store, color: Colors.grey, size: 24),
@@ -152,7 +152,6 @@ class MerchantOrderSection extends StatelessWidget {
 
   Widget _buildMerchantStatus() {
     return Row(
-      
       mainAxisSize: MainAxisSize.min,
       children: [
         if (merchantOrder.isMerchantVerified)

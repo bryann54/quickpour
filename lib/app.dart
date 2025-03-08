@@ -33,6 +33,8 @@ import 'package:chupachap/features/promotions/presentation/bloc/promotions_bloc.
 import 'package:chupachap/features/promotions/presentation/bloc/promotions_event.dart';
 import 'package:chupachap/features/user_data/data/repositories/user_data_repository_impl.dart';
 import 'package:chupachap/features/user_data/presentation/bloc/user_data_bloc.dart';
+import 'package:chupachap/features/wallet/data/repositories/wallet_repository.dart';
+import 'package:chupachap/features/wallet/presentation/bloc/wallet_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -92,11 +94,12 @@ class App extends StatelessWidget {
               repository: NotificationsRepository(),
             ),
           ),
-           BlocProvider(
-  create: (context) => PromotionsBloc(promotionsRepository: PromotionsRepository())
-    ..add(FetchActivePromotions()),
-           ),
-         
+          BlocProvider(
+            create: (context) =>
+                PromotionsBloc(promotionsRepository: PromotionsRepository())
+                  ..add(FetchActivePromotions()),
+          ),
+
           BlocProvider(
             create: (_) =>
                 MerchantBloc(merchantRepository)..add(FetchMerchantEvent()),
@@ -117,6 +120,7 @@ class App extends StatelessWidget {
 
               return CheckoutBloc(
                 placeOrderUseCase: placeOrderUseCase,
+                walletRepository: WalletRepository(),
               );
             },
           ),
@@ -144,6 +148,11 @@ class App extends StatelessWidget {
               authRepository: AuthRepository(),
             ))
               ..add(LoadFavoritesEvent()),
+          ),
+          BlocProvider(
+            create: (context) => WalletBloc(
+              walletRepository: WalletRepository(),
+            ),
           ),
           BlocProvider(
             create: (context) => ProductBloc(

@@ -43,6 +43,7 @@ extension StringExtension on String {
     return "${this[0].toUpperCase()}${substring(1)}";
   }
 }
+
 // Helper function to get the appropriate delivery typeicon
 IconData getDeliveryIcon(String deliveryType) {
   switch (deliveryType) {
@@ -87,7 +88,6 @@ String formatDate(DateTime date) {
   return '${date.hour}:${date.minute.toString().padLeft(2, '0')} ${date.hour >= 12 ? 'PM' : 'AM'}';
 }
 
-
 String getPromotionTypeDisplay(PromotionTarget target) {
   switch (target) {
     case PromotionTarget.products:
@@ -100,6 +100,25 @@ String getPromotionTypeDisplay(PromotionTarget target) {
       return 'Unknown';
   }
 }
-  String getValidityPeriod(PromotionModel promotion) {
-    return 'Valid until ${formatDate(promotion.endDate)}';
+
+
+Color getStatusColor(OrderStatus status) {
+  switch (status) {
+    case OrderStatus.received:
+      return const Color(0xFFF39C12);
+    case OrderStatus.processing:
+      return const Color(0xFF3498DB);
+    case OrderStatus.dispatched:
+      return const Color(0xFF9B59B6);
+    case OrderStatus.delivered:
+      return const Color(0xFF1ABC9C);
+    case OrderStatus.completed:
+      return const Color(0xFF2ECC71);
+    default:
+      return Colors.grey;
   }
+}
+
+String getValidityPeriod(PromotionModel promotion) {
+  return 'Valid until ${formatDate(promotion.endDate)}';
+}

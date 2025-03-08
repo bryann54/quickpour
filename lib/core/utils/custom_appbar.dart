@@ -1,8 +1,6 @@
 import 'package:chupachap/features/user_data/presentation/widgets/custom_greetings.dart';
 import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/auth/domain/usecases/auth_usecases.dart';
-import 'package:chupachap/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:chupachap/features/auth/presentation/bloc/auth_event.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:chupachap/features/cart/presentation/bloc/cart_state.dart';
 import 'package:chupachap/features/cart/presentation/pages/cart_page.dart';
@@ -11,7 +9,7 @@ import 'package:chupachap/features/notifications/presentation/bloc/notifications
 import 'package:chupachap/features/notifications/presentation/pages/notifications_screen.dart';
 import 'package:chupachap/features/profile/presentation/pages/profile_screen.dart';
 import 'package:chupachap/features/profile/presentation/pages/settings_screen.dart';
-import 'package:chupachap/features/profile/presentation/widgets/logout_dialog.dart';
+import 'package:chupachap/features/wallet/presentation/pages/wallet_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -219,18 +217,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                             )));
 
                                 break;
-                              case 'logout':
-                                CustomLogoutDialog(
-                                  onConfirm: () {
-                                    Navigator.of(context)
-                                        .pop(); // Close the dialog
-                                    context.read<AuthBloc>().add(LogoutEvent());
-                                  },
-                                  onCancel: () {
-                                    Navigator.of(context)
-                                        .pop(); // Close the dialog
-                                  },
-                                );
+                              case 'wallet':
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const WalletScreen()));
                                 break;
                             }
                           },
@@ -266,13 +258,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                               ),
                             ),
                             const PopupMenuItem<String>(
-                              value: 'logout',
+                              value: 'wallet',
                               child: Row(
                                 children: [
-                                  FaIcon(FontAwesomeIcons.rightFromBracket,
-                                      size: 20),
+                                  FaIcon(FontAwesomeIcons.wallet, size: 20),
                                   SizedBox(width: 10),
-                                  Text('Logout'),
+                                  Text('wallet'),
                                 ],
                               ),
                             ),

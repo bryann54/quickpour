@@ -3,13 +3,16 @@ import 'package:chupachap/features/checkout/domain/entities/merchant_order.dart'
 import 'package:chupachap/features/checkout/domain/usecases/place_order_usecase.dart';
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_event.dart';
 import 'package:chupachap/features/checkout/presentation/bloc/checkout_state.dart';
+import 'package:chupachap/features/wallet/data/repositories/wallet_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   final PlaceOrderUseCase placeOrderUseCase;
+  final WalletRepository walletRepository;
 
   CheckoutBloc({
     required this.placeOrderUseCase,
+    required this.walletRepository,
   }) : super(const CheckoutInitialState()) {
     on<UpdateDeliveryInfoEvent>(_onUpdateDeliveryInfo);
     on<UpdatePaymentMethodEvent>(_onUpdatePaymentMethod);
@@ -39,7 +42,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     ));
   }
 
-  Future<void> _onPlaceOrder(
+Future<void> _onPlaceOrder(
       PlaceOrderEvent event, Emitter<CheckoutState> emit) async {
     try {
       // Check if cart has items before proceeding
@@ -70,6 +73,26 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         userName: state.userName,
         userId: state.userId,
       ));
+
+      if (event.paymentMethod == 'wallet') {
+        final wallet = await walletRepository.getWallet();
+        if (wallet.balance < event.cart.totalPrice) {
+          emit(CheckoutErrorState(
+            errorMessage: 'Insufficient wallet balance',
+            address: state.address,
+            phoneNumber: state.phoneNumber,
+            paymentMethod: state.paymentMethod,
+            deliveryTime: state.deliveryTime,
+            specialInstructions: state.specialInstructions,
+            deliveryType: state.deliveryType,
+            userEmail: state.userEmail,
+            userName: state.userName,
+            userId: state.userId,
+          ));
+          return;
+        }
+        await walletRepository.deductFromWallet(event.cart.totalPrice);
+      }
 
       // Place the order
       final order = await placeOrderUseCase.execute(
@@ -124,8 +147,6 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         ));
       }
 
-     
-
       // Emit success state
       emit(CheckoutOrderPlacedState(
         orderId: order.orderId,
@@ -147,7 +168,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       // Assuming you have a CartBloc or similar to manage the cart state
       // cartBloc.add(ClearCartEvent());
     } catch (e) {
-    
+      print('Failed to place order: ${e.toString()}');
       emit(CheckoutErrorState(
         errorMessage: 'Failed to place order: ${e.toString()}',
         address: state.address,
@@ -163,3 +184,5 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     }
   }
 }
+
+
