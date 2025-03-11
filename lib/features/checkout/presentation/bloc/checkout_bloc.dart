@@ -168,7 +168,6 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       // Assuming you have a CartBloc or similar to manage the cart state
       // cartBloc.add(ClearCartEvent());
     } catch (e) {
-      print('Failed to place order: ${e.toString()}');
       emit(CheckoutErrorState(
         errorMessage: 'Failed to place order: ${e.toString()}',
         address: state.address,

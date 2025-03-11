@@ -2,6 +2,7 @@
 import 'dart:math';
 
 import 'package:chupachap/core/utils/colors.dart';
+import 'package:chupachap/core/utils/functions.dart';
 import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +15,11 @@ class OrderIdDateRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final status = OrderStatus.values.firstWhere(
+      (s) => s.toString().split('.').last == order.status.toLowerCase(),
+      orElse: () => OrderStatus.received,
+    );
+    final statusColor = OrderStatusUtils.getStatusColor(status);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -25,13 +31,13 @@ class OrderIdDateRow extends StatelessWidget {
               vertical: 6,
             ),
             decoration: BoxDecoration(
-              color: AppColors.brandAccent.withOpacity(0.1),
+              color: statusColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
               '#${order.id.substring(0, min(8, order.id.length))}',
-              style: const TextStyle(
-                color: AppColors.brandAccent,
+              style: TextStyle(
+                color: statusColor,
                 fontWeight: FontWeight.w600,
               ),
               overflow: TextOverflow.ellipsis,

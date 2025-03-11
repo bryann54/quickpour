@@ -27,8 +27,6 @@ class OrdersRepository {
           final order = CompletedOrder.fromFirebase(doc.data(), doc.id);
           orders.add(order);
         } catch (e) {
-          print('Error parsing order ${doc.id}: $e');
-          print('Order data: ${doc.data()}');
           // Continue processing other orders
           continue;
         }
@@ -36,7 +34,6 @@ class OrdersRepository {
 
       return orders;
     } catch (e) {
-      print('Error fetching orders: $e');
       throw Exception('Failed to fetch orders: $e');
     }
   }

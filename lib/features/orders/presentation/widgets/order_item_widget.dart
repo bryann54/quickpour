@@ -6,8 +6,6 @@ import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/orders/data/models/completed_order_model.dart';
 import 'package:chupachap/features/orders/presentation/pages/order_details.dart';
 
-enum OrderStatus { received, processing, dispatched, delivered, completed }
-
 class OrderItemWidget extends StatelessWidget {
   final CompletedOrder order;
   const OrderItemWidget({super.key, required this.order});
@@ -15,6 +13,12 @@ class OrderItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final status = OrderStatus.values.firstWhere(
+      (s) => s.toString().split('.').last == order.status.toLowerCase(),
+      orElse: () => OrderStatus.received,
+    );
+    final statusColor = OrderStatusUtils.getStatusColor(status);
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -24,47 +28,53 @@ class OrderItemWidget extends StatelessWidget {
           ),
         );
       },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-          color: theme.brightness == Brightness.light
-              ? AppColors.surface
-              : AppColors.cardColorDark,
-          borderRadius: BorderRadius.circular(10),
-          // border: Border.all(
-          //   color: theme.brightness == Brightness.light
-          //       ? AppColors.dividerColor
-          //       : AppColors.backgroundDark,
-          // )
-          boxShadow: [
-            BoxShadow(
+      child: Stack(
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
               color: theme.brightness == Brightness.light
-                  ? AppColors.shadowColor
-                  : AppColors.shadowColorDark,
-              blurRadius: 10,
-              offset: const Offset(0, 2),
+                  ? AppColors.surface
+                  : AppColors.cardColorDark,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: theme.brightness == Brightness.light
+                      ? AppColors.shadowColor
+                      : AppColors.shadowColorDark,
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(context),
-            _buildDeliveryInfo(context),
-            _buildTotal(context),
-          ],
-        ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(context, status, statusColor),
+                _buildDeliveryInfo(context),
+                _buildTotal(context),
+              ],
+            ),
+          ),
+          if (order.status == 'canceled')
+            Positioned(
+              top: 100,
+              right: 115,
+              child: Image.asset(
+                'assets/ca1.webp',
+                fit: BoxFit.cover,
+                width: 180,
+                height: 180,
+              ),
+            ),
+        ],
       ),
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(
+      BuildContext context, OrderStatus status, Color statusColor) {
     final theme = Theme.of(context);
-    final status = OrderStatus.values.firstWhere(
-        (s) => s.toString().split('.').last == order.status.toLowerCase(),
-        orElse: () => OrderStatus.received);
-    final statusColor = getStatusColor(status);
-
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Row(
@@ -81,13 +91,13 @@ class OrderItemWidget extends StatelessWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.brandAccent.withOpacity(0.1),
+                    color: statusColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
                     '#${order.id.substring(0, min(8, order.id.length))}',
-                    style: const TextStyle(
-                      color: AppColors.brandAccent,
+                    style: TextStyle(
+                      color: statusColor,
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
                     ),
@@ -139,7 +149,7 @@ class OrderItemWidget extends StatelessWidget {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      status.toString().split('.').last,
+                      OrderStatusUtils.getStatusLabel(status),
                       style: TextStyle(
                         color: statusColor,
                         fontSize: 12,

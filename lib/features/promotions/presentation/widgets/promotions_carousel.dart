@@ -105,30 +105,33 @@ class PromotionsCarousel extends StatelessWidget {
               child: Stack(
                 children: [
                   // Background Image
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: promotion.imageUrl != null &&
-                            promotion.imageUrl!.isNotEmpty
-                        ? CachedNetworkImage(
-                            imageUrl: promotion.imageUrl!,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: double.infinity,
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator.adaptive(),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              color: Colors.grey[300],
-                              child: const Icon(Icons.error, size: 40),
-                            ),
-                          )
-                        : Container(
-                            color: theme.primaryColor.withOpacity(0.2),
-                            child: const Center(
-                              child: Icon(Icons.local_offer, size: 40),
-                            ),
-                          ),
-                  ),
+                  if (promotion.imageUrl != null &&
+                      promotion.imageUrl!.isNotEmpty)
+                    Hero(
+                      tag: 'promotion-${promotion.id}',
+                      child: CachedNetworkImage(
+                        imageUrl: promotion.imageUrl!,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                        placeholder: (context, url) => const Center(
+                            child: CircularProgressIndicator.adaptive()),
+                        errorWidget: (context, url, error) => Container(
+                          color: Colors.grey[300],
+                          child: const Icon(Icons.error, size: 40),
+                        ),
+                      ),
+                    )
+                  else
+                    Hero(
+                      tag: 'promotion-${promotion.id}',
+                      child: Container(
+                        color: theme.primaryColor.withOpacity(0.2),
+                        child: const Center(
+                          child: Icon(Icons.local_offer, size: 40),
+                        ),
+                      ),
+                    ),
 
                   // Gradient Overlay
                   Positioned.fill(

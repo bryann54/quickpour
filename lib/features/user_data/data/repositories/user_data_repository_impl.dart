@@ -1,6 +1,7 @@
 import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/user_data/domain/entities/user_data.dart';
 import 'package:chupachap/features/user_data/domain/repositories/user_data_repository.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
@@ -52,7 +53,7 @@ class UserDataRepositoryImpl implements UserDataRepository {
       }
       return 'Location not found';
     } catch (e) {
-      print('Location error: $e');
+      debugPrint('Location error: $e');
       return 'Unable to fetch location';
     }
   }
@@ -70,10 +71,10 @@ class UserDataRepositoryImpl implements UserDataRepository {
 
     try {
       position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high, // Use high accuracy
+        desiredAccuracy: LocationAccuracy.high,
       );
     } catch (e) {
-      print('Error getting position: $e');
+      debugPrint('Error getting position: $e');
     }
 
     return UserData(
