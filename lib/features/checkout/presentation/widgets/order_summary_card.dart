@@ -44,16 +44,16 @@ class OrderSummaryCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(theme,isDark),
+            _buildHeader(theme, isDark),
             const SizedBox(height: 16),
             _buildDeliveryInfo(theme),
-              if (subtotal > 0)
-            if (showBreakdown) ...[
-              const SizedBox(height: 16),
-              _buildDivider(theme),
-              const SizedBox(height: 12),
-              _buildPriceBreakdown(theme),
-            ],
+            if (subtotal > 0)
+              if (showBreakdown) ...[
+                const SizedBox(height: 16),
+                _buildDivider(theme),
+                const SizedBox(height: 12),
+                _buildPriceBreakdown(theme),
+              ],
             const SizedBox(height: 16),
             _buildDivider(theme),
             const SizedBox(height: 12),
@@ -74,9 +74,11 @@ class OrderSummaryCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
-            Icons.receipt_outlined,
+            Icons.receipt_long,
             size: 18,
-            color: isDark ? AppColors.cardColor.withOpacity(.4): AppColors.primaryColor,
+            color: isDark
+                ? AppColors.cardColor.withOpacity(.4)
+                : AppColors.primaryColor,
           ),
         ),
         const SizedBox(width: 12),
@@ -164,7 +166,9 @@ class OrderSummaryCard extends StatelessWidget {
         title: 'Total Amount'.toUpperCase(),
         value: 'KSh ${formatMoney(totalAmount)}',
         isTotal: true,
-        valueColor: isDark ? AppColors.cardColor.withOpacity(.4): AppColors.primaryColor,
+        valueColor: isDark
+            ? AppColors.cardColor.withOpacity(.4)
+            : AppColors.primaryColor,
       ),
     );
   }

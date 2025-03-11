@@ -247,7 +247,7 @@ class CartItemWidget extends StatelessWidget {
                     child: CachedNetworkImage(
                       imageUrl: cartItem.product.imageUrls.isNotEmpty
                           ? cartItem.product.imageUrls.first
-                          : 'fallback_image_url',
+                          : '',
                       width: 120,
                       height: 100,
                       fit: BoxFit.cover,
@@ -494,7 +494,6 @@ class CartItemWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-                 
                 ],
               ),
             ),

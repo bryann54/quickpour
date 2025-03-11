@@ -12,7 +12,6 @@ class OrderItemWidget extends StatelessWidget {
   final CompletedOrder order;
   const OrderItemWidget({super.key, required this.order});
 
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -157,13 +156,15 @@ class OrderItemWidget extends StatelessWidget {
     );
   }
 
-Widget _buildDeliveryInfo(BuildContext context) {
+  Widget _buildDeliveryInfo(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
     return Card(
       elevation: 1,
-      margin: const EdgeInsets.symmetric(horizontal: 2, ),
+      margin: const EdgeInsets.symmetric(
+        horizontal: 2,
+      ),
       color: isDark ? Colors.grey[850] : Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -177,7 +178,7 @@ Widget _buildDeliveryInfo(BuildContext context) {
         children: [
           // Delivery Type Section
           Padding(
-           padding: const EdgeInsets.fromLTRB(6, 6, 6, 6),
+            padding: const EdgeInsets.fromLTRB(6, 6, 6, 6),
             child: Row(
               children: [
                 Container(
@@ -191,15 +192,14 @@ Widget _buildDeliveryInfo(BuildContext context) {
                   child: Icon(
                     getDeliveryIcon(order.deliveryType),
                     size: 15,
-                    color: isDark
-                        ? AppColors.background
-                        : AppColors.primaryColor,
+                    color:
+                        isDark ? AppColors.background : AppColors.primaryColor,
                   ),
                 ),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         'Delivery Type',
@@ -210,7 +210,6 @@ Widget _buildDeliveryInfo(BuildContext context) {
                           fontSize: 13,
                         ),
                       ),
-                    
                       Text(
                         getDeliveryText(order.deliveryType),
                         style: TextStyle(
@@ -240,38 +239,33 @@ Widget _buildDeliveryInfo(BuildContext context) {
           ),
 
           // Delivery Address Section
-          InkWell(
-            onTap: () {
-              // Optional: Show full address or open maps
-            },
-            borderRadius: BorderRadius.circular(12),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(6, 6, 6, 6),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(6, 6, 6, 6),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? AppColors.background.withOpacity(0.1)
-                          : AppColors.primaryColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(
-                      Icons.location_on_outlined,
-                      size:   15,
-                      color: isDark
-                          ? AppColors.background
-                          : AppColors.primaryColor,
-                    ),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? AppColors.background.withOpacity(0.1)
+                        : AppColors.primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
+                  child: Icon(
+                    Icons.location_on_outlined,
+                    size: 15,
+                    color:
+                        isDark ? AppColors.background : AppColors.primaryColor,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
                           'Delivery Address',
                           style: TextStyle(
                             color: isDark
@@ -280,8 +274,10 @@ Widget _buildDeliveryInfo(BuildContext context) {
                             fontSize: 13,
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
+                      ),
+                      const SizedBox(height: 4),
+                      Expanded(
+                        child: Text(
                           order.address,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
@@ -293,11 +289,11 @@ Widget _buildDeliveryInfo(BuildContext context) {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],

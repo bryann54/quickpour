@@ -23,7 +23,7 @@ class WalletRepository {
     await prefs.setString(_walletKey, jsonEncode(wallet.toJson()));
   }
 
-Future<void> deductFromWallet(double amount) async {
+  Future<void> deductFromWallet(double amount) async {
     final wallet = await getWallet();
     if (wallet.balance >= amount) {
       final updatedWallet = wallet.copyWith(balance: wallet.balance - amount);

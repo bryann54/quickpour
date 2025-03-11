@@ -31,7 +31,7 @@ class AddItemSection extends StatelessWidget {
     final highlightColor = isDarkMode ? Colors.white : Colors.black87;
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical:5, horizontal: 5),
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       decoration: BoxDecoration(
         color: isDarkMode
             ? AppColors.cardColorDark
@@ -39,7 +39,9 @@ class AddItemSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
       ),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 5,),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 5,
+        ),
         title: remaining > 0
             ? Text(
                 'Free Delivery',
@@ -79,8 +81,7 @@ class AddItemSection extends StatelessWidget {
                   ],
                 ),
               )
-            : 
-            Text(
+            : Text(
                 'You qualify for free delivery!',
                 style: TextStyle(
                   color: highlightColor,

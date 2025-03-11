@@ -124,7 +124,9 @@ class WalletScreen extends StatelessWidget {
                         ),
                         TextButton.icon(
                           icon: const Icon(Icons.add),
-                          label: const Text('Add New',),
+                          label: const Text(
+                            'Add New',
+                          ),
                           onPressed: () {
                             Navigator.push(
                               context,

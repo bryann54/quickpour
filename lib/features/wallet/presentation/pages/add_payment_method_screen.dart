@@ -101,37 +101,172 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: RadioListTile<PaymentMethodType>(
-                                  title: const Text('Credit Card'),
-                                  value: PaymentMethodType.creditCard,
-                                  groupValue: selectedType,
-                                  onChanged: (PaymentMethodType? value) {
-                                    if (value != null) {
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
                                       setState(() {
-                                        selectedType = value;
+                                        selectedType =
+                                            PaymentMethodType.creditCard;
                                       });
-                                    }
-                                  },
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12, horizontal: 16),
+                                      decoration: BoxDecoration(
+                                        color: selectedType ==
+                                                PaymentMethodType.creditCard
+                                            ? AppColors.brandPrimary
+                                                .withOpacity(0.1)
+                                            : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: selectedType ==
+                                                  PaymentMethodType.creditCard
+                                              ? AppColors.brandPrimary
+                                              : Colors.grey.shade300,
+                                          width: 1.5,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 20,
+                                            height: 20,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: selectedType ==
+                                                        PaymentMethodType
+                                                            .creditCard
+                                                    ? AppColors.brandPrimary
+                                                    : Colors.grey.shade400,
+                                                width: 2,
+                                              ),
+                                            ),
+                                            child: selectedType ==
+                                                    PaymentMethodType.creditCard
+                                                ? Center(
+                                                    child: Container(
+                                                      width: 12,
+                                                      height: 12,
+                                                      decoration: const BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color: AppColors
+                                                            .brandPrimary,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : null,
+                                          ),
+                                          const SizedBox(width: 12),
+                                          Text(
+                                            'Credit Card',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: selectedType ==
+                                                      PaymentMethodType
+                                                          .creditCard
+                                                  ? FontWeight.w600
+                                                  : FontWeight.normal,
+                                              color: selectedType ==
+                                                      PaymentMethodType
+                                                          .creditCard
+                                                  ? AppColors.brandPrimary
+                                                  : Colors.grey.shade700,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              Expanded(
-                                child: RadioListTile<PaymentMethodType>(
-                                  title: const Text('Debit Card'),
-                                  value: PaymentMethodType.debitCard,
-                                  groupValue: selectedType,
-                                  onChanged: (PaymentMethodType? value) {
-                                    if (value != null) {
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
                                       setState(() {
-                                        selectedType = value;
+                                        selectedType =
+                                            PaymentMethodType.debitCard;
                                       });
-                                    }
-                                  },
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12, horizontal: 16),
+                                      decoration: BoxDecoration(
+                                        color: selectedType ==
+                                                PaymentMethodType.debitCard
+                                            ? AppColors.brandPrimary
+                                                .withOpacity(0.1)
+                                            : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: selectedType ==
+                                                  PaymentMethodType.debitCard
+                                              ? AppColors.brandPrimary
+                                              : Colors.grey.shade300,
+                                          width: 1.5,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 20,
+                                            height: 20,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: selectedType ==
+                                                        PaymentMethodType
+                                                            .debitCard
+                                                    ? AppColors.brandPrimary
+                                                    : Colors.grey.shade400,
+                                                width: 2,
+                                              ),
+                                            ),
+                                            child: selectedType ==
+                                                    PaymentMethodType.debitCard
+                                                ? Center(
+                                                    child: Container(
+                                                      width: 12,
+                                                      height: 12,
+                                                      decoration: const BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color: AppColors
+                                                            .brandPrimary,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : null,
+                                          ),
+                                          const SizedBox(width: 12),
+                                          Text(
+                                            'Debit Card',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: selectedType ==
+                                                      PaymentMethodType
+                                                          .debitCard
+                                                  ? FontWeight.w600
+                                                  : FontWeight.normal,
+                                              color: selectedType ==
+                                                      PaymentMethodType
+                                                          .debitCard
+                                                  ? AppColors.brandPrimary
+                                                  : Colors.grey.shade700,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           CheckboxListTile(
                             title: const Text('Set as default payment method'),

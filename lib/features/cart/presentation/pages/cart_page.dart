@@ -260,7 +260,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
             );
           }
 
-          // Initialize item controllers 
+          // Initialize item controllers
           if (_itemControllers.length != cartState.cart.items.length) {
             _initializeItemControllers(cartState.cart.items.length);
           }

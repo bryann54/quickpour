@@ -64,7 +64,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
               ),
             ),
             // Discount Tag
-             if (widget.product.discountPrice > 0 &&
+            if (widget.product.discountPrice > 0 &&
                 widget.product.discountPrice < widget.product.price)
               Positioned(
                 top: 0,

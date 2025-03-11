@@ -24,33 +24,33 @@ class FavoritesWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 5.0),
       child: Container(
         decoration: BoxDecoration(
-          color: isDarkMode
-              ? Colors.grey[900]!.withOpacity(.7)
-              : AppColors.cardColor.withOpacity(.7),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
             color: isDarkMode
-               ? Colors.grey[900]!.withOpacity(.7)
+                ? Colors.grey[900]!.withOpacity(.7)
+                : AppColors.cardColor.withOpacity(.7),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isDarkMode
+                  ? Colors.grey[900]!.withOpacity(.7)
                   : AppColors.backgroundDark.withOpacity(.15),
-          )
-          // boxShadow: isDarkMode
-          //     ? [
-          //         BoxShadow(
-          //           color: AppColors.background.withOpacity(0.3),
-          //           spreadRadius: 2,
-          //           blurRadius: 2,
-          //           offset: const Offset(0, 1),
-          //         ),
-          //       ]
-          //     : [
-          //         BoxShadow(
-          //           color: Colors.black.withOpacity(0.3),
-          //           spreadRadius: 1,
-          //           blurRadius: .5,
-          //           offset: const Offset(0, 3),
-          //         ),
-          //       ],
-        ),
+            )
+            // boxShadow: isDarkMode
+            //     ? [
+            //         BoxShadow(
+            //           color: AppColors.background.withOpacity(0.3),
+            //           spreadRadius: 2,
+            //           blurRadius: 2,
+            //           offset: const Offset(0, 1),
+            //         ),
+            //       ]
+            //     : [
+            //         BoxShadow(
+            //           color: Colors.black.withOpacity(0.3),
+            //           spreadRadius: 1,
+            //           blurRadius: .5,
+            //           offset: const Offset(0, 3),
+            //         ),
+            //       ],
+            ),
         child: InkWell(
           onTap: () {
             Navigator.push(
@@ -70,9 +70,8 @@ class FavoritesWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                      Hero(
+                    Hero(
                       tag: 'product-image-${favoriteItem.product.id}',
-                      
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(12),
                         child: CachedNetworkImage(
@@ -103,7 +102,7 @@ class FavoritesWidget extends StatelessWidget {
                           Row(
                             children: [
                               Expanded(
-                                child:   Hero(
+                                child: Hero(
                                   tag:
                                       'product-name-${favoriteItem.product.id}',
                                   child: Text(
@@ -203,7 +202,6 @@ class FavoritesWidget extends StatelessWidget {
                       color: isDarkMode
                           ? AppColors.backgroundDark.withOpacity(0.5)
                           : AppColors.backgroundDark.withOpacity(0.4),
-                  
                     ),
                     child: IconButton(
                       padding: EdgeInsets.zero,

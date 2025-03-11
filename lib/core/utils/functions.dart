@@ -101,7 +101,6 @@ String getPromotionTypeDisplay(PromotionTarget target) {
   }
 }
 
-
 Color getStatusColor(OrderStatus status) {
   switch (status) {
     case OrderStatus.received:
