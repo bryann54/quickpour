@@ -22,18 +22,33 @@ class OrderItemRow extends StatelessWidget {
         children: [
           // Product image
           if (item.images.isNotEmpty)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: CachedNetworkImage(
-                imageUrl: item.images.first,
-                width: 50,
-                height: 50,
-                fit: BoxFit.contain,
-                errorWidget: (context, error, stackTrace) => Container(
-                  width: 50,
-                  height: 50,
-                  color: isDark ? Colors.grey : Colors.grey[300],
-                  child: const Icon(Icons.error, color: Colors.grey),
+            Container(
+              decoration: BoxDecoration(
+                  color: isDark
+                      ? Colors.grey.shade800
+                      : (Colors.grey[100] ?? Colors.grey),
+                  border: Border.all(
+                    color: isDark
+                        ? Colors.grey
+                        : theme.dividerColor.withOpacity(0.1),
+                  ),
+                  borderRadius: BorderRadius.circular(8)),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: CachedNetworkImage(
+                    imageUrl: item.images.first,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.contain,
+                    errorWidget: (context, error, stackTrace) => Container(
+                      width: 50,
+                      height: 50,
+                      color: isDark ? Colors.grey : Colors.grey[300],
+                      child: const Icon(Icons.error, color: Colors.grey),
+                    ),
+                  ),
                 ),
               ),
             )

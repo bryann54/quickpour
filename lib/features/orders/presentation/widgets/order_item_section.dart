@@ -33,8 +33,10 @@ class OrderItemsSection extends StatelessWidget {
         children: [
           const SectionTitle(title: 'Items'),
           if (order.merchantOrders.isNotEmpty) ...[
-            ...order.merchantOrders.map((merchantOrder) =>
-                MerchantOrderSection(merchantOrder: merchantOrder, order: order,)),
+            ...order.merchantOrders.map((merchantOrder) => MerchantOrderSection(
+                  merchantOrder: merchantOrder,
+                  order: order,
+                )),
           ],
           OrderTotalRow(order: order),
         ],
