@@ -34,7 +34,7 @@ class OrderItemRow extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.circular(8)),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(2.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: CachedNetworkImage(
