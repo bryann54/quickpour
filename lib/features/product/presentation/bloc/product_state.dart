@@ -16,20 +16,22 @@ class ProductLoadingState extends ProductState {
   const ProductLoadingState({this.cachedProducts});
 
   @override
-  List<Object> get props => cachedProducts ?? [];
+  List<Object> get props => cachedProducts != null ? [cachedProducts!] : [];
 }
 
 class ProductLoadedState extends ProductState {
   final List<ProductModel> products;
   final DateTime lastFetched;
+  final bool hasMoreData;
 
   const ProductLoadedState({
     required this.products,
     required this.lastFetched,
+    this.hasMoreData = true,
   });
 
   @override
-  List<Object> get props => [products, lastFetched];
+  List<Object> get props => [products, lastFetched, hasMoreData];
 
   bool get shouldRefetch {
     final now = DateTime.now();
@@ -49,5 +51,8 @@ class ProductErrorState extends ProductState {
   });
 
   @override
-  List<Object> get props => [errorMessage, cachedProducts ?? []];
+  List<Object> get props => [
+        errorMessage,
+        if (cachedProducts != null) cachedProducts!,
+      ];
 }

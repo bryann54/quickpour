@@ -4,6 +4,7 @@ import 'package:chupachap/features/auth/data/repositories/auth_repository.dart';
 import 'package:chupachap/features/drink_request/presentation/pages/requests_screen.dart';
 import 'package:chupachap/features/product_search/presentation/widgets/filter_bottomSheet.dart';
 import 'package:chupachap/features/product/presentation/widgets/promo_card.dart';
+import 'package:chupachap/features/product_search/presentation/widgets/product_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,8 +14,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:chupachap/features/product/data/repositories/product_repository.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_bloc.dart';
 import 'package:chupachap/features/product/presentation/bloc/product_event.dart';
-import 'package:chupachap/features/product/presentation/bloc/product_state.dart';
-import 'package:chupachap/features/product/presentation/widgets/product_shimmer_widget.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_bloc.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_event.dart';
 import 'package:chupachap/features/product_search/presentation/bloc/product_search_state.dart';
@@ -252,65 +251,11 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildProductList() {
-    return BlocBuilder<ProductBloc, ProductState>(
-      builder: (context, state) {
-        if (state is ProductLoadingState) {
-          return GridView.builder(
-            padding: const EdgeInsets.all(10),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.7,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-            ),
-            itemCount: 6,
-            itemBuilder: (context, index) => const ProductCardShimmer(),
-          );
-        }
-
-        if (state is ProductErrorState) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.error_outline, size: 60),
-                const SizedBox(height: 16),
-                Text(
-                  state.errorMessage,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<ProductBloc>().add(FetchProductsEvent());
-                  },
-                  child: const Text('Retry'),
-                ),
-              ],
-            ),
-          );
-        }
-
-        if (state is ProductLoadedState) {
-          return GridView.builder(
-            padding: const EdgeInsets.all(10),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.7,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-            ),
-            itemCount: state.products.length,
-            itemBuilder: (context, index) {
-              final product = state.products[index];
-              return PromotionCard(product: product);
-            },
-          );
-        }
-
-        return const SizedBox.shrink();
-      },
+    return BlocProvider<ProductBloc>(
+      create: (context) => ProductBloc(
+        productRepository: ProductRepository(),
+      )..add(FetchProductsEvent()),
+      child: const ProductListWidget(),
     );
   }
 }

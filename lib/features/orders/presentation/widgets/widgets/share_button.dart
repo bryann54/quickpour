@@ -4,7 +4,6 @@ import 'package:chupachap/features/orders/data/models/completed_order_model.dart
 import 'package:chupachap/features/orders/data/models/merchant_order_item_model.dart';
 import 'package:chupachap/features/orders/data/models/order_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -130,7 +129,7 @@ class ShareButton extends StatelessWidget {
     try {
       // Generate the PDF
       final pdf = pw.Document();
-      
+
       // Use PdfPageFormat.a5 for a smaller receipt-style format
       // You can also use custom sizes: PdfPageFormat(width, height)
       pdf.addPage(
@@ -163,7 +162,7 @@ class ShareButton extends StatelessWidget {
     }
   }
 
-pw.Widget _buildPdfContent() {
+  pw.Widget _buildPdfContent() {
     final currencyFormat = NumberFormat.currency(
       symbol: 'Ksh ',
       decimalDigits: 0,
@@ -171,7 +170,7 @@ pw.Widget _buildPdfContent() {
     );
 
     // Load fonts (replace with your custom fonts if needed)
-  
+
     final boldFont = pw.Font.helveticaBold();
 
     return pw.Container(
