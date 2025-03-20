@@ -44,6 +44,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   }
 
   Future<void> _loadFilters() async {
+    
     try {
       final categoryRepository = CategoryRepository();
       final merchantsRepository = MerchantsRepository();

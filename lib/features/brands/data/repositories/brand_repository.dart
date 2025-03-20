@@ -1,37 +1,86 @@
-import 'package:chupachap/features/brands/data/models/brands_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:chupachap/features/brands/data/models/brands_model.dart';
 
 class BrandRepository {
-  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
+  final int _pageSize = 12;
+  DocumentSnapshot? _lastDocument;
+  bool _hasMoreData = true;
 
-  Future<void> uploadBrands(List<BrandModel> brands) async {
+  BrandRepository({
+    FirebaseFirestore? firestore,
+  }) : _firestore = firestore ?? FirebaseFirestore.instance;
+
+  bool get hasMoreData => _hasMoreData;
+
+  Future<List<BrandModel>> getBrands() async {
+    // Reset pagination state when fetching from beginning
+    _lastDocument = null;
+    _hasMoreData = true;
+
     try {
-      WriteBatch batch = _firebaseFirestore.batch();
+      final query =
+          _firestore.collection('brands').orderBy('name').limit(_pageSize);
 
-      for (var brand in brands) {
-        DocumentReference brandRef =
-            _firebaseFirestore.collection('brands').doc(brand.id);
-        batch.set(brandRef, brand.toJson());
-      }
+      final snapshot = await query.get();
+      _updatePaginationState(snapshot);
 
-      await batch.commit();
+      return _snapshotToBrands(snapshot);
     } catch (e) {
-      rethrow;
+      throw Exception('Failed to fetch brands: ${e.toString()}');
     }
   }
 
-  Future<List<BrandModel>> getBrands() async {
-    try {
-      QuerySnapshot querySnapshot =
-          await _firebaseFirestore.collection('brands').get();
-
-      List<BrandModel> brands = querySnapshot.docs
-          .map((doc) => BrandModel.fromJson(doc.data() as Map<String, dynamic>))
-          .toList();
-
-      return brands;
-    } catch (e) {
-      rethrow;
+  Future<List<BrandModel>> getNextBrandsPage() async {
+    if (!_hasMoreData || _lastDocument == null) {
+      return [];
     }
+
+    try {
+      final query = _firestore
+          .collection('brands')
+          .orderBy('name')
+          .startAfterDocument(_lastDocument!)
+          .limit(_pageSize);
+
+      final snapshot = await query.get();
+      _updatePaginationState(snapshot);
+
+      return _snapshotToBrands(snapshot);
+    } catch (e) {
+      throw Exception('Failed to fetch more brands: ${e.toString()}');
+    }
+  }
+
+  void _updatePaginationState(QuerySnapshot snapshot) {
+    if (snapshot.docs.isEmpty) {
+      _hasMoreData = false;
+      return;
+    }
+
+    if (snapshot.docs.length < _pageSize) {
+      _hasMoreData = false;
+    }
+
+    _lastDocument = snapshot.docs.last;
+  }
+
+  List<BrandModel> _snapshotToBrands(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return BrandModel.fromJson(doc.data() as Map<String, dynamic>, );
+    }).toList();
+  }
+
+  // Additional methods for CRUD operations
+  Future<void> addBrand(BrandModel brand) async {
+    await _firestore.collection('brands').add(brand.toJson());
+  }
+
+  Future<void> updateBrand(BrandModel brand) async {
+    await _firestore.collection('brands').doc(brand.id).update(brand.toJson());
+  }
+
+  Future<void> deleteBrand(String brandId) async {
+    await _firestore.collection('brands').doc(brandId).delete();
   }
 }

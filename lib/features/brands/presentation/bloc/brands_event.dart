@@ -27,6 +27,8 @@ class UpdateBrandEvent extends BrandsEvent {
   List<Object> get props => [brand];
 }
 
+class LoadMoreBrandsEvent extends BrandsEvent {}
+
 class DeleteBrandEvent extends BrandsEvent {
   final String brandId;
 
