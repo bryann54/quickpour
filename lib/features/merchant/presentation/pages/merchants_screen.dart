@@ -4,8 +4,36 @@ import 'package:chupachap/features/merchant/presentation/widgets/merchant_tile_s
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MerchantsScreen extends StatelessWidget {
+class MerchantsScreen extends StatefulWidget {
   const MerchantsScreen({super.key});
+
+  @override
+  State<MerchantsScreen> createState() => _MerchantsScreenState();
+}
+
+class _MerchantsScreenState extends State<MerchantsScreen> {
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+    context.read<MerchantBloc>().add(FetchMerchantEvent());
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      context.read<MerchantBloc>().add(FetchMoreMerchantsEvent());
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +41,7 @@ class MerchantsScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           Expanded(
             child: BlocBuilder<MerchantBloc, MerchantState>(
               builder: (context, state) {
@@ -24,11 +50,21 @@ class MerchantsScreen extends StatelessWidget {
                 } else if (state is MerchantLoaded) {
                   final merchants = state.merchants;
                   return ListView.builder(
+                    controller: _scrollController,
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    itemCount: merchants.length,
+                    itemCount: merchants.length + 1,
                     itemBuilder: (context, index) {
-                      final merchant = merchants[index];
-                      return MerchantCardWidget(merchant: merchant);
+                      if (index < merchants.length) {
+                        final merchant = merchants[index];
+                        return MerchantCardWidget(merchant: merchant);
+                      } else if (state.hasMoreData) {
+                        return const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Center(child: CircularProgressIndicator.adaptive()),
+                        );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
                     },
                   );
                 } else if (state is MerchantError) {

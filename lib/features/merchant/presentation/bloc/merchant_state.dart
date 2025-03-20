@@ -8,7 +8,19 @@ class MerchantLoading extends MerchantState {}
 
 class MerchantLoaded extends MerchantState {
   final List<Merchants> merchants;
-  MerchantLoaded(this.merchants);
+  final bool hasMoreData;
+
+  MerchantLoaded({required this.merchants, required this.hasMoreData});
+
+  MerchantLoaded copyWith({
+    List<Merchants>? merchants,
+    bool? hasMoreData,
+  }) {
+    return MerchantLoaded(
+      merchants: merchants ?? this.merchants,
+      hasMoreData: hasMoreData ?? this.hasMoreData,
+    );
+  }
 }
 
 class MerchantError extends MerchantState {
