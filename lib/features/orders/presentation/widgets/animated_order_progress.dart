@@ -1,4 +1,7 @@
 import 'package:chupachap/core/utils/functions.dart';
+import 'package:chupachap/features/orders/presentation/widgets/widgets/canceled_order_widget.dart';
+import 'package:chupachap/features/orders/presentation/widgets/widgets/progress_indicator.dart';
+import 'package:chupachap/features/orders/presentation/widgets/widgets/status_label.dart';
 import 'package:flutter/material.dart';
 
 class AnimatedOrderProgress extends StatefulWidget {
@@ -17,52 +20,27 @@ class AnimatedOrderProgress extends StatefulWidget {
 
 class _AnimatedOrderProgressState extends State<AnimatedOrderProgress>
     with TickerProviderStateMixin {
-  late AnimationController _lineController;
-  late Animation<double> _lineAnimation;
-  late AnimationController _canceledController;
-  late Animation<double> _canceledAnimation;
+  late final OrderAnimationManager _animations;
+  late final OrderStatusManager _statusManager;
 
   @override
   void initState() {
     super.initState();
-    _lineController = AnimationController(
-      duration: widget.animationDuration,
+    _animations = OrderAnimationManager(
       vsync: this,
+      animationDuration: widget.animationDuration,
     );
-
-    _lineAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _lineController,
-        curve: Curves.easeInOut,
-      ),
-    );
-
-    _canceledController = AnimationController(
-      duration: const Duration(milliseconds: 1000),
-      vsync: this,
-    );
-
-    _canceledAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _canceledController,
-        curve: Curves.easeInOut,
-      ),
-    );
-
+    _statusManager = OrderStatusManager();
     _startAnimation();
   }
 
   void _startAnimation() {
-    _lineController.forward();
-    if (widget.currentStatus == OrderStatus.canceled) {
-      _canceledController.repeat(reverse: true);
-    }
+    _animations.startAnimations(widget.currentStatus);
   }
 
   @override
   void dispose() {
-    _lineController.dispose();
-    _canceledController.dispose();
+    _animations.dispose();
     super.dispose();
   }
 
@@ -70,173 +48,178 @@ class _AnimatedOrderProgressState extends State<AnimatedOrderProgress>
   void didUpdateWidget(AnimatedOrderProgress oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.currentStatus != widget.currentStatus) {
-      _lineController.reset();
-      _canceledController.reset();
+      _animations.resetAnimations();
       _startAnimation();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final currentIndex = OrderStatus.values.indexOf(widget.currentStatus);
+    if (widget.currentStatus == OrderStatus.canceled) {
+      return const CanceledOrderWidget();
+    }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Row(
-            children: List.generate(5, (index) {
-              final isActive = index <= currentIndex;
-              final statusColor =
-                  OrderStatusUtils.getStatusColor(OrderStatus.values[index]);
+    final currentIndex = _statusManager.getStatusIndex(widget.currentStatus);
 
-              return Expanded(
-                child: Row(
-                  children: [
-                    // Animated Status Icon
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      child: Container(
-                        key: ValueKey(isActive),
-                        width: 20,
-                        height: 20,
-                        decoration: BoxDecoration(
-                          color: isActive ? statusColor : Colors.grey.shade300,
-                          shape: BoxShape.circle,
-                        ),
-                        child: isActive
-                            ? Icon(
-                                OrderStatusUtils.getStatusIcon(
-                                    OrderStatus.values[index]),
-                                size: 12,
-                                color: Colors.white,
-                              )
-                            : null,
-                      ),
-                    ),
-                    // Progress line
-                    if (index < 4)
-                      Expanded(
-                        child: AnimatedBuilder(
-                          animation: _lineAnimation,
-                          builder: (context, child) {
-                            final lineProgress = index < currentIndex
-                                ? 1.0
-                                : (index == currentIndex
-                                    ? _lineAnimation.value
-                                    : 0.0);
-                            return Container(
-                              height: 2,
-                              margin: const EdgeInsets.symmetric(horizontal: 4),
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    color: Colors.grey.shade300,
-                                  ),
-                                  FractionallySizedBox(
-                                    widthFactor: lineProgress,
-                                    child: Container(
-                                      color: statusColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                  ],
-                ),
-              );
-            }),
+    return FadeTransition(
+      opacity: _animations.fadeAnimation,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          OrderProgressIndicators(
+            currentIndex: currentIndex,
+            statusManager: _statusManager,
+            animations: _animations,
           ),
-        ),
-        const SizedBox(height: 8),
-        // Interactive Status Labels
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: List.generate(5, (index) {
-              final isActive = index == currentIndex;
-              final statusColor =
-                  OrderStatusUtils.getStatusColor(OrderStatus.values[index]);
-
-              return GestureDetector(
-                onTap: () {
-                  // Add interaction logic here (e.g., show details for the status)
-                  print(
-                      'Tapped on: ${OrderStatusUtils.getStatusLabel(OrderStatus.values[index])}');
-                },
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: Text(
-                    OrderStatusUtils.getStatusLabel(OrderStatus.values[index]),
-                    key: ValueKey(isActive),
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight:
-                          isActive ? FontWeight.bold : FontWeight.normal,
-                      color: isActive ? statusColor : Colors.grey,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              );
-            }),
+          const SizedBox(height: 8),
+          OrderStatusLabels(
+            currentIndex: currentIndex,
+            statusManager: _statusManager,
+            animations: _animations,
           ),
-        ),
-        // Canceled Status Overlay
-        if (widget.currentStatus == OrderStatus.canceled)
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: Center(
-              child: AnimatedBuilder(
-                animation: _canceledAnimation,
-                builder: (context, child) {
-                  return Transform.scale(
-                    scale: _canceledAnimation.value,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: OrderStatusUtils.getStatusColor(
-                                OrderStatus.canceled)
-                            .withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            OrderStatusUtils.getStatusIcon(
-                                OrderStatus.canceled),
-                            color: OrderStatusUtils.getStatusColor(
-                                OrderStatus.canceled),
-                            size: 16,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Canceled',
-                            style: TextStyle(
-                              color: OrderStatusUtils.getStatusColor(
-                                  OrderStatus.canceled),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-      ],
+        ],
+      ),
     );
+  }
+}
+
+class OrderAnimationManager {
+  final TickerProvider vsync;
+  final Duration animationDuration;
+
+  late final AnimationController lineController;
+  late final AnimationController canceledController;
+  late final AnimationController bounceController;
+  late final AnimationController fadeController;
+  late final AnimationController pulseController;
+
+  late final Animation<double> lineAnimation;
+  late final Animation<double> bounceAnimation;
+  late final Animation<double> fadeAnimation;
+  late final Animation<double> pulseAnimation;
+
+  OrderAnimationManager({
+    required this.vsync,
+    required this.animationDuration,
+  }) {
+    _initializeControllers();
+    _initializeAnimations();
+  }
+
+  void _initializeControllers() {
+    lineController = AnimationController(
+      duration: animationDuration,
+      vsync: vsync,
+    );
+
+    canceledController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: vsync,
+    );
+
+    bounceController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: vsync,
+    );
+
+    fadeController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: vsync,
+    );
+
+    pulseController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: vsync,
+    );
+  }
+
+  void _initializeAnimations() {
+    lineAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: lineController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    bounceAnimation = Tween<double>(begin: 0.8, end: 1.2).animate(
+      CurvedAnimation(
+        parent: bounceController,
+        curve: Curves.elasticOut,
+      ),
+    );
+
+    fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: fadeController,
+        curve: Curves.easeIn,
+      ),
+    );
+
+    pulseAnimation = Tween<double>(begin: 1.0, end: 1.2).animate(
+      CurvedAnimation(
+        parent: pulseController,
+        curve: Curves.easeInOut,
+      ),
+    );
+  }
+
+  void startAnimations(OrderStatus currentStatus) {
+    lineController.forward();
+    fadeController.forward();
+
+    if (currentStatus == OrderStatus.canceled) {
+      canceledController.repeat(reverse: true);
+    } else {
+      bounceController.forward().then((_) => bounceController.reset());
+      pulseController.repeat(reverse: true);
+    }
+  }
+
+  void resetAnimations() {
+    lineController.reset();
+    canceledController.reset();
+    fadeController.reset();
+    bounceController.reset();
+    pulseController.reset();
+  }
+
+  void dispose() {
+    lineController.dispose();
+    canceledController.dispose();
+    bounceController.dispose();
+    fadeController.dispose();
+    pulseController.dispose();
+  }
+}
+
+class OrderStatusManager {
+  final List<OrderStatus> normalOrderFlow = [
+    OrderStatus.received,
+    OrderStatus.processing,
+    OrderStatus.dispatched,
+    OrderStatus.delivering,
+    OrderStatus.completed,
+  ];
+
+  int getStatusIndex(OrderStatus status) {
+    return normalOrderFlow.indexOf(status);
+  }
+
+  int get statusCount => normalOrderFlow.length;
+
+  OrderStatus getStatusAtIndex(int index) {
+    return normalOrderFlow[index];
+  }
+
+  Color getStatusColor(int index) {
+    return OrderStatusUtils.getStatusColor(normalOrderFlow[index]);
+  }
+
+  IconData getStatusIcon(int index) {
+    return OrderStatusUtils.getStatusIcon(normalOrderFlow[index]);
+  }
+
+  String getStatusLabel(int index) {
+    return OrderStatusUtils.getStatusLabel(normalOrderFlow[index]);
   }
 }

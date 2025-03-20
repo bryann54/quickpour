@@ -1,5 +1,6 @@
 import 'package:chupachap/features/promotions/data/models/promotion_model.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 //time formatter
@@ -22,12 +23,12 @@ String formatTimestamp(DateTime timestamp) {
 
 // common/enums/order_status.dart
 enum OrderStatus {
-  canceled,
   received,
   processing,
   dispatched,
-  delivered,
+  delivering,
   completed,
+  canceled,
 }
 
 OrderStatus getOrderStatus(String status) {
@@ -39,7 +40,7 @@ OrderStatus getOrderStatus(String status) {
     case 'dispatched':
       return OrderStatus.dispatched;
     case 'delivering':
-      return OrderStatus.delivered;
+      return OrderStatus.delivering;
     case 'completed':
       return OrderStatus.completed;
     default:
@@ -125,7 +126,7 @@ class OrderStatusUtils {
         return const Color(0xFF3498DB);
       case OrderStatus.dispatched:
         return const Color(0xFF9B59B6);
-      case OrderStatus.delivered:
+      case OrderStatus.delivering:
         return const Color(0xFF1ABC9C);
       case OrderStatus.completed:
         return const Color(0xFF2ECC71);
@@ -141,9 +142,9 @@ class OrderStatusUtils {
       case OrderStatus.processing:
         return Icons.build;
       case OrderStatus.dispatched:
+        return FontAwesomeIcons.box;
+      case OrderStatus.delivering:
         return Icons.local_shipping;
-      case OrderStatus.delivered:
-        return Icons.delivery_dining;
       case OrderStatus.completed:
         return Icons.check_circle;
       case OrderStatus.canceled:
@@ -160,15 +161,15 @@ class OrderStatusUtils {
       case OrderStatus.processing:
         return 'Processing';
       case OrderStatus.dispatched:
-        return 'Dispatched';
-      case OrderStatus.delivered:
-        return 'Delivered';
+        return 'Ready to Ship';
+      case OrderStatus.delivering:
+        return 'Shipping';
       case OrderStatus.completed:
         return 'Completed';
       case OrderStatus.canceled:
         return 'Canceled';
       default:
-        return 'Unknown';
+        return 'pending';
     }
   }
 }
