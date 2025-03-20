@@ -136,11 +136,13 @@ class App extends StatelessWidget {
             create: (_) => BrandsBloc(brandRepository: BrandRepository())
               ..add(FetchBrandsEvent()),
           ),
-          BlocProvider(
+        BlocProvider(
             create: (context) => CategoriesBloc(
               FetchCategories(CategoryRepository()),
+              FetchNextCategoriesPage(CategoryRepository()),
             )..add(LoadCategories()),
           ),
+
           BlocProvider(
             create: (context) => FavoritesBloc(
                 favoritesRepository: FavoritesRepository(

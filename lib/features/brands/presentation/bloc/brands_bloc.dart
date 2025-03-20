@@ -13,9 +13,6 @@ class BrandsBloc extends Bloc<BrandsEvent, BrandsState> {
   BrandsBloc({required this.brandRepository}) : super(BrandsInitialState()) {
     on<FetchBrandsEvent>(_onFetchBrands);
     on<LoadMoreBrandsEvent>(_onLoadMoreBrands);
-    on<AddBrandEvent>(_onAddBrand);
-    on<UpdateBrandEvent>(_onUpdateBrand);
-    on<DeleteBrandEvent>(_onDeleteBrand);
   }
 
   Future<void> _onFetchBrands(
@@ -71,57 +68,4 @@ class BrandsBloc extends Bloc<BrandsEvent, BrandsState> {
     }
   }
 
-  Future<void> _onAddBrand(
-      AddBrandEvent event, Emitter<BrandsState> emit) async {
-    try {
-      await brandRepository.addBrand(event.brand);
-      add(FetchBrandsEvent()); // Refresh the list
-    } catch (e) {
-      emit(BrandsErrorState('Failed to add brand: ${e.toString()}'));
-    }
-  }
-
-  Future<void> _onUpdateBrand(
-      UpdateBrandEvent event, Emitter<BrandsState> emit) async {
-    try {
-      await brandRepository.updateBrand(event.brand);
-
-      if (state is BrandsLoadedState) {
-        final currentState = state as BrandsLoadedState;
-        final updatedBrands = currentState.brands
-            .map((brand) => brand.id == event.brand.id ? event.brand : brand)
-            .toList();
-
-        emit(BrandsLoadedState(
-          updatedBrands,
-          DateTime.now(),
-          hasMoreData: currentState.hasMoreData,
-        ));
-      }
-    } catch (e) {
-      emit(BrandsErrorState('Failed to update brand: ${e.toString()}'));
-    }
-  }
-
-  Future<void> _onDeleteBrand(
-      DeleteBrandEvent event, Emitter<BrandsState> emit) async {
-    try {
-      await brandRepository.deleteBrand(event.brandId);
-
-      if (state is BrandsLoadedState) {
-        final currentState = state as BrandsLoadedState;
-        final updatedBrands = currentState.brands
-            .where((brand) => brand.id != event.brandId)
-            .toList();
-
-        emit(BrandsLoadedState(
-          updatedBrands,
-          DateTime.now(),
-          hasMoreData: currentState.hasMoreData,
-        ));
-      }
-    } catch (e) {
-      emit(BrandsErrorState('Failed to delete brand: ${e.toString()}'));
-    }
-  }
 }

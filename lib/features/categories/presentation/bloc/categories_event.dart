@@ -1,3 +1,5 @@
 abstract class CategoriesEvent {}
 
 class LoadCategories extends CategoriesEvent {}
+
+class LoadMoreCategories extends CategoriesEvent {}

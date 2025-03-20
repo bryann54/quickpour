@@ -17,3 +17,19 @@ class FetchCategories {
         .toList();
   }
 }
+class FetchNextCategoriesPage {
+  final CategoryRepository repository;
+
+  FetchNextCategoriesPage(this.repository);
+
+   Future<List<Category>> call() async {
+    final categories = await repository.getNextCategoriesPage();
+    return categories
+        .map((model) => Category(
+              id: model.id,
+              name: model.name,
+              imageUrl: model.imageUrl,
+            ))
+        .toList();
+  }
+}

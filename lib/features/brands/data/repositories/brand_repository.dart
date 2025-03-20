@@ -2,14 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chupachap/features/brands/data/models/brands_model.dart';
 
 class BrandRepository {
-  final FirebaseFirestore _firestore;
+   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final int _pageSize = 12;
   DocumentSnapshot? _lastDocument;
   bool _hasMoreData = true;
 
-  BrandRepository({
-    FirebaseFirestore? firestore,
-  }) : _firestore = firestore ?? FirebaseFirestore.instance;
+
 
   bool get hasMoreData => _hasMoreData;
 
@@ -69,18 +67,5 @@ class BrandRepository {
     return snapshot.docs.map((doc) {
       return BrandModel.fromJson(doc.data() as Map<String, dynamic>, );
     }).toList();
-  }
-
-  // Additional methods for CRUD operations
-  Future<void> addBrand(BrandModel brand) async {
-    await _firestore.collection('brands').add(brand.toJson());
-  }
-
-  Future<void> updateBrand(BrandModel brand) async {
-    await _firestore.collection('brands').doc(brand.id).update(brand.toJson());
-  }
-
-  Future<void> deleteBrand(String brandId) async {
-    await _firestore.collection('brands').doc(brandId).delete();
   }
 }
