@@ -19,12 +19,16 @@ class _MerchantsScreenState extends State<MerchantsScreen> {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
-    context.read<MerchantBloc>().add(FetchMerchantEvent());
+
+    final bloc = context.read<MerchantBloc>();
+    if (bloc.state is MerchantInitial) {
+      bloc.add(FetchMerchantEvent());
+    }
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 100) {
       context.read<MerchantBloc>().add(FetchMoreMerchantsEvent());
     }
   }
@@ -38,48 +42,49 @@ class _MerchantsScreenState extends State<MerchantsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 20),
-          Expanded(
-            child: BlocBuilder<MerchantBloc, MerchantState>(
-              builder: (context, state) {
-                if (state is MerchantLoading) {
-                  return const MerchantTileShimmer();
-                } else if (state is MerchantLoaded) {
-                  final merchants = state.merchants;
-                  return ListView.builder(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    itemCount: merchants.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index < merchants.length) {
-                        final merchant = merchants[index];
-                        return MerchantCardWidget(merchant: merchant);
-                      } else if (state.hasMoreData) {
-                        return const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Center(child: CircularProgressIndicator.adaptive()),
-                        );
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    },
-                  );
-                } else if (state is MerchantError) {
-                  return Center(
-                    child: Text(
-                      state.message,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  );
-                }
-                return const SizedBox.shrink();
-              },
+      body: BlocListener<MerchantBloc, MerchantState>(
+        listener: (context, state) {
+          if (state is MerchantError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            Expanded(
+              child: BlocBuilder<MerchantBloc, MerchantState>(
+                builder: (context, state) {
+                  if (state is MerchantLoading) {
+                    return const MerchantTileShimmer();
+                  } else if (state is MerchantLoaded) {
+                    final merchants = state.merchants;
+                    return ListView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      itemCount: merchants.length + (state.hasMoreData ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index < merchants.length) {
+                          return MerchantCardWidget(merchant: merchants[index]);
+                        } else {
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: CircularProgressIndicator.adaptive(),
+                            ),
+                          );
+                        }
+                      },
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

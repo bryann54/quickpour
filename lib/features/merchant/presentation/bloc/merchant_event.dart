@@ -1,6 +1,9 @@
 part of 'merchant_bloc.dart';
 
-abstract class MerchantEvent {}
+abstract class MerchantEvent extends Equatable {
+  @override
+  List<Object> get props => [];
+}
 
 class FetchMerchantEvent extends MerchantEvent {}
 

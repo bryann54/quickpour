@@ -3,7 +3,7 @@ import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
 
 class MerchantsRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final int _pageSize = 5;
+  final int _pageSize = 10;
   DocumentSnapshot? _lastDocument;
   bool _hasMoreData = true;
 
