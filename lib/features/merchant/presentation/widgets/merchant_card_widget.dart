@@ -84,15 +84,12 @@ class MerchantCardWidget extends StatelessWidget {
                               placeholder: (context, url) => Container(
                                 // color: Colors.grey[200],
                                 child: const Center(
-                                  child: CircularProgressIndicator(
+                                  child: CircularProgressIndicator.adaptive(
                                     strokeWidth: 2,
                                   ),
                                 ),
                               ),
-                              errorWidget: (context, url, error) => Container(
-                                // color: Colors.grey[200],
-                                child: const Icon(Icons.error),
-                              ),
+                              errorWidget: (context, url, error) => const Icon(Icons.error),
                             ),
                           ),
                         ),
@@ -129,7 +126,7 @@ class MerchantCardWidget extends StatelessWidget {
 
                   const SizedBox(width: 16),
 
-                  // Enhanced Merchant Details
+                  // Merchant Details
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

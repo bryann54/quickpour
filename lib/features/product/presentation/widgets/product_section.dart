@@ -13,12 +13,12 @@ class ProductSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProductBloc, ProductState>(
-      builder: (context, state) {
+      builder: (context, state) {        
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Recommended for you',
+              'Recommended ',
               style: GoogleFonts.montaga(
                 fontSize: 20,
                 textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -50,7 +50,7 @@ class ProductSection extends StatelessWidget {
             _buildCachedProductGrid(state.cachedProducts!, gridDelegate),
           if (state.cachedProducts == null) _buildShimmerGrid(gridDelegate),
           if (state.cachedProducts != null)
-            const Positioned(
+            const Positioned( 
               top: 10,
               right: 10,
               child: SizedBox(

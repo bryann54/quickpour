@@ -37,7 +37,7 @@ class BrandCardWidget extends StatelessWidget {
                   placeholder: (context, url) => Container(
                     height: 120,
                     color: Colors.grey.shade200,
-                    child: const Center(child: CircularProgressIndicator()),
+                    child: const Center(child: CircularProgressIndicator.adaptive()),
                   ),
                   errorWidget: (context, url, error) =>
                       const Icon(Icons.error, size: 48),
