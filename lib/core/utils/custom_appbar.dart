@@ -83,23 +83,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget _buildCartIcon(
-      BuildContext context, CartState cartState, ThemeData currentTheme) {
-    final iconColorWithTheme = iconColor ?? currentTheme.iconTheme.color;
-
-    return badges.Badge(
-      badgeContent: Text(
-        '${cartState.cart.totalQuantity}',
-        style: const TextStyle(color: Colors.white),
-      ),
-      showBadge: cartState.cart.totalQuantity > 0,
-      child: FaIcon(
-        FontAwesomeIcons.cartShopping,
-        size: 22,
-        color: iconColorWithTheme,
-      ),
-    );
-  }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     final currentTheme = theme ?? Theme.of(context);

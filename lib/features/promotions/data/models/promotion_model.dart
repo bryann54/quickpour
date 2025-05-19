@@ -154,8 +154,7 @@ class PromotionModel {
         return categoryId != null && categoryIds.contains(categoryId);
       case PromotionTarget.brands:
         return brandId != null && brandIds.contains(brandId);
-      default:
-        return false;
+    
     }
   }
 

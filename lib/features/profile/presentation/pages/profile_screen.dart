@@ -243,57 +243,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildUserProfileHeader(User user) {
-    final theme = Theme.of(context);
-    final isDarkMode = theme.brightness == Brightness.dark;
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Colors.grey.withOpacity(0.5),
-            Colors.grey.withOpacity(0.5),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            radius: 50,
-            backgroundColor: AppColors.accentColor.withOpacity(0.2),
-            child: user.profileImage.isNotEmpty
-                ? CachedNetworkImage(imageUrl: user.profileImage)
-                : const Icon(Icons.person,
-                    size: 50, color: AppColors.accentColor),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            '${user.firstName} ${user.lastName}',
-            style: GoogleFonts.acme(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: isDarkMode
-                  ? Colors.white
-                  : AppColors.backgroundDark.withOpacity(.7),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            user.email,
-            style: GoogleFonts.montaga(
-              fontSize: 14,
-              color: isDarkMode
-                  ? Colors.white
-                  : AppColors.backgroundDark.withOpacity(.7),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildSectionTitle(BuildContext context, String title) {
     return Text(

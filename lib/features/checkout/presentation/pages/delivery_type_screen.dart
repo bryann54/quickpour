@@ -5,7 +5,6 @@ import 'package:chupachap/features/checkout/presentation/pages/delivery_address_
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DeliveryLocationScreen extends StatefulWidget {
@@ -91,41 +90,6 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
     }
   }
 
-  Future<void> _getUserCurrentLocation() async {
-    try {
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        _showErrorSnackBar('Location services are disabled.');
-        return;
-      }
-
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          _showErrorSnackBar('Location permissions are denied.');
-          return;
-        }
-      }
-
-      setState(() => _isLoading = true);
-
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-
-      setState(() {
-        _selectedLocation = LatLng(position.latitude, position.longitude);
-        _isLoading = false;
-      });
-
-      await _getAddressFromLatLng(_selectedLocation!);
-      await _animateToLocation(_selectedLocation!);
-    } catch (e) {
-      _showErrorSnackBar('Error fetching location');
-      setState(() => _isLoading = false);
-    }
-  }
 
   Future<void> _getAddressFromLatLng(LatLng position) async {
     try {
@@ -145,26 +109,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
     }
   }
 
-  Future<void> _animateToLocation(LatLng location) async {
-    _mapController?.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: location,
-          zoom: 15,
-        ),
-      ),
-    );
-  }
 
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
 
   Widget _buildMapSection() {
     final theme = Theme.of(context);
