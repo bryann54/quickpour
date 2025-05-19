@@ -12,11 +12,13 @@ import 'package:chupachap/features/product/data/models/product_model.dart';
 class FavoriteFAB extends StatefulWidget {
   final ProductModel product;
   final bool isDarkMode;
+  final bool smallSize;
 
   const FavoriteFAB({
     Key? key,
     required this.product,
     required this.isDarkMode,
+    this.smallSize = false,
   }) : super(key: key);
 
   @override

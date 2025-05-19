@@ -11,11 +11,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class CartQuantityFAB extends StatelessWidget {
   final ProductModel product;
   final bool isDarkMode;
+  final bool smallSize;
 
   const CartQuantityFAB({
     Key? key,
     required this.product,
     required this.isDarkMode,
+    this.smallSize = false,
   }) : super(key: key);
 
   @override
@@ -29,15 +31,19 @@ class CartQuantityFAB extends StatelessWidget {
               )
             : CartItem(product: product, quantity: 0);
 
+        final fabSize = smallSize ? 24.0 : 32.0;
+        final iconSize = smallSize ? 14.0 : 16.0;
+        final fontSize = smallSize ? 12.0 : 13.0;
+
         if (cartItem.quantity > 0) {
           return Container(
-            height: 32,
-            constraints: const BoxConstraints(maxWidth: 110),
+            height: fabSize,
+            constraints: BoxConstraints(maxWidth: smallSize ? 90 : 110),
             decoration: BoxDecoration(
               color: isDarkMode
                   ? AppColors.background.withOpacity(.2)
                   : AppColors.accentColor,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(fabSize / 2),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.3),
@@ -51,8 +57,8 @@ class CartQuantityFAB extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: 32,
-                  height: 32,
+                  width: fabSize,
+                  height: fabSize,
                   child: Material(
                     color: Colors.transparent,
                     child: InkWell(
@@ -71,7 +77,7 @@ class CartQuantityFAB extends StatelessWidget {
                       child: Center(
                         child: FaIcon(
                           FontAwesomeIcons.minus,
-                          size: 12,
+                          size: iconSize,
                           color:
                               isDarkMode ? AppColors.accentColor : Colors.white,
                         ),
@@ -86,14 +92,14 @@ class CartQuantityFAB extends StatelessWidget {
                     '${cartItem.quantity}',
                     style: TextStyle(
                       color: isDarkMode ? AppColors.accentColor : Colors.white,
-                      fontSize: 13,
+                      fontSize: fontSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 SizedBox(
-                  width: 32,
-                  height: 32,
+                  width: fabSize,
+                  height: fabSize,
                   child: Material(
                     color: Colors.transparent,
                     child: InkWell(
@@ -110,7 +116,7 @@ class CartQuantityFAB extends StatelessWidget {
                       child: Center(
                         child: FaIcon(
                           FontAwesomeIcons.plus,
-                          size: 12,
+                          size: iconSize,
                           color:
                               isDarkMode ? AppColors.accentColor : Colors.white,
                         ),
@@ -123,8 +129,8 @@ class CartQuantityFAB extends StatelessWidget {
           );
         } else {
           return SizedBox(
-            width: 32,
-            height: 32,
+            width: fabSize,
+            height: fabSize,
             child: Material(
               color: isDarkMode
                   ? AppColors.background.withOpacity(.2)
@@ -132,7 +138,7 @@ class CartQuantityFAB extends StatelessWidget {
               shape: const CircleBorder(),
               elevation: 4,
               child: InkWell(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(fabSize / 2),
                 onTap: () {
                   context.read<CartBloc>().add(
                         AddToCartEvent(product: product, quantity: 1),
@@ -141,7 +147,7 @@ class CartQuantityFAB extends StatelessWidget {
                 child: Center(
                   child: FaIcon(
                     FontAwesomeIcons.plus,
-                    size: 14,
+                    size: iconSize,
                     color: isDarkMode ? AppColors.accentColor : Colors.white,
                   ),
                 ),
