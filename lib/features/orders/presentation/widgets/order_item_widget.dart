@@ -58,13 +58,16 @@ class OrderItemWidget extends StatelessWidget {
           ),
           if (order.status == 'canceled')
             Positioned(
-              top: 100,
+              top: 70,
               right: 115,
-              child: Image.asset(
-                'assets/ca1.webp',
-                fit: BoxFit.cover,
-                width: 180,
-                height: 180,
+              child: Hero(
+                tag: 'cancel-button',
+                child: Image.asset(
+                  'assets/ca1.webp',
+                  fit: BoxFit.cover,
+                  width: 160,
+                  height: 160,
+                ),
               ),
             ),
         ],

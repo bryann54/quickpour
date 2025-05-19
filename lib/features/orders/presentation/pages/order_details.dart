@@ -22,18 +22,21 @@ class OrderDetails extends StatelessWidget {
       backgroundColor: isDark ? AppColors.backgroundDark : AppColors.background,
       // appBar: CustomAppBar(showCart: false),
       appBar: AppBar(
-        title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'Order Details',
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
+                color:
+                    isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
               ),
             ),
-            if(order.status != 'canceled')
-            ShareButton(order: order,),
-       
+            if (order.status != 'canceled')
+              ShareButton(
+                order: order,
+              ),
           ],
         ),
       ),

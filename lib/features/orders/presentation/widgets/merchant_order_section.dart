@@ -12,7 +12,8 @@ class MerchantOrderSection extends StatelessWidget {
   final MerchantOrderItem merchantOrder;
   final CompletedOrder order;
 
-  const MerchantOrderSection({super.key, required this.merchantOrder, required this.order});
+  const MerchantOrderSection(
+      {super.key, required this.merchantOrder, required this.order});
 
   @override
   Widget build(BuildContext context) {
@@ -156,17 +157,20 @@ class MerchantOrderSection extends StatelessWidget {
             ],
           ),
         ),
-          if (order.status == 'canceled')
-        Positioned(
-          top: 10,
-          right: 20,
-          child: Image.asset(
-            'assets/ca1.webp',
-            fit: BoxFit.cover,
-            width: 90,
-            height: 90,
+        if (order.status == 'canceled')
+          Positioned(
+            top: 10,
+            right: 20,
+            child: Hero(
+              tag: 'cancel-button',
+              child: Image.asset(
+                'assets/ca1.webp',
+                fit: BoxFit.cover,
+                width: 90,
+                height: 90,
+              ),
+            ),
           ),
-        ),
       ],
     );
   }
