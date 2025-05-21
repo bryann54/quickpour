@@ -132,23 +132,27 @@ class ProductSection extends StatelessWidget {
     if (state is ProductLoadedState) {
       final popularProducts = state.products.take(10).toList();
 
-      return ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: popularProducts.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: PopularProductCard(
-              product: popularProducts[index],
-            ),
-          );
-        },
+      return SingleChildScrollView(
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: popularProducts.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: PopularProductCard(
+                product: popularProducts[index],
+              ),
+            );
+          },
+        ),
       );
     }
 
     return const SizedBox.shrink();
   }
+
+
 
   Widget _buildPopularProductsShimmer() {
     return ListView.builder(

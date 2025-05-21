@@ -20,42 +20,34 @@ class MerchantCardAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MerchantDetailsScreen(merchant: merchant),
-          ),
-        );
-      },
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MerchantDetailsScreen(merchant: merchant),
+        ),
+      ),
       child: Container(
-        width: 100,
-        height: 150,
+        width: 110,
         margin: EdgeInsets.only(
-          left: isFirst ? 4.0 : 0.0,
-          right: isLast ? 4.0 : 8.0,
+          left: isFirst ? 12.0 : 4.0,
+          right: isLast ? 12.0 : 4.0,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: isFirst || isLast
-                ? Colors.transparent
-                : AppColors.accentColor.withOpacity(0.5),
-          ),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              spreadRadius: 2,
-              blurRadius: 8,
-              offset: const Offset(0, 3),
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 10,
+              offset: const Offset(0, 6),
             ),
           ],
         ),
         child: Stack(
           children: [
             _buildBackgroundImage(),
-            _buildMerchantInfo(context),
-            _buildStatusBadge(),
+            if (!merchant.isOpen) _buildClosedOverlay(),
+            _buildGlassOverlay(context),
+           
           ],
         ),
       ),
@@ -64,32 +56,52 @@ class MerchantCardAvatar extends StatelessWidget {
 
   Widget _buildBackgroundImage() {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(16),
       child: Hero(
         tag: 'merchant_image_${merchant.id}',
-        child: CachedNetworkImage(
-          imageUrl: merchant.imageUrl,
-          width: 100,
-          height: 150,
-          fit: BoxFit.cover,
-          placeholder: (context, url) => Container(
-            color: Colors.grey[200],
-            child: const Center(
-              child: SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator.adaptive(
-                  strokeWidth: 2,
+        child: ColorFiltered(
+          colorFilter: merchant.isOpen
+              ? const ColorFilter.mode(Colors.transparent, BlendMode.multiply)
+              : const ColorFilter.matrix([
+                  0.2126,
+                  0.7152,
+                  0.0722,
+                  0,
+                  0,
+                  0.2126,
+                  0.7152,
+                  0.0722,
+                  0,
+                  0,
+                  0.2126,
+                  0.7152,
+                  0.0722,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                ]),
+          child: CachedNetworkImage(
+            imageUrl: merchant.imageUrl,
+            width: 110,
+            height: 150,
+            fit: BoxFit.cover,
+            placeholder: (context, url) => Container(
+              color: Colors.grey[200],
+              child: const Center(
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
                 ),
               ),
             ),
-          ),
-          errorWidget: (context, url, error) => Container(
-            color: Colors.grey[200],
-            child: FaIcon(
-              Icons.error,
-              size: 35,
-              color: Colors.grey[400],
+            errorWidget: (context, url, error) => Container(
+              color: Colors.grey[200],
+              child: const Icon(Icons.error, size: 35, color: Colors.grey),
             ),
           ),
         ),
@@ -97,22 +109,31 @@ class MerchantCardAvatar extends StatelessWidget {
     );
   }
 
-  Widget _buildMerchantInfo(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDarkMode = theme.brightness == Brightness.dark;
+  Widget _buildClosedOverlay() {
+    return Positioned.fill(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.black.withOpacity(0.3),
+        ),
+      ),
+    );
+  }
 
+  Widget _buildGlassOverlay(BuildContext context) {
     return Positioned(
       bottom: 0,
       left: 0,
       right: 0,
       child: Container(
-        padding: const EdgeInsets.all(8.0),
+        height: 50,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.5),
           borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10),
+            bottomLeft: Radius.circular(16),
+            bottomRight: Radius.circular(16),
           ),
+          color: Colors.black.withOpacity(merchant.isOpen ? 0.4 : 0.6),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,34 +143,26 @@ class MerchantCardAvatar extends StatelessWidget {
               child: Text(
                 merchant.name,
                 style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12,
-                  color: isDarkMode ? Colors.white70 : Colors.white,
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
                 ),
-                textAlign: TextAlign.center,
-                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            if (merchant.isVerified) const SizedBox(height: 4),
             if (merchant.isVerified)
               Row(
                 children: [
-                  Hero(
-                    tag: 'verified-${merchant.id}',
-                    child: const FaIcon(
-                      Icons.verified,
-                      size: 14,
-                      color: AppColors.accentColor,
-                    ),
-                  ),
+                  const Icon(Icons.verified,
+                      size: 14, color: AppColors.accentColor),
                   const SizedBox(width: 4),
                   Text(
                     'Verified',
                     style: TextStyle(
-                        fontSize: 10,
-                        color: isDarkMode ? Colors.white70 : Colors.white,
-                        fontWeight: FontWeight.bold),
+                      color: Colors.white70,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ],
               ),
@@ -159,26 +172,4 @@ class MerchantCardAvatar extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusBadge() {
-    return Positioned(
-      top: 0,
-      left: 0,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-        decoration: BoxDecoration(
-          color: merchant.isOpen ? Colors.green : Colors.red,
-          borderRadius:
-              const BorderRadius.only(bottomRight: Radius.circular(4)),
-        ),
-        child: Text(
-          merchant.isOpen ? 'Open' : 'Closed',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 10,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
 }

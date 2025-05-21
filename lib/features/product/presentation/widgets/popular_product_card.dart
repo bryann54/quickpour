@@ -135,7 +135,7 @@ class PopularProductCard extends StatelessWidget {
           fit: BoxFit.cover,
           errorWidget: (_, __, ___) => Container(
             width: 90,
-            height: height,
+            height: height,     
             color: errorBgColor,
             child: Icon(
               Icons.error_outline,

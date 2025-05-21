@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Row(
                           children: [
-                            Text('Verified  Stores',
+                            Text('Nearby  Stores',
                                 style: GoogleFonts.montaga(
                                   textStyle: theme.textTheme.bodyMedium
                                       ?.copyWith(
@@ -113,13 +113,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             const SizedBox(
                               width: 5,
                             ),
-                            Icon(
-                              size: 17,
-                              Icons.verified,
-                              color: isDarkMode
-                                  ? Colors.teal
-                                  : AppColors.accentColor,
-                            )
+                            // Icon(
+                            //   size: 17,
+                            //   Icons.verified,
+                            //   color: isDarkMode
+                            //       ? Colors.teal
+                            //       : AppColors.accentColor,
+                            // )
                           ],
                         ),
                         GestureDetector(
