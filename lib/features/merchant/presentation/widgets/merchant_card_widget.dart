@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
 import 'package:chupachap/features/merchant/presentation/pages/merchant_details_screen.dart';
@@ -141,7 +143,7 @@ class MerchantCardWidget extends StatelessWidget {
                                 child: Container(
                                   padding: const EdgeInsets.all(4),
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: AppColors.background,
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
@@ -151,9 +153,11 @@ class MerchantCardWidget extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  child: const Icon(
+                                  child:  Icon(
                                     Icons.verified,
-                                    color: AppColors.accentColor,
+                                    color: merchant.isOpen
+                                        ? AppColors.accentColor
+                                        : AppColors.textSecondaryDark,
                                     size: 20,
                                   ),
                                 ),

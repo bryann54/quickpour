@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
@@ -148,13 +150,15 @@ class MerchantCardAvatar extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            if (merchant.isVerified)
-              const Row(
+            if (merchant.isVerified )
+               Row(
                 children: [
                   Icon(Icons.verified,
-                      size: 14, color: AppColors.accentColor),
-                  SizedBox(width: 4),
-                  Text(
+                      size: 14,  color:
+                        merchant.isOpen ? AppColors.accentColor : Colors.grey,
+                  ),
+                const  SizedBox(width: 4),
+                 const Text(
                     'Verified',
                     style: TextStyle(
                       color: Colors.white70,
