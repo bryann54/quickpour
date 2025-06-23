@@ -21,83 +21,86 @@ class PopularProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
-    
+
     // Extract common styles to avoid repetition
     final errorColor = isDarkMode ? Colors.grey.shade500 : Colors.grey.shade700;
-    final errorBgColor = isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200;
-    final categoryTextColor = isDarkMode ? Colors.grey.shade400 : Colors.grey.shade600;
-    final measureBgColor = isDarkMode ? Colors.grey.shade800 : Colors.grey.shade100;
-    final measureBorderColor = isDarkMode ? Colors.grey.shade700 : Colors.grey.shade300;
+    final errorBgColor =
+        isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200;
+    final categoryTextColor =
+        isDarkMode ? Colors.grey.shade400 : Colors.grey.shade600;
+    final measureBgColor =
+        isDarkMode ? Colors.grey.shade800 : Colors.grey.shade100;
+    final measureBorderColor =
+        isDarkMode ? Colors.grey.shade700 : Colors.grey.shade300;
     final measureTextColor = isDarkMode ? Colors.white70 : Colors.grey.shade700;
-    
+
     // Prepare product hero tags to ensure consistency
     final imageHeroTag = 'popular-image-${product.id}';
     final nameHeroTag = 'popular-name-${product.id}';
-    
+
     return GestureDetector(
-          onTap: () => _navigateToDetails(context),
-          child: Container(
-            height: height,
-            margin: const EdgeInsets.only(bottom: 12),
-            decoration: BoxDecoration(
-              color: theme.cardColor,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
-                ),
-              ],
+      onTap: () => _navigateToDetails(context),
+      child: Container(
+        height: height,
+        margin: const EdgeInsets.only(bottom: 12),
+        decoration: BoxDecoration(
+          color: theme.cardColor,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
             ),
-            child: Stack(
+          ],
+        ),
+        child: Stack(
+          children: [
+            Row(
               children: [
-                Row(
-                  children: [
-                    // Product image with hero animation
-                    _buildProductImage(imageHeroTag, errorBgColor, errorColor),
-                    
-                    // Product details section
-                    _buildProductDetails(
-                      context, 
-                      nameHeroTag,
-                      categoryTextColor,
-                      measureBgColor,
-                      measureBorderColor,
-                      measureTextColor,
-                    ),
-                  ],
-                ),
+                // Product image with hero animation
+                _buildProductImage(imageHeroTag, errorBgColor, errorColor),
 
-                // Discount badge if product is on sale
-                if (_isOnSale())
-                  _buildDiscountBadge(),
-
-                // Favorite button
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: FavoriteFAB(
-                    product: product,
-                    isDarkMode: isDarkMode,
-                    smallSize: true, 
-                  ),
-                ),
-
-                // Add to cart button
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: CartQuantityFAB(
-                    product: product,
-                    isDarkMode: isDarkMode,
-                    smallSize: true,
-                  ),
+                // Product details section
+                _buildProductDetails(
+                  context,
+                  nameHeroTag,
+                  categoryTextColor,
+                  measureBgColor,
+                  measureBorderColor,
+                  measureTextColor,
                 ),
               ],
             ),
-          ),
-        );
+
+            // Discount badge if product is on sale
+            if (_isOnSale()) _buildDiscountBadge(),
+
+            // Favorite button
+            Positioned(
+              top: 0,
+              right: 0,
+              child: FavoriteFAB(
+                product: product,
+                isDarkMode: isDarkMode,
+                smallSize: true,
+              ),
+            ),
+
+            // Add to cart button
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: CartQuantityFAB(
+                product: product,
+                isDarkMode: isDarkMode,
+                smallSize: true,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   // Navigate to product details screen
@@ -120,7 +123,8 @@ class PopularProductCard extends StatelessWidget {
   }
 
   // Build the product image section
-  Widget _buildProductImage(String heroTag, Color errorBgColor, Color errorColor) {
+  Widget _buildProductImage(
+      String heroTag, Color errorBgColor, Color errorColor) {
     return Hero(
       tag: heroTag,
       child: ClipRRect(
@@ -135,7 +139,7 @@ class PopularProductCard extends StatelessWidget {
           fit: BoxFit.cover,
           errorWidget: (_, __, ___) => Container(
             width: 90,
-            height: height,     
+            height: height,
             color: errorBgColor,
             child: Icon(
               Icons.error_outline,

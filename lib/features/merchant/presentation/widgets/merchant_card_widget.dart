@@ -112,7 +112,7 @@ class MerchantCardWidget extends StatelessWidget {
                                     height: 80,
                                     fit: BoxFit.cover,
                                     placeholder: (context, url) => Container(
-                                      child: Center(
+                                      child: const Center(
                                         child: CircularProgressIndicator(
                                           strokeWidth: 2,
                                           color: AppColors.accentColor,
@@ -151,7 +151,7 @@ class MerchantCardWidget extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.verified,
                                     color: AppColors.accentColor,
                                     size: 20,

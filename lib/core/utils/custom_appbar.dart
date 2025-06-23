@@ -83,7 +83,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     final currentTheme = theme ?? Theme.of(context);
     final iconColorWithTheme = iconColor ?? currentTheme.iconTheme.color;

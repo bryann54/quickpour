@@ -257,7 +257,6 @@ class PromotionsCarousel extends StatelessWidget {
         return 'Category Discount';
       case PromotionTarget.brands:
         return 'Brand Discount';
-     
     }
   }
 }

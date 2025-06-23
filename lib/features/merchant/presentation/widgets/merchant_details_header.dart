@@ -170,21 +170,28 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      const Icon(
-                        FontAwesomeIcons.locationDot,
-                        size: 16,
-                        color: Colors.white70,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        widget.merchant.location,
-                        style: theme.textTheme.bodyMedium?.copyWith(
+                  Flexible(
+                    child: Row(
+                      children: [
+                        const Icon(
+                          FontAwesomeIcons.locationDot,
+                          size: 16,
                           color: Colors.white70,
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            widget.merchant.location,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: Colors.white70,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            softWrap: false,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Hero(
                     tag: 'merchant-open-${widget.merchant.id}',
@@ -196,9 +203,9 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
                             widget.merchant.isOpen ? Colors.green : Colors.red,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Text(
-                        widget.merchant.isOpen ? 'Open' : 'Closed',
-                        style: const TextStyle(
+                      child: const Text(
+                        'Open',
+                        style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -208,6 +215,7 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
                   ),
                 ],
               ),
+
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: CustomSearchBar(

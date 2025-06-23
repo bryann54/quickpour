@@ -243,7 +243,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-
   Widget _buildSectionTitle(BuildContext context, String title) {
     return Text(
       title,

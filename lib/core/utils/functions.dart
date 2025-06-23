@@ -106,7 +106,6 @@ String getPromotionTypeDisplay(PromotionTarget target) {
       return 'Product Categories';
     case PromotionTarget.brands:
       return 'Product Brands';
-
   }
 }
 
@@ -129,7 +128,7 @@ class OrderStatusUtils {
         return const Color(0xFF1ABC9C);
       case OrderStatus.completed:
         return const Color(0xFF2ECC71);
-      }
+    }
   }
 
   static IconData getStatusIcon(OrderStatus status) {
@@ -146,7 +145,7 @@ class OrderStatusUtils {
         return Icons.check_circle;
       case OrderStatus.canceled:
         return Icons.cancel;
-      }
+    }
   }
 
   static String getStatusLabel(OrderStatus status) {
@@ -163,7 +162,6 @@ class OrderStatusUtils {
         return 'Completed';
       case OrderStatus.canceled:
         return 'Canceled';
-    
     }
   }
 }

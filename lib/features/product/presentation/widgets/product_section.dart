@@ -152,8 +152,6 @@ class ProductSection extends StatelessWidget {
     return const SizedBox.shrink();
   }
 
-
-
   Widget _buildPopularProductsShimmer() {
     return ListView.builder(
       shrinkWrap: true,
@@ -240,29 +238,28 @@ class ProductSection extends StatelessWidget {
 
   Widget _buildCachedProductRow(List<ProductModel> products) {
     return SizedBox(
-      height: 230, // Adjust height as needed
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          return Container(
-            width: 160, // Adjust width as needed
-            margin: const EdgeInsets.only(right: 12),
-            child: Stack(
-              children: [
-                HorizontalPromotionCard(product: products[index]),
-                Positioned.fill(
-                  child: Container(
-                    color: Colors.white.withOpacity(0.3),
+        height: 230, // Adjust height as needed
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          itemCount: products.length,
+          itemBuilder: (context, index) {
+            return Container(
+              width: 160, // Adjust width as needed
+              margin: const EdgeInsets.only(right: 12),
+              child: Stack(
+                children: [
+                  HorizontalPromotionCard(product: products[index]),
+                  Positioned.fill(
+                    child: Container(
+                      color: Colors.white.withOpacity(0.3),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
-      )
-    );
+                ],
+              ),
+            );
+          },
+        ));
   }
 
   Widget _buildErrorWidget(BuildContext context, String errorMessage) {

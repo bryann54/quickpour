@@ -26,7 +26,17 @@ class WalletRepository {
   Future<void> deductFromWallet(double amount) async {
     final wallet = await getWallet();
     if (wallet.balance >= amount) {
-      final updatedWallet = wallet.copyWith(balance: wallet.balance - amount);
+    final updatedWallet = wallet.copyWith(
+        balance:
+            wallet.balance - amount, 
+      transactions: [...wallet.transactions,
+        Transaction.create(
+          amount: amount,
+          type: TransactionType.withdrawal,
+          description: 'Deducted from wallet',
+        ),
+      ],
+      );
       await saveWallet(updatedWallet);
     } else {
       throw Exception('Insufficient funds');
@@ -132,7 +142,7 @@ class WalletRepository {
     return true;
   }
 
-  Future<bool> processOrderPayment({
+Future<bool> processOrderPayment({
     required double amount,
     required String description,
     required PaymentMethod paymentMethod,
@@ -144,7 +154,9 @@ class WalletRepository {
     }
 
     // Case 2: Using payment card
-    if (paymentMethod.type == PaymentMethodType.values) {
+    // Fix: Check if the payment method type is either credit or debit card
+    if (paymentMethod.type == PaymentMethodType.creditCard ||
+        paymentMethod.type == PaymentMethodType.debitCard) {
       try {
         // Process card payment logic here
         // This would typically involve an API call to a payment processor

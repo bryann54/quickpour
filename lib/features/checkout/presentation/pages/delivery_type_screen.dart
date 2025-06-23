@@ -90,7 +90,6 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
     }
   }
 
-
   Future<void> _getAddressFromLatLng(LatLng position) async {
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(
@@ -108,8 +107,6 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
       debugPrint('Error getting address: $e');
     }
   }
-
-
 
   Widget _buildMapSection() {
     final theme = Theme.of(context);

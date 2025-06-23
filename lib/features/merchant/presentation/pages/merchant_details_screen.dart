@@ -44,7 +44,6 @@ class _MerchantDetailsScreenState extends State<MerchantDetailsScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

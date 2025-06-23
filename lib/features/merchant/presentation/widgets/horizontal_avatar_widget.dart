@@ -3,7 +3,6 @@ import 'package:chupachap/core/utils/colors.dart';
 import 'package:chupachap/features/merchant/data/models/merchants_model.dart';
 import 'package:chupachap/features/merchant/presentation/pages/merchant_details_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MerchantCardAvatar extends StatelessWidget {
   final Merchants merchant;
@@ -47,7 +46,6 @@ class MerchantCardAvatar extends StatelessWidget {
             _buildBackgroundImage(),
             if (!merchant.isOpen) _buildClosedOverlay(),
             _buildGlassOverlay(context),
-           
           ],
         ),
       ),
@@ -142,8 +140,8 @@ class MerchantCardAvatar extends StatelessWidget {
               tag: 'merchant-name-${merchant.id}',
               child: Text(
                 merchant.name,
-                style: TextStyle(
-                  color: Colors.white,
+                style: const TextStyle(
+                  color: AppColors.background,
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                 ),
@@ -151,11 +149,11 @@ class MerchantCardAvatar extends StatelessWidget {
               ),
             ),
             if (merchant.isVerified)
-              Row(
+              const Row(
                 children: [
-                  const Icon(Icons.verified,
+                  Icon(Icons.verified,
                       size: 14, color: AppColors.accentColor),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   Text(
                     'Verified',
                     style: TextStyle(
@@ -171,5 +169,4 @@ class MerchantCardAvatar extends StatelessWidget {
       ),
     );
   }
-
 }
