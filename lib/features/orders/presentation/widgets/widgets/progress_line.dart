@@ -58,7 +58,7 @@ class ProgressLine extends StatelessWidget {
           borderRadius: BorderRadius.circular(1.5),
           boxShadow: [
             BoxShadow(
-              color: statusColor.withOpacity(0.3),
+              color: statusColor.withValues(alpha: 0.3),
               blurRadius: 3,
               offset: const Offset(0, 1),
             ),

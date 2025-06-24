@@ -17,8 +17,8 @@ class OrderTotalRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
         color: isDark
-            ? AppColors.cardColorDark.withOpacity(0.8)
-            : AppColors.surface.withOpacity(0.8),
+            ? AppColors.cardColorDark.withValues(alpha: 0.8)
+            : AppColors.surface.withValues(alpha: 0.8),
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(12),
           bottomRight: Radius.circular(12),

@@ -34,8 +34,9 @@ class CustomGreeting extends StatelessWidget {
         if (state is UserDataLoading) {
           return Container(
             child: Shimmer.fromColors(
-              baseColor: theme.colorScheme.onSurface.withOpacity(0.1),
-              highlightColor: theme.colorScheme.onSurface.withOpacity(0.2),
+              baseColor: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+              highlightColor:
+                  theme.colorScheme.onSurface.withValues(alpha: 0.2),
               child: Text(
                 _getGreeting(),
                 style: theme.textTheme.titleSmall,
@@ -81,7 +82,8 @@ class CustomGreeting extends StatelessWidget {
                     child: Text(
                       state.userData.location,
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),

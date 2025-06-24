@@ -41,12 +41,12 @@ class CartQuantityFAB extends StatelessWidget {
             constraints: BoxConstraints(maxWidth: smallSize ? 90 : 110),
             decoration: BoxDecoration(
               color: isDarkMode
-                  ? AppColors.background.withOpacity(.2)
+                  ? AppColors.background.withValues(alpha: .2)
                   : AppColors.accentColor,
               borderRadius: BorderRadius.circular(fabSize / 2),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
+                  color: Colors.black.withValues(alpha: 0.3),
                   blurRadius: 1,
                   offset: const Offset(0, 2),
                 ),
@@ -133,7 +133,7 @@ class CartQuantityFAB extends StatelessWidget {
             height: fabSize,
             child: Material(
               color: isDarkMode
-                  ? AppColors.background.withOpacity(.2)
+                  ? AppColors.background.withValues(alpha: .2)
                   : AppColors.accentColor,
               shape: const CircleBorder(),
               elevation: 4,

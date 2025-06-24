@@ -25,18 +25,18 @@ class FavoritesWidget extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: isDarkMode
-                ? Colors.grey[900]!.withOpacity(.7)
-                : AppColors.cardColor.withOpacity(.7),
+                ? Colors.grey[900]!.withValues(alpha: .7)
+                : AppColors.cardColor.withValues(alpha: .7),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isDarkMode
-                  ? Colors.grey[900]!.withOpacity(.7)
-                  : AppColors.backgroundDark.withOpacity(.15),
+                  ? Colors.grey[900]!.withValues(alpha: .7)
+                  : AppColors.backgroundDark.withValues(alpha: .15),
             )
             // boxShadow: isDarkMode
             //     ? [
             //         BoxShadow(
-            //           color: AppColors.background.withOpacity(0.3),
+            //           color: AppColors.background.withValues(alpha: 0.3),
             //           spreadRadius: 2,
             //           blurRadius: 2,
             //           offset: const Offset(0, 1),
@@ -44,7 +44,7 @@ class FavoritesWidget extends StatelessWidget {
             //       ]
             //     : [
             //         BoxShadow(
-            //           color: Colors.black.withOpacity(0.3),
+            //           color: Colors.black.withValues(alpha: 0.3),
             //           spreadRadius: 1,
             //           blurRadius: .5,
             //           offset: const Offset(0, 3),
@@ -86,7 +86,8 @@ class FavoritesWidget extends StatelessWidget {
                           errorWidget: (context, url, error) => Container(
                               decoration: BoxDecoration(
                                 color: isDarkMode
-                                    ? AppColors.backgroundDark.withOpacity(.5)
+                                    ? AppColors.backgroundDark
+                                        .withValues(alpha: .5)
                                     : AppColors.background,
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -111,7 +112,8 @@ class FavoritesWidget extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14,
                                       color: isDarkMode
-                                          ? AppColors.surface.withOpacity(.8)
+                                          ? AppColors.surface
+                                              .withValues(alpha: .8)
                                           : Colors.black,
                                     ),
                                   ),
@@ -125,7 +127,7 @@ class FavoritesWidget extends StatelessWidget {
                             style: theme.textTheme.bodyMedium?.copyWith(
                               fontSize: 12,
                               color: isDarkMode
-                                  ? AppColors.surface.withOpacity(.6)
+                                  ? AppColors.surface.withValues(alpha: .6)
                                   : Colors.black,
                             ),
                           ),
@@ -200,8 +202,8 @@ class FavoritesWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: isDarkMode
-                          ? AppColors.backgroundDark.withOpacity(0.5)
-                          : AppColors.backgroundDark.withOpacity(0.4),
+                          ? AppColors.backgroundDark.withValues(alpha: 0.5)
+                          : AppColors.backgroundDark.withValues(alpha: 0.4),
                     ),
                     child: IconButton(
                       padding: EdgeInsets.zero,

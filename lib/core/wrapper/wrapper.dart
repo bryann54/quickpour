@@ -18,7 +18,7 @@ class Wrapper extends StatelessWidget {
             context: context,
             message: state.message,
             icon: Icons.error_outline,
-            backgroundColor: Colors.red.withOpacity(0.9),
+            backgroundColor: Colors.red.withValues(alpha: 0.9),
           );
         }
 
@@ -27,7 +27,7 @@ class Wrapper extends StatelessWidget {
             context: context,
             message: "Welcome back!",
             icon: Icons.check_circle_outline,
-            backgroundColor: Colors.green.withOpacity(0.9),
+            backgroundColor: Colors.green.withValues(alpha: 0.9),
           );
         }
       },

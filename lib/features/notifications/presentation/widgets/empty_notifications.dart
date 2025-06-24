@@ -82,8 +82,8 @@ class _AnimatedBellIcon extends StatelessWidget {
     return Icon(
       FontAwesomeIcons.solidBell,
       color: isDarkMode
-          ? Colors.cyan.withOpacity(0.5 + (index % 5) * 0.1)
-          : Colors.cyan.withOpacity(0.5 + (index % 5) * 0.1),
+          ? Colors.cyan.withValues(alpha: 0.5 + (index % 5) * 0.1)
+          : Colors.cyan.withValues(alpha: 0.5 + (index % 5) * 0.1),
       size: isSmall ? 16.0 : 24.0,
     )
         .animate(onPlay: (controller) => controller.repeat())

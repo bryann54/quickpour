@@ -244,7 +244,7 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
         color: isDarkMode ? Colors.grey[900] : Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -308,7 +308,7 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
             height: 2,
             color: Theme.of(
               context,
-            ).dividerColor.withOpacity(.1),
+            ).dividerColor.withValues(alpha: .1),
           ),
           itemBuilder: (context, index) {
             final location = locations[index];

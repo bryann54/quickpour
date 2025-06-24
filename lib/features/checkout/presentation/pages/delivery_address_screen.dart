@@ -115,7 +115,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: isDark
-            ? AppColors.background.withOpacity(.1)
+            ? AppColors.background.withValues(alpha: .1)
             : Colors.grey.shade100,
         borderRadius: BorderRadius.circular(16),
       ),
@@ -185,7 +185,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                     style: TextStyle(
                       color: isSelected
                           ? theme.colorScheme.onPrimary
-                          : theme.colorScheme.onSurface.withOpacity(.5),
+                          : theme.colorScheme.onSurface.withValues(alpha: .5),
                     ),
                   ),
                   selected: isSelected,
@@ -260,7 +260,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isDark
-            ? AppColors.background.withOpacity(.1)
+            ? AppColors.background.withValues(alpha: .1)
             : Colors.grey.shade100,
         borderRadius: BorderRadius.circular(16),
       ),
@@ -277,7 +277,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
             child: Divider(
                 color: isDark
                     ? AppColors.dividerColorDark
-                    : AppColors.dividerColorDark.withOpacity(.3)),
+                    : AppColors.dividerColorDark.withValues(alpha: .3)),
           ),
           _buildPriceRow(
             'Total',
@@ -380,7 +380,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
           Text(
             widget.addressDetails,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.6),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
         ],
@@ -390,13 +390,13 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
             Icon(
               Icons.phone,
               size: 16,
-              color: theme.colorScheme.onSurface.withOpacity(0.6),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
             const SizedBox(width: 8),
             Text(
               widget.phoneNumber,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.6),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             ),
           ],
@@ -432,12 +432,12 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
             decoration: InputDecoration(
               hintText: 'Any special instructions for delivery...',
               hintStyle: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.5),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),
               filled: true,
               fillColor: isDark
                   ? theme.colorScheme.surface
-                  : theme.colorScheme.surface.withOpacity(0.3),
+                  : theme.colorScheme.surface.withValues(alpha: 0.3),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
@@ -452,7 +452,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(
-                  color: theme.colorScheme.onSurface.withOpacity(0.3),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
                   width: 1.2,
                 ),
               ),
@@ -520,7 +520,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                 fontWeight: FontWeight.bold,
                 color: isEnabled
                     ? theme.colorScheme.onPrimary
-                    : theme.colorScheme.onSurface.withOpacity(.3)),
+                    : theme.colorScheme.onSurface.withValues(alpha: .3)),
           ),
         ),
       ),

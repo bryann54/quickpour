@@ -149,8 +149,8 @@ class OffersScreen extends StatelessWidget {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          Colors.black.withOpacity(0.6),
-                          Colors.black.withOpacity(0.3),
+                          Colors.black.withValues(alpha: 0.6),
+                          Colors.black.withValues(alpha: 0.3),
                         ],
                       ),
                     ),
@@ -238,7 +238,7 @@ class OffersScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   color: theme.colorScheme.onSurfaceVariant
-                                      .withOpacity(.2),
+                                      .withValues(alpha: .2),
                                 ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
@@ -269,7 +269,7 @@ class OffersScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: theme.colorScheme.onSurfaceVariant
-                                    .withOpacity(.2),
+                                    .withValues(alpha: .2),
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),

@@ -118,9 +118,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         ? AppColors.accentColor
                                         : (isDarkMode
                                             ? AppColors.brandPrimary
-                                                .withOpacity(.5)
+                                                .withValues(alpha: .5)
                                             : AppColors.background
-                                                .withOpacity(0.9)),
+                                                .withValues(alpha: 0.9)),
                                     shape: const CircleBorder(),
                                     elevation: 1,
                                     child: InkWell(
@@ -149,7 +149,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                               : (isDarkMode
                                                   ? AppColors.accentColor
                                                   : AppColors.backgroundDark
-                                                      .withOpacity(.3)),
+                                                      .withValues(alpha: .3)),
                                         ),
                                       ),
                                     ),
@@ -179,7 +179,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   // borderRadius: BorderRadius.circular(8),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
+                                      color:
+                                          Colors.black.withValues(alpha: 0.2),
                                       blurRadius: 4,
                                       offset: const Offset(2, 2),
                                     ),

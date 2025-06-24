@@ -19,13 +19,13 @@ class NotificationFooter extends StatelessWidget {
         Icon(
           _getTypeIcon(),
           size: 14,
-          color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
+          color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.7),
         ),
         const SizedBox(width: 6),
         Text(
           formatTimestamp(notification.timestamp),
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
+            color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.7),
           ),
         ),
       ],

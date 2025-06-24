@@ -29,7 +29,7 @@ class WalletBalanceCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.2),
+                color: Colors.black.withValues(alpha: 0.2),
                 blurRadius: 15,
                 offset: const Offset(0, 8),
                 spreadRadius: 3,
@@ -52,14 +52,14 @@ class WalletBalanceCard extends StatelessWidget {
                       gradient: LinearGradient(
                         colors: isDarkMode
                             ? [
-                                Colors.redAccent.withOpacity(0.1),
-                                Colors.grey.shade900.withOpacity(0.6),
-                                Colors.redAccent.withOpacity(0.1),
+                                Colors.redAccent.withValues(alpha: 0.1),
+                                Colors.grey.shade900.withValues(alpha: 0.6),
+                                Colors.redAccent.withValues(alpha: 0.1),
                               ]
                             : [
-                                Colors.cyan.shade600.withOpacity(0.3),
-                                Colors.black.withOpacity(0.8),
-                                Colors.cyan.shade600.withOpacity(0.3),
+                                Colors.cyan.shade600.withValues(alpha: 0.3),
+                                Colors.black.withValues(alpha: 0.8),
+                                Colors.cyan.shade600.withValues(alpha: 0.3),
                               ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -90,7 +90,7 @@ class WalletBalanceCard extends StatelessWidget {
                           Text(
                             'AlkoPay',
                             style: TextStyle(
-                              color: Colors.white.withOpacity(0.9),
+                              color: Colors.white.withValues(alpha: 0.9),
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 1,
@@ -98,7 +98,7 @@ class WalletBalanceCard extends StatelessWidget {
                           ),
                           Icon(
                             Icons.wallet,
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withValues(alpha: 0.9),
                             size: 24,
                           ),
                         ],

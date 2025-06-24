@@ -94,7 +94,7 @@ class OrderItemWidget extends StatelessWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: statusColor.withOpacity(0.1),
+                    color: statusColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -136,7 +136,7 @@ class OrderItemWidget extends StatelessWidget {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: statusColor.withOpacity(0.1),
+                  color: statusColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -198,8 +198,8 @@ class OrderItemWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: isDark
-                        ? AppColors.background.withOpacity(0.1)
-                        : AppColors.primaryColor.withOpacity(0.1),
+                        ? AppColors.background.withValues(alpha: 0.1)
+                        : AppColors.primaryColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -261,8 +261,8 @@ class OrderItemWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: isDark
-                        ? AppColors.background.withOpacity(0.1)
-                        : AppColors.primaryColor.withOpacity(0.1),
+                        ? AppColors.background.withValues(alpha: 0.1)
+                        : AppColors.primaryColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -354,8 +354,8 @@ class OrderItemWidget extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: isDark
-                        ? AppColors.textSecondary.withOpacity(0.6)
-                        : AppColors.primaryColor.withOpacity(0.1),
+                        ? AppColors.textSecondary.withValues(alpha: 0.6)
+                        : AppColors.primaryColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -364,7 +364,7 @@ class OrderItemWidget extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: isDark
-                          ? AppColors.background.withOpacity(.5)
+                          ? AppColors.background.withValues(alpha: .5)
                           : AppColors.primaryColor,
                     ),
                   ),

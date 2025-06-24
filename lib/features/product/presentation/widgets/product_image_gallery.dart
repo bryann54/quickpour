@@ -39,13 +39,13 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: isDarkMode
-                        ? Colors.grey.withOpacity(.1)
-                        : AppColors.accentColor.withOpacity(.1),
+                        ? Colors.grey.withValues(alpha: .1)
+                        : AppColors.accentColor.withValues(alpha: .1),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: isDarkMode
-                          ? Colors.grey.withOpacity(.1)
-                          : AppColors.accentColor.withOpacity(.1),
+                          ? Colors.grey.withValues(alpha: .1)
+                          : AppColors.accentColor.withValues(alpha: .1),
                     ),
                   ),
                   child: CachedNetworkImage(
@@ -83,7 +83,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                       // borderRadius: BorderRadius.circular(8),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withValues(alpha: 0.2),
                           blurRadius: 4,
                           offset: const Offset(2, 2),
                         ),
@@ -180,8 +180,8 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                         color: isFavorite
                             ? AppColors.accentColor
                             : (isDarkMode
-                                ? AppColors.brandPrimary.withOpacity(.5)
-                                : AppColors.background.withOpacity(0.9)),
+                                ? AppColors.brandPrimary.withValues(alpha: .5)
+                                : AppColors.background.withValues(alpha: 0.9)),
                         shape: const CircleBorder(),
                         elevation: 1,
                         child: InkWell(
@@ -210,7 +210,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                                   : (isDarkMode
                                       ? AppColors.accentColor
                                       : AppColors.backgroundDark
-                                          .withOpacity(.3)),
+                                          .withValues(alpha: .3)),
                             ),
                           ),
                         ),
@@ -245,7 +245,7 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
                       border: Border.all(
                         color: _currentImageIndex == index
                             ? AppColors.primaryColor
-                            : Colors.grey.withOpacity(0.5),
+                            : Colors.grey.withValues(alpha: 0.5),
                         width: 2,
                       ),
                       image: DecorationImage(

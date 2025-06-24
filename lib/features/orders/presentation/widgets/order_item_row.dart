@@ -30,7 +30,7 @@ class OrderItemRow extends StatelessWidget {
                   border: Border.all(
                     color: isDark
                         ? Colors.grey
-                        : theme.dividerColor.withOpacity(0.1),
+                        : theme.dividerColor.withValues(alpha: 0.1),
                   ),
                   borderRadius: BorderRadius.circular(8)),
               child: Padding(

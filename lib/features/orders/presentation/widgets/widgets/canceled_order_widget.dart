@@ -77,13 +77,13 @@ class _CanceledOrderWidgetState extends State<CanceledOrderWidget>
                   ),
                   decoration: BoxDecoration(
                     color: OrderStatusUtils.getStatusColor(OrderStatus.canceled)
-                        .withOpacity(0.15),
+                        .withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(24),
                     boxShadow: [
                       BoxShadow(
                         color: OrderStatusUtils.getStatusColor(
                                 OrderStatus.canceled)
-                            .withOpacity(0.2),
+                            .withValues(alpha: 0.2),
                         blurRadius: 8,
                         spreadRadius: 1,
                         offset: const Offset(0, 3),
@@ -155,7 +155,7 @@ class _CanceledOrderWidgetState extends State<CanceledOrderWidget>
             'Your order was canceled',
             style: TextStyle(
               color: OrderStatusUtils.getStatusColor(OrderStatus.canceled)
-                  .withOpacity(0.7),
+                  .withValues(alpha: 0.7),
               fontSize: 13,
             ),
           ),

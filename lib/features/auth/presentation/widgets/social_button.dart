@@ -27,7 +27,7 @@ class SocialButton extends StatelessWidget {
       child: InkWell(
         onTap: onPressed,
         borderRadius: BorderRadius.circular(12),
-        splashColor: Colors.grey.withOpacity(0.2),
+        splashColor: Colors.grey.withValues(alpha: 0.2),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
           decoration: BoxDecoration(
@@ -35,7 +35,7 @@ class SocialButton extends StatelessWidget {
             color: buttonColor ?? Colors.blue,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.15),
+                color: Colors.black.withValues(alpha: 0.15),
                 blurRadius: 6,
                 offset: const Offset(0, 3),
               ),

@@ -40,7 +40,7 @@ class CartTotalSection extends StatelessWidget {
                     'KSh ${formatMoney(cart.totalPrice)}',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           color: isDarkMode
-                              ? AppColors.surface.withOpacity(.7)
+                              ? AppColors.surface.withValues(alpha: .7)
                               : AppColors.primaryColor,
                           fontWeight: FontWeight.bold,
                         ),
@@ -64,7 +64,7 @@ class CartTotalSection extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
                       backgroundColor: isDarkMode
-                          ? AppColors.background.withOpacity(.3)
+                          ? AppColors.background.withValues(alpha: .3)
                           : AppColors.primaryColor,
                       foregroundColor: Colors.white,
                       disabledBackgroundColor: isDarkMode

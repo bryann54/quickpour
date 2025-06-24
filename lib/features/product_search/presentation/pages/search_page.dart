@@ -144,7 +144,7 @@ class _SearchPageState extends State<SearchPage> {
             decoration: BoxDecoration(
               border: Border.all(
                 color: isDarkMode
-                    ? AppColors.accentColor.withOpacity(.3)
+                    ? AppColors.accentColor.withValues(alpha: .3)
                     : Colors.grey.shade300,
               ),
               color: isDarkMode ? Colors.grey.shade600 : Colors.white,
@@ -230,7 +230,7 @@ class _SearchPageState extends State<SearchPage> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   color: isDarkMode
-                      ? AppColors.background.withOpacity(.8)
+                      ? AppColors.background.withValues(alpha: .8)
                       : AppColors.backgroundDark,
                 ),
                 child: Center(

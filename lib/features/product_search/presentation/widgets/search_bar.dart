@@ -32,7 +32,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             decoration: BoxDecoration(
               border: Border.all(
                 color: isDarkMode
-                    ? AppColors.accentColor.withOpacity(.3)
+                    ? AppColors.accentColor.withValues(alpha: .3)
                     : Colors.grey.shade300,
               ),
               color: isDarkMode ? Colors.grey.shade600 : Colors.white,
@@ -84,7 +84,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             height: 45,
             width: 50,
             decoration: BoxDecoration(
-              color: AppColors.accentColorDark.withOpacity(.9),
+              color: AppColors.accentColorDark.withValues(alpha: .9),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Center(

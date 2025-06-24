@@ -59,7 +59,8 @@ class PaymentMethodsList extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             side: card.isDefault
                 ? BorderSide(
-                    color: AppColors.primaryColor.withOpacity(.5), width: 2)
+                    color: AppColors.primaryColor.withValues(alpha: .5),
+                    width: 2)
                 : BorderSide.none,
           ),
           child: Padding(
@@ -71,7 +72,7 @@ class PaymentMethodsList extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: AppColors.brandPrimary.withOpacity(0.1),
+                        color: AppColors.brandPrimary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Icon(

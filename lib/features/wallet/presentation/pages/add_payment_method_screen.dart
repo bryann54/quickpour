@@ -121,7 +121,7 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
                                         color: selectedType ==
                                                 PaymentMethodType.creditCard
                                             ? AppColors.brandPrimary
-                                                .withOpacity(0.1)
+                                                .withValues(alpha: 0.1)
                                             : Colors.transparent,
                                         borderRadius: BorderRadius.circular(12),
                                         border: Border.all(
@@ -202,7 +202,7 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
                                         color: selectedType ==
                                                 PaymentMethodType.debitCard
                                             ? AppColors.brandPrimary
-                                                .withOpacity(0.1)
+                                                .withValues(alpha: 0.1)
                                             : Colors.transparent,
                                         borderRadius: BorderRadius.circular(12),
                                         border: Border.all(

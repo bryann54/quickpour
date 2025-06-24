@@ -35,7 +35,7 @@ class AddItemSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: isDarkMode
             ? AppColors.cardColorDark
-            : Colors.cyan.withOpacity(.055),
+            : Colors.cyan.withValues(alpha: .055),
         borderRadius: BorderRadius.circular(5),
       ),
       child: ListTile(
@@ -98,7 +98,7 @@ class AddItemSection extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: isDarkMode
-                          ? AppColors.background.withOpacity(0.7)
+                          ? AppColors.background.withValues(alpha: 0.7)
                           : Theme.of(context).primaryColor,
                       width: 1,
                     ),
@@ -109,7 +109,7 @@ class AddItemSection extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       color: isDarkMode
-                          ? AppColors.background.withOpacity(0.9)
+                          ? AppColors.background.withValues(alpha: 0.9)
                           : Theme.of(context).primaryColor,
                       fontSize: 13,
                     ),

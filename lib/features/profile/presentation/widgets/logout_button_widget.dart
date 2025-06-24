@@ -59,8 +59,8 @@ class _LogOutButtonState extends State<LogOutButton> {
         child: Material(
           elevation: 5,
           shadowColor: isLightMode
-              ? Colors.black.withOpacity(0.3)
-              : Colors.white.withOpacity(0.1),
+              ? Colors.black.withValues(alpha: 0.3)
+              : Colors.white.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(10),
           color: Colors.transparent,
           child: BlocBuilder<AuthBloc, AuthState>(

@@ -24,14 +24,14 @@ class PromoValidityInfo extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isDarkMode
-            ? AppColors.backgroundDark.withOpacity(0.7)
+            ? AppColors.backgroundDark.withValues(alpha: 0.7)
             : AppColors.background,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: isDarkMode
-                ? Colors.black.withOpacity(0.2)
-                : Colors.black.withOpacity(0.05),
+                ? Colors.black.withValues(alpha: 0.2)
+                : Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
             spreadRadius: 1,
             offset: const Offset(0, 2),
@@ -58,7 +58,7 @@ class PromoValidityInfo extends StatelessWidget {
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: isDarkMode
-                      ? Colors.white.withOpacity(0.9)
+                      ? Colors.white.withValues(alpha: 0.9)
                       : Colors.black87,
                 ),
               ),
@@ -106,8 +106,8 @@ class PromoValidityInfo extends StatelessWidget {
         isDarkMode ? Colors.grey.shade300 : Colors.blueGrey.shade800;
 
     final valueColor = isDarkMode
-        ? Colors.white.withOpacity(0.8)
-        : Colors.black.withOpacity(0.8);
+        ? Colors.white.withValues(alpha: 0.8)
+        : Colors.black.withValues(alpha: 0.8);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),

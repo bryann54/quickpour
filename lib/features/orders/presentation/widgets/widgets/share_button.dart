@@ -30,8 +30,8 @@ class ShareButton extends StatelessWidget {
       margin: const EdgeInsets.only(right: 6),
       decoration: BoxDecoration(
         color: isDark
-            ? AppColors.background.withOpacity(.4)
-            : AppColors.backgroundDark.withOpacity(.2),
+            ? AppColors.background.withValues(alpha: .4)
+            : AppColors.backgroundDark.withValues(alpha: .2),
         borderRadius: BorderRadius.circular(12),
       ),
       child: SizedBox(

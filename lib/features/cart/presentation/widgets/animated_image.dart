@@ -54,7 +54,7 @@ class _AnimatedCartImageState extends State<AnimatedCartImage>
                 )
                 .shimmer(
                   duration: 2000.ms,
-                  color: Theme.of(context).primaryColor.withOpacity(0.3),
+                  color: Theme.of(context).primaryColor.withValues(alpha: 0.3),
                 ),
           ],
         ),

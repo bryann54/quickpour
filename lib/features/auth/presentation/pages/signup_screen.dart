@@ -272,7 +272,7 @@ class _SignupScreenState extends State<SignupScreen> {
           color: Theme.of(context).scaffoldBackgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 20,
               offset: const Offset(0, -5),
@@ -291,7 +291,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       .textTheme
                       .bodyLarge
                       ?.color
-                      ?.withOpacity(0.8),
+                      ?.withValues(alpha: 0.8),
                 ),
               ),
               TextButton(

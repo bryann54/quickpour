@@ -40,14 +40,14 @@ class _LoginScreenState extends State<LoginScreen> {
               context: context,
               message: state.message,
               icon: Icons.error_outline,
-              backgroundColor: Colors.red.withOpacity(0.9),
+              backgroundColor: Colors.red.withValues(alpha: 0.9),
             );
           } else if (state is Authenticated) {
             CustomAnimatedSnackbar.show(
               context: context,
               message: 'Login successful!',
               icon: Icons.check_circle_outline,
-              backgroundColor: Colors.green.withOpacity(0.9),
+              backgroundColor: Colors.green.withValues(alpha: 0.9),
             );
 
             Future.delayed(const Duration(milliseconds: 1500), () {
@@ -189,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
           color: Theme.of(context).scaffoldBackgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 20,
               offset: const Offset(0, -5),
@@ -208,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       .textTheme
                       .bodyLarge
                       ?.color
-                      ?.withOpacity(0.8),
+                      ?.withValues(alpha: 0.8),
                 ),
               ),
               TextButton(

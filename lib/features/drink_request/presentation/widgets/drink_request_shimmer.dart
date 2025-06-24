@@ -17,7 +17,7 @@ class DrinkRequestListTileShimmer extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border(
                 left: BorderSide(
-                  color: theme.colorScheme.primary.withOpacity(0.3),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.3),
                   width: 4,
                 ),
               ),

@@ -17,7 +17,7 @@ class MerchantsDetailsSection extends StatelessWidget {
 
     return Card(
       elevation: isDarkMode ? 2 : 1,
-      shadowColor: AppColors.primaryColor.withOpacity(0.1),
+      shadowColor: AppColors.primaryColor.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),

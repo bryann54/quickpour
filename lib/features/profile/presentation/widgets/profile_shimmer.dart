@@ -128,7 +128,7 @@ class ProfileScreenShimmer extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppColors.accentColor.withOpacity(0.2),
+          color: AppColors.accentColor.withValues(alpha: 0.2),
         ),
       ),
       child: Row(
@@ -164,10 +164,10 @@ class ProfileScreenShimmer extends StatelessWidget {
   Widget _buildProfileOptionsShimmer() {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.primaryColor.withOpacity(0.1),
+        color: AppColors.primaryColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppColors.accentColor.withOpacity(0.2),
+          color: AppColors.accentColor.withValues(alpha: 0.2),
         ),
       ),
       child: Column(

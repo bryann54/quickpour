@@ -110,7 +110,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           color: theme.scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: AppColors.accentColor.withOpacity(0.2),
+            color: AppColors.accentColor.withValues(alpha: 0.2),
           ),
         ),
         child: Column(
@@ -232,7 +232,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
-            color: AppColors.accentColor.withOpacity(0.2),
+            color: AppColors.accentColor.withValues(alpha: 0.2),
           ),
         ),
         focusedBorder: OutlineInputBorder(

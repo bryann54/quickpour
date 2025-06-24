@@ -110,7 +110,7 @@ class _SplashScreenState extends State<SplashScreen>
                         height: 250,
                         width: 250,
                         decoration: BoxDecoration(
-                          color: Colors.blueGrey.withOpacity(.3),
+                          color: Colors.blueGrey.withValues(alpha: .3),
                           border: const GradientBoxBorder(
                             gradient: LinearGradient(
                               colors: [
@@ -207,7 +207,8 @@ class _SplashScreenState extends State<SplashScreen>
                         child: Text(
                           'Terms & conditions apply',
                           style: GoogleFonts.acme(
-                            color: AppColors.textPrimaryDark.withOpacity(0.7),
+                            color: AppColors.textPrimaryDark
+                                .withValues(alpha: 0.7),
                             fontSize: 14,
                             letterSpacing: 0.5,
                           ),
@@ -231,7 +232,7 @@ class _SplashScreenState extends State<SplashScreen>
       shaderCallback: (bounds) => LinearGradient(
         colors: [
           Colors.white,
-          Colors.white.withOpacity(0.9),
+          Colors.white.withValues(alpha: 0.9),
         ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
@@ -247,7 +248,7 @@ class _SplashScreenState extends State<SplashScreen>
           color: Colors.white,
           shadows: [
             Shadow(
-              color: AppColors.textPrimary.withOpacity(0.3),
+              color: AppColors.textPrimary.withValues(alpha: 0.3),
               offset: const Offset(2, 2),
               blurRadius: 4,
             ),

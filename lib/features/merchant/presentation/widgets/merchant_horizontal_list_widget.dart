@@ -23,8 +23,8 @@ class HorizontalMerchantsListWidget extends StatelessWidget {
         height: 100,
         decoration: BoxDecoration(
           color: isDarkMode
-              ? AppColors.dividerColorDark.withOpacity(.3)
-              : AppColors.cardColor.withOpacity(.5),
+              ? AppColors.dividerColorDark.withValues(alpha: .3)
+              : AppColors.cardColor.withValues(alpha: .5),
           borderRadius: BorderRadius.circular(12),
         ),
         child: verifiedMerchants.isEmpty

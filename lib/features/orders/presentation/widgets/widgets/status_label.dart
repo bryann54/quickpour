@@ -98,7 +98,7 @@ class StatusLabel extends StatelessWidget {
             shadows: isActive
                 ? [
                     Shadow(
-                      color: statusColor.withOpacity(0.3),
+                      color: statusColor.withValues(alpha: 0.3),
                       blurRadius: 2,
                       offset: const Offset(0, 1),
                     )

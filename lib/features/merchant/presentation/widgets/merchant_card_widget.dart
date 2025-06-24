@@ -23,7 +23,7 @@ class MerchantCardWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 10,
             offset: const Offset(0, 2),
@@ -50,8 +50,8 @@ class MerchantCardWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: isDarkMode
-                    ? AppColors.accentColor.withOpacity(.3)
-                    : Colors.grey.withOpacity(0.5),
+                    ? AppColors.accentColor.withValues(alpha: .3)
+                    : Colors.grey.withValues(alpha: 0.5),
               ),
             ),
             child: Stack(
@@ -68,15 +68,16 @@ class MerchantCardWidget extends StatelessWidget {
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.grey.withOpacity(0.2),
+                                  color: Colors.grey.withValues(alpha: 0.2),
                                   spreadRadius: 1,
                                   blurRadius: 6,
                                 ),
                               ],
                               border: Border.all(
                                 color: isDarkMode
-                                    ? AppColors.accentColor.withOpacity(.3)
-                                    : Colors.grey.withOpacity(0.3),
+                                    ? AppColors.accentColor
+                                        .withValues(alpha: .3)
+                                    : Colors.grey.withValues(alpha: 0.3),
                               ),
                             ),
                             child: Hero(
@@ -147,13 +148,14 @@ class MerchantCardWidget extends StatelessWidget {
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
+                                        color:
+                                            Colors.black.withValues(alpha: 0.1),
                                         blurRadius: 4,
                                         spreadRadius: 1,
                                       ),
                                     ],
                                   ),
-                                  child:  Icon(
+                                  child: Icon(
                                     Icons.verified,
                                     color: merchant.isOpen
                                         ? AppColors.accentColor
@@ -204,8 +206,8 @@ class MerchantCardWidget extends StatelessWidget {
                                     ),
                                     decoration: BoxDecoration(
                                       color: merchant.isOpen
-                                          ? Colors.green.withOpacity(0.1)
-                                          : Colors.grey.withOpacity(0.1),
+                                          ? Colors.green.withValues(alpha: 0.1)
+                                          : Colors.grey.withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Text(
@@ -262,8 +264,9 @@ class MerchantCardWidget extends StatelessWidget {
                                   ),
                                   decoration: BoxDecoration(
                                     color: merchant.isOpen
-                                        ? AppColors.accentColor.withOpacity(0.1)
-                                        : Colors.grey.withOpacity(0.1),
+                                        ? AppColors.accentColor
+                                            .withValues(alpha: 0.1)
+                                        : Colors.grey.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Row(
@@ -305,7 +308,7 @@ class MerchantCardWidget extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.black.withOpacity(0.03),
+                        color: Colors.black.withValues(alpha: 0.03),
                       ),
                     ),
                   ),

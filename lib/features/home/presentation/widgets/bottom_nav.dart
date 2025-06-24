@@ -50,7 +50,7 @@ class _BottomNavState extends State<BottomNav> {
           FaIcon(FontAwesomeIcons.magnifyingGlass,
               size: 25,
               color: isDarkMode
-                  ? Colors.grey.shade400.withOpacity(.9)
+                  ? Colors.grey.shade400.withValues(alpha: .9)
                   : Colors.white),
 
           // Favorites with badge
@@ -65,7 +65,7 @@ class _BottomNavState extends State<BottomNav> {
                 child: FaIcon(FontAwesomeIcons.solidHeart,
                     size: 25,
                     color: isDarkMode
-                        ? Colors.grey.shade400.withOpacity(.9)
+                        ? Colors.grey.shade400.withValues(alpha: .9)
                         : Colors.white),
               );
             },
@@ -73,7 +73,7 @@ class _BottomNavState extends State<BottomNav> {
           FaIcon(FontAwesomeIcons.houseChimney,
               size: 25,
               color: isDarkMode
-                  ? Colors.grey.shade400.withOpacity(.9)
+                  ? Colors.grey.shade400.withValues(alpha: .9)
                   : Colors.white),
 
           // Cart with badge
@@ -88,7 +88,7 @@ class _BottomNavState extends State<BottomNav> {
                 child: FaIcon(FontAwesomeIcons.cartShopping,
                     size: 25,
                     color: isDarkMode
-                        ? Colors.grey.shade400.withOpacity(.9)
+                        ? Colors.grey.shade400.withValues(alpha: .9)
                         : Colors.white),
               );
             },
@@ -97,7 +97,7 @@ class _BottomNavState extends State<BottomNav> {
           FaIcon(FontAwesomeIcons.clipboardList,
               size: 25,
               color: isDarkMode
-                  ? Colors.grey.shade400.withOpacity(.9)
+                  ? Colors.grey.shade400.withValues(alpha: .9)
                   : Colors.white),
         ],
         color: AppColors.primaryColor,

@@ -79,7 +79,7 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: AppColors.accentColor.withOpacity(0.5),
+              color: AppColors.accentColor.withValues(alpha: 0.5),
             ),
           ),
           child: ClipRRect(
@@ -102,7 +102,7 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
               borderRadius: BorderRadius.circular(12),
               gradient: LinearGradient(
                 colors: [
-                  Colors.black.withOpacity(0.6),
+                  Colors.black.withValues(alpha: 0.6),
                   Colors.transparent,
                 ],
                 begin: Alignment.bottomCenter,
@@ -234,7 +234,7 @@ class _MerchantDetailsHeaderState extends State<MerchantDetailsHeader> {
     return Center(
       child: CircularProgressIndicator.adaptive(
         valueColor: AlwaysStoppedAnimation<Color>(
-          AppColors.accentColor.withOpacity(0.5),
+          AppColors.accentColor.withValues(alpha: 0.5),
         ),
         strokeWidth: 2,
       ),

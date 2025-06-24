@@ -181,7 +181,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       margin: const EdgeInsets.only(right: 10),
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? AppColors.accentColor.withOpacity(0.1)
+                            ? AppColors.accentColor.withValues(alpha: 0.1)
                             : null,
                         border: Border.all(
                           color: isSelected

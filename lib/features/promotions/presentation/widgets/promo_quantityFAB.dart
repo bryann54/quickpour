@@ -35,12 +35,12 @@
 //             constraints: const BoxConstraints(maxWidth: 110),
 //             decoration: BoxDecoration(
 //               color: isDarkMode
-//                   ? AppColors.background.withOpacity(.2)
+//                   ? AppColors.background.withValues(alpha: .2)
 //                   : AppColors.accentColor,
 //               borderRadius: BorderRadius.circular(16),
 //               boxShadow: [
 //                 BoxShadow(
-//                   color: Colors.black.withOpacity(0.7),
+//                   color: Colors.black.withValues(alpha: 0.7),
 //                   blurRadius: 4,
 //                   offset: const Offset(0, 2),
 //                 ),
@@ -127,7 +127,7 @@
 //             height: 32,
 //             child: Material(
 //               color: isDarkMode
-//                   ? AppColors.background.withOpacity(.2)
+//                   ? AppColors.background.withValues(alpha: .2)
 //                   : AppColors.accentColor,
 //               shape: const CircleBorder(),
 //               elevation: 4,

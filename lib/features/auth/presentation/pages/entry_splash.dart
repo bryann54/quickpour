@@ -135,8 +135,8 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        AppColors.primaryColor.withOpacity(0.9),
-                        AppColors.brandPrimary.withOpacity(0.95),
+                        AppColors.primaryColor.withValues(alpha: 0.9),
+                        AppColors.brandPrimary.withValues(alpha: 0.95),
                         AppColors.primaryColorDark,
                       ],
                       begin: Alignment.topLeft,
@@ -189,7 +189,8 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.shadowColor.withOpacity(0.3),
+                              color:
+                                  AppColors.shadowColor.withValues(alpha: 0.3),
                               blurRadius: 25,
                               spreadRadius: 5,
                               offset: const Offset(0, 10),
@@ -212,7 +213,7 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                                     colors: [
                                       Colors.transparent,
                                       AppColors.primaryColorDark
-                                          .withOpacity(0.3),
+                                          .withValues(alpha: 0.3),
                                     ],
                                   ),
                                 ),
@@ -275,7 +276,7 @@ class _EntrySplashScreenState extends State<EntrySplashScreen>
                       height: 40,
                       child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          AppColors.brandAccent.withOpacity(0.7),
+                          AppColors.brandAccent.withValues(alpha: 0.7),
                         ),
                         strokeWidth: 2,
                       ),

@@ -150,15 +150,17 @@ class MerchantCardAvatar extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            if (merchant.isVerified )
-               Row(
+            if (merchant.isVerified)
+              Row(
                 children: [
-                  Icon(Icons.verified,
-                      size: 14,  color:
+                  Icon(
+                    Icons.verified,
+                    size: 14,
+                    color:
                         merchant.isOpen ? AppColors.accentColor : Colors.grey,
                   ),
-                const  SizedBox(width: 4),
-                 const Text(
+                  const SizedBox(width: 4),
+                  const Text(
                     'Verified',
                     style: TextStyle(
                       color: Colors.white70,

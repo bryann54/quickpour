@@ -100,7 +100,7 @@ class _FavoriteFABState extends State<FavoriteFAB>
                         color: Colors.transparent,
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.accentColor.withOpacity(0.6),
+                            color: AppColors.accentColor.withValues(alpha: 0.6),
                             blurRadius: 10 * _scaleAnimation.value,
                             spreadRadius: 2 * _scaleAnimation.value,
                           ),
@@ -121,8 +121,8 @@ class _FavoriteFABState extends State<FavoriteFAB>
                   color: isFavorite
                       ? AppColors.accentColor
                       : (widget.isDarkMode
-                          ? AppColors.brandPrimary.withOpacity(.4)
-                          : AppColors.background.withOpacity(0.9)),
+                          ? AppColors.brandPrimary.withValues(alpha: .4)
+                          : AppColors.background.withValues(alpha: 0.9)),
                   shape: const CircleBorder(),
                   elevation: 0,
                   child: InkWell(
@@ -157,7 +157,7 @@ class _FavoriteFABState extends State<FavoriteFAB>
                                   : (widget.isDarkMode
                                       ? AppColors.accentColor
                                       : AppColors.backgroundDark
-                                          .withOpacity(.3)),
+                                          .withValues(alpha: .3)),
                             ),
                           ),
                         );

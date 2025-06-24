@@ -182,7 +182,7 @@ class _ItemBottomsheetState extends State<ItemBottomsheet> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.3),
+                  color: Colors.grey.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -220,7 +220,7 @@ class _ItemBottomsheetState extends State<ItemBottomsheet> {
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: isDarkMode
-                            ? Colors.blue.shade900.withOpacity(0.3)
+                            ? Colors.blue.shade900.withValues(alpha: 0.3)
                             : Colors.blue.shade50,
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -271,14 +271,14 @@ class _ItemBottomsheetState extends State<ItemBottomsheet> {
               decoration: BoxDecoration(
                 border: Border.all(
                   color: isDarkMode
-                      ? AppColors.accentColor.withOpacity(.3)
+                      ? AppColors.accentColor.withValues(alpha: .3)
                       : Colors.grey.shade300,
                 ),
                 color: isDarkMode ? Colors.grey.shade700 : Colors.white,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 5,
                     offset: const Offset(0, 2),
                   ),

@@ -44,12 +44,12 @@ class NotificationTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: notification.isRead
               ? theme.cardColor
-              : theme.colorScheme.primary.withOpacity(0.04),
+              : theme.colorScheme.primary.withValues(alpha: 0.04),
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             if (!notification.isRead)
               BoxShadow(
-                color: theme.colorScheme.primary.withOpacity(0.1),
+                color: theme.colorScheme.primary.withValues(alpha: 0.1),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -107,7 +107,7 @@ class NotificationTile extends StatelessWidget {
                             height: 1.4,
                             color: notification.isRead
                                 ? theme.textTheme.bodyMedium?.color
-                                    ?.withOpacity(0.8)
+                                    ?.withValues(alpha: 0.8)
                                 : theme.textTheme.bodyLarge?.color,
                           ),
                         ),

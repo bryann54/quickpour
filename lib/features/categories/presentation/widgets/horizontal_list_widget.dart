@@ -21,8 +21,8 @@ class HorizontalCategoriesListWidget extends StatelessWidget {
           height: 130,
           decoration: BoxDecoration(
             color: isDarkMode
-                ? AppColors.dividerColorDark.withOpacity(0.2)
-                : AppColors.cardColor.withOpacity(0.1),
+                ? AppColors.dividerColorDark.withValues(alpha: 0.2)
+                : AppColors.cardColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(16),
           ),
           child: categories.isEmpty

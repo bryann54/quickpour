@@ -88,7 +88,7 @@ class HorizontalPromotionCard extends StatelessWidget {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: 0.2),
                             blurRadius: 4,
                             offset: const Offset(2, 2),
                           ),
@@ -117,15 +117,15 @@ class HorizontalPromotionCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Colors.black.withOpacity(0.0),
-                        Colors.black.withOpacity(0.7),
+                        Colors.black.withValues(alpha: 0.0),
+                        Colors.black.withValues(alpha: 0.7),
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withValues(alpha: 0.3),
                         blurRadius: 6,
                         offset: const Offset(0, -2),
                       ),

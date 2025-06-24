@@ -108,7 +108,7 @@ class PaymentMethodTile extends StatelessWidget {
         border: Border.all(
           color: isSelected
               ? (isDark
-                  ? AppColors.error.withOpacity(.1)
+                  ? AppColors.error.withValues(alpha: .1)
                   : AppColors.primaryColor)
               : theme.dividerColor,
           width: isSelected ? 2 : 1,
@@ -116,7 +116,8 @@ class PaymentMethodTile extends StatelessWidget {
         boxShadow: isSelected
             ? [
                 BoxShadow(
-                  color: AppColors.primaryColor.withOpacity(isDark ? 0.2 : 0.1),
+                  color: AppColors.primaryColor
+                      .withValues(alpha: isDark ? 0.2 : 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -125,7 +126,7 @@ class PaymentMethodTile extends StatelessWidget {
       ),
       child: Material(
         color: isSelected
-            ? AppColors.backgroundDark.withOpacity(.1)
+            ? AppColors.backgroundDark.withValues(alpha: .1)
             : Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(16),

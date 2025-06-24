@@ -34,11 +34,14 @@ class OrderSummaryCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
-          color: isDark ? Colors.white.withOpacity(0.1) : Colors.grey.shade200,
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.1)
+              : Colors.grey.shade200,
         ),
       ),
-      color:
-          isDark ? AppColors.background.withOpacity(.05) : Colors.grey.shade50,
+      color: isDark
+          ? AppColors.background.withValues(alpha: .05)
+          : Colors.grey.shade50,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -70,14 +73,14 @@ class OrderSummaryCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: theme.colorScheme.primary.withOpacity(0.1),
+            color: theme.colorScheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
             Icons.receipt_long,
             size: 18,
             color: isDark
-                ? AppColors.cardColor.withOpacity(.4)
+                ? AppColors.cardColor.withValues(alpha: .4)
                 : AppColors.primaryColor,
           ),
         ),
@@ -100,7 +103,7 @@ class OrderSummaryCard extends StatelessWidget {
         color: theme.cardColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: theme.dividerColor.withOpacity(0.1),
+          color: theme.dividerColor.withValues(alpha: 0.1),
         ),
       ),
       child: Column(
@@ -123,7 +126,7 @@ class OrderSummaryCard extends StatelessWidget {
 
   Widget _buildDivider(ThemeData theme) {
     return Divider(
-      color: theme.dividerColor.withOpacity(.2),
+      color: theme.dividerColor.withValues(alpha: .2),
       height: 1,
     );
   }
@@ -159,7 +162,7 @@ class OrderSummaryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       decoration: BoxDecoration(
-        color: theme.colorScheme.primary.withOpacity(0.08),
+        color: theme.colorScheme.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(8),
       ),
       child: SummaryRow(
@@ -167,7 +170,7 @@ class OrderSummaryCard extends StatelessWidget {
         value: 'KSh ${formatMoney(totalAmount)}',
         isTotal: true,
         valueColor: isDark
-            ? AppColors.cardColor.withOpacity(.4)
+            ? AppColors.cardColor.withValues(alpha: .4)
             : AppColors.primaryColor,
       ),
     );

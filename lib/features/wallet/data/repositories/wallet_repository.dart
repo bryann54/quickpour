@@ -26,16 +26,16 @@ class WalletRepository {
   Future<void> deductFromWallet(double amount) async {
     final wallet = await getWallet();
     if (wallet.balance >= amount) {
-    final updatedWallet = wallet.copyWith(
-        balance:
-            wallet.balance - amount, 
-      transactions: [...wallet.transactions,
-        Transaction.create(
-          amount: amount,
-          type: TransactionType.withdrawal,
-          description: 'Deducted from wallet',
-        ),
-      ],
+      final updatedWallet = wallet.copyWith(
+        balance: wallet.balance - amount,
+        transactions: [
+          ...wallet.transactions,
+          Transaction.create(
+            amount: amount,
+            type: TransactionType.withdrawal,
+            description: 'Deducted from wallet',
+          ),
+        ],
       );
       await saveWallet(updatedWallet);
     } else {
@@ -142,7 +142,7 @@ class WalletRepository {
     return true;
   }
 
-Future<bool> processOrderPayment({
+  Future<bool> processOrderPayment({
     required double amount,
     required String description,
     required PaymentMethod paymentMethod,

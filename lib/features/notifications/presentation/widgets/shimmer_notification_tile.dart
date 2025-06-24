@@ -16,7 +16,7 @@ class NotificationTileShimmer extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey.withOpacity(0.2)),
+              border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
             ),
             child: Shimmer.fromColors(
               baseColor: Colors.grey[300]!,

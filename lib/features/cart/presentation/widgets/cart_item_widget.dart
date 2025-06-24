@@ -79,7 +79,7 @@ class CartItemWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           // boxShadow: [
           //   BoxShadow(
-          //     color: Colors.black.withOpacity(0.1),
+          //     color: Colors.black.withValues(alpha: 0.1),
           //     blurRadius: 4,
           //     offset: const Offset(0, 2),
           //   ),
@@ -223,7 +223,7 @@ class CartItemWidget extends StatelessWidget {
           ),
           // boxShadow: [
           //   BoxShadow(
-          //     color: Colors.black.withOpacity(0.1),
+          //     color: Colors.black.withValues(alpha: 0.1),
           //     blurRadius: 4,
           //     offset: const Offset(2, 2),
           //   ),
@@ -240,8 +240,8 @@ class CartItemWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: isDarkMode
-                            ? Colors.grey.shade500.withOpacity(.2)
-                            : Colors.grey.shade200.withOpacity(.6),
+                            ? Colors.grey.shade500.withValues(alpha: .2)
+                            : Colors.grey.shade200.withValues(alpha: .6),
                       ),
                     ),
                     child: CachedNetworkImage(
@@ -277,7 +277,7 @@ class CartItemWidget extends StatelessWidget {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: 0.2),
                             blurRadius: 2,
                             offset: const Offset(2, 2),
                           ),
@@ -386,7 +386,7 @@ class CartItemWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                       border: Border.all(
                           color: isDarkMode
-                              ? AppColors.accentColor.withOpacity(0.3)
+                              ? AppColors.accentColor.withValues(alpha: 0.3)
                               : Colors.grey),
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -476,7 +476,8 @@ class CartItemWidget extends StatelessWidget {
                               height: 40,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: AppColors.accentColor.withOpacity(0.1),
+                                color: AppColors.accentColor
+                                    .withValues(alpha: 0.1),
                                 borderRadius: const BorderRadius.only(
                                   topRight: Radius.circular(10),
                                   bottomRight: Radius.circular(10),

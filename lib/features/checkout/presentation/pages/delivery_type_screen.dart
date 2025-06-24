@@ -139,7 +139,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
             ),
             if (_isLoading)
               Container(
-                color: theme.colorScheme.surface.withOpacity(0.8),
+                color: theme.colorScheme.surface.withValues(alpha: 0.8),
                 child: Center(
                   child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
@@ -215,8 +215,8 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
       decoration: BoxDecoration(
         border: Border.all(
           color: isSelected
-              ? theme.colorScheme.onSurface.withOpacity(0.5)
-              : theme.colorScheme.outline.withOpacity(.3),
+              ? theme.colorScheme.onSurface.withValues(alpha: 0.5)
+              : theme.colorScheme.outline.withValues(alpha: .3),
         ),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -230,12 +230,15 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: isSelected
-                  ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                  ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
                   : Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: isSelected
-                    ? Theme.of(context).colorScheme.secondary.withOpacity(.7)
+                    ? Theme.of(context)
+                        .colorScheme
+                        .secondary
+                        .withValues(alpha: .7)
                     : Colors.transparent,
                 width: 1,
               ),
@@ -247,8 +250,8 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
                   color: isSelected
                       ? isDark
                           ? Colors.amber
-                          : theme.colorScheme.onSurface.withOpacity(0.6)
-                      : theme.colorScheme.onSurface.withOpacity(0.6),
+                          : theme.colorScheme.onSurface.withValues(alpha: 0.6)
+                      : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -263,7 +266,8 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
                           color: isSelected
                               ? isDark
                                   ? Colors.amber
-                                  : theme.colorScheme.onSurface.withOpacity(0.6)
+                                  : theme.colorScheme.onSurface
+                                      .withValues(alpha: 0.6)
                               : theme.colorScheme.onSurface,
                         ),
                       ),
@@ -273,8 +277,10 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
                           color: isSelected
                               ? isDark
                                   ? Colors.amber
-                                  : theme.colorScheme.onSurface.withOpacity(0.6)
-                              : theme.colorScheme.onSurface.withOpacity(0.6),
+                                  : theme.colorScheme.onSurface
+                                      .withValues(alpha: 0.6)
+                              : theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.6),
                         ),
                       ),
                     ],
@@ -304,62 +310,55 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
       children: [
         Text(
           'Address Details',
-          style: theme.textTheme.titleLarge?.copyWith(
+          style: theme.textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.bold,
           ),
         ),
         const SizedBox(height: 8),
         if (_currentAddress != null)
           Padding(
-            padding: const EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.only(bottom: 6),
             child: Text(
               _currentAddress!,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.6),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             ),
           ),
-        Focus(
-          onFocusChange: (hasFocus) {
-            if (hasFocus) {
-              // Additional logic if needed when focused
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(top: 18.0),
-            child: TextField(
-              controller: _addressDetailsController,
-              maxLines: 3,
-              style: theme.textTheme.bodyMedium,
-              decoration: InputDecoration(
-                hintText: 'Apartment, Floor, Landmark etc.',
-                hintStyle: TextStyle(
-                  color: theme.colorScheme.onSurface.withOpacity(0.5),
-                ),
-                filled: true,
-                fillColor: isDark
-                    ? theme.colorScheme.surface
-                    : theme.colorScheme.surface.withOpacity(0.3),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: theme.colorScheme.primary,
-                    width: 2.0, // More distinct border when focused
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: theme.colorScheme.onSurface.withOpacity(0.3),
-                    width: 1.2,
-                  ),
-                ),
-                contentPadding: const EdgeInsets.all(16),
+        Padding(
+          padding: const EdgeInsets.only(top: 18.0),
+          child: TextField(
+            controller: _addressDetailsController,
+            maxLines: 3,
+            style: theme.textTheme.bodyMedium,
+            decoration: InputDecoration(
+              hintText: 'Apartment, Floor, Landmark etc.',
+              hintStyle: TextStyle(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),
+              filled: true,
+              fillColor: isDark
+                  ? theme.colorScheme.surface
+                  : theme.colorScheme.surface.withValues(alpha: 0.3),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                  color: theme.colorScheme.primary,
+                  width: 2.0, 
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                  width: 1.2,
+                ),
+              ),
+              contentPadding: const EdgeInsets.all(16),
             ),
           ),
         ),
@@ -402,16 +401,16 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildMapSection(),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 14),
                         _buildDeliveryTypeSection(),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 14),
                         _buildAddressDetailsSection(),
                       ],
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
+                Padding(    
+                  padding: const EdgeInsets.all(6),
                   child: ElevatedButton(
                     onPressed:
                         (_selectedLocation != null && _deliveryType.isNotEmpty)
@@ -469,7 +468,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
                                       _deliveryType.isNotEmpty)
                                   ? theme.colorScheme.onPrimary
                                   : theme.colorScheme.onSurface
-                                      .withOpacity(0.4),
+                                      .withValues(alpha: 0.4),
                             ),
                           ),
                           const SizedBox(

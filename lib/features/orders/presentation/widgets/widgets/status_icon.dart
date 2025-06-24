@@ -60,7 +60,7 @@ class StatusIcon extends StatelessWidget {
           boxShadow: isActive
               ? [
                   BoxShadow(
-                    color: statusColor.withOpacity(0.4),
+                    color: statusColor.withValues(alpha: 0.4),
                     blurRadius: 5,
                     spreadRadius: 1,
                     offset: const Offset(0, 2),

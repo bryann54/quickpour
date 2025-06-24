@@ -16,14 +16,14 @@ class ProductDetailsHeader extends StatelessWidget {
     return Card(
       elevation: isDarkMode ? 2 : 1,
       shadowColor: isDarkMode
-          ? AppColors.brandAccent.withOpacity(0.3)
-          : AppColors.brandPrimary.withOpacity(0.1),
+          ? AppColors.brandAccent.withValues(alpha: 0.3)
+          : AppColors.brandPrimary.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side: BorderSide(
           color: isDarkMode
-              ? AppColors.brandAccent.withOpacity(0.1)
-              : AppColors.brandPrimary.withOpacity(0.05),
+              ? AppColors.brandAccent.withValues(alpha: 0.1)
+              : AppColors.brandPrimary.withValues(alpha: 0.05),
           width: 1,
         ),
       ),
@@ -37,7 +37,7 @@ class ProductDetailsHeader extends StatelessWidget {
                   end: Alignment.bottomRight,
                   colors: [
                     theme.cardColor,
-                    theme.cardColor.withOpacity(0.95),
+                    theme.cardColor.withValues(alpha: 0.95),
                   ],
                 )
               : null,
@@ -111,13 +111,13 @@ class ProductDetailsHeader extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: isDarkMode
-                      ? AppColors.brandPrimary.withOpacity(0.05)
-                      : AppColors.brandPrimary.withOpacity(0.03),
+                      ? AppColors.brandPrimary.withValues(alpha: 0.05)
+                      : AppColors.brandPrimary.withValues(alpha: 0.03),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: isDarkMode
-                        ? AppColors.brandAccent.withOpacity(0.1)
-                        : AppColors.brandPrimary.withOpacity(0.1),
+                        ? AppColors.brandAccent.withValues(alpha: 0.1)
+                        : AppColors.brandPrimary.withValues(alpha: 0.1),
                     width: 1,
                   ),
                 ),

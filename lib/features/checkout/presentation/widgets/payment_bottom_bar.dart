@@ -26,7 +26,7 @@ class PaymentBottomBar extends StatelessWidget {
         color: theme.cardColor,
         boxShadow: [
           BoxShadow(
-            color: theme.shadowColor.withOpacity(0.05),
+            color: theme.shadowColor.withValues(alpha: 0.05),
             offset: const Offset(0, -4),
             blurRadius: 8,
           ),

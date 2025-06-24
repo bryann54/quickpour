@@ -126,7 +126,7 @@ class PromotionsCarousel extends StatelessWidget {
                     Hero(
                       tag: 'promotion-${promotion.id}',
                       child: Container(
-                        color: theme.primaryColor.withOpacity(0.2),
+                        color: theme.primaryColor.withValues(alpha: 0.2),
                         child: const Center(
                           child: Icon(Icons.local_offer, size: 40),
                         ),
@@ -142,7 +142,7 @@ class PromotionsCarousel extends StatelessWidget {
                           end: Alignment.bottomCenter,
                           colors: [
                             Colors.transparent,
-                            Colors.black.withOpacity(0.7),
+                            Colors.black.withValues(alpha: 0.7),
                           ],
                         ),
                       ),
@@ -164,7 +164,7 @@ class PromotionsCarousel extends StatelessWidget {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: 0.2),
                             blurRadius: 4,
                             offset: const Offset(2, 2),
                           ),

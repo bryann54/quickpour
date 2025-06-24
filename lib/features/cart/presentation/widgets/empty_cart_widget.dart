@@ -29,8 +29,9 @@ class EmptyCartWidget extends StatelessWidget {
               child: Icon(
                 FontAwesomeIcons.bagShopping,
                 color: isDarkMode
-                    ? Colors.orangeAccent.withOpacity(0.5 + (index % 5) * 0.1)
-                    : Colors.amber.withOpacity(0.5 + (index % 5) * 0.1),
+                    ? Colors.orangeAccent
+                        .withValues(alpha: 0.5 + (index % 5) * 0.1)
+                    : Colors.amber.withValues(alpha: 0.5 + (index % 5) * 0.1),
                 size: isSmall ? 16.0 : 24.0,
               )
                   .animate(

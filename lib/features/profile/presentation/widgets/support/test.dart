@@ -88,8 +88,8 @@
 //                     begin: Alignment.topCenter,
 //                     end: Alignment.bottomCenter,
 //                     colors: [
-//                       AppColors.primaryColor.withOpacity(0.9),
-//                       AppColors.primaryColor.withOpacity(0.9),
+//                       AppColors.primaryColor.withValues(alpha: 0.9),
+//                       AppColors.primaryColor.withValues(alpha: 0.9),
 //                     ],
 //                   ),
 //                 ),
@@ -242,7 +242,7 @@
 //             borderRadius: BorderRadius.circular(20),
 //             boxShadow: [
 //               BoxShadow(
-//                 color: Colors.black.withOpacity(0.05),
+//                 color: Colors.black.withValues(alpha: 0.05),
 //                 blurRadius: 10,
 //                 offset: const Offset(0, 5),
 //               ),
@@ -257,7 +257,7 @@
 //                     leading: Container(
 //                       padding: const EdgeInsets.all(8),
 //                       decoration: BoxDecoration(
-//                         color: AppColors.accentColor.withOpacity(0.1),
+//                         color: AppColors.accentColor.withValues(alpha: 0.1),
 //                         borderRadius: BorderRadius.circular(10),
 //                       ),
 //                       child: Icon(
@@ -277,14 +277,14 @@
 //                         ? Text(
 //                             item.subtitle!,
 //                             style: TextStyle(
-//                               color: AppColors.accentColor.withOpacity(0.7),
+//                               color: AppColors.accentColor.withValues(alpha: 0.7),
 //                             ),
 //                           )
 //                         : null,
 //                     trailing: item.trailing ??
 //                         Icon(
 //                           Icons.chevron_right,
-//                           color: AppColors.accentColor.withOpacity(0.5),
+//                           color: AppColors.accentColor.withValues(alpha: 0.5),
 //                         ),
 //                     onTap: item.onTap,
 //                   ),
@@ -293,7 +293,7 @@
 //                       height: 1,
 //                       indent: 65,
 //                       endIndent: 20,
-//                       color: AppColors.dividerColorDark.withOpacity(0.1),
+//                       color: AppColors.dividerColorDark.withValues(alpha: 0.1),
 //                     ),
 //                 ],
 //               );

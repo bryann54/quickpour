@@ -93,10 +93,10 @@ class AppColors {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
-
+ 
   // Opacity Variants
   static Color getColorWithOpacity(Color color, double opacity) {
-    return color.withOpacity(opacity);
+    return color.withValues(alpha: opacity);
   }
 
   // Shimmer Effect Colors

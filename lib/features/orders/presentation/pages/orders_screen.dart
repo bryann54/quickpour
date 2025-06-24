@@ -99,9 +99,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
               child: Icon(
                 FontAwesomeIcons.boxOpen,
                 color: isDarkMode
-                    ? AppColors.brandAccent.withOpacity(0.5 + (index % 5) * 0.1)
+                    ? AppColors.brandAccent
+                        .withValues(alpha: 0.5 + (index % 5) * 0.1)
                     : AppColors.accentColor
-                        .withOpacity(0.5 + (index % 5) * 0.1),
+                        .withValues(alpha: 0.5 + (index % 5) * 0.1),
                 size: isSmall ? 16.0 : 24.0,
               )
                   .animate(

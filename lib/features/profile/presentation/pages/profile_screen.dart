@@ -107,8 +107,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Colors.black.withOpacity(0.4),
-                              Colors.transparent.withOpacity(.9),
+                              Colors.black.withValues(alpha: 0.4),
+                              Colors.transparent.withValues(alpha: .9),
                             ],
                           ).createShader(bounds);
                         },
@@ -135,7 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     child: CircleAvatar(
                                       radius: 77,
                                       backgroundColor: AppColors.accentColor
-                                          .withOpacity(0.2),
+                                          .withValues(alpha: 0.2),
                                       backgroundImage: _pickedImage != null
                                           ? FileImage(File(_pickedImage!.path))
                                           : (user.profileImage.isNotEmpty
@@ -331,7 +331,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Divider(
         height: 1,
-        color: AppColors.dividerColorDark.withOpacity(0.1),
+        color: AppColors.dividerColorDark.withValues(alpha: 0.1),
       ),
     );
   }

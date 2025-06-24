@@ -35,19 +35,19 @@ class CategoryCardAvatar extends StatelessWidget {
               shape: BoxShape.circle,
               gradient: LinearGradient(
                 colors: [
-                  AppColors.accentColor.withOpacity(0.1),
-                  AppColors.accentColor.withOpacity(0.3),
+                  AppColors.accentColor.withValues(alpha: 0.1),
+                  AppColors.accentColor.withValues(alpha: 0.3),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               border: Border.all(
-                color: AppColors.accentColor.withOpacity(0.3),
+                color: AppColors.accentColor.withValues(alpha: 0.3),
                 width: 2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.accentColor.withOpacity(0.1),
+                  color: AppColors.accentColor.withValues(alpha: 0.1),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),

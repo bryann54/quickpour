@@ -58,8 +58,9 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 filled: true,
-                fillColor:
-                    isDarkMode ? Colors.grey.withOpacity(.1) : Colors.grey[100],
+                fillColor: isDarkMode
+                    ? Colors.grey.withValues(alpha: .1)
+                    : Colors.grey[100],
               ),
               onChanged: (value) {
                 if (value.isNotEmpty) {
@@ -89,11 +90,11 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                 return ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: isDarkMode
-                        ? Colors.grey.withOpacity(.1)
-                        : AppColors.glassEffect.withOpacity(.2),
+                        ? Colors.grey.withValues(alpha: .1)
+                        : AppColors.glassEffect.withValues(alpha: .2),
                     foregroundColor: isDarkMode
-                        ? Colors.white.withOpacity(.6)
-                        : AppColors.primaryColor.withOpacity(.8),
+                        ? Colors.white.withValues(alpha: .6)
+                        : AppColors.primaryColor.withValues(alpha: .8),
                   ),
                   onPressed: () {
                     setState(() {

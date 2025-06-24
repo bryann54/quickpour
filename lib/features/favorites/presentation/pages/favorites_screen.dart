@@ -44,10 +44,10 @@ class FavoritesScreen extends StatelessWidget {
                             child: Icon(
                               FontAwesomeIcons.solidHeart,
                               color: isDarkMode
-                                  ? AppColors.accentColorDark
-                                      .withOpacity(0.5 + (index % 5) * 0.1)
-                                  : AppColors.accentColor
-                                      .withOpacity(0.5 + (index % 5) * 0.1),
+                                  ? AppColors.accentColorDark.withValues(
+                                      alpha: 0.5 + (index % 5) * 0.1)
+                                  : AppColors.accentColor.withValues(
+                                      alpha: 0.5 + (index % 5) * 0.1),
                               size: isSmall ? 16.0 : 24.0,
                             )
                                 .animate(
