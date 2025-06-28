@@ -79,7 +79,7 @@ class OrderConfirmationScreen extends StatelessWidget {
                         _buildDetailRow('Delivery Time', deliveryTime),
                         const Divider(),
                         _buildDetailRow(
-                            'Payment Method', selectedPaymentMethod), // New row
+                            'Payment Method', selectedPaymentMethod),
                       ],
                     ),
                   ),

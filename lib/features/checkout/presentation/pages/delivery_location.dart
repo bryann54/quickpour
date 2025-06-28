@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:chupachap/core/utils/colors.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PlaceAutocompletePage extends StatefulWidget {
   const PlaceAutocompletePage({super.key});
@@ -20,9 +23,24 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
   Timer? _debounce;
   List<Map<String, dynamic>> _predictions = [];
   bool _showRecentLocations = true;
+  bool _isLoading = false;
   List<Map<String, dynamic>> _recentLocations = [];
   List<Map<String, dynamic>> _savedLocations = [];
   Map<String, dynamic>? _currentLocation;
+
+  // Get Google API key from environment variables based on platform
+  static String get _googleApiKey {
+    if (Platform.isAndroid) {
+      return dotenv.env['GOOGLE_MAPS_API_KEY_ANDROID'] ?? '';
+    } else if (Platform.isIOS) {
+      return dotenv.env['GOOGLE_MAPS_API_KEY_IOS'] ?? '';
+    }
+    return '';
+  }
+
+  // Kenya bounds for better local results
+  static const String _kenyaBounds =
+      'location=-1.286389,36.817223&radius=500000';
 
   @override
   void initState() {
@@ -33,9 +51,53 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
     _fetchCurrentLocation();
   }
 
+  // Helper method to convert IconData to a serializable format
+  String _iconDataToString(IconData iconData) {
+    return iconData.codePoint.toString();
+  }
+
+  // Helper method to convert string back to IconData
+  IconData _stringToIconData(String iconString) {
+    try {
+      int codePoint = int.parse(iconString);
+      return IconData(codePoint, fontFamily: 'MaterialIcons');
+    } catch (e) {
+      return Icons.location_on; // Default fallback
+    }
+  }
+
+  // Helper method to create a serializable location object
+  Map<String, dynamic> _createSerializableLocation(
+      Map<String, dynamic> location) {
+    Map<String, dynamic> serializable = Map<String, dynamic>.from(location);
+
+    // Convert IconData to string for serialization
+    if (serializable['icon'] is IconData) {
+      serializable['iconCode'] = _iconDataToString(serializable['icon']);
+      serializable.remove('icon'); // Remove the non-serializable icon
+    }
+
+    return serializable;
+  }
+
+  // Helper method to restore IconData from serialized location
+  Map<String, dynamic> _restoreLocationIcon(Map<String, dynamic> location) {
+    Map<String, dynamic> restored = Map<String, dynamic>.from(location);
+
+    // Restore IconData from string
+    if (restored.containsKey('iconCode')) {
+      restored['icon'] = _stringToIconData(restored['iconCode']);
+    } else {
+      // Set default icon if none exists
+      restored['icon'] =
+          getIconForPlaceType(List<String>.from(restored['types'] ?? []));
+    }
+
+    return restored;
+  }
+
   Future<void> _fetchCurrentLocation() async {
     try {
-      // Check location permissions
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         throw Exception('Location services are disabled.');
@@ -53,12 +115,10 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
         throw Exception('Location permissions are permanently denied.');
       }
 
-      // Fetch current position
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
 
-      // Convert coordinates to address
       List<Placemark> placemarks = await placemarkFromCoordinates(
         position.latitude,
         position.longitude,
@@ -85,7 +145,8 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
             },
             'city': place.locality ?? '',
             'country': place.country ?? '',
-            'isSaved': false,
+            'placeType': 'current_location',
+            'icon': Icons.my_location,
           };
         });
       }
@@ -100,7 +161,8 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
 
     setState(() {
       _savedLocations = savedLocationsJson
-          .map((json) => jsonDecode(json) as Map<String, dynamic>)
+          .map((json) =>
+              _restoreLocationIcon(jsonDecode(json) as Map<String, dynamic>))
           .toList();
     });
   }
@@ -111,15 +173,33 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
 
     setState(() {
       _recentLocations = recentLocationsJson
-          .map((json) => jsonDecode(json) as Map<String, dynamic>)
+          .map((json) =>
+              _restoreLocationIcon(jsonDecode(json) as Map<String, dynamic>))
           .toList();
     });
   }
 
-  Future<void> _saveRecentLocations() async {
+  Future<void> _saveRecentLocation(Map<String, dynamic> location) async {
+    // Create serializable version
+    _createSerializableLocation(location);
+
+    // Remove if already exists to avoid duplicates
+    _recentLocations.removeWhere((loc) =>
+        loc['mainText'] == location['mainText'] &&
+        loc['secondaryText'] == location['secondaryText']);
+
+    // Add to beginning of list
+    _recentLocations.insert(0, location);
+
+    // Keep only last 10 recent locations
+    if (_recentLocations.length > 10) {
+      _recentLocations = _recentLocations.take(10).toList();
+    }
+
     final prefs = await SharedPreferences.getInstance();
-    final recentLocationsJson =
-        _recentLocations.map((loc) => jsonEncode(loc)).toList();
+    final recentLocationsJson = _recentLocations
+        .map((loc) => jsonEncode(_createSerializableLocation(loc)))
+        .toList();
     await prefs.setStringList('recentLocations', recentLocationsJson);
   }
 
@@ -129,9 +209,11 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
         loc['secondaryText'] == location['secondaryText'])) {
       _savedLocations.add(location);
       final prefs = await SharedPreferences.getInstance();
-      final savedLocationsJson =
-          _savedLocations.map((loc) => jsonEncode(loc)).toList();
+      final savedLocationsJson = _savedLocations
+          .map((loc) => jsonEncode(_createSerializableLocation(loc)))
+          .toList();
       await prefs.setStringList('savedLocations', savedLocationsJson);
+      setState(() {});
     }
   }
 
@@ -141,9 +223,11 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
         loc['secondaryText'] == location['secondaryText']);
 
     final prefs = await SharedPreferences.getInstance();
-    final savedLocationsJson =
-        _savedLocations.map((loc) => jsonEncode(loc)).toList();
+    final savedLocationsJson = _savedLocations
+        .map((loc) => jsonEncode(_createSerializableLocation(loc)))
+        .toList();
     await prefs.setStringList('savedLocations', savedLocationsJson);
+    setState(() {});
   }
 
   @override
@@ -157,7 +241,7 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       if (_searchController.text.length > 2) {
-        _getLocationPredictions(_searchController.text);
+        _getGooglePlacePredictions(_searchController.text);
         setState(() {
           _showRecentLocations = false;
         });
@@ -165,27 +249,154 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
         setState(() {
           _predictions = [];
           _showRecentLocations = true;
+          _isLoading = false;
         });
       }
     });
   }
 
-  Future<void> _getLocationPredictions(String query) async {
+  Future<void> _getGooglePlacePredictions(String query) async {
     if (query.isEmpty) {
       setState(() {
         _predictions = [];
         _showRecentLocations = true;
+        _isLoading = false;
       });
       return;
     }
 
-    setState(() {});
+    setState(() {
+      _isLoading = true;
+    });
 
     try {
-      List<Location> locations = await locationFromAddress(query);
+      // Google Places Autocomplete API
+      final String url =
+          'https://maps.googleapis.com/maps/api/place/autocomplete/json'
+          '?input=${Uri.encodeComponent(query)}'
+          '&key=$_googleApiKey'
+          '&components=country:ke'
+          '&$_kenyaBounds'
+          '&types=establishment|geocode'
+          '&language=en';
+
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data['status'] == 'OK') {
+          List<Map<String, dynamic>> predictions = [];
+
+          for (var prediction in data['predictions']) {
+            // Get place details for better information
+            final placeDetails = await _getPlaceDetails(prediction['place_id']);
+
+            if (placeDetails != null) {
+              predictions.add(placeDetails);
+            } else {
+              // Fallback to basic prediction data
+              predictions.add(_createPredictionFromBasicData(prediction));
+            }
+          }
+
+          if (mounted) {
+            setState(() {
+              _predictions = predictions;
+              _isLoading = false;
+            });
+          }
+        } else {
+          throw Exception('API Error: ${data['status']}');
+        }
+      } else {
+        throw Exception('HTTP Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Error fetching Google Places: $e');
+
+      // Fallback to geocoding if Google Places fails
+      await _getFallbackPredictions(query);
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<Map<String, dynamic>?> _getPlaceDetails(String placeId) async {
+    try {
+      final String url =
+          'https://maps.googleapis.com/maps/api/place/details/json'
+          '?place_id=$placeId'
+          '&key=$_googleApiKey'
+          '&fields=name,formatted_address,geometry,types,business_status';
+
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data['status'] == 'OK') {
+          final result = data['result'];
+          final location = result['geometry']['location'];
+          final types = List<String>.from(result['types'] ?? []);
+
+          return {
+            'description': result['formatted_address'] ?? '',
+            'mainText':
+                result['name'] ?? extractMainText(result['formatted_address']),
+            'secondaryText': extractSecondaryText(
+                result['formatted_address'], result['name']),
+            'location': {
+              'lat': location['lat'],
+              'lng': location['lng'],
+            },
+            'city': extractCity(result['formatted_address']),
+            'country': 'Kenya',
+            'placeType': getPlaceType(types),
+            'icon': getIconForPlaceType(types),
+            'types': types,
+            'place_id': placeId, // Include place_id for reference
+          };
+        }
+      }
+    } catch (e) {
+      debugPrint('Error getting place details: $e');
+    }
+    return null;
+  }
+
+  Map<String, dynamic> _createPredictionFromBasicData(
+      Map<String, dynamic> prediction) {
+    final description = prediction['description'] ?? '';
+    final structuredFormatting = prediction['structured_formatting'] ?? {};
+    final mainText = structuredFormatting['main_text'] ?? '';
+    final secondaryText = structuredFormatting['secondary_text'] ?? '';
+    final types = List<String>.from(prediction['types'] ?? []);
+
+    return {
+      'description': description,
+      'mainText': mainText,
+      'secondaryText': secondaryText,
+      'location': {'lat': 0.0, 'lng': 0.0}, // Will need to geocode separately
+      'city': extractCity(description),
+      'country': 'Kenya',
+      'placeType': getPlaceType(types),
+      'icon': getIconForPlaceType(types),
+      'types': types,
+      'place_id': prediction['place_id'],
+    };
+  }
+
+  Future<void> _getFallbackPredictions(String query) async {
+    try {
+      List<Location> locations = await locationFromAddress('$query, Kenya');
       List<Map<String, dynamic>> predictions = [];
 
-      for (var location in locations) {
+      for (var location in locations.take(5)) {
         try {
           List<Placemark> placemarks = await placemarkFromCoordinates(
             location.latitude,
@@ -194,27 +405,27 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
 
           if (placemarks.isNotEmpty) {
             Placemark place = placemarks[0];
-            if (place.country == 'Kenya') {
-              String mainText = place.street ?? '';
-              String secondaryText = [
-                place.subLocality,
-                place.locality,
-                place.administrativeArea,
-                place.country
-              ].where((e) => e != null && e.isNotEmpty).join(', ');
+            String mainText = place.street ?? place.name ?? query;
+            String secondaryText = [
+              place.subLocality,
+              place.locality,
+              place.administrativeArea,
+              place.country
+            ].where((e) => e != null && e.isNotEmpty).join(', ');
 
-              predictions.add({
-                'description': '$mainText, $secondaryText',
-                'mainText': mainText,
-                'secondaryText': secondaryText,
-                'location': {
-                  'lat': location.latitude,
-                  'lng': location.longitude,
-                },
-                'city': place.locality ?? '',
-                'country': place.country ?? '',
-              });
-            }
+            predictions.add({
+              'description': '$mainText, $secondaryText',
+              'mainText': mainText,
+              'secondaryText': secondaryText,
+              'location': {
+                'lat': location.latitude,
+                'lng': location.longitude,
+              },
+              'city': place.locality ?? '',
+              'country': place.country ?? '',
+              'placeType': 'geocoded',
+              'icon': Icons.location_on,
+            });
           }
         } catch (e) {
           debugPrint('Error getting place details: $e');
@@ -227,8 +438,7 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
         });
       }
     } catch (e) {
-      debugPrint('Error fetching locations: $e');
-
+      debugPrint('Error with fallback geocoding: $e');
       if (mounted) {
         setState(() {
           _predictions = [];
@@ -237,99 +447,147 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
     }
   }
 
-  Widget _buildSearchBar(bool isDarkMode) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isDarkMode ? Colors.grey[900] : Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+  // Enhanced selection handler with better error handling
+  Future<void> _handleLocationSelection(Map<String, dynamic> location) async {
+    try {
+      // Ensure location has valid coordinates
+      if (location['location'] == null ||
+          location['location']['lat'] == null ||
+          location['location']['lng'] == null) {
+        // Try to geocode if coordinates are missing
+        await _geocodeLocation(location);
+      }
+
+      // Save to recent locations
+      await _saveRecentLocation(location);
+
+      // Return the location to previous screen
+      if (mounted) {
+        Navigator.pop(context, location);
+      }
+    } catch (e) {
+      debugPrint('Error handling location selection: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error selecting location: ${e.toString()}'),
+            backgroundColor: Colors.red,
           ),
-        ],
-      ),
-      child: TextField(
-        controller: _searchController,
-        decoration: InputDecoration(
-          hintText: 'Search road ,apartmernt...',
-          hintStyle: TextStyle(
-            color: isDarkMode ? Colors.grey[500] : Colors.grey[600],
-          ),
-          prefixIcon: Icon(
-            Icons.search,
-            color: isDarkMode ? Colors.grey[500] : Colors.grey[700],
-          ),
-          suffixIcon: _searchController.text.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    _searchController.clear();
-                    setState(() {
-                      _predictions = [];
-                      _showRecentLocations = true;
-                    });
-                  },
-                )
-              : null,
-          filled: true,
-          fillColor: isDarkMode ? Colors.grey[800] : Colors.grey[100],
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
-          ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 14,
-          ),
-        ),
-      ),
-    );
+        );
+      }
+    }
   }
 
+  // Helper method to geocode location if coordinates are missing
+  Future<void> _geocodeLocation(Map<String, dynamic> location) async {
+    try {
+      final address = location['description'] ??
+          '${location['mainText']}, ${location['secondaryText']}';
+
+      List<Location> locations = await locationFromAddress(address);
+      if (locations.isNotEmpty) {
+        location['location'] = {
+          'lat': locations.first.latitude,
+          'lng': locations.first.longitude,
+        };
+      }
+    } catch (e) {
+      debugPrint('Error geocoding location: $e');
+      // Set default coordinates if geocoding fails
+      location['location'] = {'lat': 0.0, 'lng': 0.0};
+    }
+  }
+
+// In _buildListSection (updated minimal design)
   Widget _buildListSection(String title, List<Map<String, dynamic>> locations) {
     if (locations.isEmpty) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Text(title,
-              style:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-        ),
+        if (title.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Text(
+              title,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+                color: Theme.of(context).hintColor,
+              ),
+            ),
+          ),
         ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: locations.length,
           separatorBuilder: (context, index) => Divider(
-            height: 2,
-            color: Theme.of(
-              context,
-            ).dividerColor.withValues(alpha: .1),
+            height: 1,
+            color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
           ),
           itemBuilder: (context, index) {
             final location = locations[index];
-            bool isSaved = _savedLocations.any((loc) =>
+            final isSaved = _savedLocations.any((loc) =>
                 loc['mainText'] == location['mainText'] &&
                 loc['secondaryText'] == location['secondaryText']);
 
             return ListTile(
-              leading:
-                  const Icon(Icons.location_on, color: AppColors.accentColor),
-              title: Text(location['mainText'] ?? '',
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+              leading: Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  location['icon'] ?? Icons.location_on,
+                  size: 16,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              title: Text(
+                location['mainText'] ?? '',
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+              ),
               subtitle: Text(
                 location['secondaryText'] ?? '',
-                maxLines: 2,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Theme.of(context).hintColor,
+                ),
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
               trailing: IconButton(
-                icon: Icon(
-                  isSaved ? Icons.favorite : Icons.favorite_border,
-                  color: isSaved ? AppColors.accentColor : Colors.grey,
+                icon: Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: isSaved
+                        ? Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withValues(alpha: .1)
+                        : null,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    isSaved ? Icons.bookmark : Icons.bookmark_outline,
+                    size: 20,
+                    color: isSaved
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context)
+                            .iconTheme
+                            .color
+                            ?.withValues(alpha: 0.4),
+                  ),
                 ),
                 onPressed: () async {
                   if (isSaved) {
@@ -337,17 +595,60 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
                   } else {
                     await _saveLocation(location);
                   }
-                  setState(() {});
                 },
+                splashRadius: 20,
+                padding: EdgeInsets.zero,
               ),
-              onTap: () {
-                _saveRecentLocations();
-                Navigator.pop(context, location);
-              },
+              onTap: () => _handleLocationSelection(location),
             );
           },
         ),
       ],
+    );
+  }
+
+// Updated search bar for minimal design
+  Widget _buildSearchBar(bool isDarkMode) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: TextField(
+        controller: _searchController,
+        decoration: InputDecoration(
+          hintText: 'Search apartments, landmarks, addresses...',
+          hintStyle: TextStyle(
+            color: Theme.of(context).hintColor,
+            fontSize: 14,
+          ),
+          prefixIcon: Icon(
+            Icons.search,
+            size: 20,
+            color: Theme.of(context).hintColor,
+          ),
+          suffixIcon: _searchController.text.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(Icons.clear, size: 20),
+                  onPressed: () {
+                    _searchController.clear();
+                    setState(() {
+                      _predictions = [];
+                      _showRecentLocations = true;
+                      _isLoading = false;
+                    });
+                  },
+                )
+              : null,
+          filled: true,
+          fillColor: Theme.of(context).cardColor,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
+        ),
+      ),
     );
   }
 
@@ -371,13 +672,97 @@ class _PlaceAutocompletePageState extends State<PlaceAutocompletePage> {
               children: [
                 if (_currentLocation != null)
                   _buildListSection('Current Location', [_currentLocation!]),
-                if (_showRecentLocations)
+                if (_showRecentLocations && _recentLocations.isNotEmpty)
                   _buildListSection('Recent Locations', _recentLocations),
-                _buildListSection('Predictions', _predictions),
+                if (_savedLocations.isNotEmpty)
+                  _buildListSection('Saved Locations', _savedLocations),
+                if (_predictions.isNotEmpty)
+                  _buildListSection('Search Results', _predictions),
+                if (_isLoading)
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Center(child: _buildShimmerLoading(isDarkMode)),
+                  ),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildShimmerLoading(bool isDarkMode) {
+    return Shimmer.fromColors(
+      baseColor: isDarkMode ? Colors.grey[700]! : Colors.grey[300]!,
+      highlightColor: isDarkMode ? Colors.grey[500]! : Colors.grey[100]!,
+      child: Column(
+        children: List.generate(
+          3,
+          (index) => Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: [
+                // Icon placeholder
+                Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                // Text content placeholder
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Main text placeholder
+                      Container(
+                        width: double.infinity,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      // Subtitle placeholder
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        height: 14,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      // Type label placeholder
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                // Trailing icon placeholder
+                Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

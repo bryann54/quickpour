@@ -118,6 +118,11 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
             ? AppColors.background.withValues(alpha: .1)
             : Colors.grey.shade100,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isDark
+              ? AppColors.dividerColorDark.withValues(alpha: .3)
+              : AppColors.dividerColorDark.withValues(alpha: .1),
+        ),
       ),
       child: Column(
         children: [
@@ -401,6 +406,25 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
             ),
           ],
         ),
+        //   const SizedBox(height: 12),
+        // Row(
+        //   children: [
+        //     Icon(
+        //       Icons.delivery_dining,
+        //       size: 16,
+        //       color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+        //     ),
+        //     const SizedBox(width: 8),
+        //     Text(
+        //       widget.totalAmount >= 5000
+        //           ? 'Free Delivery'
+        //           : 'Delivery Fee: Ksh ${formatMoney(widget.deliveryType == 'express' ? 250.0 : 150.0)}',
+        //       style: theme.textTheme.bodyMedium?.copyWith(
+        //         color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ],
     );
   }
@@ -430,7 +454,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
             maxLines: 3,
             style: theme.textTheme.bodyMedium,
             decoration: InputDecoration(
-              hintText: 'Any special instructions for delivery...',
+              hintText: 'Any special instructions for the rider?',
               hintStyle: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),

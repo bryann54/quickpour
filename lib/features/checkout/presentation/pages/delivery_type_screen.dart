@@ -115,6 +115,10 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
       height: MediaQuery.of(context).size.height * 0.15,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: theme.colorScheme.outline.withValues(alpha: 0.15),
+          width: 1,
+        ),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
@@ -166,7 +170,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 6),
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
@@ -191,7 +195,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
               _buildDeliveryOption(
                 'pickup',
                 'Pick Up',
-                'Pick up order yourself',
+                'Pick the order yourself',
                 Icons.store_outlined,
               ),
             ],
@@ -230,7 +234,10 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: isSelected
-                  ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
+                  ? Theme.of(context)
+                      .colorScheme
+                      .secondaryFixed
+                      .withValues(alpha: 0.1)
                   : Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
@@ -310,14 +317,14 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
       children: [
         Text(
           'Address Details',
-          style: theme.textTheme.bodyLarge?.copyWith(
+          style: theme.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
           ),
         ),
         const SizedBox(height: 8),
         if (_currentAddress != null)
           Padding(
-            padding: const EdgeInsets.only(bottom: 6),
+            padding: const EdgeInsets.only(bottom: 16),
             child: Text(
               _currentAddress!,
               style: theme.textTheme.bodyMedium?.copyWith(
@@ -325,41 +332,38 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
               ),
             ),
           ),
-        Padding(
-          padding: const EdgeInsets.only(top: 18.0),
-          child: TextField(
-            controller: _addressDetailsController,
-            maxLines: 3,
-            style: theme.textTheme.bodyMedium,
-            decoration: InputDecoration(
-              hintText: 'Apartment, Floor, Landmark etc.',
-              hintStyle: TextStyle(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-              ),
-              filled: true,
-              fillColor: isDark
-                  ? theme.colorScheme.surface
-                  : theme.colorScheme.surface.withValues(alpha: 0.3),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                  color: theme.colorScheme.primary,
-                  width: 2.0, 
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
-                  width: 1.2,
-                ),
-              ),
-              contentPadding: const EdgeInsets.all(16),
+        TextField(
+          controller: _addressDetailsController,
+          maxLines: 3,
+          style: theme.textTheme.bodyMedium,
+          decoration: InputDecoration(
+            hintText: 'Apartment, Floor, Landmark etc.',
+            hintStyle: TextStyle(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
             ),
+            filled: true,
+            fillColor: isDark
+                ? theme.colorScheme.surface
+                : theme.colorScheme.surface.withValues(alpha: 0.3),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: theme.colorScheme.primary,
+                width: 2.0, // More distinct border when focused
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                width: 1.2,
+              ),
+            ),
+            contentPadding: const EdgeInsets.all(16),
           ),
         ),
       ],
@@ -409,8 +413,8 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen>
                     ),
                   ),
                 ),
-                Padding(    
-                  padding: const EdgeInsets.all(6),
+                Padding(
+                  padding: const EdgeInsets.all(16),
                   child: ElevatedButton(
                     onPressed:
                         (_selectedLocation != null && _deliveryType.isNotEmpty)

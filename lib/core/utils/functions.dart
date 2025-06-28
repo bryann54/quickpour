@@ -165,3 +165,108 @@ class OrderStatusUtils {
     }
   }
 }
+
+String extractMainText(String? formattedAddress) {
+  if (formattedAddress == null) return '';
+  return formattedAddress.split(',').first.trim();
+}
+
+String extractSecondaryText(String? formattedAddress, String? name) {
+  if (formattedAddress == null) return '';
+  final parts = formattedAddress.split(',');
+  if (parts.length > 1) {
+    final secondary = parts.skip(1).join(',').trim();
+    // Remove the name from secondary text to avoid duplication
+    if (name != null && secondary.startsWith(name)) {
+      return secondary.substring(name.length).replaceFirst(',', '').trim();
+    }
+    return secondary;
+  }
+  return '';
+}
+
+String extractCity(String? formattedAddress) {
+  if (formattedAddress == null) return '';
+  // Simple extraction - you might want to make this more sophisticated
+  final parts = formattedAddress.split(',');
+  for (var part in parts.reversed) {
+    part = part.trim();
+    if (part.isNotEmpty && !part.contains('Kenya') && part.length > 2) {
+      return part;
+    }
+  }
+  return '';
+}
+
+String getPlaceType(List<String> types) {
+  // Prioritize residential and delivery-relevant places
+  if (types.contains('street_address')) return 'address';
+  if (types.contains('subpremise')) return 'apartment';
+  if (types.contains('premise')) return 'building';
+  if (types.contains('establishment')) return 'establishment';
+  if (types.contains('lodging')) return 'hotel';
+  if (types.contains('point_of_interest')) return 'poi';
+  if (types.contains('route')) return 'route';
+  if (types.contains('intersection')) return 'intersection';
+  if (types.contains('plus_code')) return 'plus_code';
+  return 'location';
+}
+
+String getPlaceTypeLabel(String placeType) {
+  switch (placeType) {
+    case 'apartment':
+      return 'Apartment';
+    case 'building':
+      return 'Building';
+    case 'premise':
+      return 'Property';
+    case 'establishment':
+      return 'Business';
+    case 'poi':
+      return 'Landmark';
+    case 'route':
+      return 'Road';
+    case 'address':
+      return 'Address';
+    case 'current_location':
+      return 'Current Location';
+    default:
+      return 'Location';
+  }
+}
+
+IconData getIconForPlaceType(List<String> types) {
+  // Residential locations
+  if (types.contains('apartment') ||
+      types.contains('subpremise') ||
+      types.contains('premise')) {
+    return FontAwesomeIcons.buildingUser;
+  }
+
+  // Delivery-friendly businesses
+  if (types.contains('restaurant') ||
+      types.contains('food') ||
+      types.contains('meal_takeaway') ||
+      types.contains('bar') ||
+      types.contains('night_club')) {
+    return FontAwesomeIcons.wineGlass;
+  }
+
+  // Common delivery locations
+  if (types.contains('hotel') || types.contains('lodging')) {
+    return FontAwesomeIcons.hotel;
+  }
+  if (types.contains('office') || types.contains('workplace')) {
+    return FontAwesomeIcons.building;
+  }
+  if (types.contains('university') || types.contains('school')) {
+    return FontAwesomeIcons.graduationCap;
+  }
+
+  // Default icons for other types
+  if (types.contains('establishment')) return FontAwesomeIcons.store;
+  if (types.contains('point_of_interest')) return FontAwesomeIcons.mapPin;
+  if (types.contains('route')) return FontAwesomeIcons.route;
+
+  return FontAwesomeIcons.locationDot;
+}

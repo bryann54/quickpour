@@ -36,7 +36,7 @@ class OrderSummaryCard extends StatelessWidget {
         side: BorderSide(
           color: isDark
               ? Colors.white.withValues(alpha: 0.1)
-              : Colors.grey.shade200,
+              : Colors.grey.shade300,
         ),
       ),
       color: isDark
