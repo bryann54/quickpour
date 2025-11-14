@@ -14,11 +14,11 @@ if (envPropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.example.chupachap"
+    namespace "com.nduko.chupachap"
     compileSdk flutter.compileSdkVersion
     
     defaultConfig {
-        applicationId "com.example.chupachap"
+        applicationId "com.nduko.chupachap"
         minSdkVersion 23
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutter.versionCode
